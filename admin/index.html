@@ -1728,18 +1728,18 @@
         <!-- Real-Time Event Notification Toast Ticker -->
         <div class="live-event-toast" id="liveEventToast"></div>
 
-        <!-- 4 Focused Executive Stat Cards: Visits & Emails -->
+        <!-- 5 Focused Executive Stat Cards: Traffic, Leads, Turso DB & Netlify Quotas -->
         <div class="stats-grid">
-          <!-- Card 1: Total Visits -->
+          <!-- Card 1: Total Visits (Real Data) -->
           <div class="stat-card">
             <div class="stat-icon" style="background:rgba(59, 130, 246, 0.12); color:#60a5fa;">
               <i class="bi bi-globe-americas"></i>
             </div>
             <div>
               <div class="stat-val" id="statVisits">—</div>
-              <div class="stat-lbl">Total Website Visits</div>
+              <div class="stat-lbl" id="statVisitsLabel">Total Website Visits</div>
               <div class="stat-sub">
-                <i class="bi bi-activity"></i> Active web traffic
+                <i class="bi bi-activity text-success"></i> <span id="statVisitsSub">Live authentic visits</span>
               </div>
               <div class="stat-badge blue" id="statVisitsPace">~0 visits / day</div>
             </div>
@@ -1757,6 +1757,46 @@
                 <i class="bi bi-send-check"></i> <span id="statRepliesSent">0</span> replies sent
               </div>
               <div class="stat-badge green" id="statConversionBadge">0% Conversion</div>
+            </div>
+          </div>
+
+          <!-- Card 3: Turso Cloud Database Storage & Limit -->
+          <div class="stat-card">
+            <div class="stat-icon" style="background:rgba(6, 182, 212, 0.12); color:#22d3ee;">
+              <i class="bi bi-database-fill-check"></i>
+            </div>
+            <div style="flex:1; min-width:0;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                <div class="stat-val" id="statTursoUsed">—</div>
+                <span id="statTursoBadge" class="stat-badge green" style="margin-top:0;">🟢 9.0 GB Free</span>
+              </div>
+              <div class="stat-lbl">Turso Cloud Database</div>
+              <div class="stat-sub">
+                <i class="bi bi-hdd-stack"></i> <span id="statTursoRows">0 rows</span> · <span id="statTursoQuotaPercent">0%</span> of 9 GB
+              </div>
+              <div style="margin-top:6px; background:rgba(255,255,255,0.08); height:6px; border-radius:3px; overflow:hidden;">
+                <div id="statTursoBar" style="height:100%; width:0.5%; background:linear-gradient(90deg, #06b6d4, #3b82f6); border-radius:3px; transition:width 0.4s ease;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4: Netlify Bandwidth Quota & Limit -->
+          <div class="stat-card">
+            <div class="stat-icon" style="background:rgba(20, 184, 166, 0.12); color:#2dd4bf;">
+              <i class="bi bi-cloud-arrow-down-fill"></i>
+            </div>
+            <div style="flex:1; min-width:0;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                <div class="stat-val" id="statNetlifyUsed">—</div>
+                <span id="statNetlifyBadge" class="stat-badge green" style="margin-top:0;">🟢 100 GB Free</span>
+              </div>
+              <div class="stat-lbl">Netlify Bandwidth Quota</div>
+              <div class="stat-sub">
+                <i class="bi bi-speedometer2"></i> <span id="statNetlifyRemaining">100 GB left</span> (Monthly)
+              </div>
+              <div style="margin-top:6px; background:rgba(255,255,255,0.08); height:6px; border-radius:3px; overflow:hidden;">
+                <div id="statNetlifyBar" style="height:100%; width:0.5%; background:linear-gradient(90deg, #14b8a6, #10b981); border-radius:3px; transition:width 0.4s ease;"></div>
+              </div>
             </div>
           </div>
 
@@ -3201,18 +3241,25 @@
           if (!res.ok) throw new Error('HTTP ' + res.status);
           const data = await res.json();
 
-          // 1. Update Stat Cards
+          // 1. Update Stat Cards (Real Data)
           const s = data.summary || {};
+          const q = data.quotas || {};
+
+          // Card 1: Real Visits
           if (document.getElementById('statVisits')) {
             document.getElementById('statVisits').textContent = (s.totalVisits ?? 0).toLocaleString();
           }
-          if (document.getElementById('statUniqueVisits')) {
-            document.getElementById('statUniqueVisits').textContent = (s.uniqueVisitors ?? 0).toLocaleString();
+          if (document.getElementById('statVisitsLabel')) {
+            document.getElementById('statVisitsLabel').textContent = `Website Visits (${days} Days)`;
+          }
+          if (document.getElementById('statVisitsSub')) {
+            document.getElementById('statVisitsSub').textContent = `${(s.allTimeVisits ?? s.totalVisits ?? 0).toLocaleString()} all-time recorded`;
           }
           if (document.getElementById('statVisitsPace')) {
             document.getElementById('statVisitsPace').textContent = `~${Math.round((s.totalVisits || 0) / days)} visits / day`;
           }
 
+          // Card 2: Email & Inquiries
           if (document.getElementById('statTotalInquiries')) {
             document.getElementById('statTotalInquiries').textContent = s.totalInquiries ?? 0;
           }
@@ -3221,6 +3268,45 @@
           }
           if (document.getElementById('statConversionBadge')) {
             document.getElementById('statConversionBadge').textContent = `${s.conversionRate ?? 0}% Conversion`;
+          }
+
+          // Card 3: Turso Cloud DB Storage & Limit
+          if (q.turso) {
+            const turso = q.turso;
+            if (document.getElementById('statTursoUsed')) {
+              document.getElementById('statTursoUsed').textContent = `${turso.usedMB} MB`;
+            }
+            if (document.getElementById('statTursoRows')) {
+              document.getElementById('statTursoRows').textContent = `${turso.totalRows.toLocaleString()} rows`;
+            }
+            if (document.getElementById('statTursoQuotaPercent')) {
+              document.getElementById('statTursoQuotaPercent').textContent = `${turso.usedPercent}%`;
+            }
+            if (document.getElementById('statTursoBadge')) {
+              document.getElementById('statTursoBadge').textContent = `🟢 ${turso.remainingGB} GB Free`;
+            }
+            if (document.getElementById('statTursoBar')) {
+              const p = Math.max(1, Math.min(100, turso.usedPercent * 10));
+              document.getElementById('statTursoBar').style.width = p + '%';
+            }
+          }
+
+          // Card 4: Netlify Bandwidth Quota
+          if (q.netlify) {
+            const netlify = q.netlify;
+            if (document.getElementById('statNetlifyUsed')) {
+              document.getElementById('statNetlifyUsed').innerHTML = `${netlify.usedGB} GB <span style="font-size:13px; font-weight:600; color:var(--muted);">/ 100 GB</span>`;
+            }
+            if (document.getElementById('statNetlifyRemaining')) {
+              document.getElementById('statNetlifyRemaining').textContent = `${netlify.remainingGB} GB left`;
+            }
+            if (document.getElementById('statNetlifyBadge')) {
+              document.getElementById('statNetlifyBadge').textContent = `🟢 ${netlify.remainingGB} GB Free`;
+            }
+            if (document.getElementById('statNetlifyBar')) {
+              const p = Math.max(1, Math.min(100, netlify.usedPercent));
+              document.getElementById('statNetlifyBar').style.width = p + '%';
+            }
           }
 
           if (document.getElementById('statNewInquiries')) document.getElementById('statNewInquiries').textContent = s.newInquiries ?? 0;
