@@ -11,7 +11,7 @@ if (!fs.existsSync(dist)) {
   fs.mkdirSync(dist, { recursive: true });
 }
 
-// Copy Admin portal to dist/admin
+// 1. Copy Admin portal to dist/admin
 const adminSrc = path.join(root, "admin");
 const adminDest = path.join(dist, "admin");
 if (fs.existsSync(adminSrc)) {
@@ -19,7 +19,21 @@ if (fs.existsSync(adminSrc)) {
   console.log("  ✅ Admin portal copied to frontend/dist/admin");
 }
 
-// Copy static assets to dist/assets
+// 2. Copy In-Place Live Editor pages to dist/admin/site/
+const adminSiteDest = path.join(dist, "admin/site");
+if (!fs.existsSync(adminSiteDest)) {
+  fs.mkdirSync(adminSiteDest, { recursive: true });
+}
+const siteHtmlFiles = ["index.html", "services.html", "sev.html", "starter-page.html", "dropdown.html"];
+for (const file of siteHtmlFiles) {
+  const src = path.join(root, file);
+  if (fs.existsSync(src)) {
+    fs.copyFileSync(src, path.join(adminSiteDest, file));
+  }
+}
+console.log("  ✅ Live editor preview pages copied to frontend/dist/admin/site/");
+
+// 3. Copy static assets to dist/assets
 const assetsSrc = path.join(root, "assets");
 const assetsDest = path.join(dist, "assets");
 if (fs.existsSync(assetsSrc)) {
