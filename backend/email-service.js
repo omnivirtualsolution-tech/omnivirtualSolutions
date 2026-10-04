@@ -575,12 +575,6 @@ function buildAutoReplyHtml({ submission, settings, bodyText, senderEmail, isWeb
       ${trimmedBodyText.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br>")}
     </div>` : ""}
 
-    <div style="background-color: ${bannerBg}; border-left: 4px solid ${bannerBorder}; padding: 14px 16px; border-radius: 0 8px 8px 0; margin-bottom: 24px;">
-      <p style="margin: 0; font-size: 14px; line-height: 22px; color: ${bannerText};">
-        <strong>Expected turnaround:</strong> We typically respond within <strong>1–2 business days</strong>. If your request is time-sensitive, you can also reach our desk at <a href="tel:${cleanPhone}" style="color: #eba22d; text-decoration: none; font-weight: 600;">${brandPhone}</a>.
-      </p>
-    </div>
-
     <!-- Message Summary Card -->
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: ${cardBg}; border: 1px solid ${cardBorder}; border-radius: 10px; overflow: hidden; margin-bottom: 8px;">
       <tr>
