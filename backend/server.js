@@ -162,6 +162,31 @@ app.use(express.urlencoded({ extended: false, limit: "2mb" }));
 // ─────────────────────────────────────────────────────────────────
 // Static Files: Whitelisted directories only (NO full root exposure)
 // ─────────────────────────────────────────────────────────────────
+const { db: appDb } = require("./db");
+
+// ── Serve uploaded media stored directly in Turso Database (BLOB) ──
+app.get(["/assets/uploads/:filename", "/api/v1/media/:filename"], async (req, res, next) => {
+  const filename = req.params.filename;
+  try {
+    const result = await appDb.execute({
+      sql: "SELECT mime_type, data FROM media_files WHERE filename = ? OR asset_key = ? LIMIT 1",
+      args: [filename, filename],
+    });
+
+    if (result.rows && result.rows.length > 0) {
+      const row = result.rows[0];
+      const buffer = Buffer.from(row.data);
+      res.setHeader("Content-Type", row.mime_type || "image/webp");
+      res.setHeader("Content-Length", buffer.length);
+      res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+      return res.end(buffer);
+    }
+  } catch (err) {
+    console.warn("[media/turso] Database fetch warning:", err.message);
+  }
+  next();
+});
+
 // 1. Shared assets: /assets/* -> ../assets/*
 app.use("/assets", express.static(path.resolve(__dirname, "../assets")));
 
@@ -200,7 +225,6 @@ app.use("/api/v1/live",      liveRouter);
 
 // ── Lightweight visitor tracking (privacy-preserving & rate-limited) ──
 const crypto = require("crypto");
-const { db: appDb } = require("./db");
 
 const trackVisitLimit = createRateLimit({
   windowMs: 60 * 1000, // 1 minute

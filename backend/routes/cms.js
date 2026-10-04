@@ -536,8 +536,37 @@ router.patch("/submissions/:id", requireAuth, async (req, res) => {
 });
 
 // ─────────────────────────────────────────────────────────────────
+// GET /api/v1/cms/media/:filename
+// Serves image directly from Turso database binary storage (zero local disk)
+// ─────────────────────────────────────────────────────────────────
+router.get("/media/:filename", async (req, res) => {
+  const { filename } = req.params;
+  try {
+    const result = await db.execute({
+      sql: "SELECT mime_type, data FROM media_files WHERE filename = ? OR asset_key = ? LIMIT 1",
+      args: [filename, filename],
+    });
+
+    if (!result.rows || result.rows.length === 0) {
+      return res.status(404).json({ error: { code: "NOT_FOUND", message: "Media file not found in database." } });
+    }
+
+    const row = result.rows[0];
+    const buffer = Buffer.from(row.data);
+
+    res.setHeader("Content-Type", row.mime_type || "image/webp");
+    res.setHeader("Content-Length", buffer.length);
+    res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+    return res.end(buffer);
+  } catch (err) {
+    console.error("[cms/media] Turso fetch error:", err.message);
+    return res.status(500).json({ error: { code: "INTERNAL_ERROR", message: "Failed to load image from database." } });
+  }
+});
+
+// ─────────────────────────────────────────────────────────────────
 // POST /api/v1/cms/upload
-// Upload an image → saves to assets/uploads/ → returns URL
+// Upload an image → compresses into WebP (100% original resolution) → saves directly into Turso database
 // Optional body param: block_key — auto-updates the block after upload
 // ─────────────────────────────────────────────────────────────────
 router.post("/upload", requireAuth, upload.single("image"), async (req, res) => {
@@ -553,57 +582,75 @@ router.post("/upload", requireAuth, upload.single("image"), async (req, res) => 
   let originalSize = req.file.size;
   let optimizedSize = req.file.size;
   let savings = "0%";
+  let width = null;
+  let height = null;
+  let mimeType = isSvg ? "image/svg+xml" : "image/webp";
 
   if (!isSvg) {
     try {
+      // Compresses file size significantly while retaining 100% original resolution (width x height)
       const optimized = await optimizeImage(req.file.buffer);
       finalBuffer   = optimized.buffer;
       optimizedSize = optimized.size;
+      width         = optimized.width;
+      height        = optimized.height;
       savings = ((1 - optimizedSize / originalSize) * 100).toFixed(1) + "%";
     } catch (optErr) {
       console.warn("[cms/upload] Optimization fallback to original:", optErr.message);
       const ext = path.extname(req.file.originalname).toLowerCase() || ".jpg";
       filename = `upload_${Date.now()}${ext}`;
+      mimeType = req.file.mimetype || "image/jpeg";
     }
   }
 
-  // Save the optimized file to assets/uploads/
-  const fullFilePath = path.join(UPLOADS_DIR, filename);
-  fs.writeFileSync(fullFilePath, finalBuffer);
+  const assetKey = `upload_${Date.now()}`;
+  const servedPath = `api/v1/cms/media/${filename}`;
 
-  const relativePath = `assets/uploads/${filename}`;
-
-  // Register in media_assets table
+  // ── Save directly to Turso Cloud (media_files table) — ZERO local disk files ──
   try {
     await db.execute({
-      sql: `INSERT OR IGNORE INTO media_assets (asset_key, file_path, alt_text, category)
+      sql: `INSERT INTO media_files (asset_key, filename, mime_type, data, width, height, size_bytes)
+            VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      args: [assetKey, filename, mimeType, finalBuffer, width, height, optimizedSize],
+    });
+  } catch (dbErr) {
+    console.error("[cms/upload] Failed to store image binary in Turso:", dbErr.message);
+    return res.status(500).json({ error: { code: "DB_ERROR", message: "Failed to store image in database." } });
+  }
+
+  // Register in media_assets catalog
+  try {
+    await db.execute({
+      sql: `INSERT OR REPLACE INTO media_assets (asset_key, file_path, alt_text, category)
             VALUES (?, ?, ?, 'upload')`,
-      args: [`upload_${Date.now()}`, relativePath, req.file.originalname],
+      args: [assetKey, servedPath, req.file.originalname],
     });
   } catch (_) { /* non-critical */ }
 
-  // If a block_key was supplied, auto-update that block with the new image path
+  // If a block_key was supplied, auto-update that block with the new image URL
   const blockKey = req.body.block_key;
   if (blockKey) {
     try {
       await db.execute({
         sql: "UPDATE content_blocks SET value = ?, updated_at = CURRENT_TIMESTAMP, updated_by = ? WHERE block_key = ?",
-        args: [relativePath, editor, blockKey],
+        args: [servedPath, editor, blockKey],
       });
-      broadcast({ type: "cms_block_updated", key: blockKey, value: relativePath, blockType: "image", updatedBy: editor, table: "content_blocks" });
+      broadcast({ type: "cms_block_updated", key: blockKey, value: servedPath, blockType: "image", updatedBy: editor, table: "content_blocks" });
     } catch (_) { /* non-critical if block doesn't exist */ }
   }
 
-  console.log(`[cms/upload] ${editor} uploaded: ${relativePath} | Original: ${(originalSize/1024).toFixed(1)}KB -> Saved: ${(optimizedSize/1024).toFixed(1)}KB (${savings} reduced)`);
+  console.log(`[cms/upload] ${editor} saved to Turso DB: ${servedPath} | Original: ${(originalSize/1024).toFixed(1)}KB -> Turso: ${(optimizedSize/1024).toFixed(1)}KB (${savings} reduced) | Resolution: ${width || 'original'}x${height || 'original'}`);
 
   res.status(201).json({
     success: true,
-    url: `/${relativePath}`,
-    path: relativePath,
+    url: `/${servedPath}`,
+    path: servedPath,
     filename,
     originalSize,
     optimizedSize,
     savings,
+    width,
+    height,
     block_key: blockKey || null,
   });
 });

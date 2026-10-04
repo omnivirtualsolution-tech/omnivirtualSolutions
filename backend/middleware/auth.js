@@ -11,9 +11,15 @@
 //  • Returns distinct codes for expired vs. invalid tokens so the
 //    client can show "session expired — please log in again" vs.
 //    a generic auth error, without leaking server internals
+//  • Session revocation: every token carries a fingerprint of the
+//    admin's current credentials (password hash + email). Changing
+//    the password or login email instantly invalidates every token
+//    issued before the change (e.g. a stolen/leaked session).
 // =================================================================
 
-const jwt = require("jsonwebtoken");
+const jwt    = require("jsonwebtoken");
+const crypto = require("crypto");
+const { db } = require("../db");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -39,8 +45,19 @@ if (!JWT_SECRET || JWT_SECRET === "omni-cms-secret-change-in-production") {
 // Use the env var if set, fall back to a development placeholder only
 const EFFECTIVE_SECRET = JWT_SECRET || "omni-cms-dev-secret-DO-NOT-USE-IN-PRODUCTION";
 
+// ── Credential fingerprint ────────────────────────────────────────
+// HMAC of the stored password hash + email, keyed with the JWT secret.
+// Not reversible, and changes whenever either credential changes.
+function credentialFingerprint(user) {
+  return crypto
+    .createHmac("sha256", EFFECTIVE_SECRET)
+    .update(`${user.password_hash}|${String(user.email).toLowerCase()}`)
+    .digest("base64url")
+    .slice(0, 22);
+}
+
 // ── requireAuth middleware ─────────────────────────────────────────
-function requireAuth(req, res, next) {
+async function requireAuth(req, res, next) {
   const header = req.headers["authorization"] || "";
   const token  = header.startsWith("Bearer ") ? header.slice(7).trim() : (req.query?.token || null);
 
@@ -50,10 +67,9 @@ function requireAuth(req, res, next) {
     });
   }
 
+  let payload;
   try {
-    const payload = jwt.verify(token, EFFECTIVE_SECRET);
-    req.admin = payload; // { id, username, role, iat, exp }
-    return next();
+    payload = jwt.verify(token, EFFECTIVE_SECRET);
   } catch (err) {
     if (err.name === "TokenExpiredError") {
       return res.status(401).json({
@@ -64,6 +80,34 @@ function requireAuth(req, res, next) {
       error: { code: "TOKEN_INVALID", message: "Invalid authentication token." },
     });
   }
+
+  // Revocation check — token must match the admin's CURRENT credentials
+  try {
+    const result = await db.execute({
+      sql:  "SELECT password_hash, email FROM admin_users WHERE id = ? AND is_active = 1 LIMIT 1",
+      args: [payload.id],
+    });
+    const user = result.rows[0];
+    const expected = user ? credentialFingerprint(user) : null;
+    if (
+      !expected ||
+      typeof payload.cfp !== "string" ||
+      payload.cfp.length !== expected.length ||
+      !crypto.timingSafeEqual(Buffer.from(payload.cfp), Buffer.from(expected))
+    ) {
+      return res.status(401).json({
+        error: { code: "SESSION_REVOKED", message: "Your session is no longer valid. Please log in again." },
+      });
+    }
+  } catch (err) {
+    console.error("[auth/middleware] Revocation check failed:", err.message);
+    return res.status(500).json({
+      error: { code: "INTERNAL_ERROR", message: "Authentication check failed." },
+    });
+  }
+
+  req.admin = payload; // { id, username, role, cfp, iat, exp }
+  return next();
 }
 
 // ── signToken ─────────────────────────────────────────────────────
@@ -73,4 +117,4 @@ function signToken(payload) {
   return jwt.sign(payload, EFFECTIVE_SECRET, { expiresIn: "2h" });
 }
 
-module.exports = { requireAuth, signToken };
+module.exports = { requireAuth, signToken, credentialFingerprint };

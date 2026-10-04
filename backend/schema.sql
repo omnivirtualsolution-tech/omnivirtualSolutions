@@ -41,6 +41,25 @@ CREATE TABLE IF NOT EXISTS media_assets (
 );
 
 -- ─────────────────────────────────────────────────────────────────
+-- 2b. Direct Database Media Storage (Turso Cloud BLOB Storage)
+--     Stores optimized WebP image binaries with 100% original resolution
+--     Zero local disk dependency — works in serverless/cloud environments
+-- ─────────────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS media_files (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    asset_key   TEXT UNIQUE NOT NULL,
+    filename    TEXT UNIQUE NOT NULL,
+    mime_type   TEXT NOT NULL,
+    data        BLOB NOT NULL,
+    width       INTEGER,
+    height      INTEGER,
+    size_bytes  INTEGER,
+    created_at  DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_media_files_filename ON media_files(filename);
+CREATE INDEX IF NOT EXISTS idx_media_files_key ON media_files(asset_key);
+
+-- ─────────────────────────────────────────────────────────────────
 -- 3. Hero Showcase Books (Swiper carousel on homepage)
 --    8 book titles displayed in the hero section coverflow swiper.
 -- ─────────────────────────────────────────────────────────────────

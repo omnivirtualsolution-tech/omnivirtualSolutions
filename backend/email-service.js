@@ -86,17 +86,8 @@ async function updateNotifyStatus(submissionId, status) {
 
 // ── Visual Design Template Builders (Compliant with Email Visual Design Skill) ──
 
+// Emails use hosted HTTPS URL for the header logo to prevent Gmail from showing an attachment chip
 function getLogoAttachment() {
-  const logoPath = path.resolve(__dirname, "../assets/img/OmniLogo2.png");
-  if (fs.existsSync(logoPath)) {
-    return [
-      {
-        filename: "omni-logo.png",
-        path: logoPath,
-        cid: "omnilogo",
-      },
-    ];
-  }
   return [];
 }
 
@@ -121,7 +112,8 @@ function buildEmailShell({
   const brandAddress = company?.full_address || "1350 Ave of the Americas, Fl 2 -1100, New York, NY 10019";
   const emailTo = supportEmail || company?.email || "admin@omnivirtualsolution.com";
   const copyrightLine = company?.copyright_text || `© ${new Date().getFullYear()} ${brandName}. All rights reserved.`;
-  const logoSrc = isWebPreview ? "/assets/img/OmniLogo2.png" : "cid:omnilogo";
+  const siteBaseUrl = (process.env.PUBLIC_URL || process.env.URL || "https://www.omnivirtualsolution.com").replace(/\/$/, "");
+  const logoSrc = isWebPreview ? "/assets/img/OmniLogo2.png" : `${siteBaseUrl}/assets/img/OmniLogo2.png`;
   const brandGold = "#eba22d";
 
   // ─────────────────────────────────────────────────────────────────
@@ -816,7 +808,6 @@ async function sendNewSubmissionNotification(submission) {
       subject,
       html: htmlBody,
       text: `New inquiry from ${submission.full_name} (${submission.email})\n\nSubject: ${submission.subject || "General Inquiry"}\n\nMessage:\n${submission.message}`,
-      attachments: getLogoAttachment(),
     });
 
     await updateNotifyStatus(submission.id, "sent");
@@ -866,7 +857,6 @@ async function sendAutoReply(submission) {
       subject,
       text: bodyText,
       html: htmlBody,
-      attachments: getLogoAttachment(),
     });
     await logEmail({ eventType: "auto_reply", submissionId: submission.id, recipientEmail: submission.email, subject, status: "sent" });
     return { success: true };
@@ -914,7 +904,6 @@ async function sendReply({ submission, replyBody, replyId, sentBy }) {
       subject,
       text: fullBody,
       html: htmlBody,
-      attachments: getLogoAttachment(),
     });
 
     await db.execute({

@@ -4,6 +4,8 @@
 // POST /api/v1/auth/login   → returns JWT on valid credentials
 // POST /api/v1/auth/logout  → server-side logs + client clears token
 // GET  /api/v1/auth/me      → returns current admin info (requires auth)
+// PATCH /api/v1/auth/password → change login password (requires current password)
+// PATCH /api/v1/auth/email    → change login email    (requires current password)
 //
 // Security controls (Login Page Security Mastery Skill):
 //  • Rate-limited per-IP (global) AND per-account (targeted lockout prevention)
@@ -21,12 +23,14 @@ const bcrypt       = require("bcryptjs");
 const { rateLimit, ipKeyGenerator } = require("express-rate-limit");
 const router       = express.Router();
 const { db }       = require("../db");
-const { requireAuth, signToken } = require("../middleware/auth");
+const { requireAuth, signToken, credentialFingerprint } = require("../middleware/auth");
 
 // ── Validation constants ───────────────────────────────────────────
 const MAX_USERNAME_LEN = 254;  // max email length per RFC 5321
 const MAX_PASSWORD_LEN = 1024; // prevent bcrypt DoS via huge strings
 const MIN_PASSWORD_LEN = 1;    // login only — creation enforces 12+
+const MIN_NEW_PASSWORD_LEN = 12; // for password changes
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 // ── Dummy hash for timing-safe "user not found" path ───────────────
 // Pre-computed so the cost is identical to a real lookup.
@@ -81,6 +85,41 @@ const accountRateLimit = rateLimit({
     });
   },
 });
+
+// ── Rate limiter: credential changes (per admin, failures only) ───
+// 5 wrong "current password" attempts per 15 min per admin account.
+// Stops someone with a hijacked session from brute-forcing the password.
+const credentialChangeLimit = rateLimit({
+  windowMs:         15 * 60 * 1000,
+  max:              5,
+  standardHeaders: "draft-7",
+  legacyHeaders:    false,
+  validate:        { trustProxy: false, xForwardedForHeader: false },
+  keyGenerator:    (req) => `cred-change:${req.admin?.id ?? "anon"}`,
+  skipSuccessfulRequests: true,
+  // Only wrong "current password" attempts count — not validation typos
+  requestWasSuccessful: (req, res) => res.statusCode !== 401,
+  handler: (req, res) => {
+    console.warn(`[auth/rate-limit] Credential change blocked for admin ID ${req.admin?.id}`);
+    res.status(429).json({
+      error: {
+        code:    "RATE_LIMITED",
+        message: "Too many failed attempts. Please wait 15 minutes before trying again.",
+        retryAfterSeconds: 15 * 60,
+      },
+    });
+  },
+});
+
+// Issue a short-lived token bound to the admin's current credentials
+function issueTokenFor(user) {
+  return signToken({
+    id:       user.id,
+    username: user.username,
+    role:     user.role,
+    cfp:      credentialFingerprint(user),
+  });
+}
 
 // ── Helpers ────────────────────────────────────────────────────────
 function getClientIP(req) {
@@ -164,12 +203,9 @@ router.post("/login", ipRateLimit, accountRateLimit, async (req, res) => {
       args: [user.id],
     });
 
-    // 6. Sign a short-lived token (2 h — re-auth frequently)
-    const token = signToken({
-      id:       user.id,
-      username: user.username,
-      role:     user.role,
-    });
+    // 6. Sign a short-lived token (2 h — re-auth frequently),
+    //    bound to the current credentials for revocation
+    const token = issueTokenFor(user);
 
     console.log(
       `[auth/login] SUCCESS: ${user.username} (${user.role}) | IP: ${ip} | UA: ${ua}`
@@ -211,17 +247,25 @@ router.get("/me", requireAuth, async (req, res) => {
 });
 
 // ── PATCH /api/v1/auth/password — change admin password ───────────
-router.patch("/password", requireAuth, async (req, res) => {
+// Body: { currentPassword, newPassword }
+// On success, every other session is revoked and a fresh token is returned.
+router.patch("/password", ipRateLimit, requireAuth, credentialChangeLimit, async (req, res) => {
   const { currentPassword, newPassword } = req.body || {};
-  if (!currentPassword || !newPassword) {
+  if (typeof currentPassword !== "string" || typeof newPassword !== "string" || !currentPassword || !newPassword) {
     return res.status(400).json({
       error: { code: "VALIDATION_ERROR", message: "currentPassword and newPassword are required." },
     });
   }
 
-  if (typeof newPassword !== "string" || newPassword.length < 10) {
+  if (currentPassword.length > MAX_PASSWORD_LEN || newPassword.length > MAX_PASSWORD_LEN) {
     return res.status(400).json({
-      error: { code: "VALIDATION_ERROR", message: "newPassword must be at least 10 characters long." },
+      error: { code: "VALIDATION_ERROR", message: "Password exceeds maximum allowed length." },
+    });
+  }
+
+  if (newPassword.length < MIN_NEW_PASSWORD_LEN) {
+    return res.status(400).json({
+      error: { code: "VALIDATION_ERROR", message: `New password must be at least ${MIN_NEW_PASSWORD_LEN} characters long.` },
     });
   }
 
@@ -231,9 +275,15 @@ router.patch("/password", requireAuth, async (req, res) => {
     });
   }
 
+  if (newPassword === currentPassword) {
+    return res.status(400).json({
+      error: { code: "VALIDATION_ERROR", message: "New password must be different from the current password." },
+    });
+  }
+
   try {
     const result = await db.execute({
-      sql: "SELECT id, password_hash FROM admin_users WHERE id = ? AND is_active = 1",
+      sql: "SELECT id, username, email, role, password_hash FROM admin_users WHERE id = ? AND is_active = 1",
       args: [req.admin.id],
     });
 
@@ -244,6 +294,7 @@ router.patch("/password", requireAuth, async (req, res) => {
     const user = result.rows[0];
     const match = await bcrypt.compare(currentPassword, user.password_hash);
     if (!match) {
+      console.warn(`[auth/password] Wrong current password for admin ID ${user.id} | IP: ${getClientIP(req)}`);
       return res.status(401).json({
         error: { code: "INVALID_CREDENTIALS", message: "Current password is incorrect." },
       });
@@ -255,12 +306,107 @@ router.patch("/password", requireAuth, async (req, res) => {
       args: [newHash, user.id],
     });
 
-    console.log(`[auth/password] Password updated successfully for admin ID ${user.id}`);
-    return res.json({ success: true, message: "Password updated successfully." });
+    const token = issueTokenFor({ ...user, password_hash: newHash });
+
+    console.log(`[auth/password] Password updated for admin ID ${user.id} | IP: ${getClientIP(req)} — other sessions revoked`);
+    return res.json({
+      success: true,
+      message: "Password updated successfully. All other sessions have been signed out.",
+      token,
+      admin: { id: user.id, username: user.username, email: user.email, role: user.role },
+    });
   } catch (err) {
     console.error("[auth/password] Error:", err.message);
     return res.status(500).json({
       error: { code: "INTERNAL_ERROR", message: "Failed to update password." },
+    });
+  }
+});
+
+// ── PATCH /api/v1/auth/email — change admin login email ───────────
+// Body: { currentPassword, newEmail }
+// Requires re-entering the current password (prevents a hijacked
+// session from silently taking over the account).
+router.patch("/email", ipRateLimit, requireAuth, credentialChangeLimit, async (req, res) => {
+  const { currentPassword, newEmail } = req.body || {};
+  if (typeof currentPassword !== "string" || typeof newEmail !== "string" || !currentPassword || !newEmail.trim()) {
+    return res.status(400).json({
+      error: { code: "VALIDATION_ERROR", message: "currentPassword and newEmail are required." },
+    });
+  }
+
+  if (currentPassword.length > MAX_PASSWORD_LEN) {
+    return res.status(400).json({
+      error: { code: "VALIDATION_ERROR", message: "Password exceeds maximum allowed length." },
+    });
+  }
+
+  const email = newEmail.trim().toLowerCase();
+  if (email.length > MAX_USERNAME_LEN || !EMAIL_RE.test(email)) {
+    return res.status(400).json({
+      error: { code: "VALIDATION_ERROR", message: "Please enter a valid email address." },
+    });
+  }
+
+  try {
+    const result = await db.execute({
+      sql: "SELECT id, username, email, role, password_hash FROM admin_users WHERE id = ? AND is_active = 1",
+      args: [req.admin.id],
+    });
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: { code: "NOT_FOUND", message: "Admin user not found." } });
+    }
+
+    const user = result.rows[0];
+    const match = await bcrypt.compare(currentPassword, user.password_hash);
+    if (!match) {
+      console.warn(`[auth/email] Wrong current password for admin ID ${user.id} | IP: ${getClientIP(req)}`);
+      return res.status(401).json({
+        error: { code: "INVALID_CREDENTIALS", message: "Current password is incorrect." },
+      });
+    }
+
+    if (String(user.email).toLowerCase() === email) {
+      return res.status(400).json({
+        error: { code: "VALIDATION_ERROR", message: "That is already your login email." },
+      });
+    }
+
+    // Must not collide with another admin's email OR username (login accepts both)
+    const clash = await db.execute({
+      sql: "SELECT id FROM admin_users WHERE (lower(email) = ? OR lower(username) = ?) AND id != ? LIMIT 1",
+      args: [email, email, user.id],
+    });
+    if (clash.rows.length > 0) {
+      return res.status(409).json({
+        error: { code: "EMAIL_IN_USE", message: "That email cannot be used. Please choose another." },
+      });
+    }
+
+    // If the username was the old email, keep them in sync so the old
+    // address can no longer be used to sign in.
+    const usernameWasEmail = String(user.username).toLowerCase() === String(user.email).toLowerCase();
+    const newUsername = usernameWasEmail ? email : user.username;
+
+    await db.execute({
+      sql: "UPDATE admin_users SET email = ?, username = ? WHERE id = ?",
+      args: [email, newUsername, user.id],
+    });
+
+    const updated = { ...user, email, username: newUsername };
+    const token = issueTokenFor(updated);
+
+    console.log(`[auth/email] Login email changed for admin ID ${user.id} | IP: ${getClientIP(req)} — other sessions revoked`);
+    return res.json({
+      success: true,
+      message: "Login email updated. All other sessions have been signed out.",
+      token,
+      admin: { id: updated.id, username: updated.username, email: updated.email, role: updated.role },
+    });
+  } catch (err) {
+    console.error("[auth/email] Error:", err.message);
+    return res.status(500).json({
+      error: { code: "INTERNAL_ERROR", message: "Failed to update email." },
     });
   }
 });

@@ -1651,6 +1651,11 @@
           <i class="bi bi-images"></i> Media Library
         </a>
       </li>
+      <li>
+        <a class="nav-item" onclick="switchTab('account-security', this)">
+          <i class="bi bi-shield-lock-fill" style="color:var(--gold);"></i> Account Security
+        </a>
+      </li>
     </ul>
 
     <div class="sidebar-footer">
@@ -2188,6 +2193,118 @@
         </div>
       </section>
 
+      <!-- ── SECTION: ACCOUNT SECURITY (change login email / password) ── -->
+      <section id="section-account-security" class="admin-section">
+        <style>
+          .sec-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap:20px; }
+          .sec-field { margin-bottom:16px; }
+          .sec-field label { display:block; font-size:12px; font-weight:600; color:#cbd5e1; margin-bottom:6px; }
+          .sec-hint { font-size:11px; color:var(--muted); margin-top:5px; }
+          .sec-pw-wrap { position:relative; }
+          .sec-pw-wrap input { padding-right:42px !important; }
+          .sec-eye { position:absolute; right:8px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--muted); cursor:pointer; font-size:15px; padding:4px 6px; }
+          .sec-eye:hover { color:var(--gold); }
+          .sec-meter { height:5px; border-radius:4px; background:rgba(255,255,255,0.07); margin-top:8px; overflow:hidden; }
+          .sec-meter > div { height:100%; width:0; border-radius:4px; transition:width .25s ease, background .25s ease; }
+          .sec-msg { display:none; font-size:12.5px; border-radius:8px; padding:10px 12px; margin-bottom:14px; line-height:1.45; }
+          .sec-msg.show { display:block; animation: secFade .2s ease; }
+          .sec-msg.ok  { background:rgba(72,187,120,0.12); border:1px solid rgba(72,187,120,0.35); color:#9ae6b4; }
+          .sec-msg.err { background:rgba(248,113,113,0.10); border:1px solid rgba(248,113,113,0.35); color:#fca5a5; }
+          .sec-current { display:flex; align-items:center; gap:10px; background:var(--gold-dim); border:1px solid rgba(235,162,45,0.25); border-radius:10px; padding:12px 14px; margin-bottom:18px; font-size:13px; }
+          .sec-current code { font-family:'JetBrains Mono', monospace; color:#fff; word-break:break-all; }
+          .sec-note { display:flex; gap:10px; align-items:flex-start; font-size:12px; color:var(--muted); background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:10px; padding:12px 14px; margin-top:20px; line-height:1.5; }
+          @keyframes secFade { from { opacity:0; transform:translateY(-3px); } to { opacity:1; transform:none; } }
+        </style>
+
+        <div class="sec-grid">
+          <!-- Card: Change Login Email -->
+          <div class="panel" style="margin-bottom:0;">
+            <div class="panel-header">
+              <div class="panel-title"><i class="bi bi-envelope-at-fill text-warning"></i> Change Login Email</div>
+            </div>
+            <div class="panel-body">
+              <div class="sec-current">
+                <i class="bi bi-person-badge" style="color:var(--gold); font-size:18px;"></i>
+                <div>
+                  <div style="font-size:11px; color:var(--muted);">Current login email</div>
+                  <code id="secCurrentEmail">—</code>
+                </div>
+              </div>
+              <div class="sec-msg" id="secEmailMsg" role="status" aria-live="polite"></div>
+              <form id="secEmailForm" autocomplete="off" novalidate>
+                <div class="sec-field">
+                  <label for="secNewEmail">New Email Address</label>
+                  <input type="email" id="secNewEmail" class="search-input" style="width:100%; box-sizing:border-box;" placeholder="you@company.com" maxlength="254" autocomplete="email" required>
+                </div>
+                <div class="sec-field">
+                  <label for="secEmailConfirm">Confirm New Email</label>
+                  <input type="email" id="secEmailConfirm" class="search-input" style="width:100%; box-sizing:border-box;" placeholder="Re-type new email" maxlength="254" autocomplete="off" required>
+                </div>
+                <div class="sec-field">
+                  <label for="secEmailPw">Current Password</label>
+                  <div class="sec-pw-wrap">
+                    <input type="password" id="secEmailPw" class="search-input" style="width:100%; box-sizing:border-box;" placeholder="Required to confirm it's you" maxlength="1024" autocomplete="current-password" required>
+                    <button type="button" class="sec-eye" data-target="secEmailPw" aria-label="Show password"><i class="bi bi-eye"></i></button>
+                  </div>
+                </div>
+                <button type="submit" id="btnSecSaveEmail" class="btn-header btn-primary-gold" style="width:100%; justify-content:center; padding:11px 18px; font-weight:700;">
+                  <i class="bi bi-check2-circle"></i> Update Login Email
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Card: Change Password -->
+          <div class="panel" style="margin-bottom:0;">
+            <div class="panel-header">
+              <div class="panel-title"><i class="bi bi-key-fill text-warning"></i> Change Password</div>
+            </div>
+            <div class="panel-body">
+              <div class="sec-msg" id="secPwMsg" role="status" aria-live="polite"></div>
+              <form id="secPwForm" autocomplete="off" novalidate>
+                <!-- hidden username field helps password managers save the right account -->
+                <input type="text" id="secPwUsername" autocomplete="username" style="display:none;" tabindex="-1" aria-hidden="true">
+                <div class="sec-field">
+                  <label for="secCurPw">Current Password</label>
+                  <div class="sec-pw-wrap">
+                    <input type="password" id="secCurPw" class="search-input" style="width:100%; box-sizing:border-box;" maxlength="1024" autocomplete="current-password" required>
+                    <button type="button" class="sec-eye" data-target="secCurPw" aria-label="Show password"><i class="bi bi-eye"></i></button>
+                  </div>
+                </div>
+                <div class="sec-field">
+                  <label for="secNewPw">New Password</label>
+                  <div class="sec-pw-wrap">
+                    <input type="password" id="secNewPw" class="search-input" style="width:100%; box-sizing:border-box;" maxlength="1024" autocomplete="new-password" required>
+                    <button type="button" class="sec-eye" data-target="secNewPw" aria-label="Show password"><i class="bi bi-eye"></i></button>
+                  </div>
+                  <div class="sec-meter"><div id="secPwMeter"></div></div>
+                  <div class="sec-hint" id="secPwStrength">At least 12 characters. Mix upper/lowercase, numbers and symbols.</div>
+                </div>
+                <div class="sec-field">
+                  <label for="secNewPw2">Confirm New Password</label>
+                  <div class="sec-pw-wrap">
+                    <input type="password" id="secNewPw2" class="search-input" style="width:100%; box-sizing:border-box;" maxlength="1024" autocomplete="new-password" required>
+                    <button type="button" class="sec-eye" data-target="secNewPw2" aria-label="Show password"><i class="bi bi-eye"></i></button>
+                  </div>
+                </div>
+                <button type="submit" id="btnSecSavePw" class="btn-header btn-primary-gold" style="width:100%; justify-content:center; padding:11px 18px; font-weight:700;">
+                  <i class="bi bi-shield-check"></i> Update Password
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="sec-note">
+          <i class="bi bi-info-circle-fill" style="color:var(--gold); margin-top:1px;"></i>
+          <div>
+            For your protection, every change requires your current password. After a successful change,
+            <strong style="color:#e2e8f0;">all other devices and browsers are signed out immediately</strong> —
+            this device stays signed in. Repeated wrong passwords are temporarily blocked.
+          </div>
+        </div>
+      </section>
+
       <!-- ── SECTION: EMAIL UI & TEMPLATE DESIGNS ── -->
       <section id="section-email-templates" class="admin-section">
         <div class="panel">
@@ -2663,10 +2780,205 @@
           'services': '<i class="bi bi-briefcase-fill text-warning"></i> Services & Pricing Catalog',
           'leads': '<i class="bi bi-envelope-open-fill text-warning"></i> Contact Leads CRM',
           'email-templates': '<i class="bi bi-palette2 text-warning"></i> Client Email Design Studio',
-          'media': '<i class="bi bi-images text-warning"></i> Media Assets Library'
+          'media': '<i class="bi bi-images text-warning"></i> Media Assets Library',
+          'account-security': '<i class="bi bi-shield-lock-fill text-warning"></i> Account Security'
         };
         document.getElementById('topHeaderTitle').innerHTML = titles[tabId] || 'Admin Dashboard';
+
+        if (tabId === 'account-security') {
+          refreshSecurityPanel();
+        }
       };
+
+      // ── Account Security: change login email / password ────────────
+      function secGetToken() {
+        return localStorage.getItem('omni_admin_token');
+      }
+
+      function secShowMsg(id, type, text) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.className = 'sec-msg show ' + type;
+        el.textContent = text;
+      }
+
+      function secClearMsg(id) {
+        const el = document.getElementById(id);
+        if (el) { el.className = 'sec-msg'; el.textContent = ''; }
+      }
+
+      function secApplySession(data) {
+        if (data && data.token) localStorage.setItem('omni_admin_token', data.token);
+        if (data && data.admin) {
+          localStorage.setItem('omni_admin_user', JSON.stringify(data.admin));
+          const uEl = document.getElementById('sidebarUserName');
+          if (uEl) uEl.textContent = data.admin.username;
+        }
+        refreshSecurityPanel();
+      }
+
+      function refreshSecurityPanel() {
+        try {
+          const u = JSON.parse(localStorage.getItem('omni_admin_user') || '{}');
+          const cur = document.getElementById('secCurrentEmail');
+          if (cur) cur.textContent = u.email || '—';
+          const hidden = document.getElementById('secPwUsername');
+          if (hidden) hidden.value = u.email || u.username || '';
+        } catch (_) {}
+      }
+
+      async function secRequest(path, body) {
+        const res = await fetch('/api/v1/auth/' + path, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + secGetToken(),
+          },
+          body: JSON.stringify(body),
+        });
+        let data = {};
+        try { data = await res.json(); } catch (_) {}
+        // Session expired or revoked elsewhere → back to login
+        if (res.status === 401 && data.error && ['TOKEN_EXPIRED', 'TOKEN_INVALID', 'SESSION_REVOKED', 'UNAUTHORIZED'].includes(data.error.code)) {
+          handleAuthFailure();
+          throw new Error('Session ended. Please log in again.');
+        }
+        if (!res.ok) {
+          throw new Error((data.error && data.error.message) || 'Request failed. Please try again.');
+        }
+        return data;
+      }
+
+      function secSetBusy(btn, busy, idleHtml) {
+        if (!btn) return;
+        btn.disabled = busy;
+        btn.style.opacity = busy ? '0.65' : '';
+        btn.innerHTML = busy ? '<i class="bi bi-arrow-repeat"></i> Saving…' : idleHtml;
+      }
+
+      function secScorePassword(pw) {
+        let score = 0;
+        if (pw.length >= 12) score++;
+        if (pw.length >= 16) score++;
+        if (/[a-z]/.test(pw) && /[A-Z]/.test(pw)) score++;
+        if (/\d/.test(pw)) score++;
+        if (/[^A-Za-z0-9]/.test(pw)) score++;
+        if (pw.length < 12) score = Math.min(score, 1);
+        return score; // 0..5
+      }
+
+      // Show / hide password toggles
+      document.querySelectorAll('#section-account-security .sec-eye').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const input = document.getElementById(btn.dataset.target);
+          if (!input) return;
+          const show = input.type === 'password';
+          input.type = show ? 'text' : 'password';
+          btn.innerHTML = show ? '<i class="bi bi-eye-slash"></i>' : '<i class="bi bi-eye"></i>';
+          btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+        });
+      });
+
+      // Live strength meter
+      const secNewPwEl = document.getElementById('secNewPw');
+      if (secNewPwEl) {
+        secNewPwEl.addEventListener('input', () => {
+          const pw = secNewPwEl.value;
+          const s = secScorePassword(pw);
+          const meter = document.getElementById('secPwMeter');
+          const label = document.getElementById('secPwStrength');
+          const levels = [
+            { w: '0%',   c: 'transparent', t: 'At least 12 characters. Mix upper/lowercase, numbers and symbols.' },
+            { w: '20%',  c: '#f87171', t: pw.length < 12 ? `Too short — ${12 - pw.length} more character(s) needed.` : 'Weak' },
+            { w: '40%',  c: '#fb923c', t: 'Fair' },
+            { w: '60%',  c: '#facc15', t: 'Good' },
+            { w: '80%',  c: '#4ade80', t: 'Strong' },
+            { w: '100%', c: '#22c55e', t: 'Very strong' },
+          ];
+          const lv = pw ? levels[Math.max(1, s)] : levels[0];
+          if (meter) { meter.style.width = lv.w; meter.style.background = lv.c; }
+          if (label) label.textContent = lv.t;
+        });
+      }
+
+      // Change email
+      const secEmailForm = document.getElementById('secEmailForm');
+      if (secEmailForm) {
+        secEmailForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          secClearMsg('secEmailMsg');
+          const btn = document.getElementById('btnSecSaveEmail');
+          const idle = btn.innerHTML;
+          const newEmail = document.getElementById('secNewEmail').value.trim();
+          const confirmEmail = document.getElementById('secEmailConfirm').value.trim();
+          const currentPassword = document.getElementById('secEmailPw').value;
+
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(newEmail)) {
+            return secShowMsg('secEmailMsg', 'err', 'Please enter a valid email address.');
+          }
+          if (newEmail.toLowerCase() !== confirmEmail.toLowerCase()) {
+            return secShowMsg('secEmailMsg', 'err', 'The two email addresses do not match.');
+          }
+          if (!currentPassword) {
+            return secShowMsg('secEmailMsg', 'err', 'Enter your current password to confirm this change.');
+          }
+
+          secSetBusy(btn, true, idle);
+          try {
+            const data = await secRequest('email', { newEmail, currentPassword });
+            secApplySession(data);
+            secEmailForm.reset();
+            secShowMsg('secEmailMsg', 'ok', (data.message || 'Login email updated.') + ' Use the new email next time you sign in.');
+          } catch (err) {
+            secShowMsg('secEmailMsg', 'err', err.message);
+            document.getElementById('secEmailPw').value = '';
+          } finally {
+            secSetBusy(btn, false, idle);
+          }
+        });
+      }
+
+      // Change password
+      const secPwForm = document.getElementById('secPwForm');
+      if (secPwForm) {
+        secPwForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          secClearMsg('secPwMsg');
+          const btn = document.getElementById('btnSecSavePw');
+          const idle = btn.innerHTML;
+          const currentPassword = document.getElementById('secCurPw').value;
+          const newPassword = document.getElementById('secNewPw').value;
+          const confirmPw = document.getElementById('secNewPw2').value;
+
+          if (!currentPassword) {
+            return secShowMsg('secPwMsg', 'err', 'Enter your current password.');
+          }
+          if (newPassword.length < 12) {
+            return secShowMsg('secPwMsg', 'err', 'New password must be at least 12 characters long.');
+          }
+          if (newPassword !== confirmPw) {
+            return secShowMsg('secPwMsg', 'err', 'The new passwords do not match.');
+          }
+          if (newPassword === currentPassword) {
+            return secShowMsg('secPwMsg', 'err', 'New password must be different from the current one.');
+          }
+
+          secSetBusy(btn, true, idle);
+          try {
+            const data = await secRequest('password', { currentPassword, newPassword });
+            secApplySession(data);
+            secPwForm.reset();
+            const meter = document.getElementById('secPwMeter');
+            if (meter) meter.style.width = '0%';
+            secShowMsg('secPwMsg', 'ok', data.message || 'Password updated successfully.');
+          } catch (err) {
+            secShowMsg('secPwMsg', 'err', err.message);
+            document.getElementById('secCurPw').value = '';
+          } finally {
+            secSetBusy(btn, false, idle);
+          }
+        });
+      }
 
       // ── Device Viewport & Realistic Mockup Switcher ──────────────
       window.setDeviceViewport = function(deviceKey, btn) {

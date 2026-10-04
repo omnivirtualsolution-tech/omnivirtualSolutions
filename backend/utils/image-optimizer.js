@@ -14,28 +14,35 @@ const fs    = require("fs");
 
 /**
  * Optimizes an image buffer or file to high-efficiency WebP.
+ * Preserves 100% original resolution (width & height) by default while drastically
+ * shrinking file size via modern WebP compression and EXIF metadata stripping.
+ *
  * @param {Buffer|string} input - File path or image Buffer
  * @param {object} [options]
- * @param {number} [options.maxWidth=1920] - Max display width
- * @param {number} [options.quality=82]    - WebP quality level (80-85 is visually lossless)
+ * @param {number} [options.quality=85]    - WebP quality level (80-90 is visually pristine)
+ * @param {number} [options.maxWidth]      - Optional max display width (omitted by default to preserve 100% original resolution)
  * @returns {Promise<{ buffer: Buffer, width: number, height: number, size: number, format: string }>}
  */
 async function optimizeImage(input, options = {}) {
-  const maxWidth = options.maxWidth || 1920;
-  const quality  = options.quality  || 82;
+  const quality = options.quality || 85;
 
-  const pipeline = sharp(input, { failOnError: false })
-    .rotate() // Auto-orient based on EXIF before stripping metadata
-    .resize({
-      width: maxWidth,
+  let pipeline = sharp(input, { failOnError: false })
+    .rotate(); // Auto-orient based on EXIF before stripping metadata
+
+  // Only resize if explicitly requested by caller; otherwise retain 100% original resolution
+  if (options.maxWidth) {
+    pipeline = pipeline.resize({
+      width: options.maxWidth,
       withoutEnlargement: true,
       fit: "inside",
-    })
-    .webp({
-      quality,
-      effort: 6, // High compression effort
-      smartSubsample: true,
     });
+  }
+
+  pipeline = pipeline.webp({
+    quality,
+    effort: 6, // Maximum compression effort
+    smartSubsample: true,
+  });
 
   const { data, info } = await pipeline.toBuffer({ resolveWithObject: true });
 

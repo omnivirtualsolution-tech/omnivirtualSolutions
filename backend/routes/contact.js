@@ -152,6 +152,7 @@ const handleContactSubmission = async (req, res) => {
     console.log(`[contact] Fallback active (strategy: ${quota.strategy}, sent24h: ${quota.sent24h}/${quota.limit}). Prompting frontend popup.`);
     return res.status(201).json({
       success: true,
+      id: newId,
       mode: "popup_fallback",
       reason: quota.strategy === "force_popup" ? "admin_forced_popup" : "quota_exceeded",
       sent24h: quota.sent24h,
@@ -168,6 +169,7 @@ const handleContactSubmission = async (req, res) => {
 
   res.status(201).json({
     success: true,
+    id: newId,
     mode: "background_sent",
     sent24h: quota.sent24h + 1,
     limit: quota.limit,
