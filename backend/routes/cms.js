@@ -27,27 +27,21 @@ const { broadcast }    = require("./live");
 const { syncUniversalEmail, isEmailKey } = require("../email-sync");
 const { getFullBusinessProfile, updateBusinessProfile } = require("../business-profile-sync");
 
-// ── Image upload config (multer) ──────────────────────────────────
+const { optimizeImage } = require("../utils/image-optimizer");
+
+// ── Image upload config (multer with memory buffer for optimization) ──
 const UPLOADS_DIR = path.resolve(__dirname, "../../assets/uploads");
 if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/svg+xml"];
-const MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
+const MAX_SIZE_BYTES = 15 * 1024 * 1024; // Allow up to 15 MB since we compress it down to ~150KB
 
-const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => cb(null, UPLOADS_DIR),
-  filename: (_req, file, cb) => {
-    const ts  = Date.now();
-    const ext = path.extname(file.originalname).toLowerCase();
-    cb(null, `upload_${ts}${ext}`);
-  },
-});
+const storage = multer.memoryStorage();
 
 const upload = multer({
   storage,
   limits: { fileSize: MAX_SIZE_BYTES },
   fileFilter: (_req, file, cb) => {
-    // Validate by actual mimetype allowlist, not client-claimed extension
     if (ALLOWED_TYPES.includes(file.mimetype)) {
       cb(null, true);
     } else {
@@ -551,8 +545,33 @@ router.post("/upload", requireAuth, upload.single("image"), async (req, res) => 
     return res.status(400).json({ error: { code: "VALIDATION_ERROR", message: "No image file provided." } });
   }
 
-  const relativePath = `assets/uploads/${req.file.filename}`;
-  const editor       = req.admin.username;
+  const editor = req.admin.username;
+  const isSvg  = req.file.mimetype === "image/svg+xml";
+
+  let finalBuffer = req.file.buffer;
+  let filename    = `upload_${Date.now()}.${isSvg ? "svg" : "webp"}`;
+  let originalSize = req.file.size;
+  let optimizedSize = req.file.size;
+  let savings = "0%";
+
+  if (!isSvg) {
+    try {
+      const optimized = await optimizeImage(req.file.buffer);
+      finalBuffer   = optimized.buffer;
+      optimizedSize = optimized.size;
+      savings = ((1 - optimizedSize / originalSize) * 100).toFixed(1) + "%";
+    } catch (optErr) {
+      console.warn("[cms/upload] Optimization fallback to original:", optErr.message);
+      const ext = path.extname(req.file.originalname).toLowerCase() || ".jpg";
+      filename = `upload_${Date.now()}${ext}`;
+    }
+  }
+
+  // Save the optimized file to assets/uploads/
+  const fullFilePath = path.join(UPLOADS_DIR, filename);
+  fs.writeFileSync(fullFilePath, finalBuffer);
+
+  const relativePath = `assets/uploads/${filename}`;
 
   // Register in media_assets table
   try {
@@ -575,13 +594,16 @@ router.post("/upload", requireAuth, upload.single("image"), async (req, res) => 
     } catch (_) { /* non-critical if block doesn't exist */ }
   }
 
-  console.log(`[cms/upload] ${editor} uploaded: ${relativePath}`);
+  console.log(`[cms/upload] ${editor} uploaded: ${relativePath} | Original: ${(originalSize/1024).toFixed(1)}KB -> Saved: ${(optimizedSize/1024).toFixed(1)}KB (${savings} reduced)`);
 
   res.status(201).json({
     success: true,
     url: `/${relativePath}`,
     path: relativePath,
-    filename: req.file.filename,
+    filename,
+    originalSize,
+    optimizedSize,
+    savings,
     block_key: blockKey || null,
   });
 });
