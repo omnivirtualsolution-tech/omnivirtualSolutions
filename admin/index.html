@@ -1631,7 +1631,7 @@
       </li>
       <li>
         <a class="nav-item" onclick="switchTab('services', this)">
-          <i class="bi bi-briefcase-fill"></i> Services & Pricing
+          <i class="bi bi-briefcase-fill"></i> Services Catalog
         </a>
       </li>
       <li>
@@ -2129,17 +2129,17 @@
       </section>
 
 
-      <!-- ── SECTION 4: SERVICES & PRICING ── -->
+      <!-- ── SECTION 4: SERVICES CATALOG ── -->
       <section id="section-services" class="admin-section">
         <div class="panel">
           <div class="panel-header">
-            <div class="panel-title"><i class="bi bi-briefcase-fill text-warning"></i> Services & Pricing Catalog</div>
+            <div class="panel-title"><i class="bi bi-briefcase-fill text-warning"></i> Services Catalog</div>
             <input type="text" class="search-input" id="searchServices" placeholder="Search service..." oninput="filterServicesTable(this.value)">
           </div>
           <div class="panel-body" style="padding:0; overflow-x:auto;">
             <table class="data-table">
               <thead>
-                <tr><th>Title</th><th>Category</th><th>Price Display</th><th>Action</th></tr>
+                <tr><th>Title</th><th>Category</th><th>Action</th></tr>
               </thead>
               <tbody id="servicesTableBody">
                 <tr><td colspan="4" style="text-align:center; padding:24px; color:var(--muted)">Loading services...</td></tr>
@@ -2180,10 +2180,15 @@
         <div class="panel">
           <div class="panel-header">
             <div class="panel-title"><i class="bi bi-images text-warning"></i> Media Assets Library</div>
-            <label class="btn-header btn-primary-gold" style="cursor:pointer;">
-              <i class="bi bi-cloud-arrow-up-fill"></i> Upload Image
-              <input type="file" id="mediaUploadMain" accept="image/*" style="display:none;" onchange="uploadMainMedia(this)">
-            </label>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <button type="button" class="btn-header" onclick="purgeUnusedMedia()" style="background:rgba(239,68,68,0.12); color:#ef4444; border:1px solid rgba(239,68,68,0.3); cursor:pointer;">
+                <i class="bi bi-trash3"></i> Purge Unused Uploads
+              </button>
+              <label class="btn-header btn-primary-gold" style="cursor:pointer; margin-bottom:0;">
+                <i class="bi bi-cloud-arrow-up-fill"></i> Upload Image
+                <input type="file" id="mediaUploadMain" accept="image/*" style="display:none;" onchange="uploadMainMedia(this)">
+              </label>
+            </div>
           </div>
           <div class="panel-body">
             <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:16px;" id="mediaMainGrid">
@@ -2777,7 +2782,7 @@
           'overview': '<i class="bi bi-grid-1x2-fill text-warning"></i> Overview Dashboard',
           'live-editor': '<i class="bi bi-browser-chrome text-warning"></i> Live In-Place Website Editor',
           'business-profile': '<i class="bi bi-building-gear text-warning"></i> Universal Business Profile & Contact Data',
-          'services': '<i class="bi bi-briefcase-fill text-warning"></i> Services & Pricing Catalog',
+          'services': '<i class="bi bi-briefcase-fill text-warning"></i> Services Catalog',
           'leads': '<i class="bi bi-envelope-open-fill text-warning"></i> Contact Leads CRM',
           'email-templates': '<i class="bi bi-palette2 text-warning"></i> Client Email Design Studio',
           'media': '<i class="bi bi-images text-warning"></i> Media Assets Library',
@@ -3315,6 +3320,7 @@
           const clean = path.startsWith('/') ? path.slice(1) : path;
           const fullUrl = clean.startsWith('http') ? clean : '/' + clean;
           const filename = clean.split('/').pop();
+          const isUploaded = clean.includes('upload_') || clean.includes('uploads/') || clean.includes('/media/');
           return `
             <div style="position:relative; aspect-ratio:4/3; border-radius:10px; overflow:hidden; border:2px solid rgba(255,255,255,0.08); background:#151a24; cursor:pointer; transition:all 0.2s;"
                  onmouseover="this.style.borderColor='#eba22d'; this.style.transform='scale(1.04)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.6)';"
@@ -3322,6 +3328,16 @@
                  onclick="applyPickedImage('${clean}')"
                  title="Click to apply: ${filename}">
               <img src="${fullUrl}" alt="${filename}" style="width:100%; height:100%; object-fit:cover; display:block;">
+              ${isUploaded ? `
+                <button type="button"
+                        onclick="deleteMediaFromTurso('${clean}', event)"
+                        title="Delete permanently from Turso Cloud database"
+                        style="position:absolute; top:6px; right:6px; background:rgba(239,68,68,0.9); color:#fff; border:none; border-radius:6px; width:26px; height:26px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:12px; z-index:5; box-shadow:0 2px 6px rgba(0,0,0,0.4); transition:all 0.2s;"
+                        onmouseover="this.style.background='#dc2626'; this.style.transform='scale(1.15)';"
+                        onmouseout="this.style.background='rgba(239,68,68,0.9)'; this.style.transform='scale(1)';">
+                  <i class="bi bi-trash3-fill"></i>
+                </button>
+              ` : ''}
               <div style="position:absolute; bottom:0; inset-inline:0; padding:4px 8px; background:rgba(0,0,0,0.78); font-size:10px; color:#cbd5e1; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; border-top:1px solid rgba(255,255,255,0.06);">
                 ${filename}
               </div>
@@ -3506,6 +3522,11 @@
                 if (document.getElementById('section-business-profile')?.classList.contains('active')) {
                   window.loadBusinessProfile(true);
                 }
+              } else if (event.type === 'media_deleted' || event.type === 'media_purged') {
+                showLiveToast(event.type === 'media_purged' ? `Cleaned unused media from Turso (${event.count || 0} removed)` : `Image "${escapeHtml(event.filename || '')}" deleted from Turso Cloud`, 'info');
+                loadMedia();
+                if (typeof loadEditorMediaList === 'function') loadEditorMediaList();
+                scheduleAnalyticsRefresh();
               } else if (event.table === 'content_blocks' || event.table === 'services') {
                 showLiveToast(`Content updated: ${escapeHtml(event.key || '')}`, 'info');
               }
@@ -3993,14 +4014,8 @@
             <td><strong>${escapeHtml(s.title)}</strong></td>
             <td><span class="status-badge" style="background:rgba(255,255,255,0.06); color:var(--muted);">${escapeHtml(s.categoryTitle)}</span></td>
             <td>
-              <input type="text" value="${escapeHtml(s.price || s.price_display || '')}" id="price-${s.slug}" style="background:#1a202c; color:#fff; border:1px solid var(--border); border-radius:6px; padding:4px 8px; font-size:12px; width:130px;">
-            </td>
-            <td>
-              <button class="btn-header btn-primary-gold" style="padding:3px 8px; font-size:11px;" onclick="saveServicePrice('${s.slug}')">
-                Save Price
-              </button>
-              <button class="btn-header" style="padding:3px 8px; font-size:11px; margin-left:6px; border-color:rgba(235,162,45,0.4);" onclick="openServiceInLiveEditor('${s.slug}')" title="Edit title, price, overview, and features in Live Editor">
-                <i class="bi bi-browser-chrome text-warning"></i> Live Editor
+              <button class="btn-header btn-primary-gold" style="padding:4px 10px; font-size:11px;" onclick="openServiceInLiveEditor('${s.slug}')" title="Edit title, overview, and features in Live Editor">
+                <i class="bi bi-browser-chrome"></i> Edit in Live Editor
               </button>
             </td>
           </tr>
@@ -4039,28 +4054,116 @@
       // ── Load Media ──────────────────────────────────────────────
       async function loadMedia() {
         try {
+          // 1. Fetch live uploaded files directly from Turso database
+          let tursoFiles = [];
+          if (token) {
+            try {
+              const resTurso = await fetch('/api/v1/cms/media', {
+                headers: { 'Authorization': 'Bearer ' + token }
+              });
+              if (resTurso.ok) {
+                const dataTurso = await resTurso.json();
+                tursoFiles = dataTurso.media || [];
+              }
+            } catch (_) {}
+          }
+
+          // 2. Fetch site metadata for static assets
           const res = await fetch('/api/v1/site-meta');
           if (!res.ok) throw new Error('HTTP ' + res.status);
           const data = await res.json();
           const assets = data.media_assets || [];
           const defaultImgs = [
-            'assets/img/about_team.jpg',
-            'assets/img/footer-image.jpg',
-            'assets/img/OmniLogo2.png',
-            'assets/img/books/book1.png',
-            'assets/img/books/book2.png',
-            'assets/img/books/book3.png',
-            'assets/img/books/book4.png'
+            'assets/img/about_team.webp',
+            'assets/img/footer-image.webp',
+            'assets/img/OmniLogo2.webp',
+            'assets/img/books/book1.webp',
+            'assets/img/books/book2.webp',
+            'assets/img/books/book3.webp',
+            'assets/img/books/book4.webp'
           ];
-          const all = Array.from(new Set([...assets.map(a => a.file_path), ...defaultImgs]));
 
-          document.getElementById('mediaMainGrid').innerHTML = all.map(path => {
-            const clean = path.startsWith('/') ? path.slice(1) : path;
+          // Build unified media items
+          const itemsMap = new Map();
+
+          // Add Turso database files first
+          tursoFiles.forEach(tf => {
+            const urlPath = `api/v1/cms/media/${tf.filename}`;
+            itemsMap.set(tf.filename, {
+              path: urlPath,
+              filename: tf.filename,
+              isTurso: true,
+              sizeKB: tf.size_kb,
+              dimensions: tf.width && tf.height ? `${tf.width}×${tf.height}` : null,
+            });
+          });
+
+          // Add remaining catalog assets
+          assets.forEach(a => {
+            const fn = a.file_path.split('/').pop();
+            const isUpload = a.category === 'upload' || a.file_path.includes('upload_') || a.file_path.includes('/media/');
+            if (!itemsMap.has(fn)) {
+              itemsMap.set(fn, {
+                path: a.file_path,
+                filename: fn,
+                isTurso: isUpload,
+                sizeKB: null,
+                dimensions: null,
+              });
+            }
+          });
+
+          // Add default static assets
+          defaultImgs.forEach(p => {
+            const fn = p.split('/').pop();
+            if (!itemsMap.has(fn)) {
+              itemsMap.set(fn, {
+                path: p,
+                filename: fn,
+                isTurso: false,
+                sizeKB: null,
+                dimensions: null,
+              });
+            }
+          });
+
+          const allItems = Array.from(itemsMap.values());
+
+          document.getElementById('mediaMainGrid').innerHTML = allItems.map(item => {
+            const clean = item.path.startsWith('/') ? item.path.slice(1) : item.path;
+            const fullUrl = clean.startsWith('http') ? clean : '/' + clean;
             return `
-              <div style="background:var(--card2); border:1px solid var(--border); border-radius:8px; overflow:hidden;">
-                <img src="${clean}" style="width:100%; aspect-ratio:4/3; object-fit:cover; display:block;" onerror="this.style.display='none'">
-                <div style="padding:8px; font-size:11px; color:var(--muted); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;" title="${clean}">
-                  ${clean.split('/').pop()}
+              <div style="background:var(--card2); border:1px solid var(--border); border-radius:10px; overflow:hidden; display:flex; flex-direction:column;">
+                <div style="position:relative; width:100%; aspect-ratio:4/3; background:#0b0f19;">
+                  <img src="${fullUrl}" style="width:100%; height:100%; object-fit:cover; display:block;" onerror="this.style.opacity='0.4'">
+                  ${item.isTurso ? `
+                    <span style="position:absolute; top:6px; left:6px; font-size:10px; background:rgba(235,162,45,0.9); color:#000; padding:2px 6px; border-radius:4px; font-weight:700; display:flex; align-items:center; gap:4px; box-shadow:0 2px 4px rgba(0,0,0,0.5);">
+                      <i class="bi bi-cloud-check-fill"></i> Turso DB
+                    </span>
+                  ` : `
+                    <span style="position:absolute; top:6px; left:6px; font-size:10px; background:rgba(15,23,42,0.85); color:#94a3b8; padding:2px 6px; border-radius:4px; font-weight:500;">
+                      Core
+                    </span>
+                  `}
+                </div>
+                <div style="padding:10px; flex:1; display:flex; flex-direction:column; justify-content:space-between; gap:8px;">
+                  <div>
+                    <div style="font-size:11px; font-weight:600; color:#e2e8f0; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;" title="${item.filename}">
+                      ${item.filename}
+                    </div>
+                    ${item.sizeKB ? `<div style="font-size:10px; color:#94a3b8; margin-top:2px;">Size: ${item.sizeKB} KB ${item.dimensions ? '• ' + item.dimensions : ''}</div>` : ''}
+                  </div>
+                  ${item.isTurso ? `
+                    <button type="button" 
+                            class="btn btn-sm btn-outline-danger" 
+                            onclick="deleteMediaFromTurso('${item.filename}', event)"
+                            style="font-size:11px; padding:4px 8px; border-radius:6px; display:flex; align-items:center; justify-content:center; gap:5px;"
+                            title="Delete permanently from Turso Cloud database">
+                      <i class="bi bi-trash3-fill"></i> Delete from Turso
+                    </button>
+                  ` : `
+                    <div style="font-size:10px; color:#64748b; font-style:italic;">Protected system asset</div>
+                  `}
                 </div>
               </div>
             `;
@@ -4070,6 +4173,84 @@
           document.getElementById('mediaMainGrid').innerHTML = '<div style="color:var(--muted);">No media loaded.</div>';
         }
       }
+
+      window.deleteMediaFromTurso = async function(filePath, e) {
+        if (e) {
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        const filename = filePath.split('/').pop();
+        if (!confirm(`Delete "${filename}" from Turso Cloud database?\n\nThis will permanently delete the binary data from Turso to conserve database storage.`)) {
+          return;
+        }
+
+        try {
+          const res = await fetch(`/api/v1/cms/media/${encodeURIComponent(filename)}`, {
+            method: 'DELETE',
+            headers: {
+              'Authorization': 'Bearer ' + token
+            }
+          });
+
+          if (res.status === 401) {
+            handleAuthFailure();
+            return;
+          }
+
+          const data = await res.json();
+          if (res.ok && data.success) {
+            const freedText = data.freedBytes ? ` (${(data.freedBytes / 1024).toFixed(1)} KB freed)` : '';
+            if (typeof showLiveToast === 'function') {
+              showLiveToast(`"${filename}" permanently deleted from Turso${freedText}`, 'success');
+            } else {
+              alert(`Successfully deleted "${filename}" from Turso database.`);
+            }
+
+            await loadMedia();
+            if (typeof loadEditorMediaList === 'function') await loadEditorMediaList();
+            if (typeof scheduleAnalyticsRefresh === 'function') scheduleAnalyticsRefresh();
+          } else {
+            alert('Failed to delete media: ' + (data.error?.message || 'Unknown error'));
+          }
+        } catch (err) {
+          console.error('[deleteMediaFromTurso] Error:', err);
+          alert('Delete failed: ' + err.message);
+        }
+      };
+
+      window.purgeUnusedMedia = async function() {
+        if (!confirm('Scan Turso Cloud and delete all unused uploaded images?\n\nThis will permanently remove images that are not used on any page or service to conserve your Turso storage.')) {
+          return;
+        }
+
+        try {
+          const res = await fetch('/api/v1/cms/media/purge-unused', {
+            method: 'POST',
+            headers: {
+              'Authorization': 'Bearer ' + token,
+              'Content-Type': 'application/json'
+            }
+          });
+
+          if (res.status === 401) {
+            handleAuthFailure();
+            return;
+          }
+
+          const data = await res.json();
+          if (res.ok && data.success) {
+            alert(data.message || `Purged ${data.purgedCount} unused images from Turso (${data.freedKB} KB freed).`);
+            await loadMedia();
+            if (typeof loadEditorMediaList === 'function') await loadEditorMediaList();
+            if (typeof scheduleAnalyticsRefresh === 'function') scheduleAnalyticsRefresh();
+          } else {
+            alert('Purge failed: ' + (data.error?.message || 'Unknown error'));
+          }
+        } catch (err) {
+          console.error('[purgeUnusedMedia] Error:', err);
+          alert('Purge failed: ' + err.message);
+        }
+      };
 
       window.uploadMainMedia = async function(input) {
         const file = input.files[0];
@@ -4090,8 +4271,10 @@
           }
           const data = await res.json();
           if (res.ok && data.success) {
-            alert('Image uploaded successfully: ' + data.path);
+            alert('Image uploaded and saved to Turso: ' + data.path);
+            input.value = '';
             loadMedia();
+            if (typeof loadEditorMediaList === 'function') loadEditorMediaList();
           } else {
             alert('Upload failed: ' + (data.error?.message || 'Failed'));
           }

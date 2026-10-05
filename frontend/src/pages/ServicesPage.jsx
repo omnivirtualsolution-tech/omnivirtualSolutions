@@ -824,9 +824,9 @@ export default function ServicesPage() {
                     <span className="text-dark fw-semibold" data-block-key={selectedService ? `service.${selectedService.slug}.title` : undefined}>{displayTitle}</span>
                   </div>
 
-                  {/* Header row: Badge, Title, Price */}
+                  {/* Header row: Badge, Title */}
                   <div className="d-flex align-items-start justify-content-between flex-wrap gap-2">
-                    <div style={{ maxWidth: '620px' }}>
+                    <div>
                       <div className="service-tag-badge">
                         <i className="bi bi-award-fill"></i>
                         <span data-block-key="services.badge.text">{badgeText}</span>
@@ -834,15 +834,6 @@ export default function ServicesPage() {
                       <h2 className="service-title" data-block-key={selectedService ? `service.${selectedService.slug}.title` : undefined}>
                         {displayTitle}
                       </h2>
-                    </div>
-
-                    <div className="service-price-block">
-                      <span className="service-price-amount" data-block-key={selectedService ? `service.${selectedService.slug}.price` : undefined}>
-                        {displayPrice}
-                      </span>
-                      <span className="service-price-sub" data-block-key="services.price.sub">
-                        {priceSubText}
-                      </span>
                     </div>
                   </div>
 

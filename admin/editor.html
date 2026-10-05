@@ -561,12 +561,51 @@
 
           grid.innerHTML = all.map(path => {
             const clean = path.startsWith('/') ? path.slice(1) : path;
-            return `<div><img src="${clean}" class="media-thumb" onclick="pickImage('${clean}')" alt="Media asset"></div>`;
+            const filename = clean.split('/').pop();
+            const isUploaded = clean.includes('upload_') || clean.includes('uploads/') || clean.includes('/media/');
+            return `
+              <div style="position:relative;">
+                <img src="${clean}" class="media-thumb" onclick="pickImage('${clean}')" alt="Media asset">
+                ${isUploaded ? `
+                  <button type="button" 
+                          onclick="deleteMediaFromTurso('${clean}', event)"
+                          title="Delete permanently from Turso Cloud database"
+                          style="position:absolute; top:4px; right:4px; background:rgba(239,68,68,0.9); color:#fff; border:none; border-radius:4px; width:22px; height:22px; font-size:11px; cursor:pointer; display:flex; align-items:center; justify-content:center; z-index:2;">
+                    <i class="bi bi-trash3-fill"></i>
+                  </button>
+                ` : ''}
+              </div>
+            `;
           }).join('');
         } catch (e) {
           grid.innerHTML = '<div class="text-danger p-3">Failed to load media.</div>';
         }
       }
+
+      window.deleteMediaFromTurso = async function (filePath, e) {
+        if (e) {
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        const filename = filePath.split('/').pop();
+        if (!confirm(`Delete "${filename}" from Turso Cloud database?\n\nThis will permanently delete the binary data from Turso to conserve database storage.`)) return;
+
+        try {
+          const res = await fetch(`/api/v1/cms/media/${encodeURIComponent(filename)}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': 'Bearer ' + token }
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            showToast('Deleted from Turso Cloud');
+            loadMedia();
+          } else {
+            alert('Delete failed: ' + (data.error?.message || 'Error'));
+          }
+        } catch (err) {
+          alert('Delete error: ' + err.message);
+        }
+      };
 
       window.pickImage = async function (path) {
         if (targetImgKey) {

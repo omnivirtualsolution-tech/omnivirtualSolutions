@@ -565,6 +565,178 @@ router.get("/media/:filename", async (req, res) => {
 });
 
 // ─────────────────────────────────────────────────────────────────
+// GET /api/v1/cms/media
+// List all uploaded media files in Turso Cloud with size metadata
+// ─────────────────────────────────────────────────────────────────
+router.get("/media", requireAuth, async (req, res) => {
+  try {
+    const result = await db.execute({
+      sql: `SELECT id, asset_key, filename, mime_type, width, height, size_bytes, created_at
+            FROM media_files
+            ORDER BY created_at DESC`,
+      args: [],
+    });
+
+    const media = (result.rows || []).map((row) => ({
+      id: row.id,
+      asset_key: row.asset_key,
+      filename: row.filename,
+      mime_type: row.mime_type,
+      width: row.width,
+      height: row.height,
+      size_bytes: row.size_bytes,
+      size_kb: (row.size_bytes / 1024).toFixed(1),
+      url: `/api/v1/cms/media/${row.filename}`,
+      created_at: row.created_at,
+    }));
+
+    const totalBytes = media.reduce((acc, m) => acc + (m.size_bytes || 0), 0);
+    const totalMB = (totalBytes / (1024 * 1024)).toFixed(2);
+
+    res.json({
+      success: true,
+      media,
+      totalCount: media.length,
+      totalBytes,
+      totalMB,
+    });
+  } catch (err) {
+    console.error("[cms/media GET] Error:", err.message);
+    res.status(500).json({ error: { code: "INTERNAL_ERROR", message: "Failed to fetch media list." } });
+  }
+});
+
+// ─────────────────────────────────────────────────────────────────
+// DELETE /api/v1/cms/media/:identifier
+// Permanently deletes media binary from Turso database (media_files & media_assets)
+// Frees Turso cloud storage pages immediately.
+// ─────────────────────────────────────────────────────────────────
+router.delete("/media/:identifier", requireAuth, async (req, res) => {
+  const identifier = decodeURIComponent(req.params.identifier).trim();
+  const editor = req.admin?.username || "admin";
+  const filename = path.basename(identifier);
+  const rawKey = filename.replace(/\.[^/.]+$/, "");
+
+  try {
+    // 1. Fetch file info before deleting to report freed bytes
+    const checkFile = await db.execute({
+      sql: "SELECT id, filename, asset_key, size_bytes FROM media_files WHERE filename = ? OR asset_key = ? OR filename = ? LIMIT 1",
+      args: [identifier, identifier, filename],
+    });
+
+    const fileRow = checkFile.rows[0];
+    const freedBytes = fileRow?.size_bytes || 0;
+    const actualFilename = fileRow?.filename || filename;
+    const actualAssetKey = fileRow?.asset_key || rawKey;
+
+    // 2. Delete from media_files (BLOB binary in Turso)
+    await db.execute({
+      sql: "DELETE FROM media_files WHERE filename = ? OR asset_key = ? OR filename = ? OR asset_key = ?",
+      args: [identifier, identifier, actualFilename, actualAssetKey],
+    });
+
+    // 3. Delete from media_assets catalog in Turso
+    await db.execute({
+      sql: `DELETE FROM media_assets 
+            WHERE asset_key = ? OR asset_key = ? 
+               OR file_path LIKE ? OR file_path LIKE ?`,
+      args: [identifier, actualAssetKey, `%${actualFilename}%`, `%${identifier}%`],
+    });
+
+    // 4. Local disk cleanup if file exists locally
+    try {
+      const localFile = path.join(UPLOADS_DIR, actualFilename);
+      if (fs.existsSync(localFile)) fs.unlinkSync(localFile);
+    } catch (_) {}
+
+    console.log(`[cms/media] ${editor} permanently deleted media from Turso: ${actualFilename} (${(freedBytes / 1024).toFixed(1)} KB freed)`);
+
+    // 5. Broadcast real-time deletion event
+    broadcast({
+      type: "media_deleted",
+      filename: actualFilename,
+      assetKey: actualAssetKey,
+      deletedBy: editor,
+    });
+
+    return res.json({
+      success: true,
+      filename: actualFilename,
+      assetKey: actualAssetKey,
+      freedBytes,
+      message: `Media "${actualFilename}" permanently deleted from Turso Cloud database.`,
+    });
+  } catch (err) {
+    console.error("[cms/media DELETE] Error:", err.message);
+    return res.status(500).json({
+      error: { code: "INTERNAL_ERROR", message: "Failed to delete media from database: " + err.message },
+    });
+  }
+});
+
+// ─────────────────────────────────────────────────────────────────
+// POST /api/v1/cms/media/purge-unused
+// Scans Turso for unreferenced uploaded images and purges them
+// ─────────────────────────────────────────────────────────────────
+router.post("/media/purge-unused", requireAuth, async (req, res) => {
+  const editor = req.admin?.username || "admin";
+  try {
+    const allMedia = await db.execute("SELECT id, filename, asset_key, size_bytes FROM media_files");
+    const blocks = await db.execute("SELECT value FROM content_blocks");
+    const services = await db.execute("SELECT description FROM services");
+    const catalog = await db.execute("SELECT value FROM content_blocks WHERE block_key = 'services.catalog.data'");
+
+    let allBlockContent = blocks.rows.map(r => String(r.value || '')).join(' ') + ' ' +
+                          services.rows.map(r => String(r.description || '')).join(' ') + ' ' +
+                          (catalog.rows[0]?.value || '');
+
+    const unused = [];
+    let totalFreed = 0;
+
+    for (const file of (allMedia.rows || [])) {
+      const fn = file.filename;
+      const key = file.asset_key;
+      if (!allBlockContent.includes(fn) && (!key || !allBlockContent.includes(key))) {
+        unused.push(file);
+      }
+    }
+
+    for (const file of unused) {
+      await db.execute({
+        sql: "DELETE FROM media_files WHERE id = ?",
+        args: [file.id],
+      });
+      await db.execute({
+        sql: "DELETE FROM media_assets WHERE asset_key = ? OR file_path LIKE ?",
+        args: [file.asset_key, `%${file.filename}%`],
+      });
+      totalFreed += (file.size_bytes || 0);
+
+      try {
+        const localFile = path.join(UPLOADS_DIR, file.filename);
+        if (fs.existsSync(localFile)) fs.unlinkSync(localFile);
+      } catch (_) {}
+    }
+
+    console.log(`[cms/media purge] ${editor} purged ${unused.length} orphaned images (${(totalFreed/1024).toFixed(1)} KB) from Turso`);
+
+    broadcast({ type: "media_purged", count: unused.length, freedBytes: totalFreed });
+
+    return res.json({
+      success: true,
+      purgedCount: unused.length,
+      purgedFiles: unused.map(f => f.filename),
+      freedBytes: totalFreed,
+      freedKB: (totalFreed / 1024).toFixed(1),
+      message: `Successfully purged ${unused.length} unreferenced images from Turso database (${(totalFreed / 1024).toFixed(1)} KB freed).`,
+    });
+  } catch (err) {
+    console.error("[cms/media purge] Error:", err.message);
+    return res.status(500).json({ error: { code: "INTERNAL_ERROR", message: "Failed to purge unused media." } });
+  }
+});
+
+// ─────────────────────────────────────────────────────────────────
 // POST /api/v1/cms/upload
 // Upload an image → compresses into WebP (100% original resolution) → saves directly into Turso database
 // Optional body param: block_key — auto-updates the block after upload
@@ -631,11 +803,32 @@ router.post("/upload", requireAuth, upload.single("image"), async (req, res) => 
   const blockKey = req.body.block_key;
   if (blockKey) {
     try {
+      // Check previous block value to see if it was an uploaded image
+      const prevBlock = await db.execute({
+        sql: "SELECT value FROM content_blocks WHERE block_key = ? LIMIT 1",
+        args: [blockKey],
+      });
+      const prevVal = prevBlock.rows[0]?.value;
+
       await db.execute({
         sql: "UPDATE content_blocks SET value = ?, updated_at = CURRENT_TIMESTAMP, updated_by = ? WHERE block_key = ?",
         args: [servedPath, editor, blockKey],
       });
       broadcast({ type: "cms_block_updated", key: blockKey, value: servedPath, blockType: "image", updatedBy: editor, table: "content_blocks" });
+
+      // If replacing an existing uploaded image, clean up the old file from Turso if unreferenced elsewhere
+      if (prevVal && (prevVal.includes('upload_') || prevVal.includes('/media/'))) {
+        const prevFn = path.basename(prevVal);
+        const otherUses = await db.execute({
+          sql: "SELECT COUNT(*) as count FROM content_blocks WHERE value LIKE ? AND block_key != ?",
+          args: [`%${prevFn}%`, blockKey],
+        });
+        if (Number(otherUses.rows[0]?.count || 0) === 0) {
+          await db.execute({ sql: "DELETE FROM media_files WHERE filename = ? OR asset_key = ?", args: [prevFn, prevFn.replace(/\.[^/.]+$/, "")] });
+          await db.execute({ sql: "DELETE FROM media_assets WHERE file_path LIKE ? OR asset_key = ?", args: [`%${prevFn}%`, prevFn.replace(/\.[^/.]+$/, "")] });
+          console.log(`[cms/upload] Replaced & purged old unreferenced image from Turso: ${prevFn}`);
+        }
+      }
     } catch (_) { /* non-critical if block doesn't exist */ }
   }
 

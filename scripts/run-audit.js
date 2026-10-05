@@ -94,9 +94,17 @@ async function main() {
   const fallbackRes = await fetch(`${BASE}/assets/uploads/${upData.filename}`);
   assert('Fallback /assets/uploads Interceptor', fallbackRes.ok, `HTTP ${fallbackRes.status}`);
 
-  // Cleanup
-  await db.execute({ sql: 'DELETE FROM media_files WHERE filename = ?', args: [upData.filename] });
-  await db.execute({ sql: 'DELETE FROM media_assets WHERE file_path LIKE ?', args: ['%' + upData.filename + '%'] });
+  // Cleanup via new DELETE /api/v1/cms/media/:filename API
+  const delRes = await fetch(`${BASE}/api/v1/cms/media/${upData.filename}`, {
+    method: 'DELETE',
+    headers: { Authorization: 'Bearer ' + token },
+  });
+  const delData = await delRes.json();
+  assert('Turso Media Deletion API', delRes.ok && delData.success, `Freed ${delData.freedBytes} bytes from Turso`);
+
+  // Verify deletion from Turso Cloud database
+  const verifyDb = await db.execute({ sql: 'SELECT id FROM media_files WHERE filename = ?', args: [upData.filename] });
+  assert('Turso Database Zero Residue', verifyDb.rows.length === 0, 'Row permanently purged from Turso Cloud');
 
   // ── 4. WEBSITE UPDATES ──
   console.log('\n4. Website Updates (CMS, Profile, Catalog):');
