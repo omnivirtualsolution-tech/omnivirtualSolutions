@@ -328,9 +328,6 @@ const FILE_TO_SUBCATEGORY = {
   "basic":                          "publishing-options",
   "standard-package":               "publishing-options",
   "advanced":                       "publishing-options",
-  "Founder-Package":                "publishing-options",
-  "Pioneer-Package":                "publishing-options",
-  "Voyager-Package":                "publishing-options",
   "Explorer-Package":               "publishing-options",
   "navigator-package":              "publishing-options",
   // ── Evaluation Services ─────────────────────────────────────────

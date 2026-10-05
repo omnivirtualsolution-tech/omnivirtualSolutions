@@ -360,6 +360,10 @@
       background: #fdf9f2;
       border-color: #eba22d;
     }
+    .category-accordion-row.active-cat-selected {
+      background: #f7ede0 !important;
+      border-color: #ad7d42 !important;
+    }
 
     .category-accordion-label {
       display: flex;
@@ -1180,6 +1184,20 @@
                 <h2 class="service-title editable-field" id="detailTitle" contenteditable="true" spellcheck="false" onblur="handleServiceFieldSave('title', this.innerText.trim())">
                   Basic Package
                 </h2>
+                <div class="service-package-price-wrap mt-2 mb-2" id="detailPriceContainer" style="display: flex; align-items: baseline; gap: 8px;">
+                  <span 
+                    class="editable-field" 
+                    id="detailPrice" 
+                    contenteditable="true" 
+                    spellcheck="false" 
+                    onblur="handleServiceFieldSave('price', this.innerText.trim())"
+                    onkeydown="if(event.key==='Enter'){event.preventDefault(); this.blur();}"
+                    style="font-size: 1.45rem; font-weight: 800; color: #ad7d42; letter-spacing: -0.015em; display: inline-block; min-width: 60px;"
+                    title="Click to edit package price"
+                  >
+                    $899.00
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -1389,6 +1407,8 @@
         { name: 'Graph', icon: 'bi-graph-up-arrow' },
         { name: 'Lightning', icon: 'bi-lightning-charge-fill' },
         { name: 'Palette', icon: 'bi-palette-fill' },
+        { name: 'Gear', icon: 'bi-gear-fill' },
+        { name: 'Shop', icon: 'bi-shop' },
       ];
 
       function showToast(msg) {
@@ -1619,12 +1639,15 @@
 
           if (q && matchingServices.length === 0) return '';
 
-          const totalCount = (cat.subcategories || []).reduce((acc, sub) => acc + (sub.services || []).length, 0);
+          const totalCount = (cat.subcategories || []).reduce(
+            (acc, sub) => acc + (sub.services || []).filter(s => !(cat.id === 'publishing-packages' && s.slug === 'publishing-packages')).length,
+            0
+          );
 
           return `
             <div class="sidebar-category-group mb-2" data-cat-id="${cat.id}">
-              <div class="category-accordion-row ${isExpanded ? 'expanded' : ''}" id="cat-row-${cat.id}">
-                <div class="category-accordion-label" onclick="toggleCatAccordion('${cat.id}')">
+              <div class="category-accordion-row ${isExpanded ? 'expanded' : ''} ${selectedService?.slug === 'publishing-packages' && cat.id === 'publishing-packages' ? 'active-cat-selected' : ''}" id="cat-row-${cat.id}">
+                <div class="category-accordion-label" onclick="handleCategoryClick('${cat.id}')">
                   <i class="bi ${cat.icon || cat.icon_class || 'bi-bookmark-star'} text-warning cat-icon" onclick="openIconPicker('${cat.id}', event)" title="Click to change icon"></i>
                   <span class="category-name-text editable-field" contenteditable="${isEditMode ? 'true' : 'false'}" spellcheck="false" onblur="handleRenameCategory('${cat.id}', this.innerText.trim())" onclick="event.stopPropagation()">${escapeHtml(cat.title)}</span>
                 </div>
@@ -1648,7 +1671,9 @@
                         <i class="bi bi-plus"></i>
                       </button>
                     </div>
-                    ${(sub.services || []).map(svc => `
+                    ${(sub.services || [])
+                      .filter(svc => !(cat.id === 'publishing-packages' && svc.slug === 'publishing-packages'))
+                      .map(svc => `
                       <button type="button" class="service-nav-item ${selectedService?.slug === svc.slug ? 'active' : ''}" onclick="selectServiceBySlug('${svc.slug}')">
                         <span class="text-truncate">${escapeHtml(svc.title)}</span>
                         ${selectedService?.slug === svc.slug ? '<i class="bi bi-check2"></i>' : ''}
@@ -1675,6 +1700,41 @@
         }
       };
 
+      window.handleCategoryClick = function(catId) {
+        const box = document.getElementById('subcat-box-' + catId);
+        if (box && box.style.display === 'none') {
+          toggleCatAccordion(catId);
+        }
+        const cat = catalog.find(c => String(c.id) === String(catId));
+        if (catId === 'publishing-packages') {
+          let pubSvc = null;
+          for (const sub of (cat?.subcategories || [])) {
+            pubSvc = (sub.services || []).find(s => s.slug === 'publishing-packages');
+            if (pubSvc) break;
+          }
+          if (!pubSvc) {
+            pubSvc = {
+              slug: 'publishing-packages',
+              title: 'Publishing Packages',
+              lead: "Our packages are designed to offer authors the support and tools they need to maximize their book's potential. Each package guarantees one-on-one author support for every step of the self-publishing journey. We offer unique packages, enabling authors to choose the package that best fits their book's needs.",
+              features: [
+                'One-on-one author support for every step of the self-publishing journey',
+                "Unique packages enabling authors to choose the tier that best fits their book's needs",
+                'Digital formatting and distribution for e-books, paperbacks, and hardcovers',
+                'Custom cover layout and professional interior formatting',
+                'Worldwide distribution across Amazon, Barnes & Noble, and Ingram',
+                'ISBN assignment, US Copyright registration, and Library of Congress Control Number'
+              ]
+            };
+          }
+          selectService(pubSvc, cat ? cat.title : 'Publishing Packages');
+          return;
+        }
+        if (cat && cat.subcategories[0]?.services[0]) {
+          selectService(cat.subcategories[0].services[0], cat.title);
+        }
+      };
+
       window.selectServiceBySlug = function(slug) {
         for (const cat of catalog) {
           for (const sub of (cat.subcategories || [])) {
@@ -1692,6 +1752,12 @@
         document.querySelectorAll('.service-nav-item').forEach(btn => {
           btn.classList.toggle('active', btn.textContent.trim() === svc.title);
         });
+
+        document.querySelectorAll('.category-accordion-row').forEach(r => r.classList.remove('active-cat-selected'));
+        if (svc.slug === 'publishing-packages') {
+          const catRow = document.getElementById('cat-row-publishing-packages');
+          if (catRow) catRow.classList.add('active-cat-selected');
+        }
 
         // Ensure category is expanded
         for (const cat of catalog) {
@@ -1713,7 +1779,16 @@
         if (catTitle) document.getElementById('detailCatBreadcrumb').textContent = catTitle;
 
         document.getElementById('detailTitle').textContent = svc.title;
-        document.getElementById('detailPrice').textContent = svc.price || svc.price_display || '$1,299';
+        const detailPriceEl = document.getElementById('detailPrice');
+        const detailPriceContainer = document.getElementById('detailPriceContainer');
+        if (detailPriceEl) {
+          const pVal = svc.price || svc.price_display || '';
+          detailPriceEl.textContent = pVal || 'Set Price';
+          detailPriceEl.style.opacity = pVal ? '1' : '0.5';
+          if (detailPriceContainer) {
+            detailPriceContainer.style.display = svc.slug === 'publishing-packages' ? 'none' : 'flex';
+          }
+        }
         document.getElementById('detailLead').textContent = svc.lead || svc.lead_paragraph || '';
         document.getElementById('detailCtaHeading').textContent = `Ready to start with ${svc.title}?`;
 
@@ -1785,6 +1860,9 @@
         }
         renderCategories();
         persistCatalog(selectedService.title);
+        if (selectedService.slug === 'publishing-packages' && field === 'lead') {
+          handleHeaderSave('service.publishing-packages.lead', val);
+        }
       };
 
       window.handleFeatureSave = function(idx, val) {

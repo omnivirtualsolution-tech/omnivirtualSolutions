@@ -3,301 +3,7 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { useCms } from '../context/CmsContext';
 import './ServicesPage.css';
 
-// Comprehensive fallback catalog matching services catalog
-const DEFAULT_CATALOG = [
-  {
-    id: 'publishing-packages',
-    title: 'Publishing Packages',
-    tag: 'eval-services',
-    icon: 'bi-book-half',
-    subcategories: [
-      {
-        id: 'publishing-options',
-        title: 'Publishing Options',
-        services: [
-          {
-            slug: 'basic-package',
-            title: 'Basic Package',
-            price: '$1,499',
-            lead: 'The Basic package is designed for authors seeking core publishing needs. It includes digital formatting, paperback publishing, and customized distribution across major online retailers.',
-            features: [
-              'Digital formatting and distribution for e-books and paperbacks',
-              'Custom cover layout and interior formatting (up to 25 image insertions)',
-              'Worldwide distribution across Amazon, Barnes & Noble, and Ingram',
-              'ISBN assignment, US Copyright registration, and LCCN',
-              '3 complimentary author paperback copies and 12-month bookseller return program',
-            ],
-          },
-          {
-            slug: 'standard-package',
-            title: 'Standard Package',
-            price: '$2,199',
-            lead: 'Building on the Basic, the Standard package adds hardcover publishing to enhance the physical presence and prestige of your book.',
-            features: [
-              'Simultaneous paperback and casebound hardcover publishing',
-              'All customization, design, and global distribution features included',
-              '3 paperback copies and 1 hardcover author copy',
-              'Extended 36-month bookseller return program for bookstores',
-              'One-on-one dedicated author publishing representative',
-            ],
-          },
-          {
-            slug: 'advanced-package',
-            title: 'Advanced Package',
-            price: '$3,499',
-            lead: 'Our most comprehensive package, designed for authors who want extensive marketing firepower and editorial support.',
-            features: [
-              '20 paperback copies and 5 hardcover author copies included',
-              '30 days of targeted online book advertising via Google Ads',
-              'Professional book review from certified critics (Kirkus Reviews)',
-              'Deluxe author promotional website setup',
-              'Maximum 60-month bookseller return program flexibility',
-            ],
-          },
-          {
-            slug: 'founder-package',
-            title: 'Founder Package',
-            price: '$3,499',
-            lead: 'Comprehensive end-to-end publishing package for ambitious authors and enterprises looking to establish industry authority.',
-            features: [
-              'Complete interior and cover design tailored to industry standards',
-              'Worldwide distribution across major online retailers (Amazon, B&N, Ingram)',
-              '100% author royalty retention program',
-              'Free electronic galley proof and priority proofing cycles',
-              'Dedicated senior author consultant throughout production',
-            ],
-          },
-          {
-            slug: 'pioneer-package',
-            title: 'Pioneer Package',
-            price: '$2,199',
-            lead: 'Designed for first-time authors needing professional publishing standards at an accessible, transparent price.',
-            features: [
-              'Custom book cover design from professional artists',
-              'Paperback formatting and digital file conversions',
-              'Global distribution network setup across 40,000+ bookstores',
-              '5 complimentary softcover author copies',
-              'Complete copyright protection and registration assistance',
-            ],
-          },
-          {
-            slug: 'voyager-package',
-            title: 'Voyager Package',
-            price: '$4,799',
-            lead: 'The ultimate all-inclusive publishing bundle with expansive marketing, media releases, and editorial services.',
-            features: [
-              'Simultaneous Softcover & Hardcover publication',
-              'Comprehensive copyediting up to 75,000 words included',
-              'Cinematic video book trailer production',
-              'Press release creation and syndication to 200+ media outlets',
-              '15 free author copies and priority shelf-ready stock',
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: 'evaluation-services',
-    title: 'Evaluation Services',
-    tag: 'editorial-services',
-    icon: 'bi-journal-check',
-    subcategories: [
-      {
-        id: 'editorial-eval',
-        title: 'Editorial Evaluation',
-        services: [
-          {
-            slug: 'editorial-evaluation',
-            title: 'Editorial Evaluation',
-            price: 'From $499',
-            lead: 'One of the key features that makes an Omni book distinct from other self-published works is our comprehensive editorial evaluation by seasoned literary editors.',
-            features: [
-              'Comprehensive diagnostic evaluation of your complete manuscript',
-              'Detailed critique covering plot, pacing, character development, and tone',
-              'Actionable editorial roadmap recommending specific editorial tracks',
-              'Market readiness and commercial genre positioning assessment',
-            ],
-          },
-          {
-            slug: 'editorial-rx-referral',
-            title: 'Editorial Rx Referral',
-            price: '$350',
-            lead: 'Diagnostic assessment pairing your manuscript with the exact editorial specialist—from line editor to book doctor—tailored to your writing style.',
-            features: [
-              'Deep sample edit (up to 3,000 words)',
-              'Direct consultation with a senior managing editor',
-              'Custom editing plan tailored to your budget and publication timeline',
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: 'editorial-services',
-    title: 'Editorial Services',
-    tag: 'combined-dropdown',
-    icon: 'bi-pencil-square',
-    subcategories: [
-      {
-        id: 'advanced-editorial',
-        title: 'Advanced Editorial Services',
-        services: [
-          {
-            slug: 'developmental-editing',
-            title: 'Developmental Editing',
-            price: 'From $0.035 / word',
-            lead: 'Substantive developmental critique evaluating structural flow, pacing, character development, and narrative arc.',
-            features: [
-              'Substantive chapter-by-chapter developmental critique',
-              'Structural reorganization and plot arc optimization',
-              'Character depth, consistency, and perspective alignment',
-              'Two rounds of revisions and tracked Word markups included',
-            ],
-          },
-          {
-            slug: 'book-doctor',
-            title: 'Book Doctor',
-            price: 'Custom Quote',
-            lead: 'Specialized intervention for stalled manuscripts, structural snags, or complex multi-genre works needing hands-on editorial surgery.',
-            features: [
-              'Senior book doctor assigned to dissect and repair manuscript issues',
-              'Rewriting and ghost-enhancement of critical scenes and transitions',
-              'Timeline and internal consistency reconciliation',
-            ],
-          },
-        ],
-      },
-      {
-        id: 'core-editorial',
-        title: 'Core Editorial Services',
-        services: [
-          {
-            slug: 'copyediting',
-            title: 'Copyediting',
-            price: 'From $0.020 / word',
-            lead: 'Polishing grammar, punctuation, syntax, and flow while strictly preserving the author’s unique voice.',
-            features: [
-              'Comprehensive grammatical, spelling, and typographical correction',
-              'Tone consistency and stylistic voice preservation',
-              'Chicago Manual of Style (current edition) adherence',
-              'Track changes markup provided for full author control',
-            ],
-          },
-          {
-            slug: 'line-editing',
-            title: 'Line Editing',
-            price: 'From $0.025 / word',
-            lead: 'Sentence-level craftsmanship focusing on style, rhythm, vocabulary precision, and readability.',
-            features: [
-              'Clarity, conciseness, and pacing refinement',
-              'Dialogue flow and emotional resonance enhancement',
-              'Elimination of repetition and awkward phrasing',
-            ],
-          },
-          {
-            slug: 'proofreading',
-            title: 'Proofreading',
-            price: 'From $0.015 / word',
-            lead: 'The vital final check before printing—eliminating typographical slips, bad breaks, and formatting inconsistencies.',
-            features: [
-              'Thorough final-pass review of layout proofs',
-              'Catching lingering typos, punctuation errors, and word omissions',
-              'Verification of page numbers, running heads, and table of contents',
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: 'marketing-services',
-    title: 'Marketing Services',
-    tag: 'marketing-dropdown',
-    icon: 'bi-megaphone-fill',
-    subcategories: [
-      {
-        id: 'publicity-and-pr',
-        title: 'Publicity & PR',
-        services: [
-          {
-            slug: 'press-release-campaign',
-            title: 'Press Release Campaign',
-            price: '$899',
-            lead: 'Get your book and author story in front of journalists, book reviewers, and targeted industry media.',
-            features: [
-              'Professionally crafted media release by veteran book publicists',
-              'Distribution across major syndicated wire services (PR Newswire / PRWeb)',
-              'Direct pitch to 50+ niche book bloggers, podcasters, and journalists',
-              'Detailed clipping and media impression report with live links',
-            ],
-          },
-          {
-            slug: 'bookblast-video-marketing',
-            title: 'BookBlast Video Marketing',
-            price: '$1,299',
-            lead: 'Engage modern readers with cinematic book trailers optimized for YouTube, Instagram Reels, and TikTok.',
-            features: [
-              'Cinematic 60-second video trailer with professional voiceover',
-              'Optimized formats for 16:9 widescreen and 9:16 vertical shorts',
-              'Social media promotional asset kit and thumbnail package',
-              'Full commercial rights granted to author in perpetuity',
-            ],
-          },
-          {
-            slug: 'indie-book-review-bundle',
-            title: 'Indie Book Review Bundle',
-            price: '$1,499',
-            lead: 'Secure verified critical reviews from established editorial review bodies to build instant reader trust.',
-            features: [
-              'Guaranteed editorial critique by certified review organizations',
-              'Licensed quotes for cover back-matter, bookstore displays, and ads',
-              'Syndication into bookstore and library acquisition catalogs',
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: 'format-services',
-    title: 'Formats & Production',
-    tag: 'format-services',
-    icon: 'bi-layers-fill',
-    subcategories: [
-      {
-        id: 'specialty-formats',
-        title: 'Specialty Formats',
-        services: [
-          {
-            slug: 'hardcover-publishing',
-            title: 'Hardcover Publishing',
-            price: '$1,199',
-            lead: 'Premium case-laminate or dust jacket hardcover editions designed for prestige and library collections.',
-            features: [
-              'Durable casebound or dust-jacket binding options',
-              'High-resolution cover finish with premium matte or gloss lamination',
-              'Library of Congress Control Number (LCCN) registration',
-            ],
-          },
-          {
-            slug: 'professional-audiobook',
-            title: 'Professional Audiobook Package',
-            price: '$2,499',
-            lead: 'Transform your manuscript into a studio-grade audiobook narrated by professional voice talent.',
-            features: [
-              'Audible, Amazon, and iTunes (ACX) compliance guaranteed',
-              'Auditioning and selection of SAG-AFTRA voice actors',
-              'Full audio mastering, chapter splitting, and QC testing',
-              'Global audiobook distribution across 30+ streaming platforms',
-            ],
-          },
-        ],
-      },
-    ],
-  },
-];
+import DEFAULT_CATALOG from '../data/catalog.json';
 
 // Helper to normalize and ensure full property tree for catalog objects
 function formatCatalog(rawList) {
@@ -313,8 +19,8 @@ function formatCatalog(rawList) {
       services: (sub.services || []).map((s) => ({
         slug: s.slug || '',
         title: s.title || '',
-        price: s.price || s.price_display || 'Inquire for Quote',
-        price_display: s.price || s.price_display || 'Inquire for Quote',
+        price: s.price || s.price_display || '',
+        price_display: s.price || s.price_display || '',
         lead: s.lead || s.lead_paragraph || '',
         lead_paragraph: s.lead || s.lead_paragraph || '',
         features: Array.isArray(s.features) && s.features.length > 0 ? s.features : [
@@ -583,10 +289,34 @@ export default function ServicesPage() {
   const ctaBtnText = t('services.cta.btn_text', 'Inquire About This Service');
   const ctaEmail = t('services.cta.email', t('footer.email', company?.email || company?.recipient_email || 'admin@omnivirtualsolution.com'));
 
+  const publishingOptionsTitle = t('service.publishing-options.title', 'Publishing Options');
+  const publishingOptionsDesc = t('service.publishing-options.desc', 'Our packages offer various combinations of our publishing, editorial, and marketing services for a truly customized publishing experience. With Omni, you can choose the package that best suits your literary goals.');
+
+  const publishingPackagesList = [
+    {
+      slug: 'basic-package',
+      title: t('service.basic-package.title', 'Basic Package'),
+      price: t('service.basic-package.price', '$899.00'),
+      summary: t('service.basic-package.summary', 'The Basic package is designed for authors seeking basic publishing needs. It includes digital formatting and distribution for e-books, paperback publishing, and customization options for the interior and cover.'),
+    },
+    {
+      slug: 'standard-package',
+      title: t('service.standard-package.title', 'Standard Package'),
+      price: t('service.standard-package.price', '$1,599.00'),
+      summary: t('service.standard-package.summary', 'Building on the Basic, the Standard package adds hardcover publishing to the mix, enhancing the physical presence of your book. This package maintains all the services of the Basic package, including the customization, support, and online distribution features.'),
+    },
+    {
+      slug: 'advanced-package',
+      title: t('service.advanced-package.title', 'Advanced Package'),
+      price: t('service.advanced-package.price', '$4,999.00'),
+      summary: t('service.advanced-package.summary', 'The Advanced package is the most comprehensive, designed for authors who want extensive support and marketing tools. It includes everything from the Standard package, but boosts the number of copies provided to 20 paperbacks and 5 hardcovers.'),
+    },
+  ];
+
   // Active selected service display values with fallback to t() overrides
   const displayTitle = selectedService ? t(`service.${selectedService.slug}.title`, selectedService.title) : '';
-  const displayPrice = selectedService ? t(`service.${selectedService.slug}.price`, selectedService.price || selectedService.price_display) : '';
-  const displayLead = selectedService ? t(`service.${selectedService.slug}.desc`, t(`service.${selectedService.slug}.lead`, selectedService.lead || selectedService.lead_paragraph)) : '';
+  const displayPrice = selectedService ? t(`service.${selectedService.slug}.price`, selectedService.price || selectedService.price_display || '') : '';
+  const displayLead = selectedService ? t(`service.${selectedService.slug}.lead`, selectedService.lead || selectedService.lead_paragraph) : '';
   const ctaHeading = t('services.cta.heading', selectedService ? `Ready to start with ${displayTitle}?` : 'Ready to get started?');
 
   const displayFeatures = useMemo(() => {
@@ -749,16 +479,39 @@ export default function ServicesPage() {
                 <div>
                   {catalog.map((cat) => {
                     const isExpanded = expandedCategories[cat.tag] || activeCategoryTag === cat.tag || searchQuery.length > 0;
-                    const totalCount = cat.subcategories.reduce((acc, sub) => acc + sub.services.length, 0);
+                    const totalCount = cat.subcategories.reduce(
+                      (acc, sub) => acc + (sub.services || []).filter((s) => !(cat.id === 'publishing-packages' && s.slug === 'publishing-packages')).length,
+                      0
+                    );
                     const catTitle = t(`service.${cat.id}.title`, cat.title);
+                    const isCatOverviewSelected = selectedService?.slug === 'publishing-packages' && cat.id === 'publishing-packages';
 
                     return (
                       <div key={cat.id} className="sidebar-category-group">
                         <div className="d-flex align-items-center justify-content-between category-header-row">
                           <button
                             type="button"
-                            className={`category-accordion-btn ${isExpanded ? 'expanded' : ''}`}
-                            onClick={() => toggleCategoryAccordion(cat.tag)}
+                            className={`category-accordion-btn ${isExpanded ? 'expanded' : ''} ${isCatOverviewSelected ? 'active-category' : ''}`}
+                            onClick={() => {
+                              toggleCategoryAccordion(cat.tag);
+                              if (cat.id === 'publishing-packages') {
+                                const pubSvc = allServicesList.find((s) => s.slug === 'publishing-packages') || cat.subcategories[0]?.services[0];
+                                if (pubSvc) {
+                                  handleSelectService(
+                                    {
+                                      ...pubSvc,
+                                      title: t(`service.${pubSvc.slug}.title`, pubSvc.title),
+                                      lead: t(`service.${pubSvc.slug}.lead`, pubSvc.lead),
+                                    },
+                                    cat,
+                                    cat.subcategories[0]
+                                  );
+                                }
+                              } else if (cat.subcategories[0]?.services[0]) {
+                                const targetSvc = cat.subcategories[0].services[0];
+                                handleSelectService({ ...targetSvc, title: t(`service.${targetSvc.slug}.title`, targetSvc.title) }, cat, cat.subcategories[0]);
+                              }
+                            }}
                           >
                             <span className="d-flex align-items-center gap-2">
                               <i className={`bi ${cat.icon}`} style={{ color: '#ad7d42' }}></i>
@@ -779,12 +532,15 @@ export default function ServicesPage() {
                           <div className="subcategories-list">
                             {cat.subcategories.map((sub) => {
                               const subTitle = t(`service.${sub.id}.title`, sub.title);
+                              const filteredServices = (sub.services || []).filter(
+                                (svc) => !(cat.id === 'publishing-packages' && svc.slug === 'publishing-packages')
+                              );
                               return (
                                 <div key={sub.id} className="mb-2">
                                   <div className="subcategory-label" data-block-key={`service.${sub.id}.title`}>
                                     {subTitle}
                                   </div>
-                                  {sub.services.map((svc) => {
+                                  {filteredServices.map((svc) => {
                                     const isSelected = selectedService?.slug === svc.slug;
                                     const svcTitle = t(`service.${svc.slug}.title`, svc.title);
                                     return (
@@ -834,6 +590,17 @@ export default function ServicesPage() {
                       <h2 className="service-title" data-block-key={selectedService ? `service.${selectedService.slug}.title` : undefined}>
                         {displayTitle}
                       </h2>
+                      {displayPrice && (
+                        <div className="service-package-price-display">
+                          <span 
+                            className="editable-field"
+                            data-block-key={selectedService ? `service.${selectedService.slug}.price` : undefined}
+                            style={{ display: 'inline-block', minWidth: '50px' }}
+                          >
+                            {displayPrice}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -847,21 +614,77 @@ export default function ServicesPage() {
                     </p>
                   </div>
 
-                  {/* What's Included Feature Checklist */}
-                  <div className="features-checklist-section">
-                    <h5 className="fw-bold mb-3" style={{ color: '#2b2219', fontSize: '1.1rem' }} data-block-key="services.included.heading">
-                      {includedHeading}
-                    </h5>
+                  {/* Bottom section: Publishing Options for overview, or What's Included for other services */}
+                  {selectedService?.slug === 'publishing-packages' ? (
+                    <div className="publishing-options-section">
+                      <h4 
+                        className="publishing-options-title" 
+                        data-block-key="service.publishing-options.title"
+                      >
+                        {publishingOptionsTitle}
+                      </h4>
+                      <p 
+                        className="publishing-options-desc" 
+                        data-block-key="service.publishing-options.desc"
+                      >
+                        {publishingOptionsDesc}
+                      </p>
 
-                    <div className="service-features-list">
-                      {displayFeatures.map((feat, idx) => (
-                        <div className="feature-checkpoint-item" key={idx}>
-                          <i className="bi bi-patch-check-fill feature-check-icon"></i>
-                          <span>{feat}</span>
-                        </div>
-                      ))}
+                      <div className="publishing-packages-container">
+                        {publishingPackagesList.map((pkg) => (
+                          <div 
+                            key={pkg.slug} 
+                            className="publishing-package-card"
+                            onClick={() => {
+                              const found = allServicesList.find(s => s.slug === pkg.slug);
+                              if (found) setSelectedService(found);
+                            }}
+                          >
+                            <div className="publishing-package-card-header">
+                              <div className="d-flex align-items-center gap-2 flex-wrap">
+                                <h5 className="publishing-package-card-title">
+                                  {pkg.title}
+                                </h5>
+                                {pkg.price && (
+                                  <span 
+                                    className="publishing-package-price-badge"
+                                    data-block-key={`service.${pkg.slug}.price`}
+                                  >
+                                    {pkg.price}
+                                  </span>
+                                )}
+                              </div>
+                              <span className="publishing-package-arrow-badge">
+                                <i className="bi bi-arrow-right-short"></i>
+                              </span>
+                            </div>
+                            <p 
+                              className="publishing-package-card-summary" 
+                              data-block-key={`service.${pkg.slug}.summary`}
+                            >
+                              {pkg.summary}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  ) : (
+                    /* What's Included Feature Checklist */
+                    <div className="features-checklist-section">
+                      <h5 className="fw-bold mb-3" style={{ color: '#2b2219', fontSize: '1.1rem' }} data-block-key="services.included.heading">
+                        {includedHeading}
+                      </h5>
+
+                      <div className="service-features-list">
+                        {displayFeatures.map((feat, idx) => (
+                          <div className="feature-checkpoint-item" key={idx}>
+                            <i className="bi bi-patch-check-fill feature-check-icon"></i>
+                            <span>{feat}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
                   {/* Direct Action Card (Book / Consult) */}
                   <div className="service-cta-card">
@@ -979,12 +802,34 @@ export default function ServicesPage() {
             {catalog.map((cat) => {
               const isExpanded = expandedCategories[cat.tag] || searchQuery.length > 0;
               const catTitle = t(`service.${cat.id}.title`, cat.title);
+              const isCatOverviewSelected = selectedService?.slug === 'publishing-packages' && cat.id === 'publishing-packages';
               return (
                 <div key={cat.id} className="sidebar-category-group mb-2">
                   <button
                     type="button"
-                    className={`category-accordion-btn ${isExpanded ? 'expanded' : ''}`}
-                    onClick={() => toggleCategoryAccordion(cat.tag)}
+                    className={`category-accordion-btn ${isExpanded ? 'expanded' : ''} ${isCatOverviewSelected ? 'active-category' : ''}`}
+                    onClick={() => {
+                      toggleCategoryAccordion(cat.tag);
+                      if (cat.id === 'publishing-packages') {
+                        const pubSvc = allServicesList.find((s) => s.slug === 'publishing-packages') || cat.subcategories[0]?.services[0];
+                        if (pubSvc) {
+                          handleSelectService(
+                            {
+                              ...pubSvc,
+                              title: t(`service.${pubSvc.slug}.title`, pubSvc.title),
+                              lead: t(`service.${pubSvc.slug}.lead`, pubSvc.lead),
+                            },
+                            cat,
+                            cat.subcategories[0]
+                          );
+                          setDrawerOpen(false);
+                        }
+                      } else if (cat.subcategories[0]?.services[0]) {
+                        const targetSvc = cat.subcategories[0].services[0];
+                        handleSelectService({ ...targetSvc, title: t(`service.${targetSvc.slug}.title`, targetSvc.title) }, cat, cat.subcategories[0]);
+                        setDrawerOpen(false);
+                      }
+                    }}
                   >
                     <span className="d-flex align-items-center gap-2">
                       <i className={`bi ${cat.icon}`} style={{ color: '#ad7d42' }}></i>
@@ -997,10 +842,13 @@ export default function ServicesPage() {
                     <div className="subcategories-list">
                       {cat.subcategories.map((sub) => {
                         const subTitle = t(`service.${sub.id}.title`, sub.title);
+                        const filteredServices = (sub.services || []).filter(
+                          (svc) => !(cat.id === 'publishing-packages' && svc.slug === 'publishing-packages')
+                        );
                         return (
                           <div key={sub.id} className="mb-2">
                             <div className="subcategory-label" data-block-key={`service.${sub.id}.title`}>{subTitle}</div>
-                            {sub.services.map((svc) => {
+                            {filteredServices.map((svc) => {
                               const isSelected = selectedService?.slug === svc.slug;
                               const svcTitle = t(`service.${svc.slug}.title`, svc.title);
                               return (
@@ -1008,7 +856,10 @@ export default function ServicesPage() {
                                   key={svc.slug}
                                   type="button"
                                   className={`service-nav-item ${isSelected ? 'active' : ''}`}
-                                  onClick={() => handleSelectService({ ...svc, title: svcTitle }, cat, sub)}
+                                  onClick={() => {
+                                    handleSelectService({ ...svc, title: svcTitle }, cat, sub);
+                                    setDrawerOpen(false);
+                                  }}
                                 >
                                   <span className="text-truncate" data-block-key={`service.${svc.slug}.title`}>{svcTitle}</span>
                                   {isSelected && <i className="bi bi-check2"></i>}
