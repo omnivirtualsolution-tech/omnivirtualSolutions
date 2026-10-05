@@ -163,9 +163,26 @@ const handleContactSubmission = async (req, res) => {
     });
   }
 
-  // Under quota & background sending active:
-  emailSvc.sendNewSubmissionNotification(submission).catch((e) => console.error("[contact] Notification error:", e.message));
-  emailSvc.sendAutoReply(submission).catch((e) => console.error("[contact] Auto-reply error:", e.message));
+  // Under quota: Send admin notification and customer auto-reply concurrently.
+  // We await them with an 8-second safety timeout so serverless environments (Netlify)
+  // do not freeze the function container before the emails are transmitted to Gmail.
+  try {
+    const emailPromise = Promise.allSettled([
+      emailSvc.sendNewSubmissionNotification(submission),
+      emailSvc.sendAutoReply(submission),
+    ]);
+
+    const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve("timeout"), 8000));
+    const raceResult = await Promise.race([emailPromise, timeoutPromise]);
+    if (raceResult === "timeout") {
+      console.warn(`[contact] Submission #${newId} emails took >8s; response returned while sending completes.`);
+    }
+  } catch (err) {
+    console.error("[contact] Email dispatch error:", err.message);
+  }
+
+  // Self-healing: recover any previously pending submissions left by cold container pauses
+  emailSvc.processPendingSubmissions(3).catch(() => {});
 
   res.status(201).json({
     success: true,
@@ -408,10 +425,32 @@ router.post("/submissions/:id/retry", requireAuth, async (req, res) => {
 
     await db.execute({ sql: "UPDATE contact_submissions SET email_notify_status = 'pending' WHERE id = ?", args: [id] });
 
-    const result = await emailSvc.sendNewSubmissionNotification(submission);
-    res.json({ success: result.success, reason: result.reason || null });
+    const [notifyResult, autoReplyResult] = await Promise.allSettled([
+      emailSvc.sendNewSubmissionNotification(submission),
+      emailSvc.sendAutoReply(submission),
+    ]);
+
+    const notifySuccess = notifyResult.status === "fulfilled" && notifyResult.value?.success;
+    res.json({
+      success: notifySuccess,
+      notification: notifyResult.status === "fulfilled" ? notifyResult.value : { success: false, reason: notifyResult.reason?.message },
+      autoReply: autoReplyResult.status === "fulfilled" ? autoReplyResult.value : { success: false, reason: autoReplyResult.reason?.message },
+      reason: notifyResult.status === "fulfilled" ? notifyResult.value?.reason : notifyResult.reason?.message,
+    });
   } catch (err) {
     res.status(500).json({ error: { code: "INTERNAL_ERROR", message: "Failed to retry." } });
+  }
+});
+
+// =================================================================
+// POST /api/v1/contact/submissions/retry-pending — Admin: retry all pending
+// =================================================================
+router.post("/submissions/retry-pending", requireAuth, async (req, res) => {
+  try {
+    const result = await emailSvc.processPendingSubmissions(10);
+    res.json({ success: true, ...result });
+  } catch (err) {
+    res.status(500).json({ error: { code: "INTERNAL_ERROR", message: err.message } });
   }
 });
 
@@ -473,6 +512,9 @@ router.put("/email-settings", requireAuth, async (req, res) => {
       if ((key === "recipient_email" || key === "sender_email") && value) {
         await syncUniversalEmail(value.trim(), editor);
       }
+    }
+    if (typeof emailSvc.clearTransporterCache === "function") {
+      emailSvc.clearTransporterCache();
     }
     res.json({ success: true, saved: pairs.length });
   } catch (err) {

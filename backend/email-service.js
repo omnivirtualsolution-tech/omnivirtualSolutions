@@ -9,8 +9,27 @@
 const nodemailer = require("nodemailer");
 const fs = require("fs");
 const path = require("path");
+const dns = require("dns");
 const { db } = require("./db");
 const { getFullBusinessProfile } = require("./business-profile-sync");
+
+// Force IPv4 DNS resolution first to avoid 20+ second ENETUNREACH / ETIMEDOUT delays on networks with partial IPv6
+if (dns && typeof dns.setDefaultResultOrder === "function") {
+  try {
+    dns.setDefaultResultOrder("ipv4first");
+  } catch (_) {}
+}
+
+let cachedTransporter = null;
+let cachedTransporterKey = null;
+
+function clearTransporterCache() {
+  if (cachedTransporter && typeof cachedTransporter.close === "function") {
+    try { cachedTransporter.close(); } catch (_) {}
+  }
+  cachedTransporter = null;
+  cachedTransporterKey = null;
+}
 
 // ── Load all email settings from DB ──────────────────────────────
 async function getSettings() {
@@ -28,7 +47,7 @@ async function getSettings() {
 }
 
 // ── Create transporter from current DB settings ───────────────────
-async function createTransporter(settings) {
+async function createTransporter(settings, { noCache = false } = {}) {
   const host = settings.smtp_host?.trim();
   const user = settings.smtp_user?.trim();
   const pass = settings.smtp_pass?.trim();
@@ -43,13 +62,51 @@ async function createTransporter(settings) {
     return null;
   }
 
-  return nodemailer.createTransport({
-    host,
-    port: parseInt(settings.smtp_port || "587", 10),
-    secure: settings.smtp_secure === "true",
-    auth: { user, pass },
-    tls: { rejectUnauthorized: false }, // allow self-signed for local testing
-  });
+  const key = `${host}:${settings.smtp_port}:${settings.smtp_secure}:${user}:${pass}`;
+  if (!noCache && cachedTransporter && cachedTransporterKey === key) {
+    return cachedTransporter;
+  }
+
+  const isGmail = host === "smtp.gmail.com" || host.includes("gmail") || user.endsWith("@gmail.com");
+
+  let transportConfig;
+  if (isGmail) {
+    transportConfig = {
+      service: "gmail",
+      auth: { user, pass },
+      pool: !noCache,
+      maxConnections: 3,
+      maxMessages: 50,
+      connectionTimeout: 8000,
+      greetingTimeout: 6000,
+      socketTimeout: 12000,
+    };
+  } else {
+    transportConfig = {
+      host,
+      port: parseInt(settings.smtp_port || "587", 10),
+      secure: settings.smtp_secure === "true",
+      auth: { user, pass },
+      tls: { rejectUnauthorized: false }, // allow self-signed for local testing
+      pool: !noCache,
+      maxConnections: 3,
+      connectionTimeout: 8000,
+      greetingTimeout: 6000,
+      socketTimeout: 12000,
+    };
+  }
+
+  try {
+    const transporter = nodemailer.createTransport(transportConfig);
+    if (!noCache) {
+      cachedTransporter = transporter;
+      cachedTransporterKey = key;
+    }
+    return transporter;
+  } catch (err) {
+    console.error("[email-service] Failed to create transport:", err.message);
+    return null;
+  }
 }
 
 // ── Interpolate template variables ───────────────────────────────
@@ -926,13 +983,52 @@ async function sendReply({ submission, replyBody, replyId, sentBy }) {
 // Test SMTP connection (for settings page)
 // =================================================================
 async function testSmtpConnection(testSettings) {
-  const transporter = await createTransporter(testSettings);
+  const transporter = await createTransporter(testSettings, { noCache: true });
   if (!transporter) return { success: false, reason: "Incomplete SMTP credentials" };
   try {
     await transporter.verify();
     return { success: true };
   } catch (err) {
     return { success: false, reason: err.message };
+  }
+}
+
+// =================================================================
+// Recovery: Process any pending submissions left by cold container pauses
+// =================================================================
+async function processPendingSubmissions(maxLimit = 5) {
+  try {
+    // Only grab submissions that were created more than 15s ago to avoid colliding with active requests
+    const pending = await db.execute({
+      sql: `SELECT id, full_name, email, phone, subject, message, created_at
+            FROM contact_submissions
+            WHERE email_notify_status = 'pending'
+            AND datetime(created_at) <= datetime('now', '-15 seconds')
+            ORDER BY id ASC
+            LIMIT ?`,
+      args: [maxLimit],
+    });
+
+    if (!pending.rows || pending.rows.length === 0) return { count: 0, sent: 0 };
+
+    console.log(`[email-service] Recovering ${pending.rows.length} pending submission(s)...`);
+    let sentCount = 0;
+    for (const sub of pending.rows) {
+      try {
+        const results = await Promise.allSettled([
+          sendNewSubmissionNotification(sub),
+          sendAutoReply(sub),
+        ]);
+        const anySuccess = results.some((r) => r.status === "fulfilled" && r.value?.success);
+        if (anySuccess) sentCount++;
+      } catch (err) {
+        console.error(`[email-service] Recovery error for submission #${sub.id}:`, err.message);
+      }
+    }
+    return { count: pending.rows.length, sent: sentCount };
+  } catch (err) {
+    console.warn("[email-service] processPendingSubmissions warning:", err.message);
+    return { count: 0, error: err.message };
   }
 }
 
@@ -1094,6 +1190,8 @@ module.exports = {
   sendAutoReply,
   sendReply,
   testSmtpConnection,
+  processPendingSubmissions,
+  clearTransporterCache,
   getEmailStats,
   getQuotaStatus,
   getSettings,

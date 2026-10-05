@@ -1432,7 +1432,7 @@
           ens.innerHTML = `<span class="badge badge-${m.email_notify_status}" title="Email notification status">✉ ${m.email_notify_status}</span>`;
         }
         const retryBtn = document.getElementById('retryBtn');
-        retryBtn.style.display = m.email_notify_status === 'failed' ? '' : 'none';
+        retryBtn.style.display = (m.email_notify_status === 'failed' || m.email_notify_status === 'pending') ? '' : 'none';
 
         // Message body
         document.getElementById('detailMessage').textContent = m.message;

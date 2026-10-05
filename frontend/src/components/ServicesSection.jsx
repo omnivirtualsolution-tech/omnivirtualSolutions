@@ -1,9 +1,42 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCms } from '../context/CmsContext';
 
 export default function ServicesSection() {
   const { t } = useCms();
+  const navigate = useNavigate();
+
+  const isLiveEditorEnvironment = () => {
+    return Boolean(
+      (window.parent && window.parent !== window) ||
+      new URLSearchParams(window.location.search).get('edit') === '1' ||
+      new URLSearchParams(window.location.search).get('admin') === '1' ||
+      document.body.classList.contains('is-admin-session') ||
+      document.body.classList.contains('mode-edit') ||
+      document.documentElement.classList.contains('in-iframe') ||
+      (window.__omniIsEditor === true)
+    );
+  };
+
+  const handleCardClick = (targetPath, e) => {
+    // Only clickable on homepage, disabled in Live In-Place Website Editor
+    if (isLiveEditorEnvironment()) {
+      return;
+    }
+
+    // If user clicked directly on the Learn More link or another button/link, let it handle naturally
+    if (e.target.closest('a') || e.target.closest('button')) {
+      return;
+    }
+
+    // Do not navigate if user is highlighting text
+    const selection = window.getSelection();
+    if (selection && selection.toString().trim().length > 0) {
+      return;
+    }
+
+    navigate(targetPath);
+  };
 
   return (
     <section id="services" className="services section services-redesign">
@@ -25,7 +58,18 @@ export default function ServicesSection() {
         <div className="row gy-4 justify-content-center">
           {/* Service Item 1: Marketing Services */}
           <div className="col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <div className="service-card-luxury">
+            <div
+              className="service-card-luxury"
+              role="link"
+              tabIndex={0}
+              aria-label="Marketing Services - Learn More"
+              onClick={(e) => handleCardClick('/services?open=marketing-dropdown', e)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  handleCardClick('/services?open=marketing-dropdown', e);
+                }
+              }}
+            >
               <div className="service-card-top">
                 <div className="service-icon-box">
                   <i className="bi bi-megaphone-fill"></i>
@@ -66,7 +110,18 @@ export default function ServicesSection() {
 
           {/* Service Item 2: Publishing Packages */}
           <div className="col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="200">
-            <div className="service-card-luxury">
+            <div
+              className="service-card-luxury"
+              role="link"
+              tabIndex={0}
+              aria-label="Publishing Packages - Learn More"
+              onClick={(e) => handleCardClick('/services?open=eval-services', e)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  handleCardClick('/services?open=eval-services', e);
+                }
+              }}
+            >
               <div className="service-card-top">
                 <div className="service-icon-box">
                   <i className="bi bi-book-half"></i>

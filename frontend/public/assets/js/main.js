@@ -324,4 +324,64 @@
   window.addEventListener('load', navmenuScrollspy);
   document.addEventListener('scroll', navmenuScrollspy);
 
+  /**
+   * Service Cards Clickable Box (Homepage only, disabled in Live In-Place Editor)
+   */
+  function isLiveEditorEnvironment() {
+    return Boolean(
+      (window.parent && window.parent !== window) ||
+      window.location.search.includes('edit=1') ||
+      window.location.search.includes('admin=1') ||
+      document.body.classList.contains('is-admin-session') ||
+      document.body.classList.contains('mode-edit') ||
+      document.documentElement.classList.contains('in-iframe') ||
+      (window.__omniIsEditor === true)
+    );
+  }
+
+  function initClickableServiceCards() {
+    const cards = document.querySelectorAll('.service-card-luxury');
+    cards.forEach(card => {
+      card.addEventListener('click', function(e) {
+        if (isLiveEditorEnvironment()) {
+          return;
+        }
+
+        // If the user clicked the link directly, let the anchor do standard navigation
+        if (e.target.closest('a')) {
+          return;
+        }
+
+        // Do not navigate if user is selecting text
+        const selection = window.getSelection();
+        if (selection && selection.toString().trim().length > 0) {
+          return;
+        }
+
+        const url = this.getAttribute('data-service-url') || this.querySelector('.service-card-footer')?.getAttribute('href');
+        if (url) {
+          window.location.href = url;
+        }
+      });
+
+      card.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          if (isLiveEditorEnvironment()) return;
+          if (e.target.closest('a')) return;
+          e.preventDefault();
+          const url = this.getAttribute('data-service-url') || this.querySelector('.service-card-footer')?.getAttribute('href');
+          if (url) {
+            window.location.href = url;
+          }
+        }
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initClickableServiceCards);
+  } else {
+    initClickableServiceCards();
+  }
+
 })();

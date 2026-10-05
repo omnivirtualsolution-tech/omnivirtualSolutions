@@ -2526,6 +2526,19 @@ footer,
   box-shadow: 0 10px 30px rgba(28, 25, 23, 0.04),
               0 2px 8px rgba(194, 154, 107, 0.05);
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.service-card-luxury:focus-visible {
+  outline: 2px solid #c29a6b;
+  outline-offset: 3px;
+}
+
+/* In Live In-Place Editor, cards are not clickable boxes for navigation */
+body.is-admin-session .service-card-luxury,
+body.mode-edit .service-card-luxury,
+html.in-iframe .service-card-luxury {
+  cursor: default;
 }
 
 .service-card-luxury:hover {
