@@ -493,6 +493,53 @@
       border-left: 2px solid rgba(173, 125, 66, 0.25);
       margin: 4px 0 12px 12px;
     }
+    .subcategory-group {
+      margin-bottom: 6px;
+    }
+    .subcategory-accordion-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 8px;
+      margin: 4px 0 2px 0;
+      background: rgba(173, 125, 66, 0.05);
+      border: 1px solid rgba(173, 125, 66, 0.16);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .subcategory-accordion-row:hover {
+      background: rgba(173, 125, 66, 0.12);
+      border-color: rgba(173, 125, 66, 0.35);
+    }
+    .subcategory-accordion-row.expanded {
+      background: rgba(173, 125, 66, 0.1);
+      border-color: rgba(173, 125, 66, 0.3);
+    }
+    .subcategory-accordion-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #8c5d28;
+      flex-grow: 1;
+      cursor: pointer;
+    }
+    .subcat-chevron {
+      font-size: 0.72rem;
+      color: #ad7d42;
+      transition: transform 0.2s ease;
+    }
+    .subcategory-services-box {
+      padding-left: 6px;
+      margin-top: 2px;
+      margin-bottom: 6px;
+      border-left: 2px solid rgba(173, 125, 66, 0.2);
+      margin-left: 6px;
+    }
     .subcategory-label {
       font-size: 0.76rem;
       font-weight: 700;
@@ -576,6 +623,15 @@
       color: #ad7d42;
       letter-spacing: -0.02em;
     }
+    #detailPrice:empty::before {
+      content: "Set Price";
+      color: #ad7d42;
+      opacity: 0.55;
+      font-size: 1.15rem;
+      font-weight: 600;
+      font-style: italic;
+      cursor: text;
+    }
     .service-price-sub {
       display: block;
       font-size: 0.75rem;
@@ -586,6 +642,208 @@
     .service-divider {
       margin: 20px 0;
       border-color: rgba(194, 154, 107, 0.2);
+    }
+
+    /* ── Rich Narrative & Editorial Layout Styles (matching ServicesPage.css) ── */
+    .editorial-callout-notice {
+      background: #faf6f0;
+      border-left: 4px solid #ad7d42;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px;
+      margin-bottom: 20px;
+    }
+    .editorial-callout-notice p {
+      margin: 0;
+      font-size: 0.92rem;
+      color: #57534e;
+      line-height: 1.6;
+    }
+    .editorial-narrative {
+      color: #44403c;
+      font-size: 0.98rem;
+      line-height: 1.75;
+      margin-bottom: 24px;
+    }
+    .editorial-testimonial-quote {
+      margin: 22px 0;
+      padding: 16px 22px;
+      border-left: 4px solid #ad7d42;
+      background: rgba(173, 125, 66, 0.05);
+      border-radius: 0 8px 8px 0;
+      font-style: italic;
+      color: #333;
+    }
+    .editorial-testimonial-quote p {
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    .editorial-testimonial-quote footer {
+      font-style: normal;
+      font-weight: 600;
+      color: #78716c;
+      font-size: 0.88rem;
+    }
+
+    /* Refined Warm Bronze Halo Bullets for Lists in Service Detail */
+    .service-detail-card ul,
+    .service-detail-card ul.ps-3,
+    .service-detail-card ul.ps-4 {
+      list-style: none !important;
+      padding-left: 0.25rem !important;
+      margin-left: 0 !important;
+      margin-top: 0.5rem;
+      margin-bottom: 0.85rem;
+    }
+    .service-detail-card ul.mb-0 {
+      margin-bottom: 0 !important;
+    }
+    .service-detail-card ul li {
+      position: relative;
+      list-style: none !important;
+      padding-left: 1.45rem !important;
+      line-height: 1.68;
+      color: #44403c;
+      transition: color 0.18s ease;
+    }
+    .service-detail-card ul li::before {
+      content: '';
+      position: absolute;
+      left: 0.15rem;
+      top: 0.72em;
+      transform: translateY(-50%);
+      width: 6.5px;
+      height: 6.5px;
+      border-radius: 50%;
+      background: #ad7d42;
+      box-shadow: 0 0 0 3px rgba(173, 125, 66, 0.18);
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .service-detail-card ul li:hover {
+      color: #1c1917;
+    }
+    .service-detail-card ul li:hover::before {
+      transform: translateY(-50%) scale(1.25);
+      background: #8a5c28;
+      box-shadow: 0 0 0 4px rgba(173, 125, 66, 0.3);
+    }
+    .service-detail-card ul li strong {
+      color: #2b2219;
+      font-weight: 600;
+    }
+    .service-detail-card ul:not([class*="gap-"]) > li + li {
+      margin-top: 0.45rem;
+    }
+
+    /* Ordered Lists (Numbered Steps) */
+    .service-detail-card ol,
+    .service-detail-card ol.ps-3,
+    .service-detail-card ol.ps-4 {
+      list-style: none !important;
+      counter-reset: omni-service-counter;
+      padding-left: 0.25rem !important;
+      margin-left: 0 !important;
+      margin-top: 0.5rem;
+      margin-bottom: 0.85rem;
+    }
+    .service-detail-card ol li {
+      counter-increment: omni-service-counter;
+      position: relative;
+      list-style: none !important;
+      padding-left: 2rem !important;
+      line-height: 1.68;
+      color: #44403c;
+    }
+    .service-detail-card ol li::before {
+      content: counter(omni-service-counter);
+      position: absolute;
+      left: 0;
+      top: 0.22em;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(173, 125, 66, 0.12);
+      border: 1px solid rgba(173, 125, 66, 0.32);
+      color: #8a5c28;
+      font-size: 0.72rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    /* Publishing Packages Container & Cards */
+    .publishing-packages-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .publishing-package-card {
+      background: #fdfbf7;
+      border: 1px solid rgba(194, 154, 107, 0.25);
+      border-radius: 12px;
+      padding: 18px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .publishing-package-card:hover {
+      border-color: #ad7d42;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(173, 125, 66, 0.15);
+      background: #fffdfa;
+    }
+    .publishing-package-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .publishing-package-card-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #2b2219;
+      margin: 0;
+    }
+    .publishing-package-arrow-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(173, 125, 66, 0.12);
+      color: #ad7d42;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+    .publishing-package-card-summary {
+      color: #57534e;
+      font-size: 0.88rem;
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    /* In-Place Editing Outlines */
+    body.mode-edit .editable-field {
+      outline: 1px dashed rgba(235, 162, 45, 0.55);
+      outline-offset: 3px;
+      cursor: text;
+      border-radius: 3px;
+    }
+    body.mode-edit .editable-field:hover {
+      outline: 2px dashed #eba22d;
+      background: rgba(235, 162, 45, 0.05);
+    }
+    body.mode-edit .editable-field:focus {
+      outline: 2px solid #eba22d;
+      background: rgba(235, 162, 45, 0.09);
+    }
+    body.mode-preview .editable-field {
+      outline: none !important;
+      background: transparent !important;
+      cursor: default;
     }
 
     .service-lead-box {
@@ -1066,6 +1324,134 @@
         max-height: 88vh;
       }
     }
+  
+    /* Category & Subcategory Overview Enhancements */
+    .category-overview-content,
+    .subcategory-overview-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .publishing-packages-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .publishing-package-card {
+      background: #fdfbf8;
+      border: 1px solid rgba(194, 154, 107, 0.35);
+      border-radius: 12px;
+      padding: 18px 20px;
+      cursor: pointer;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .publishing-package-card:hover {
+      background: #ffffff;
+      border-color: #ad7d42;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(173, 125, 66, 0.16);
+    }
+    .publishing-package-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .publishing-package-card-title {
+      font-weight: 700;
+      color: #2b2219;
+      font-size: 1.05rem;
+      margin: 0;
+      transition: color 0.2s ease;
+    }
+    .publishing-package-card:hover .publishing-package-card-title {
+      color: #ad7d42;
+    }
+    .publishing-package-arrow-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(173, 125, 66, 0.12);
+      border: 1px solid rgba(173, 125, 66, 0.25);
+      color: #ad7d42;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .publishing-package-card:hover .publishing-package-arrow-badge {
+      background: #ad7d42;
+      color: #ffffff;
+      transform: translateX(3px);
+    }
+    .publishing-package-card-summary {
+      color: #57534e;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .subcategory-service-card {
+      position: relative;
+      background: #ffffff;
+      border: 1px solid rgba(194, 154, 107, 0.28);
+      border-left: 4px solid #d9534f;
+      border-radius: 12px;
+      padding: 18px 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+      display: block;
+      margin-bottom: 12px;
+    }
+    .subcategory-service-card:hover {
+      background: #fdfbf8;
+      border-color: #d9534f;
+      border-left-width: 5px;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(217, 83, 79, 0.14);
+    }
+    .subcategory-service-card:hover .subcategory-item-title {
+      color: #c9302c !important;
+    }
+    .subcategory-service-card:hover .publishing-package-arrow-badge {
+      background: #d9534f;
+      color: #ffffff;
+      border-color: #d9534f;
+      transform: translateX(3px);
+    }
+    .subcategory-item-title {
+      color: #d9534f;
+      font-size: 1.15rem;
+      letter-spacing: -0.01em;
+      transition: color 0.2s ease;
+    }
+
+    .active-cat-selected {
+      background: #f2e4d0 !important;
+      border-color: #ad7d42 !important;
+    }
+    .active-cat-selected .category-name-text {
+      color: #7b4f20 !important;
+      font-weight: 800 !important;
+    }
+    .active-sub-selected {
+      background: rgba(173, 125, 66, 0.22) !important;
+      border-color: #ad7d42 !important;
+    }
+    .active-sub-selected .subcategory-name-text {
+      color: #7b4f20 !important;
+      font-weight: 800 !important;
+    }
+
   </style>
 </head>
 
@@ -1164,7 +1550,7 @@
         <div class="col-lg-8">
           <div class="service-detail-card" id="serviceDetailCard">
             <!-- Breadcrumbs -->
-            <div class="service-breadcrumb">
+            <div class="service-breadcrumb" id="serviceBreadcrumb">
               <span>Services</span>
               <i class="bi bi-chevron-right" style="font-size: 0.65rem;"></i>
               <span id="detailCatBreadcrumb">Publishing Packages</span>
@@ -1173,18 +1559,18 @@
             </div>
 
             <!-- Header Row: Badge, Title, Price -->
-            <div class="d-flex align-items-start justify-content-between flex-wrap gap-2">
-              <div style="max-width: 620px;">
-                <div class="service-tag-badge">
-                  <i class="bi bi-award-fill"></i>
-                  <span class="editable-field" id="detailBadge" contenteditable="true" spellcheck="false" onblur="handleHeaderSave('services.badge.text', this.innerText.trim())">
-                    Omni Specialist Service
-                  </span>
-                </div>
-                <h2 class="service-title editable-field" id="detailTitle" contenteditable="true" spellcheck="false" onblur="handleServiceFieldSave('title', this.innerText.trim())">
+            <div>
+              <div class="service-tag-badge mb-2">
+                <i class="bi bi-award-fill"></i>
+                <span class="editable-field" id="detailBadge" contenteditable="true" spellcheck="false" onblur="handleHeaderSave('services.badge.text', this.innerText.trim())">
+                  Omni Specialist Service
+                </span>
+              </div>
+              <div class="d-flex align-items-baseline gap-3 flex-wrap">
+                <h2 class="service-title editable-field m-0" id="detailTitle" contenteditable="true" spellcheck="false" onblur="handleServiceFieldSave('title', this.innerText.trim())">
                   Basic Package
                 </h2>
-                <div class="service-package-price-wrap mt-2 mb-2" id="detailPriceContainer" style="display: flex; align-items: baseline; gap: 8px;">
+                <div class="service-package-price-wrap m-0" id="detailPriceContainer" style="display: flex; align-items: baseline; gap: 8px;">
                   <span 
                     class="editable-field" 
                     id="detailPrice" 
@@ -1203,9 +1589,12 @@
 
             <hr class="service-divider">
 
-            <!-- Service Overview Box -->
-            <div class="service-lead-box">
-              <h5 class="editable-field" id="detailOverviewHeading" contenteditable="true" spellcheck="false" onblur="handleHeaderSave('services.overview.heading', this.innerText.trim())">
+            <!-- Container for rich custom detail content (Narratives, Callouts, Tables, Quotes) -->
+            <div id="serviceCustomDetailContainer" style="display: none;"></div>
+
+            <!-- Service Overview Box (Default/Packages) -->
+            <div class="service-lead-box" id="serviceDefaultLeadBox">
+              <h5 class="editable-field" id="detailOverviewHeading" contenteditable="true" spellcheck="false" onblur="handleHeaderSave(this.getAttribute('data-block-key') || 'services.overview.heading', this.innerText.trim())">
                 Service Overview
               </h5>
               <p class="service-lead-text editable-field" id="detailLead" contenteditable="true" spellcheck="false" onblur="handleServiceFieldSave('lead', this.innerText.trim())">
@@ -1214,10 +1603,10 @@
             </div>
 
             <!-- What's Included Feature Checklist -->
-            <div class="features-checklist-section">
+            <div class="features-checklist-section" id="serviceFeaturesSection">
               <div class="d-flex align-items-center justify-content-between mb-2">
                 <h5 class="fw-bold editable-field m-0" style="color: #2b2219; font-size: 1.1rem;" id="detailIncludedHeading" contenteditable="true" spellcheck="false" onblur="handleHeaderSave('services.included.heading', this.innerText.trim())">
-                  What's Included:
+                  Begin your publishing journey with the package that lets you take the extra mile.
                 </h5>
                 <button type="button" class="btn-add-feature" onclick="addFeatureBullet()">
                   <i class="bi bi-plus-circle-fill"></i> Add Feature
@@ -1378,6 +1767,9 @@
     </div>
   </div>
 
+  <!-- ── Services Rich Content Registry ── -->
+  <script src="/admin/services-content-registry.js"></script>
+
   <!-- ── Scripts ── -->
   <script>
     (function () {
@@ -1385,11 +1777,17 @@
 
       const token = localStorage.getItem('omni_admin_token');
       let catalog = [];
+      let currentViewMode = 'service'; // 'category' | 'subcategory' | 'service'
+      let selectedCategory = null;
+      let selectedSubcategory = null;
       let selectedService = null;
       let isEditMode = true;
       let activeIconCatId = null;
       let debounceTimer = null;
       let toastTimer = null;
+      let currentBlockMap = {};
+      const expandedCategories = {};
+      const expandedSubcategories = {};
 
       const AVAILABLE_ICONS = [
         { name: 'Book', icon: 'bi-book-half' },
@@ -1489,6 +1887,7 @@
           const metaRes = await fetch('/api/v1/site-meta');
           const metaData = await metaRes.json();
           if (metaData && metaData.blockMap) {
+            currentBlockMap = metaData.blockMap;
             if (metaData.blockMap['services.header.title']) {
               document.getElementById('editableHeaderTitle').textContent = metaData.blockMap['services.header.title'];
             }
@@ -1528,28 +1927,48 @@
             }
           }
 
+          if (catalog.length > 0 && Object.keys(expandedCategories).length === 0) {
+            expandedCategories[catalog[0].id] = true;
+          }
+
           renderCategories();
           
-          // Select service from URL param or first service
+          // Select service, category, or subcategory from URL param
           const params = new URLSearchParams(window.location.search);
           const svcSlug = params.get('service');
+          let foundCategory = null;
+          let foundSubcategory = null;
           let targetSvc = null;
+
           if (svcSlug) {
-            for (const cat of catalog) {
-              for (const sub of (cat.subcategories || [])) {
-                const found = (sub.services || []).find(s => s.slug === svcSlug);
-                if (found) { targetSvc = found; break; }
+            foundCategory = catalog.find(c => c.id === svcSlug);
+            if (!foundCategory) {
+              for (const cat of catalog) {
+                foundSubcategory = (cat.subcategories || []).find(s => s.id === svcSlug);
+                if (foundSubcategory) {
+                  foundCategory = cat;
+                  break;
+                }
+                const found = (cat.subcategories || []).flatMap(s => s.services || []).find(s => s.slug === svcSlug);
+                if (found) {
+                  targetSvc = found;
+                  foundCategory = cat;
+                  break;
+                }
               }
-              if (targetSvc) break;
             }
           }
 
-          if (!targetSvc && catalog[0]?.subcategories[0]?.services[0]) {
-            targetSvc = catalog[0].subcategories[0].services[0];
-          }
-
-          if (targetSvc) {
-            selectService(targetSvc);
+          if (foundCategory && !foundSubcategory && !targetSvc) {
+            selectCategory(foundCategory);
+          } else if (foundCategory && foundSubcategory && !targetSvc) {
+            selectSubcategory(foundCategory, foundSubcategory);
+          } else if (targetSvc) {
+            selectService(targetSvc, foundCategory?.title);
+          } else if (catalog[0]?.subcategories[0]?.services[0]) {
+            selectService(catalog[0].subcategories[0].services[0], catalog[0].title);
+          } else if (catalog[0]) {
+            selectCategory(catalog[0]);
           }
         } catch (e) {
           console.error('[ServicesEditor] Load error:', e);
@@ -1570,15 +1989,19 @@
 
       function updatePaginationControls() {
         const all = getAllServicesFlat();
-        if (!selectedService || all.length === 0) return;
-        const curIdx = all.findIndex(s => s.slug === selectedService.slug);
-        const prevSvc = curIdx > 0 ? all[curIdx - 1] : null;
-        const nextSvc = curIdx < all.length - 1 ? all[curIdx + 1] : null;
-
         const btnPrev = document.getElementById('btnPrevService');
         const btnNext = document.getElementById('btnNextService');
         const prevTitle = document.getElementById('prevServiceTitle');
         const nextTitle = document.getElementById('nextServiceTitle');
+
+        if (!selectedService || currentViewMode !== 'service' || all.length === 0) {
+          if (btnPrev && prevTitle) { btnPrev.disabled = true; prevTitle.textContent = 'None'; }
+          if (btnNext && nextTitle) { btnNext.disabled = true; nextTitle.textContent = 'None'; }
+          return;
+        }
+        const curIdx = all.findIndex(s => s.slug === selectedService.slug);
+        const prevSvc = curIdx > 0 ? all[curIdx - 1] : null;
+        const nextSvc = curIdx < all.length - 1 ? all[curIdx + 1] : null;
 
         if (btnPrev && prevTitle) {
           btnPrev.disabled = !prevSvc;
@@ -1592,8 +2015,9 @@
 
       window.navigateStep = function(dir) {
         const all = getAllServicesFlat();
-        if (!selectedService || all.length === 0) return;
-        const curIdx = all.findIndex(s => s.slug === selectedService.slug);
+        if (all.length === 0) return;
+        let curIdx = selectedService ? all.findIndex(s => s.slug === selectedService.slug) : 0;
+        if (curIdx === -1) curIdx = 0;
         const targetIdx = curIdx + dir;
         if (targetIdx >= 0 && targetIdx < all.length) {
           selectService(all[targetIdx]);
@@ -1624,14 +2048,70 @@
         }, 2200);
       };
 
+      function renderBreadcrumbs() {
+        const container = document.getElementById('serviceBreadcrumb');
+        if (!container) return;
+        if (currentViewMode === 'category' && selectedCategory) {
+          container.innerHTML = `
+            <span>Services</span>
+            <i class="bi bi-chevron-right" style="font-size: 0.65rem;"></i>
+            <span class="text-dark fw-semibold" id="detailCatBreadcrumb">${escapeHtml(selectedCategory.title)}</span>
+          `;
+        } else if (currentViewMode === 'subcategory' && selectedSubcategory && selectedCategory) {
+          container.innerHTML = `
+            <span>Services</span>
+            <i class="bi bi-chevron-right" style="font-size: 0.65rem;"></i>
+            <span style="cursor: pointer;" onclick="selectCategoryById('${selectedCategory.id}')">${escapeHtml(selectedCategory.title)}</span>
+            <i class="bi bi-chevron-right" style="font-size: 0.65rem;"></i>
+            <span class="text-dark fw-semibold" id="detailTitleBreadcrumb">${escapeHtml(selectedSubcategory.title)}</span>
+          `;
+        } else if (selectedService) {
+          const catTitle = selectedCategory?.title || 'Services';
+          const subTitle = selectedSubcategory?.title || '';
+          const catId = selectedCategory?.id || '';
+          const subId = selectedSubcategory?.id || '';
+
+          let html = `<span>Services</span>`;
+          if (catId) {
+            html += ` <i class="bi bi-chevron-right" style="font-size: 0.65rem;"></i> <span style="cursor: pointer;" onclick="selectCategoryById('${catId}')">${escapeHtml(catTitle)}</span>`;
+          }
+          if (subId) {
+            html += ` <i class="bi bi-chevron-right" style="font-size: 0.65rem;"></i> <span style="cursor: pointer;" onclick="selectSubcategoryById('${catId}', '${subId}')">${escapeHtml(subTitle)}</span>`;
+          }
+          html += ` <i class="bi bi-chevron-right" style="font-size: 0.65rem;"></i> <span class="text-dark fw-semibold" id="detailTitleBreadcrumb">${escapeHtml(selectedService.title)}</span>`;
+          container.innerHTML = html;
+        }
+      }
+
+      function updateSidebarHighlights() {
+        document.querySelectorAll('.category-accordion-row').forEach(row => {
+          const cid = row.getAttribute('data-cat-id');
+          const isCatActive = currentViewMode === 'category' && selectedCategory && String(selectedCategory.id) === String(cid);
+          row.classList.toggle('active-cat-selected', isCatActive);
+        });
+
+        document.querySelectorAll('.subcategory-accordion-row').forEach(row => {
+          const sid = row.getAttribute('data-sub-id');
+          const isSubActive = currentViewMode === 'subcategory' && selectedSubcategory && String(selectedSubcategory.id) === String(sid);
+          row.classList.toggle('active-sub-selected', isSubActive);
+        });
+
+        document.querySelectorAll('.service-nav-item').forEach(btn => {
+          const slug = btn.getAttribute('data-svc-slug');
+          const isActive = currentViewMode === 'service' && selectedService && selectedService.slug === slug;
+          btn.classList.toggle('active', isActive);
+        });
+      }
+
       function renderCategories(filter = '') {
         const container = document.getElementById('categoriesContainer');
+        if (!container) return;
         document.getElementById('catTotalCount').textContent = catalog.length;
 
         const q = filter.toLowerCase().trim();
 
         container.innerHTML = catalog.map((cat, catIdx) => {
-          const isExpanded = catIdx === 0 || q.length > 0;
+          const isExpanded = q.length > 0 || (expandedCategories[cat.id] !== undefined ? Boolean(expandedCategories[cat.id]) : catIdx === 0);
           const matchingServices = (cat.subcategories || []).map(sub => ({
             ...sub,
             services: (sub.services || []).filter(s => !q || s.title.toLowerCase().includes(q) || (s.lead || '').toLowerCase().includes(q))
@@ -1640,14 +2120,19 @@
           if (q && matchingServices.length === 0) return '';
 
           const totalCount = (cat.subcategories || []).reduce(
-            (acc, sub) => acc + (sub.services || []).filter(s => !(cat.id === 'publishing-packages' && s.slug === 'publishing-packages')).length,
+            (acc, sub) => acc + (sub.services || []).filter(s => 
+              !(cat.id === 'publishing-packages' && s.slug === 'publishing-packages') &&
+              !(cat.id === 'evaluation-services' && s.slug === 'evaluation-services')
+            ).length,
             0
           );
 
+          const isCatActive = currentViewMode === 'category' && selectedCategory?.id === cat.id;
+
           return `
             <div class="sidebar-category-group mb-2" data-cat-id="${cat.id}">
-              <div class="category-accordion-row ${isExpanded ? 'expanded' : ''} ${selectedService?.slug === 'publishing-packages' && cat.id === 'publishing-packages' ? 'active-cat-selected' : ''}" id="cat-row-${cat.id}">
-                <div class="category-accordion-label" onclick="handleCategoryClick('${cat.id}')">
+              <div class="category-accordion-row ${isExpanded ? 'expanded' : ''} ${isCatActive ? 'active-cat-selected' : ''}" id="cat-row-${cat.id}" data-cat-id="${cat.id}">
+                <div class="category-accordion-label" onclick="selectCategoryById('${cat.id}')">
                   <i class="bi ${cat.icon || cat.icon_class || 'bi-bookmark-star'} text-warning cat-icon" onclick="openIconPicker('${cat.id}', event)" title="Click to change icon"></i>
                   <span class="category-name-text editable-field" contenteditable="${isEditMode ? 'true' : 'false'}" spellcheck="false" onblur="handleRenameCategory('${cat.id}', this.innerText.trim())" onclick="event.stopPropagation()">${escapeHtml(cat.title)}</span>
                 </div>
@@ -1656,36 +2141,68 @@
                   <button type="button" class="btn-cat-add-service" onclick="openAddServiceModalForCategory('${cat.id}', event)" title="Add service to ${escapeHtml(cat.title)}">
                     <i class="bi bi-plus-lg"></i>
                   </button>
-                  <button type="button" class="btn-cat-toggle" onclick="toggleCatAccordion('${cat.id}')" title="Toggle category">
+                  <button type="button" class="btn-cat-toggle" onclick="event.stopPropagation(); toggleCatAccordion('${cat.id}')" title="Toggle category">
                     <i class="bi bi-chevron-${isExpanded ? 'down' : 'right'} small" id="cat-chevron-${cat.id}"></i>
                   </button>
                 </div>
               </div>
 
               <div class="subcategories-list" id="subcat-box-${cat.id}" style="display: ${isExpanded ? 'block' : 'none'};">
-                ${(q ? matchingServices : (cat.subcategories || [])).map(sub => `
-                  <div class="mb-2">
-                    <div class="d-flex align-items-center justify-content-between mb-1 pe-2">
-                      <div class="subcategory-label editable-field m-0" contenteditable="${isEditMode ? 'true' : 'false'}" spellcheck="false" onblur="handleRenameSubcat('${cat.id}', '${sub.id}', this.innerText.trim())">${escapeHtml(sub.title)}</div>
-                      <button type="button" class="btn-sub-add-service" onclick="openAddServiceModalForSubcat('${cat.id}', '${sub.id}', event)" title="Add service to ${escapeHtml(sub.title)}">
-                        <i class="bi bi-plus"></i>
-                      </button>
+                ${(q ? matchingServices : (cat.subcategories || [])).map(sub => {
+                  const filteredServices = (sub.services || []).filter(svc => 
+                    !(cat.id === 'publishing-packages' && svc.slug === 'publishing-packages') &&
+                    !(cat.id === 'evaluation-services' && svc.slug === 'evaluation-services')
+                  );
+                  if (filteredServices.length === 0) return '';
+                  const isSubOpen = q.length > 0 || (expandedSubcategories[sub.id] !== undefined ? Boolean(expandedSubcategories[sub.id]) : (selectedService && filteredServices.some(s => s.slug === selectedService.slug)) || (cat.subcategories.length === 1));
+                  const isSubActive = currentViewMode === 'subcategory' && selectedSubcategory?.id === sub.id;
+
+                  return `
+                  <div class="subcategory-group mb-2" data-sub-id="${sub.id}">
+                    <div class="subcategory-accordion-row ${isSubOpen ? 'expanded' : ''} ${isSubActive ? 'active-sub-selected' : ''}" id="sub-row-${sub.id}" data-sub-id="${sub.id}">
+                      <div class="subcategory-accordion-label" onclick="selectSubcategoryById('${cat.id}', '${sub.id}')">
+                        <button type="button" class="btn btn-link p-0 text-decoration-none" onclick="event.stopPropagation(); toggleSubcatAccordion('${sub.id}')" style="color: inherit; font-size: inherit;">
+                          <i class="bi bi-chevron-${isSubOpen ? 'down' : 'right'} subcat-chevron" id="sub-chevron-${sub.id}"></i>
+                        </button>
+                        <span class="subcategory-name-text editable-field" contenteditable="${isEditMode ? 'true' : 'false'}" spellcheck="false" onblur="handleRenameSubcat('${cat.id}', '${sub.id}', this.innerText.trim())" onclick="event.stopPropagation()">${escapeHtml(sub.title)}</span>
+                      </div>
+                      <div class="subcategory-accordion-controls d-flex align-items-center gap-1" onclick="event.stopPropagation()">
+                        <span class="badge bg-light text-muted border subcat-count-badge" style="font-size: 0.68rem; padding: 1px 6px; border-radius: 10px;">${filteredServices.length}</span>
+                        <button type="button" class="btn-sub-add-service" onclick="openAddServiceModalForSubcat('${cat.id}', '${sub.id}', event)" title="Add service to ${escapeHtml(sub.title)}">
+                          <i class="bi bi-plus"></i>
+                        </button>
+                      </div>
                     </div>
-                    ${(sub.services || [])
-                      .filter(svc => !(cat.id === 'publishing-packages' && svc.slug === 'publishing-packages'))
-                      .map(svc => `
-                      <button type="button" class="service-nav-item ${selectedService?.slug === svc.slug ? 'active' : ''}" onclick="selectServiceBySlug('${svc.slug}')">
-                        <span class="text-truncate">${escapeHtml(svc.title)}</span>
-                        ${selectedService?.slug === svc.slug ? '<i class="bi bi-check2"></i>' : ''}
-                      </button>
-                    `).join('')}
+                    <div class="subcategory-services-box" id="sub-services-box-${sub.id}" style="display: ${isSubOpen ? 'block' : 'none'};">
+                      ${filteredServices.map(svc => `
+                        <button type="button" class="service-nav-item ${currentViewMode === 'service' && selectedService?.slug === svc.slug ? 'active' : ''}" data-svc-slug="${svc.slug}" onclick="selectServiceBySlug('${svc.slug}')">
+                          <span class="text-truncate">${escapeHtml(svc.title)}</span>
+                          ${currentViewMode === 'service' && selectedService?.slug === svc.slug ? '<i class="bi bi-check2"></i>' : ''}
+                        </button>
+                      `).join('')}
+                    </div>
                   </div>
-                `).join('')}
+                `}).join('')}
               </div>
             </div>
           `;
         }).join('');
       }
+
+      window.toggleSubcatAccordion = function(subId) {
+        const box = document.getElementById('sub-services-box-' + subId);
+        const row = document.getElementById('sub-row-' + subId);
+        const chevron = document.getElementById('sub-chevron-' + subId);
+        if (!box) return;
+        const isOpen = box.style.display !== 'none';
+        const nextOpen = !isOpen;
+        expandedSubcategories[subId] = nextOpen;
+        box.style.display = nextOpen ? 'block' : 'none';
+        if (row) row.classList.toggle('expanded', nextOpen);
+        if (chevron) {
+          chevron.className = `bi bi-chevron-${nextOpen ? 'down' : 'right'} subcat-chevron`;
+        }
+      };
 
       window.toggleCatAccordion = function(catId) {
         const box = document.getElementById('subcat-box-' + catId);
@@ -1693,51 +2210,396 @@
         const chevron = document.getElementById('cat-chevron-' + catId);
         if (!box) return;
         const isOpen = box.style.display !== 'none';
-        box.style.display = isOpen ? 'none' : 'block';
-        if (row) row.classList.toggle('expanded', !isOpen);
+        const nextOpen = !isOpen;
+        expandedCategories[catId] = nextOpen;
+        box.style.display = nextOpen ? 'block' : 'none';
+        if (row) row.classList.toggle('expanded', nextOpen);
         if (chevron) {
-          chevron.className = `bi bi-chevron-${isOpen ? 'right' : 'down'} small`;
+          chevron.className = `bi bi-chevron-${nextOpen ? 'down' : 'right'} small`;
         }
       };
 
-      window.handleCategoryClick = function(catId) {
-        const box = document.getElementById('subcat-box-' + catId);
-        if (box && box.style.display === 'none') {
-          toggleCatAccordion(catId);
-        }
+      window.selectCategoryById = function(catId) {
         const cat = catalog.find(c => String(c.id) === String(catId));
-        if (catId === 'publishing-packages') {
-          let pubSvc = null;
-          for (const sub of (cat?.subcategories || [])) {
-            pubSvc = (sub.services || []).find(s => s.slug === 'publishing-packages');
-            if (pubSvc) break;
-          }
-          if (!pubSvc) {
-            pubSvc = {
-              slug: 'publishing-packages',
-              title: 'Publishing Packages',
-              lead: "Our packages are designed to offer authors the support and tools they need to maximize their book's potential. Each package guarantees one-on-one author support for every step of the self-publishing journey. We offer unique packages, enabling authors to choose the package that best fits their book's needs.",
-              features: [
-                'One-on-one author support for every step of the self-publishing journey',
-                "Unique packages enabling authors to choose the tier that best fits their book's needs",
-                'Digital formatting and distribution for e-books, paperbacks, and hardcovers',
-                'Custom cover layout and professional interior formatting',
-                'Worldwide distribution across Amazon, Barnes & Noble, and Ingram',
-                'ISBN assignment, US Copyright registration, and Library of Congress Control Number'
-              ]
-            };
-          }
-          selectService(pubSvc, cat ? cat.title : 'Publishing Packages');
-          return;
+        if (cat) {
+          expandedCategories[cat.id] = true;
+          const box = document.getElementById('subcat-box-' + cat.id);
+          const row = document.getElementById('cat-row-' + cat.id);
+          const chevron = document.getElementById('cat-chevron-' + cat.id);
+          if (box) box.style.display = 'block';
+          if (row) row.classList.add('expanded');
+          if (chevron) chevron.className = 'bi bi-chevron-down small';
+          selectCategory(cat);
         }
-        if (cat && cat.subcategories[0]?.services[0]) {
-          selectService(cat.subcategories[0].services[0], cat.title);
+      };
+
+      window.selectCategory = function(cat) {
+        if (!cat) return;
+        currentViewMode = 'category';
+        selectedCategory = cat;
+        selectedSubcategory = null;
+        selectedService = {
+          slug: cat.id,
+          title: cat.title,
+          lead: cat.lead || cat.description || '',
+          isCategoryOverview: true
+        };
+
+        updateSidebarHighlights();
+        renderBreadcrumbs();
+
+        const titleEl = document.getElementById('detailTitle');
+        if (titleEl) {
+          titleEl.textContent = (currentBlockMap && currentBlockMap[`service.${cat.id}.title`]) || cat.title;
+          titleEl.setAttribute('data-block-key', `service.${cat.id}.title`);
         }
+
+        const badgeEl = document.getElementById('detailBadge');
+        if (badgeEl) {
+          badgeEl.textContent = 'Omni Category Overview';
+        }
+
+        const priceContainer = document.getElementById('detailPriceContainer');
+        if (priceContainer) priceContainer.style.display = 'none';
+
+        const ctaHeading = document.getElementById('detailCtaHeading');
+        if (ctaHeading) ctaHeading.textContent = `Ready to explore ${cat.title}?`;
+
+        const dangerZone = document.getElementById('dangerZoneBox');
+        if (dangerZone) dangerZone.style.display = 'none';
+
+        const leadBox = document.getElementById('serviceDefaultLeadBox');
+        const featSec = document.getElementById('serviceFeaturesSection');
+        const customContainer = document.getElementById('serviceCustomDetailContainer');
+
+        if (featSec) featSec.style.display = 'none';
+
+        const catLead = (currentBlockMap && currentBlockMap[`service.${cat.id}.lead`]) ||
+                        cat.lead || cat.description ||
+                        `Explore our comprehensive range of ${cat.title.toLowerCase()} tailored to authors at every stage of their publishing journey.`;
+        if (leadBox) {
+          leadBox.style.display = 'block';
+          const headingEl = document.getElementById('detailOverviewHeading');
+          if (headingEl) {
+            headingEl.textContent = (currentBlockMap && currentBlockMap[`service.${cat.id}.overview_heading`]) || 'Category Overview';
+            headingEl.setAttribute('data-block-key', `service.${cat.id}.overview_heading`);
+          }
+          const leadEl = document.getElementById('detailLead');
+          if (leadEl) {
+            leadEl.textContent = catLead;
+            leadEl.setAttribute('data-block-key', `service.${cat.id}.lead`);
+          }
+          attachEditableFields(leadBox, cat.id);
+        }
+
+        if (customContainer) {
+          customContainer.style.display = 'block';
+
+          let html = `<div class="category-overview-content">`;
+
+          if (window.CATEGORY_CUSTOM_CALLOUTS && window.CATEGORY_CUSTOM_CALLOUTS[cat.id]) {
+            html += window.CATEGORY_CUSTOM_CALLOUTS[cat.id];
+          }
+
+          if (cat.id === 'publishing-packages') {
+            html += `
+              <div class="publishing-options-section">
+                <h4 class="fw-bold mb-2 editable-field" style="color: #2b2219; font-size: 1.25rem;" data-block-key="service.publishing-options.title">
+                  Publishing Options
+                </h4>
+                <p class="mb-4 editable-field" style="color: #57534e; font-size: 0.96rem; line-height: 1.65;" data-block-key="service.publishing-options.desc">
+                  Our packages offer various combinations of our publishing, editorial, and marketing services for a truly customized publishing experience. With Omni, you can choose the package that best suits your literary goals.
+                </p>
+
+                <div class="package-card-block mb-4">
+                  <h5 class="fw-bold mb-2 editable-field" style="color: #d9534f; font-size: 1.25rem;" data-block-key="service.basic-package.title">
+                    Basic Package
+                  </h5>
+                  <p class="mb-0 editable-field" style="color: #57534e; font-size: 0.96rem; line-height: 1.72;" data-block-key="service.basic-package.desc">
+                    The Basic package is designed for authors seeking basic publishing needs. It includes digital formatting and distribution for e-books, paperback publishing, and customization options for the interior and cover. This package supports up to 25 image insertions and provides one block of 50 interior revisions. Authors receive electronic proofs, one-on-one support, and distribution across major online retailers like Amazon and Barnes & Noble. The package also features ISBN assignment, U.S. Copyright registration, a Library of Congress Control Number, and three paperback copies. Additional perks include Amazon Look Inside, Google Preview, Barnes & Noble Read Instantly, and a 12-month bookseller return program.
+                  </p>
+                </div>
+
+                <div class="package-card-block mb-4">
+                  <h5 class="fw-bold mb-2 editable-field" style="color: #d9534f; font-size: 1.25rem;" data-block-key="service.standard-package.title">
+                    Standard Package
+                  </h5>
+                  <p class="mb-0 editable-field" style="color: #57534e; font-size: 0.96rem; line-height: 1.72;" data-block-key="service.standard-package.desc">
+                    Building on the Basic, the Standard package adds hardcover publishing to the mix, enhancing the physical presence of your book. This package maintains all the services of the Basic package, including the customization, support, and online distribution features. In addition to the three paperback copies, it also includes one hardcover copy. The bookseller return program is extended to 36 months, providing additional flexibility and support for bookstores to manage inventory.
+                  </p>
+                </div>
+
+                <div class="package-card-block mb-4">
+                  <h5 class="fw-bold mb-2 editable-field" style="color: #d9534f; font-size: 1.25rem;" data-block-key="service.advanced-package.title">
+                    Advanced Package
+                  </h5>
+                  <p class="mb-0 editable-field" style="color: #57534e; font-size: 0.96rem; line-height: 1.72;" data-block-key="service.advanced-package.desc">
+                    The Advanced package is the most comprehensive, designed for authors who want extensive support and marketing tools. It includes everything from the Standard package, but boosts the number of copies provided to 20 paperbacks and 5 hardcovers. This package distinguishes itself with marketing enhancements such as 30 days of online book ads via Google and a professional book review from Kirkus Reviews. Additionally, it includes a deluxe website setup to further promote the book. The return program is extended to 60 months, offering the maximum return flexibility for retailers.
+                  </p>
+                </div>
+              </div>
+            `;
+          } else if (cat.id === 'evaluation-services') {
+            html += `
+              <div class="evaluation-services-overview-content">
+                <div class="mb-4">
+                  <h4 class="fw-bold mb-2 editable-field" style="color: #d9534f; font-size: 1.25rem;" data-block-key="service.evaluation-services.rx_title">
+                    Editorial Rx Referral
+                  </h4>
+                  <p class="mb-3 editable-field" style="color: #57534e; font-size: 0.98rem; line-height: 1.7;" data-block-key="service.evaluation-services.rx_desc">
+                    Through this service, an evaluator will recommend the services of an appropriate editorial specialist—from a copyeditor or content editor to a developmental editor or book doctor.
+                  </p>
+                  <blockquote class="editorial-testimonial-quote" style="border-left-color: #d9534f; background: rgba(217, 83, 79, 0.04);">
+                    <p class="mb-2 editable-field" data-block-key="service.evaluation-services.rx_quote">
+                      "With the various points to examine and adjust in mind, I re-read This Golden Land and made changes along the way. These were excellent points, by the way, and very helpful to me for cleaning up the manuscript."
+                    </p>
+                    <footer class="editable-field" data-block-key="service.evaluation-services.rx_author">
+                      -Barbara Wood, author of This Golden Land
+                    </footer>
+                  </blockquote>
+                </div>
+                <div class="mb-4">
+                  <h4 class="fw-bold mb-2 editable-field" style="color: #d9534f; font-size: 1.25rem;" data-block-key="service.evaluation-services.eval_title">
+                    Editorial Evaluation Services
+                  </h4>
+                  <p class="mb-0 editable-field" style="color: #57534e; font-size: 0.98rem; line-height: 1.7;" data-block-key="service.evaluation-services.eval_desc">
+                    Regardless of your publishing goals, the editorial quality of your work matters—no one wants to read a book that's riddled with typos and grammatical errors. However, even the best writers make occasional mistakes. Omni provides editorial services that will help you make your book the best it can be.
+                  </p>
+                </div>
+                <div class="publishing-packages-container mt-4">
+                  <div class="publishing-package-card" onclick="selectServiceBySlug('editorial-evaluation')">
+                    <div class="publishing-package-card-header">
+                      <h5 class="publishing-package-card-title">Editorial Evaluation</h5>
+                      <span class="publishing-package-arrow-badge"><i class="bi bi-arrow-right-short"></i></span>
+                    </div>
+                    <p class="publishing-package-card-summary">
+                      Explore our complete manuscript diagnostic checkup, detailed observations report, and $299 credit toward professional editorial services.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+
+          if (cat.subcategories && cat.subcategories.length > 0 && cat.id !== 'publishing-packages' && cat.id !== 'evaluation-services') {
+            html += `
+              <div class="publishing-options-section mb-4">
+                <h4 class="publishing-options-title editable-field" data-block-key="category.${cat.id}.options_title">
+                  Explore ${escapeHtml(cat.title)} Options
+                </h4>
+                <p class="publishing-options-desc editable-field" data-block-key="category.${cat.id}.options_desc">
+                  Select any section below to view individual specialist services, packages, and detailed offerings.
+                </p>
+                <div class="publishing-packages-container">
+                  ${cat.subcategories.map(sub => {
+                    const subCount = (sub.services || []).filter(s => s.slug !== cat.id).length;
+                    const subDesc = (window.SUBCATEGORY_DESCRIPTIONS && window.SUBCATEGORY_DESCRIPTIONS[sub.id]) || `${sub.title} services designed for published authors.`;
+                    return `
+                      <div class="publishing-package-card" onclick="selectSubcategoryById('${cat.id}', '${sub.id}')">
+                        <div class="publishing-package-card-header">
+                          <h5 class="publishing-package-card-title">${escapeHtml(sub.title)}</h5>
+                          <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-light text-muted border" style="font-size: 0.72rem;">${subCount} ${subCount === 1 ? 'Service' : 'Services'}</span>
+                            <span class="publishing-package-arrow-badge"><i class="bi bi-arrow-right-short"></i></span>
+                          </div>
+                        </div>
+                        <p class="publishing-package-card-summary">${escapeHtml(subDesc)}</p>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+            `;
+          }
+
+          html += `</div>`;
+          customContainer.innerHTML = html;
+          attachEditableFields(customContainer, cat.id);
+          applyLoadedBlocks(customContainer);
+        }
+
+        updatePaginationControls();
+      };
+
+      window.selectSubcategoryById = function(catId, subId) {
+        const cat = catalog.find(c => String(c.id) === String(catId));
+        if (!cat) return;
+        const sub = (cat.subcategories || []).find(s => String(s.id) === String(subId));
+        if (!sub) return;
+
+        expandedCategories[cat.id] = true;
+        expandedSubcategories[sub.id] = true;
+
+        const box = document.getElementById('subcat-box-' + cat.id);
+        const row = document.getElementById('cat-row-' + cat.id);
+        const chevron = document.getElementById('cat-chevron-' + cat.id);
+        if (box) box.style.display = 'block';
+        if (row) row.classList.add('expanded');
+        if (chevron) chevron.className = 'bi bi-chevron-down small';
+
+        const subBox = document.getElementById('sub-services-box-' + sub.id);
+        const subRow = document.getElementById('sub-row-' + sub.id);
+        const subChevron = document.getElementById('sub-chevron-' + sub.id);
+        if (subBox) subBox.style.display = 'block';
+        if (subRow) subRow.classList.add('expanded');
+        if (subChevron) subChevron.className = 'bi bi-chevron-down subcat-chevron';
+
+        selectSubcategory(cat, sub);
+      };
+
+      window.selectSubcategory = function(cat, sub) {
+        if (!cat || !sub) return;
+        currentViewMode = 'subcategory';
+        selectedCategory = cat;
+        selectedSubcategory = sub;
+        selectedService = {
+          slug: sub.id,
+          title: sub.title,
+          lead: sub.lead || '',
+          isSubcategoryOverview: true
+        };
+
+        updateSidebarHighlights();
+        renderBreadcrumbs();
+
+        const titleEl = document.getElementById('detailTitle');
+        if (titleEl) {
+          titleEl.textContent = (currentBlockMap && currentBlockMap[`service.${sub.id}.title`]) || sub.title;
+          titleEl.setAttribute('data-block-key', `service.${sub.id}.title`);
+        }
+
+        const badgeEl = document.getElementById('detailBadge');
+        if (badgeEl) {
+          badgeEl.textContent = 'Omni Subcategory Overview';
+        }
+
+        const priceContainer = document.getElementById('detailPriceContainer');
+        if (priceContainer) priceContainer.style.display = 'none';
+
+        const ctaHeading = document.getElementById('detailCtaHeading');
+        if (ctaHeading) ctaHeading.textContent = `Ready to start with ${sub.title}?`;
+
+        const dangerZone = document.getElementById('dangerZoneBox');
+        if (dangerZone) dangerZone.style.display = 'none';
+
+        const leadBox = document.getElementById('serviceDefaultLeadBox');
+        const featSec = document.getElementById('serviceFeaturesSection');
+        const customContainer = document.getElementById('serviceCustomDetailContainer');
+
+        if (featSec) featSec.style.display = 'none';
+
+        const subLead = (currentBlockMap && currentBlockMap[`service.${sub.id}.lead`]) ||
+                        (window.SUBCATEGORY_LEADS && window.SUBCATEGORY_LEADS[sub.id]) ||
+                        (window.SUBCATEGORY_DESCRIPTIONS && window.SUBCATEGORY_DESCRIPTIONS[sub.id]) ||
+                        sub.lead ||
+                        `Explore all specialized services under ${sub.title}.`;
+        if (leadBox) {
+          leadBox.style.display = 'block';
+          const headingEl = document.getElementById('detailOverviewHeading');
+          if (headingEl) {
+            headingEl.textContent = (currentBlockMap && currentBlockMap[`service.${sub.id}.overview_heading`]) || 'Subcategory Overview';
+            headingEl.setAttribute('data-block-key', `service.${sub.id}.overview_heading`);
+          }
+          const leadEl = document.getElementById('detailLead');
+          if (leadEl) {
+            leadEl.textContent = subLead;
+            leadEl.setAttribute('data-block-key', `service.${sub.id}.lead`);
+          }
+          attachEditableFields(leadBox, sub.id);
+        }
+
+        if (customContainer) {
+          customContainer.style.display = 'block';
+
+          let html = `<div class="subcategory-overview-content">`;
+
+          if (window.SUBCATEGORY_ADVANTAGES_BOXES && window.SUBCATEGORY_ADVANTAGES_BOXES[sub.id]) {
+            html += window.SUBCATEGORY_ADVANTAGES_BOXES[sub.id];
+          }
+
+          if (sub.id === 'publishing-options') {
+            html += `
+              <div class="publishing-options-section">
+                <h4 class="fw-bold mb-2 editable-field" style="color: #2b2219; font-size: 1.25rem;" data-block-key="service.publishing-options.title">
+                  Publishing Options
+                </h4>
+                <p class="mb-4 editable-field" style="color: #57534e; font-size: 0.96rem; line-height: 1.65;" data-block-key="service.publishing-options.desc">
+                  Our packages offer various combinations of our publishing, editorial, and marketing services for a truly customized publishing experience. With Omni, you can choose the package that best suits your literary goals.
+                </p>
+
+                <div class="package-card-block mb-4">
+                  <h5 class="fw-bold mb-2 editable-field" style="color: #d9534f; font-size: 1.25rem;" data-block-key="service.basic-package.title">
+                    Basic Package
+                  </h5>
+                  <p class="mb-0 editable-field" style="color: #57534e; font-size: 0.96rem; line-height: 1.72;" data-block-key="service.basic-package.desc">
+                    The Basic package is designed for authors seeking basic publishing needs. It includes digital formatting and distribution for e-books, paperback publishing, and customization options for the interior and cover. This package supports up to 25 image insertions and provides one block of 50 interior revisions. Authors receive electronic proofs, one-on-one support, and distribution across major online retailers like Amazon and Barnes & Noble. The package also features ISBN assignment, U.S. Copyright registration, a Library of Congress Control Number, and three paperback copies. Additional perks include Amazon Look Inside, Google Preview, Barnes & Noble Read Instantly, and a 12-month bookseller return program.
+                  </p>
+                </div>
+
+                <div class="package-card-block mb-4">
+                  <h5 class="fw-bold mb-2 editable-field" style="color: #d9534f; font-size: 1.25rem;" data-block-key="service.standard-package.title">
+                    Standard Package
+                  </h5>
+                  <p class="mb-0 editable-field" style="color: #57534e; font-size: 0.96rem; line-height: 1.72;" data-block-key="service.standard-package.desc">
+                    Building on the Basic, the Standard package adds hardcover publishing to the mix, enhancing the physical presence of your book. This package maintains all the services of the Basic package, including the customization, support, and online distribution features. In addition to the three paperback copies, it also includes one hardcover copy. The bookseller return program is extended to 36 months, providing additional flexibility and support for bookstores to manage inventory.
+                  </p>
+                </div>
+
+                <div class="package-card-block mb-4">
+                  <h5 class="fw-bold mb-2 editable-field" style="color: #d9534f; font-size: 1.25rem;" data-block-key="service.advanced-package.title">
+                    Advanced Package
+                  </h5>
+                  <p class="mb-0 editable-field" style="color: #57534e; font-size: 0.96rem; line-height: 1.72;" data-block-key="service.advanced-package.desc">
+                    The Advanced package is the most comprehensive, designed for authors who want extensive support and marketing tools. It includes everything from the Standard package, but boosts the number of copies provided to 20 paperbacks and 5 hardcovers. This package distinguishes itself with marketing enhancements such as 30 days of online book ads via Google and a professional book review from Kirkus Reviews. Additionally, it includes a deluxe website setup to further promote the book. The return program is extended to 60 months, offering the maximum return flexibility for retailers.
+                  </p>
+                </div>
+              </div>
+            </div>`;
+          } else {
+            const filteredServices = (sub.services || []).filter(s => s.slug !== cat.id);
+            html += `<div class="d-flex flex-column gap-3 mb-4">`;
+            filteredServices.forEach(svc => {
+              const svcLead = (window.AUTHENTIC_SERVICE_SUMMARIES && window.AUTHENTIC_SERVICE_SUMMARIES[svc.slug]) || svc.lead || svc.lead_paragraph || svc.summary || '';
+              html += `
+                <div class="subcategory-service-card" onclick="selectServiceBySlug('${svc.slug}')">
+                  <div class="d-flex align-items-start justify-content-between gap-3 mb-2">
+                    <h5 class="subcategory-item-title fw-bold m-0 editable-field" style="color: #d9534f; font-size: 1.18rem; letter-spacing: -0.01em;" data-block-key="service.${svc.slug}.title" contenteditable="${isEditMode ? 'true' : 'false'}" spellcheck="false" onblur="handleContentBlockSave('${svc.slug}', this); event.stopPropagation();" onclick="event.stopPropagation();">
+                      ${escapeHtml(svc.title)}
+                    </h5>
+                    <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                      <span class="publishing-package-arrow-badge"><i class="bi bi-arrow-right-short"></i></span>
+                    </div>
+                  </div>
+                  ${svcLead ? `
+                    <p class="mb-0 editable-field" style="color: #57534e; font-size: 0.94rem; line-height: 1.68;" data-block-key="service.${svc.slug}.lead" contenteditable="${isEditMode ? 'true' : 'false'}" spellcheck="false" onblur="handleContentBlockSave('${svc.slug}', this); event.stopPropagation();" onclick="event.stopPropagation();">
+                      ${escapeHtml(svcLead)}
+                    </p>
+                  ` : ''}
+                </div>
+              `;
+            });
+            html += `</div></div>`;
+          }
+
+          customContainer.innerHTML = html;
+          attachEditableFields(customContainer, sub.id);
+          applyLoadedBlocks(customContainer);
+        }
+
+        updatePaginationControls();
       };
 
       window.selectServiceBySlug = function(slug) {
         for (const cat of catalog) {
+          if (cat.id === slug) {
+            selectCategoryById(cat.id);
+            return;
+          }
           for (const sub of (cat.subcategories || [])) {
+            if (sub.id === slug) {
+              selectSubcategoryById(cat.id, sub.id);
+              return;
+            }
             const found = (sub.services || []).find(s => s.slug === slug);
             if (found) {
               selectService(found, cat.title);
@@ -1747,62 +2609,287 @@
         }
       };
 
-      function selectService(svc, catTitle = '') {
-        selectedService = svc;
-        document.querySelectorAll('.service-nav-item').forEach(btn => {
-          btn.classList.toggle('active', btn.textContent.trim() === svc.title);
+      function applyLoadedBlocks(container) {
+        const root = container || document;
+        root.querySelectorAll('[data-block-key]').forEach(el => {
+          const key = el.getAttribute('data-block-key');
+          if (key && currentBlockMap && currentBlockMap[key] !== undefined && currentBlockMap[key] !== null) {
+            el.textContent = currentBlockMap[key];
+          }
         });
+      }
 
-        document.querySelectorAll('.category-accordion-row').forEach(r => r.classList.remove('active-cat-selected'));
-        if (svc.slug === 'publishing-packages') {
-          const catRow = document.getElementById('cat-row-publishing-packages');
-          if (catRow) catRow.classList.add('active-cat-selected');
+      function attachEditableFields(container, slug = '') {
+        const root = container || document;
+        root.querySelectorAll('.editable-field, [data-block-key]').forEach(el => {
+          el.contentEditable = isEditMode ? 'true' : 'false';
+          el.spellcheck = false;
+          if (!el.getAttribute('data-editor-bound')) {
+            el.setAttribute('data-editor-bound', 'true');
+            el.addEventListener('blur', function() {
+              handleContentBlockSave(slug, this);
+            });
+          }
+        });
+      }
+
+      window.handleContentBlockSave = function(slug, el) {
+        if (!el) return;
+        const blockKey = el.getAttribute('data-block-key') || `service.${slug}.block`;
+        const val = el.innerText.trim();
+        if (currentBlockMap) {
+          currentBlockMap[blockKey] = val;
         }
+        setSaving(true);
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(async () => {
+          try {
+            await fetch(`/api/v1/cms/blocks/${encodeURIComponent(blockKey)}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+              body: JSON.stringify({ value: val })
+            });
 
-        // Ensure category is expanded
+            // Keep custom HTML in sync and persist full custom_html block for real-time frontend display
+            const customContainer = document.getElementById('serviceCustomDetailContainer');
+            if (customContainer && customContainer.style.display !== 'none' && slug) {
+              const fullHtml = customContainer.innerHTML;
+              if (window.SERVICE_CUSTOM_VIEWS) {
+                window.SERVICE_CUSTOM_VIEWS[slug] = fullHtml;
+              }
+              currentBlockMap[`service.${slug}.custom_html`] = fullHtml;
+              fetch(`/api/v1/cms/blocks/${encodeURIComponent('service.' + slug + '.custom_html')}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                body: JSON.stringify({ value: fullHtml })
+              }).catch(() => {});
+            }
+
+            setSaving(false);
+            showToast(`Saved: ${blockKey}`);
+          } catch (_) {
+            setSaving(false);
+          }
+        }, 600);
+      };
+
+      function selectService(svc, catTitle = '') {
+        if (!svc) return;
+        currentViewMode = 'service';
+        selectedService = svc;
+
+        // Locate category and subcategory for svc in catalog
+        let parentCat = null;
+        let parentSub = null;
         for (const cat of catalog) {
           for (const sub of (cat.subcategories || [])) {
             if ((sub.services || []).some(s => s.slug === svc.slug)) {
-              const box = document.getElementById('subcat-box-' + cat.id);
-              const row = document.getElementById('cat-row-' + cat.id);
-              const chevron = document.getElementById('cat-chevron-' + cat.id);
-              if (box) box.style.display = 'block';
-              if (row) row.classList.add('expanded');
-              if (chevron) chevron.className = 'bi bi-chevron-down small';
-              if (!catTitle) catTitle = cat.title;
+              parentCat = cat;
+              parentSub = sub;
               break;
             }
           }
+          if (parentCat) break;
         }
 
-        document.getElementById('detailTitleBreadcrumb').textContent = svc.title;
-        if (catTitle) document.getElementById('detailCatBreadcrumb').textContent = catTitle;
+        if (parentCat) {
+          selectedCategory = parentCat;
+          expandedCategories[parentCat.id] = true;
+          const box = document.getElementById('subcat-box-' + parentCat.id);
+          const row = document.getElementById('cat-row-' + parentCat.id);
+          const chevron = document.getElementById('cat-chevron-' + parentCat.id);
+          if (box) box.style.display = 'block';
+          if (row) row.classList.add('expanded');
+          if (chevron) chevron.className = 'bi bi-chevron-down small';
+        }
 
-        document.getElementById('detailTitle').textContent = svc.title;
+        if (parentSub) {
+          selectedSubcategory = parentSub;
+          expandedSubcategories[parentSub.id] = true;
+          const subBox = document.getElementById('sub-services-box-' + parentSub.id);
+          const subRow = document.getElementById('sub-row-' + parentSub.id);
+          const subChevron = document.getElementById('sub-chevron-' + parentSub.id);
+          if (subBox) subBox.style.display = 'block';
+          if (subRow) subRow.classList.add('expanded');
+          if (subChevron) subChevron.className = 'bi bi-chevron-down subcat-chevron';
+        }
+
+        updateSidebarHighlights();
+        renderBreadcrumbs();
+
+        // Title and badge
+        const titleEl = document.getElementById('detailTitle');
+        if (titleEl) {
+          titleEl.textContent = (currentBlockMap && currentBlockMap[`service.${svc.slug}.title`]) || svc.title;
+          titleEl.setAttribute('data-block-key', `service.${svc.slug}.title`);
+        }
+        const badgeEl = document.getElementById('detailBadge');
+        if (badgeEl) {
+          badgeEl.textContent = 'Omni Publishing Solution';
+        }
+
+        // Danger zone
+        const dangerZone = document.getElementById('dangerZoneBox');
+        if (dangerZone) dangerZone.style.display = 'block';
+
+        // Price container - visible for all individual services so admin can edit
         const detailPriceEl = document.getElementById('detailPrice');
         const detailPriceContainer = document.getElementById('detailPriceContainer');
-        if (detailPriceEl) {
-          const pVal = svc.price || svc.price_display || '';
-          detailPriceEl.textContent = pVal || 'Set Price';
-          detailPriceEl.style.opacity = pVal ? '1' : '0.5';
-          if (detailPriceContainer) {
-            detailPriceContainer.style.display = svc.slug === 'publishing-packages' ? 'none' : 'flex';
-          }
+        if (detailPriceContainer) {
+          detailPriceContainer.style.display = (svc.slug !== 'publishing-packages' && svc.slug !== 'evaluation-services') ? 'flex' : 'none';
         }
-        document.getElementById('detailLead').textContent = svc.lead || svc.lead_paragraph || '';
-        document.getElementById('detailCtaHeading').textContent = `Ready to start with ${svc.title}?`;
+        if (detailPriceEl) {
+          const displayPrice = (currentBlockMap && currentBlockMap[`service.${svc.slug}.price`]) || svc.price || svc.price_display || '';
+          detailPriceEl.textContent = displayPrice;
+          detailPriceEl.setAttribute('data-block-key', `service.${svc.slug}.price`);
+        }
 
-        renderFeaturesList();
+        // Lead / overview
+        const leadEl = document.getElementById('detailLead');
+        if (leadEl) {
+          leadEl.textContent = (currentBlockMap && currentBlockMap[`service.${svc.slug}.lead`]) || svc.lead || svc.lead_paragraph || '';
+          leadEl.setAttribute('data-block-key', `service.${svc.slug}.lead`);
+        }
+        const overviewHeadingEl = document.getElementById('detailOverviewHeading');
+        if (overviewHeadingEl) {
+          overviewHeadingEl.textContent = (currentBlockMap && currentBlockMap['services.overview.heading']) || 'Service Overview';
+          overviewHeadingEl.setAttribute('data-block-key', 'services.overview.heading');
+        }
+
+        const ctaHeadingEl = document.getElementById('detailCtaHeading');
+        if (ctaHeadingEl) {
+          ctaHeadingEl.textContent = `Ready to start with ${svc.title}?`;
+        }
+
+        const customContainer = document.getElementById('serviceCustomDetailContainer');
+        const leadBox = document.getElementById('serviceDefaultLeadBox');
+        const featSec = document.getElementById('serviceFeaturesSection');
+
+        // Check custom HTML in DB block map first, then window.SERVICE_CUSTOM_VIEWS
+        const dbCustomHtml = currentBlockMap ? currentBlockMap[`service.${svc.slug}.custom_html`] : null;
+        const registryCustomHtml = window.SERVICE_CUSTOM_VIEWS ? window.SERVICE_CUSTOM_VIEWS[svc.slug] : null;
+
+        if (dbCustomHtml || registryCustomHtml) {
+          if (customContainer) {
+            customContainer.style.display = 'block';
+            customContainer.innerHTML = dbCustomHtml || registryCustomHtml;
+            attachEditableFields(customContainer, svc.slug);
+            applyLoadedBlocks(customContainer);
+          }
+          if (leadBox) leadBox.style.display = 'none';
+          if (featSec) featSec.style.display = 'none';
+        } else if (svc.slug === 'publishing-packages') {
+          selectCategoryById('publishing-packages');
+          return;
+        } else if (svc.slug === 'evaluation-services') {
+          selectCategoryById('evaluation-services');
+          return;
+        } else if (svc.slug === 'basic-package' || svc.slug === 'standard-package' || svc.slug === 'advanced-package') {
+          if (customContainer) customContainer.style.display = 'none';
+          if (leadBox) leadBox.style.display = 'block';
+          if (featSec) featSec.style.display = 'block';
+          const incHeading = document.getElementById('detailIncludedHeading');
+          if (incHeading) incHeading.textContent = 'Begin your publishing journey with the package that lets you take the extra mile.';
+          renderFeaturesList();
+        } else if (svc.features && svc.features.length > 0) {
+          if (customContainer) customContainer.style.display = 'none';
+          if (leadBox) leadBox.style.display = 'block';
+          if (featSec) featSec.style.display = 'block';
+          const incHeading = document.getElementById('detailIncludedHeading');
+          if (incHeading) incHeading.textContent = 'What Is Included In This Service';
+          renderFeaturesList();
+        } else {
+          if (customContainer) customContainer.style.display = 'none';
+          if (leadBox) leadBox.style.display = 'block';
+          if (featSec) featSec.style.display = 'none';
+        }
+
+        if (leadBox && leadBox.style.display !== 'none') {
+          attachEditableFields(leadBox, svc.slug);
+        }
+
         updatePaginationControls();
       }
 
       function renderFeaturesList() {
         const list = document.getElementById('detailFeaturesList');
-        const feats = selectedService?.features || [
-          'Full dedicated publishing consultation',
-          'Professional design and formatting',
-          '100% author rights and royalty retention'
-        ];
+        let feats = selectedService?.features;
+        if (!feats || feats.length === 0) {
+          if (selectedService?.slug === 'basic-package') {
+            feats = [
+              "Digital Formatting and Distribution (E-Book)",
+              "Paperback Publishing",
+              "Customization of Interior and Cover",
+              "Image Insertions Up to 25",
+              "Electronic Proofs of Your Book",
+              "Interior Revisions – One Block of 50",
+              "One-On-One Author Support",
+              "Omni Bookstore Availability",
+              "Online Distribution through Amazon, Barnes & Noble, and Other Book Retailers",
+              "ISBN Assignment",
+              "U.S. Copyright",
+              "Library of Congress Control Number",
+              "3 Paperback Copies",
+              "Amazon Look Inside",
+              "Google Preview",
+              "Barnes & Noble Read Instantly",
+              "12-Month Bookseller Return Program"
+            ];
+          } else if (selectedService?.slug === 'standard-package') {
+            feats = [
+              "Digital Formatting and Distribution (E-Book)",
+              "Paperback Publishing",
+              "Hardcover Publishing",
+              "Customization of Interior and Cover",
+              "Image Insertions Up to 50",
+              "Electronic Proofs of Your Book",
+              "Interior Revisions – One Block of 50",
+              "One-On-One Author Support",
+              "Omni Bookstore Availability",
+              "Online Distribution through Amazon, Barnes & Noble, and Other Book Retailers",
+              "ISBN Assignment",
+              "U.S. Copyright",
+              "Library of Congress Control Number",
+              "5 Paperback Copies",
+              "5 Hardcover Copies",
+              "Amazon Look Inside",
+              "Google Preview",
+              "Barnes & Noble Read Instantly",
+              "12-Month Bookseller Return Program"
+            ];
+          } else if (selectedService?.slug === 'advanced-package') {
+            feats = [
+              "Digital Formatting and Distribution (E-Book)",
+              "Paperback Publishing",
+              "Hardcover Publishing",
+              "Customization of Interior and Cover",
+              "Image Insertions Up to 75",
+              "Electronic Proofs of Your Book",
+              "Interior Revisions – One Block of 50",
+              "One-On-One Author Support",
+              "Omni Bookstore Availability",
+              "Online Distribution through Amazon, Barnes & Noble, and Other Book Retailers",
+              "ISBN Assignment",
+              "U.S. Copyright",
+              "Library of Congress Control Number",
+              "20 Paperback Copies",
+              "5 Hardcover Copies",
+              "Amazon Look Inside",
+              "Google Preview",
+              "Barnes & Noble Read Instantly",
+              "12-Month Bookseller Return Program",
+              "Press Release Essential Edition",
+              "Website Setup Standard",
+              "Social Media Setup"
+            ];
+          } else {
+            feats = [
+              'Full dedicated publishing consultation',
+              'Professional design and formatting',
+              '100% author rights and royalty retention'
+            ];
+          }
+        }
 
         list.innerHTML = feats.map((feat, idx) => `
           <div class="feature-checkpoint-item">
@@ -1848,7 +2935,21 @@
         selectedService[field] = val;
         // Update in catalog tree
         for (const cat of catalog) {
+          if (cat.id === selectedService.slug) {
+            cat[field] = val;
+            if (field === 'lead') {
+              cat.lead = val;
+              cat.description = val;
+            }
+          }
           for (const sub of (cat.subcategories || [])) {
+            if (sub.id === selectedService.slug) {
+              sub[field] = val;
+              if (field === 'lead') {
+                sub.lead = val;
+                sub.description = val;
+              }
+            }
             for (const s of (sub.services || [])) {
               if (s.slug === selectedService.slug) {
                 s[field] = val;
@@ -1860,8 +2961,13 @@
         }
         renderCategories();
         persistCatalog(selectedService.title);
-        if (selectedService.slug === 'publishing-packages' && field === 'lead') {
-          handleHeaderSave('service.publishing-packages.lead', val);
+        if (field === 'lead') {
+          handleHeaderSave(`service.${selectedService.slug}.lead`, val);
+          handleHeaderSave(`service.${selectedService.slug}.summary`, val);
+        } else if (field === 'price') {
+          handleHeaderSave(`service.${selectedService.slug}.price`, val);
+        } else if (field === 'title') {
+          handleHeaderSave(`service.${selectedService.slug}.title`, val);
         }
       };
 
@@ -1907,6 +3013,10 @@
       };
 
       window.handleHeaderSave = async function(blockKey, val) {
+        if (!blockKey) return;
+        if (currentBlockMap) {
+          currentBlockMap[blockKey] = val;
+        }
         setSaving(true);
         try {
           await fetch(`/api/v1/cms/blocks/${encodeURIComponent(blockKey)}`, {

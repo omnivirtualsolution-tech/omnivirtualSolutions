@@ -348,6 +348,22 @@ router.put("/services/catalog", requireAuth, async (req, res) => {
                     }).catch(() => {});
                   }
 
+                  if (svc.lead || svc.lead_paragraph) {
+                    const lVal = svc.lead || svc.lead_paragraph;
+                    await db.execute({
+                      sql: `INSERT INTO content_blocks (block_key, block_type, label, value, updated_by)
+                            VALUES (?, 'textarea', 'Service Overview', ?, ?)
+                            ON CONFLICT(block_key) DO UPDATE SET value = excluded.value, updated_at = CURRENT_TIMESTAMP`,
+                      args: [`service.${svc.slug}.lead`, lVal, editor],
+                    }).catch(() => {});
+                    await db.execute({
+                      sql: `INSERT INTO content_blocks (block_key, block_type, label, value, updated_by)
+                            VALUES (?, 'textarea', 'Service Summary', ?, ?)
+                            ON CONFLICT(block_key) DO UPDATE SET value = excluded.value, updated_at = CURRENT_TIMESTAMP`,
+                      args: [`service.${svc.slug}.summary`, lVal, editor],
+                    }).catch(() => {});
+                  }
+
                   // Also sync features if provided
                   if (Array.isArray(svc.features) && svc.features.length > 0) {
                     await db.execute({ sql: "DELETE FROM service_features WHERE service_id = ?", args: [svcId] });

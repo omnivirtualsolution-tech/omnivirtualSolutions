@@ -21,13 +21,14 @@
               "Custom cover layout and professional interior formatting",
               "Worldwide distribution across Amazon, Barnes & Noble, and Ingram",
               "ISBN assignment, US Copyright registration, and Library of Congress Control Number"
-            ]
+            ],
+            "price_display": ""
           },
           {
             "slug": "basic-package",
             "title": "Basic Package",
-            "price": "$899.00",
-            "lead": "The Basic package is designed for authors seeking basic publishing needs. It includes digital formatting and distribution for e-books, paperback publishing, and customization options for the interior and cover.",
+            "price": "",
+            "lead": "The Basic package is designed for authors seeking basic publishing needs. It includes digital formatting and distribution for e-books, paperback publishing, and customization options for the interior and cover. This package supports up to 25 image insertions and provides one block of 50 interior revisions. Authors receive electronic proofs, one-on-one support, and distribution across major online retailers like Amazon and Barnes & Noble. The package also features ISBN assignment, U.S. Copyright registration, a Library of Congress Control Number, and three paperback copies. Additional perks include Amazon Look Inside, Google Preview, Barnes & Noble Read Instantly, and a 12-month bookseller return program.",
             "features": [
               "Digital Formatting and Distribution (E-Book)",
               "Paperback Publishing",
@@ -36,7 +37,7 @@
               "Electronic Proofs of Your Book",
               "Interior Revisions – One Block of 50",
               "One-On-One Author Support",
-              "West Harmony Bookstore Availability",
+              "Omni Bookstore Availability",
               "Online Distribution through Amazon, Barnes & Noble, and Other Book Retailers",
               "ISBN Assignment",
               "U.S. Copyright",
@@ -46,13 +47,14 @@
               "Google Preview",
               "Barnes & Noble Read Instantly",
               "12-Month Bookseller Return Program"
-            ]
+            ],
+            "price_display": ""
           },
           {
             "slug": "standard-package",
             "title": "Standard Package",
-            "price": "$1,599.00",
-            "lead": "Building on the Basic, the Standard package adds hardcover publishing to the mix, enhancing the physical presence of your book. This package maintains all the services of the Basic package, including the customization, support, and online distribution features.",
+            "price": "",
+            "lead": "Building on the Basic, the Standard package adds hardcover publishing to the mix, enhancing the physical presence of your book. This package maintains all the services of the Basic package, including the customization, support, and online distribution features. In addition to the three paperback copies, it also includes one hardcover copy. The bookseller return program is extended to 36 months, providing additional flexibility and support for bookstores to manage inventory.",
             "features": [
               "Digital Formatting and Distribution (E-Book)",
               "Paperback Publishing",
@@ -62,7 +64,7 @@
               "Electronic Proofs of Your Book",
               "Interior Revisions – One Block of 50",
               "One-On-One Author Support",
-              "West Harmony Bookstore Availability",
+              "Omni Bookstore Availability",
               "Online Distribution through Amazon, Barnes & Noble, and Other Book Retailers",
               "ISBN Assignment",
               "U.S. Copyright",
@@ -73,13 +75,14 @@
               "Google Preview",
               "Barnes & Noble Read Instantly",
               "36-Month Bookseller Return Program"
-            ]
+            ],
+            "price_display": ""
           },
           {
             "slug": "advanced-package",
             "title": "Advanced Package",
-            "price": "$4,999.00",
-            "lead": "The Advanced package is the most comprehensive, designed for authors who want extensive support and marketing tools. It includes everything from the Standard package, but boosts the number of copies provided to 20 paperbacks and 5 hardcovers.",
+            "price": "",
+            "lead": "The Advanced package is the most comprehensive, designed for authors who want extensive support and marketing tools. It includes everything from the Standard package, but boosts the number of copies provided to 20 paperbacks and 5 hardcovers. This package distinguishes itself with marketing enhancements such as 30 days of online book ads via Google and a professional book review from Kirkus Reviews. Additionally, it includes a deluxe website setup to further promote the book. The return program is extended to 60 months, offering the maximum return flexibility for retailers.",
             "features": [
               "Digital Formatting and Distribution (E-Book)",
               "Paperback Publishing",
@@ -89,7 +92,7 @@
               "Electronic Proofs of Your Book",
               "Interior Revisions – One Block of 50",
               "One-On-One Author Support",
-              "West Harmony Bookstore Availability",
+              "Omni Bookstore Availability",
               "Online Distribution through Amazon, Barnes & Noble, and Other Book Retailers",
               "ISBN Assignment",
               "U.S. Copyright",
@@ -103,16 +106,19 @@
               "Online Book Ads via Google - 30 days Package",
               "Kirkus Book Review",
               "Deluxe Website Setup"
-            ]
+            ],
+            "price_display": ""
           }
         ]
       }
-    ]
+    ],
+    "lead": "Our packages offer various combinations of our publishing, editorial, and marketing services for a truly customized publishing experience. With Omni, you can choose the package that best suits your literary goals.",
+    "description": "Our packages offer various combinations of our publishing, editorial, and marketing services for a truly customized publishing experience. With Omni, you can choose the package that best suits your literary goals."
   },
   {
     "id": "evaluation-services",
     "title": "Evaluation Services",
-    "tag": "editorial-services",
+    "tag": "evaluation-services",
     "icon": "bi-journal-check",
     "subcategories": [
       {
@@ -120,20 +126,40 @@
         "title": "Editorial Evaluation",
         "services": [
           {
+            "slug": "evaluation-services",
+            "title": "Evaluation Services",
+            "price": "",
+            "lead": "One of the key features that makes an Omni book distinct from other self-published books is our professional editorial evaluation. The evaluation is included in certain publishing packages and is available to purchase separately as well.",
+            "features": [
+              "Editorial Rx Referral: Evaluator recommendation of an appropriate editorial specialist",
+              "Manuscript examination to pinpoint areas in need of improvement",
+              "Comprehensive assessment for works up to 100,000 words",
+              "Constructive commentary and critique across all literary elements",
+              "$299 credit deducted from future Omni Editorial Services",
+              "Turnaround duration: 2-3 Weeks"
+            ],
+            "price_display": ""
+          },
+          {
             "slug": "editorial-evaluation",
             "title": "Editorial Evaluation",
             "price": "",
             "lead": "No matter how small or big an audience you want to reach, the editorial quality of your work matters. You've worked hard to get your manuscript written; now let Omni provide you with services that will help you make it the best it can be.",
             "features": [
-              "The Editorial Evaluation is a manuscript checkup that assesses your work to be sure that it has fulfilled the basic requirements of a published book. The editorial evaluator will not only provide you with a general overview of your manuscript but will also educate you through constructive comments on how to write a better book.",
-              "The Editorial Evaluation is a detailed report on the observations of an evaluator about the strengths and weaknesses of your manuscript (rather than an editing of your manuscript). At the end of the evaluation, an Editorial Rx Referral will recommend the services of an appropriate editorial specialist—from a copyeditor or content editor to a developmental editor. You may then choose to purchase those services from Omni. If you do choose to purchase an editorial service, our staff will assign your book to a specialist who will address the issues raised in the Editorial Evaluation and give your manuscript the professional attention that it would receive at a traditional publishing house. You may also choose to use your own freelance editor or make the recommended changes yourself.",
-              "\"I appreciate all the editorial work that went into the analysis – I was very impressed with the job Omni did with my book. The analysis was thorough, clear, and very helpful. Thank you again for all your assistance on making his Golden Land T even better!\"",
-              "—Barbara Wood, author of This Golden Land"
-            ]
+              "Comprehensive manuscript checkup assessing basic publishing requirements",
+              "Detailed evaluation report on manuscript strengths and weaknesses",
+              "Editorial Rx Referral to recommended editorial specialist",
+              "Qualification for Omni's prestigious Editor's Choice program",
+              "Preliminary diagnostic tool examining key sections of the manuscript",
+              "Standard manuscript word count assessment (up to 100,000 words)"
+            ],
+            "price_display": ""
           }
         ]
       }
-    ]
+    ],
+    "lead": "Regardless of your publishing goals, the editorial quality of your work matters—no one wants to read a book that's riddled with typos and grammatical errors. Omni provides editorial evaluation services that will help you make your book the best it can be.",
+    "description": "Regardless of your publishing goals, the editorial quality of your work matters—no one wants to read a book that's riddled with typos and grammatical errors. Omni provides editorial evaluation services that will help you make your book the best it can be."
   },
   {
     "id": "editorial-services",
@@ -146,28 +172,48 @@
         "title": "Advanced Editorial Services",
         "services": [
           {
+            "slug": "editorial-services",
+            "title": "Editorial Services",
+            "price": "",
+            "lead": "Regardless of your publishing goals, the quality of your work matters—no one wants to read a book that's riddled with typos and grammatical errors. However, even the best writers make mistakes. Omni provides editorial services that will help you make your book the best it can be.",
+            "features": [
+              "Comprehensive line-by-line grammar, spelling, and punctuation editing",
+              "Advanced developmental and content evaluation for story and style",
+              "Chicago Manual of Style compliant copyediting and proofreading",
+              "Track changes markup in Microsoft Word for complete author transparency",
+              "Dedicated editorial consultants guiding revisions at every stage",
+              "100% author rights and royalty retention"
+            ],
+            "price_display": ""
+          },
+          {
             "slug": "developmental-editing",
             "title": "Developmental Editing",
             "price": "",
-            "lead": "No matter how small or big an audience you want to reach, the editorial quality of your work matters. You've worked hard to get your manuscript written; now let Omni provide you with services that will help you make it the best it can be.",
+            "lead": "The Omni Developmental Editing service combines three editorial services into one package: First, a developmental editor evaluates the manuscript at the paragraph, chapter, and book levels to identify big-picture areas that need work. Second, a content editor checks for errors in grammar, spelling, and punctuation. And third, the manuscript receives a quality review before production.",
             "features": [
-              "The Editorial Evaluation is a manuscript checkup that assesses your work to be sure that it has fulfilled the basic requirements of a published book. The editorial evaluator will not only provide you with a general overview of your manuscript but will also educate you through constructive comments on how to write a better book.",
-              "The Editorial Evaluation is a detailed report on the observations of an evaluator about the strengths and weaknesses of your manuscript (rather than an editing of your manuscript). At the end of the evaluation, an Editorial Rx Referral will recommend the services of an appropriate editorial specialist—from a copyeditor or content editor to a developmental editor. You may then choose to purchase those services from Omni. If you do choose to purchase an editorial service, our staff will assign your book to a specialist who will address the issues raised in the Editorial Evaluation and give your manuscript the professional attention that it would receive at a traditional publishing house. You may also choose to use your own freelance editor or make the recommended changes yourself.",
-              "\"I appreciate all the editorial work that went into the analysis – I was very impressed with the job Omni did with my book. The analysis was thorough, clear, and very helpful. Thank you again for all your assistance on making his Golden Land T even better!\"",
-              "—Barbara Wood, author of This Golden Land"
-            ]
+              "Comprehensive paragraph, chapter, and manuscript-level evaluation",
+              "Big-picture developmental guidance on plot, pace, and character arc",
+              "Full line-by-line content edit covering grammar, spelling, and style",
+              "Quality review ensuring manuscript is production-ready",
+              "Track changes and editor commentary in Microsoft Word",
+              "100% author rights and royalty retention"
+            ],
+            "price_display": ""
           },
           {
             "slug": "book-doctor",
             "title": "Book Doctor",
             "price": "",
-            "lead": "Prerequisite: Omni Developmental Edit. Please speak with your editorial consultant for more information.",
+            "lead": "Following the advice of a professional editor takes time and careful consideration. A book doctor makes the changes recommended by the developmental editor and approved by the author. Hiring a book doctor is the ideal choice for authors who want professional execution of big-picture revisions.",
             "features": [
-              "Following the advice of a professional editor takes time and careful consideration. Developmental Editing, in particular, often requires the author to rewrite or reorganize the manuscript to enhance material. Hiring a book doctor may be the best choice for authors who don't have the time or ability to make the big-picture changes recommended by a developmental editor.",
-              "A book doctor makes the changes recommended by the developmental editor and approved by the author. A price quote for the book doctor will be provided with the completed developmental edit.",
-              "After completion of Book Doctoring, Content Editing and a Quality Review will be provided at no extra cost.",
-              "Duration: Estimate based on work required and detailed through the Developmental Edit."
-            ]
+              "Professional rewriting and structural reorganization",
+              "Execution of all approved developmental editor recommendations",
+              "Subsequent Content Editing included at no extra cost",
+              "Comprehensive Quality Review before final production",
+              "Direct consultation with your assigned editorial team"
+            ],
+            "price_display": ""
           }
         ]
       },
@@ -181,11 +227,10 @@
             "price": "",
             "lead": "Prerequisite: Omni Copyediting. Please speak with your editorial consultant for more information.",
             "features": [
-              "Our Quality Review - Copyediting service provides a final check to make sure your revised manuscript is sound before it goes into production—for a fraction of the price of your original edit.",
-              "After you review and revise your edited manuscript, you may want an editor to check your work to ensure that you've done it correctly and haven't created new errors in the process.",
-              "\"I am really impressed by [the editor's] incredible attention to detail, and I am just so grateful there are people like her who can subject my writing to such close critical analysis.\"",
-              "-Michelle Dixon, author of The Disappearance of Lilya Bekirova"
-            ]
+              "Our Quality Review - Copyediting service provides a final check to make sure",
+              "After you review and revise your edited manuscript, you may want an editor to"
+            ],
+            "price_display": ""
           },
           {
             "slug": "quality-review-line-editing",
@@ -193,10 +238,11 @@
             "price": "",
             "lead": "Prerequisite: Omni Line Editing. Please speak with your editorial consultant for more information.",
             "features": [
-              "Our Quality Review - Line Editing provides a final check to make sure your revised manuscript is sound before it goes into production—for a fraction of the price of your original edit.",
-              "After you review and revise your edited manuscript, you may want an editor to check your work to ensure that you've done it correctly and haven't created new errors in the process.",
-              "With the Quality Review, an editor will not only review the work you've done on the manuscript in response to the editing, but ensure that you've adequately addressed all of the queries and comments."
-            ]
+              "Our Quality Review - Line Editing provides a final check to make sure your",
+              "After you review and revise your edited manuscript, you may want an editor to",
+              "With the Quality Review, an editor will not only review the work you've done on"
+            ],
+            "price_display": ""
           },
           {
             "slug": "quality-review-content-editing",
@@ -204,10 +250,23 @@
             "price": "",
             "lead": "Prerequisite: Omni Content Editing. Please speak with your editorial consultant for more information.",
             "features": [
-              "Our Quality Review - Content Editing provides a final check to make sure your revised manuscript is sound before it goes into production—for a fraction of the price of your original edit.",
-              "After you review and revise your edited manuscript, you may want an editor to check your work to ensure that you've done it correctly and haven't created new errors in the process.",
-              "Content Editing, by its very nature, involves extensive revisions to your manuscript — for example, restructuring sentences and adding material. With the Quality Review, an editor will not only review the work you've done on the manuscript in response to the editing, but ensure that you've adequately addressed all of the queries and comments."
-            ]
+              "Our Quality Review - Content Editing provides a final check to make sure your",
+              "After you review and revise your edited manuscript, you may want an editor to",
+              "Content Editing, by its very nature, involves extensive revisions to your"
+            ],
+            "price_display": ""
+          },
+          {
+            "slug": "quality-review-content-editing-plus",
+            "title": "Quality Review - Content Editing Plus",
+            "price": "",
+            "lead": "Prerequisite: Omni Content Editing Plus. Please speak with your editorial consultant for more information.",
+            "features": [
+              "Our Quality Review - Content Editing Plus provides a final check to make sure your revised manuscript is sound",
+              "After you review and revise your edited manuscript, an editor checks your work to ensure it's done correctly",
+              "Comprehensive verification that all editorial queries and comments have been adequately addressed"
+            ],
+            "price_display": ""
           },
           {
             "slug": "editorial-assistant-copyediting",
@@ -215,11 +274,12 @@
             "price": "",
             "lead": "Prerequisite: Omni Copyediting. Please speak with your editorial consultant for more information.",
             "features": [
-              "Your editorial assistant will review each change and suggestion given during the Copyediting service and take action on each one.",
-              "Going through an edited manuscript can sometimes be a time-consuming process for even the most experienced author,as it requires decisions be made regarding each of the revisions, comments and, recommendations. For our busiest authors and for authors who may be unsure of their own ability to make the needed changes, Omni offers the Editorial Assistant service, in which a professional editor handles the editing work for the author.",
-              "Your editorial assistant will review each change and suggestion given during the copyediting and take action on each one, accepting changes, rewriting sentences, resolving queries and handling other revisions suggested by the original copyeditor. This service is ideal for authors who approve of most of the editor’s work on their manuscript and do not wish to work with tracked changes in their manuscript.",
+              "Your editorial assistant will review each change and suggestion given during the",
+              "Going through an edited manuscript can sometimes be a time-consuming process for",
+              "Your editorial assistant will review each change and suggestion given during the",
               "Estimate of cost is provided with your completed Copyedit."
-            ]
+            ],
+            "price_display": ""
           },
           {
             "slug": "editorial-assistant-line-edit",
@@ -227,11 +287,12 @@
             "price": "",
             "lead": "Prerequisite: Omni Line Editing. Please speak with your editorial consultant for more information.",
             "features": [
-              "Your editorial assistant will review each change and suggestion given during the Line Editing service and take action on each one.",
-              "Going through an edited manuscript can sometimes be a time-consuming process for even the most experienced author, as it requires decisions be made regarding each of the revisions, comments, and recommendations. For our busiest authors and for authors who may be unsure of their own ability to make the needed changes, Omni offers the Editorial Assistant service, in which a professional editor handles the editing work for the author.",
-              "Your editorial assistant will review each change and suggestion given during the line edit and take action on each one, accepting changes, rewriting sentences, resolving queries and handling other revisions as suggested by the line editor. This service is ideal for authors who approve of most of the editor’s work on their manuscript and do not wish to work with tracked changes in their manuscript.",
+              "Your editorial assistant will review each change and suggestion given during the",
+              "Going through an edited manuscript can sometimes be a time-consuming process for",
+              "Your editorial assistant will review each change and suggestion given during the",
               "Duration: 2-3 weeks"
-            ]
+            ],
+            "price_display": ""
           },
           {
             "slug": "editorial-assistant-content-edit",
@@ -239,11 +300,12 @@
             "price": "",
             "lead": "Prerequisite: Omni Content Editing. Please speak with your editorial consultant for more information.",
             "features": [
-              "Your editorial assistant will review each change and suggestion given during the Content Editing service and take action on each one.",
-              "Going through an edited manuscript can sometimes be a time-consuming process for even the most experienced author, as it requires decisions to be made regarding each of the revisions, comments, and recommendations. For our busiest authors and for authors who may be unsure of their own ability to make the needed changes, Omni offers the Editorial Assistant service, in which a professional editor handles the editing work for the author.",
-              "Your editorial assistant will review each change and suggestion given during the Content Edit and take action on each one, accepting changes, rewriting sentences, resolving queries and handling other revisions as suggested by the content editor. This service is ideal for authors who approve of most of the editor’s work on their manuscript and do not wish to work with tracked changes in their manuscript.",
+              "Your editorial assistant will review each change and suggestion given during the",
+              "Going through an edited manuscript can sometimes be a time-consuming process for",
+              "Your editorial assistant will review each change and suggestion given during the",
               "Duration: 2-3 weeks"
-            ]
+            ],
+            "price_display": ""
           },
           {
             "slug": "editorial-assistant-content-edit-plus",
@@ -251,11 +313,12 @@
             "price": "",
             "lead": "Prerequisite: Omni Content Editing Plus. Please speak with your editorial consultant for more information.",
             "features": [
-              "Your editorial assistant will review each change and suggestion given during the Content Editing Plus service and take action on each one.",
-              "Going through an edited manuscript can sometimes be a time-consuming process for even the most experienced author, as it requires decisions to be made regarding each of the revisions, comments and recommendations. For our busiest authors and for authors who may be unsure of their own ability to make the needed changes, Omni offers the Editorial Assistant service, in which a professional editor handles the editing work for the author.",
-              "Your editorial assistant will review each change and suggestion given during the Content Editor Plus service and take action on each one, accepting changes, rewriting sentences, resolving queries ,and handling other revisions as suggested by the Content Editor Plus service. This service is ideal for authors who approve of most of the editor’s work on their manuscript and do not wish to work with tracked changes in their manuscript.",
+              "Your editorial assistant will review each change and suggestion given during the",
+              "Going through an edited manuscript can sometimes be a time-consuming process for",
+              "Your editorial assistant will review each change and suggestion given during the",
               "Duration: 2-3 weeks"
-            ]
+            ],
+            "price_display": ""
           }
         ]
       },
@@ -268,57 +331,40 @@
             "title": "Small Book Review with Editing (Under 5,000 Words)",
             "price": "",
             "lead": "We know you’ve put a lot of energy and dedication into your manuscript, but even experienced authors overlook their own mistakes sometimes. Since the editorial quality of your book will have an impact on your readers and its ultimate success, it’s important to have another set of professional eyes look over your book before it’s published.",
-            "features": [
-              "Editing: We perfect your spelling, punctuation, capitalization, grammar, and syntax. And we’ll provide recommendations for word choice and improving overall readability.",
-              "Content Editing: confirm the consistency of information and ideas throughout the whole book, and we also focus on more extensive sentence restructuring.",
-              "Our editors use Microsoft Word® to track their changes, so you always retain control over final edits.",
-              "Our editors typically turn your manuscript around in three to four weeks. After that time, your editor will reach out with their edits and suggestions for improvement.",
-              "Please Note: This service does not include our advanced editorial services, such as Developmental Editing. Rather, it is a combination of our Line Editing and Content Editing services with a report from the editor.",
-              "Omni accepts a very low margin of error in each completed edit. Our professional in-house editorial staff reviews each editorial service for quality assurance – an edit won’t be returned to an author until fewer than three percent of the original errors remain.",
-              "Upon reviewing your edited manuscript, if you believe that an unsatisfactory number of errors have been addressed, please create a list of the errors and the page numbers on which they appear and email it to admin@omnivirtualsolution.com We will review the list with you and address your concern."
-            ]
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "copyediting",
             "title": "Copyediting",
             "price": "",
             "lead": "Prescribed by Editorial Evaluation only. Please do not order without first speaking with your editorial consultant.",
-            "features": [
-              "An experienced copyeditor will check your manuscript carefully, correcting errors in spelling, grammar, and punctuation. In addition, the copyeditor will verify cross-references and impose an industry-standard style.",
-              "\"I took my editorial consultant's comment to heart that regardless of the quality of the book's content and message, grammatical errors will cause the public to lose respect for it. As a structural engineer, I can appreciate that since I regularly submit documents and have them submitted to me. The presentation is as important as the content. The editor's contribution has greatly enhanced my manuscript and was well worth the cost. I would recommend the use of an editor to any serious author.\"",
-              "- Bill Stahl, author of The Bible's Story of Salvation"
-            ]
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "line-editing",
             "title": "Line Editing",
             "price": "",
             "lead": "Some manuscripts simply require more work than others. When heavy copyediting is required, an editor will check the manuscript for more pervasive errors in spelling, grammar, and punctuation. The editor will also address syntax and word choice and make light recommendations for improving the overall readability of the work.",
-            "features": [
-              "\"I would like to thank the editor for a heroic job. My mother was apprehensive ... her book is intended to convey the thoughts of a child. The quirky language reflects this, and she was afraid the child's \"voice\" might be lost in the editing. I read the first few chapters of the edited manuscript to her. She was delighted! It is clear that this is a very conscientious editor and one to be trusted.\"",
-              "Virginia Merrill, author of Believe in Guardian Angels."
-            ]
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "content-editing",
             "title": "Content Editing",
             "price": "",
             "lead": "Prescribed by Editorial Evaluation only. Please do not order without first speaking with your editorial consultant.",
-            "features": [
-              "For fiction titles, the editor will focus on maintaining consistency of details in the plot, characters and setting.",
-              "For nonfiction titles, the editor will monitor consistency of information and ideas."
-            ]
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "content-editing-plus",
             "title": "Content Editing Plus",
             "price": "",
             "lead": "Prescribed by Editorial Evaluation only. Please do not order without first speaking with your editorial consultant.",
-            "features": [
-              "This service is ideal for manuscripts that need more work on sentence structure and grammar than basic Content Editing can provide. Content Editing Plus is especially suitable for translations or manuscripts written by authors whose second language is English.",
-              "\"It is difficult to imagine the best editor at HarperCollins doing a better job than my Omni editor. Editing services through Omni are equal to the finest brick and mortar publishing houses and far more timely.\"",
-              "-Michael R Zomber, author of Shogun Iemitsu"
-            ]
+            "features": [],
+            "price_display": ""
           }
         ]
       },
@@ -331,9 +377,8 @@
             "title": "Cover Copy Polish",
             "price": "",
             "lead": "With Omni Cover Copy Polishing, the ideas you provide will allow us to create intriguing copy that can help you clinch the sale. Our professional copywriting staff will mold the text that you provide into marketable material by polishing the hardcover flaps, back cover copy, author bio and keynote, in addition to any other cover material you have submitted.",
-            "features": [
-              "Create intriguing cover text and catch the attention of book buyers with this professional copywriting service. The typical timeline for this service is one week, depending on our queue and the complexity of your work."
-            ]
+            "features": [],
+            "price_display": ""
           }
         ]
       },
@@ -345,56 +390,41 @@
             "slug": "professional-indexing",
             "title": "Professional Indexing",
             "price": "",
-            "lead": "Please speak with your editorial consultant for more information.",
-            "features": [
-              "Purpose",
-              "Audience",
-              "Organization"
-            ]
+            "lead": "To maximize the usability of a nonfiction title, readers, book buyers, librarians, and reviewers expect a comprehensive index. An Omni professional indexer reads your manuscript thoroughly to create a complete alphabetical index.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "computer-generated-keyword-indexing-up-to-500-entries",
             "title": "Computer Generated Keyword Indexing - Up to 500 Entries",
             "price": "",
             "lead": "A computer-generated keyword index lists a page number for a key term each time it occurs in the book. You simply provide Omni with a list of words that you want to appear in the index. Omni will create an index by tagging the selected words during the production process. The resulting alphabetical list of keywords gives the page numbers for each occurrence of the word.",
-            "features": [
-              "The success of this type of index depends entirely on the key words you chose. The choice of words needs to be carefully thought through. Do not use simple words or words that repeat constantly throughout the text. For example, if you are writing a cookbook, do not index the word egg. Every time the word \"egg\" is mentioned, the computer will index that page. We presume that egg would show up on many recipe pages. If words are not chosen carefully, the resulting index can be overly long and unusable.",
-              "Please note: a concordance-type index has no logical organization other than alphabetization, and only exact word matches can be indexed using the approach.",
-              "Timing: Adds two weeks to the design process"
-            ]
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "computer-generated-keyword-indexing-up-to-700-entries",
             "title": "Computer Generated Keyword Indexing - Up to 700 Entries",
             "price": "",
             "lead": "A computer-generated keyword index lists a page number for a key term each time it occurs in the book. You simply provide Omni with a list of words that you want to appear in the index. Omni will create an index by tagging the selected words during the production process. The resulting alphabetical list of keywords gives the page numbers for each occurrence of the word.",
-            "features": [
-              "The success of this type of index depends entirely on the key words you chose. The choice of words needs to be carefully thought through. Do not use simple words or words that repeat constantly throughout the text. For example, if you are writing a cookbook, do not index the word egg. Every time the word \"egg\" is mentioned, the computer will index that page. We presume that egg would show up on many recipe pages. If words are not chosen carefully, the resulting index can be overly long and unusable.",
-              "Please note: a concordance-type index has no logical organization other than alphabetization, and only exact word matches can be indexed using the approach.",
-              "Timing: Adds two weeks to the design process"
-            ]
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "computer-generated-keyword-indexing-up-to-1-000-entries",
             "title": "Computer Generated Keyword Indexing - Up to 1,000 Entries",
             "price": "",
             "lead": "A computer-generated keyword index lists a page number for a key term each time it occurs in the book. You simply provide Omni with a list of words that you want to appear in the index. Omni will create an index by tagging the selected words during the production process. The resulting alphabetical list of keywords gives the page numbers for each occurrence of the word.",
-            "features": [
-              "The success of this type of index depends entirely on the key words you chose. The choice of words needs to be carefully thought through. Do not use simple words or words that repeat constantly throughout the text. For example, if you are writing a cookbook, do not index the word egg. Every time the word \"egg\" is mentioned, the computer will index that page. We presume that egg would show up on many recipe pages. If words are not chosen carefully, the resulting index can be overly long and unusable.",
-              "Please note: a concordance-type index has no logical organization other than alphabetization, and only exact word matches can be indexed using the approach.",
-              "Timing: Adds two weeks to the design process"
-            ]
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "computer-generated-keyword-indexing-custom-quote",
             "title": "Computer Generated Keyword Indexing - Custom Quote",
             "price": "",
             "lead": "An index of over 1,000 will require a custom quote. Contact your PSA for more information.",
-            "features": [
-              "A computer-generated keyword index lists a page number for a key term each time it occurs in the book. You simply provide Omni with a list of words that you want to appear in the index. Omni will create an index by tagging the selected words during the production process. The resulting alphabetical list of keywords gives the page numbers for each occurrence of the word.",
-              "The success of this type of index depends entirely on the key words you chose. The choice of words needs to be carefully thought through. Do not use simple words or words that repeat constantly throughout the text. For example, if you are writing a cookbook, do not index the word egg. Every time the word \"egg\" is mentioned, the computer will index that page. We presume that egg would show up on many recipe pages. If words are not chosen carefully, the resulting index can be overly long and unusable.",
-              "Please note: a concordance-type index has no logical organization other than alphabetization, and only exact word matches can be indexed using the approach."
-            ]
+            "features": [],
+            "price_display": ""
           }
         ]
       },
@@ -407,15 +437,14 @@
             "title": "Proofreading",
             "price": "",
             "lead": "Prerequisite: An Omni core editorial service, as recommended. Please speak with your editorial consultant for more information.",
-            "features": [
-              "As any publishing professional knows, the process of converting a manuscript into a published book is not 100 percent foolproof. Even manuscripts that have undergone a Quality Review can have the occasional remaining error, as even the best copyeditor in the business or the most careful author can inadvertently overlook or create a few mistakes. In fact, for this reason, traditional publishers usually proofread a manuscript twice. This final polish is highly recommended.",
-              "\"I must comment on the meticulous job done by all the editors, including the last. She found things that we all had missed ... It's downright scary that I teach ENGLISH!\"",
-              "-Robin M. Berard, author of King Tut and the Girl Who Loved Him"
-            ]
+            "features": [],
+            "price_display": ""
           }
         ]
       }
-    ]
+    ],
+    "lead": "Regardless of your publishing goals, the editorial quality of your work matters—no one wants to read a book that's riddled with typos and grammatical errors. Omni provides editorial services that will help you make your book the best it can be.",
+    "description": "Regardless of your publishing goals, the editorial quality of your work matters—no one wants to read a book that's riddled with typos and grammatical errors. Omni provides editorial services that will help you make your book the best it can be."
   },
   {
     "id": "formats",
@@ -432,28 +461,16 @@
             "title": "Do-It-Yourself Audiobook",
             "price": "",
             "lead": "Expand your audience and reach with the power of audiobooks, an increasingly popular and preferred format.",
-            "features": [
-              "Easy-to-use recording and editing tools",
-              "Six months of access to the virtual recording studio",
-              "Availability of your audiobook through Overdrive, Audible.com, Amazon.com, and iTunes",
-              "ISBN registration"
-            ]
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "professional-audiobook-package",
             "title": "Professional Audiobook Package",
             "price": "",
             "lead": "Readers have spoken—and we have listened. These days, they prefer books in a format that will easily fit their busy lifestyle. This is why Omni offers you a solution that allows you to tap into your readers’ multitasking ways: audiobooks. Now they can “read” your book while they commute, work out or even as they do their chores.",
-            "features": [
-              "Audiobook conversion of up to 5,000 words",
-              "Narration by a professional voice-over actor",
-              "Your own digital copy of the audiobook",
-              "Intro, beginning and end background music for your audiobook",
-              "Availability of your audiobook through Overdrive, Audible.com, Amazon.com and iTunes",
-              "ISBN Registration",
-              "Your manuscript should only have a maximum of 30,000 words.",
-              "You need to approve the audiobook sample we will send you before we can get started on your audiobook. Your 30-day countdown will start from the day we receive your demo approval."
-            ]
+            "features": [],
+            "price_display": ""
           }
         ]
       },
@@ -466,47 +483,30 @@
             "title": "Softcover Publishing",
             "price": "",
             "lead": "Softcover Format is already included in select publishing packages and cannot be purchased separately. This page is designed to give you more information about the service and why it’s important for your book.",
-            "features": [
-              "5\" x 8\"",
-              "5.5\" x 8.5\"",
-              "6\" x 9\"",
-              "7.5\" x 9.25\"",
-              "8.25\" x 11\"",
-              "8.5\" x 8.5\"",
-              "8.5\" x 11\""
-            ]
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "hardcover-publishing",
             "title": "Hardcover Publishing",
             "price": "",
             "lead": "For durability and class, our black & white hardcover publishing is available in your choice of two formats: glossy casebound or dust jacket. The casebound option features a full-color glossy cover image adhered directly to the cover. The dust jacket option features a blue digital cloth cover with a digitally printed non-metallic gold-colored ink onto the spine and a full-color dust jacket with flaps. The full-color dust jacket allows us to print your author biography and a description of your book on the inside flaps, freeing up the back cover to print reviews and endorsements. Your hardcover edition will also be assigned a unique ISBN. In addition to the paperback copies included in your publishing package, you will receive one free author copy of your hardcover edition.",
-            "features": [
-              "Page count range of 108-800",
-              "You can choose between these two trim sizes: 5.5” × 8.5”",
-              "6” × 9”",
-              "When publishing a hardcover book, the softcover trim size must match that of the hardcover.",
-              "You can provide additional text for the interior flaps of the case-laminated cover, such as an excerpt of a book review or endorsement.",
-              "During book production, you will be given the opportunity to proof both the softcover and hardcover editions of your cover and suggest changes as appropriate.",
-              "Due to the higher production costs, the retail price for hardcover books may be more than softcover books.",
-              "The delivery time for hardcover book orders is about seven days longer than for softcover books.",
-              "Author pen name must not exceed 38 characters.",
-              "Prices are subject to change without prior notice. Some restrictions may apply."
-            ]
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "book-binding-sizes-and-types",
             "title": "Book Binding Sizes and Types",
             "price": "",
             "lead": "Please note: These binding and paper options cannot be purchased separately. This page is designed to give you more information about the service and why it’s important for your book.",
-            "features": [
-              "Omni publishes softcover books in perfect-bound format, a type of book binding that uses glue to hold the pages and cover together (typical of most professional books found in stores). We also publish hardcover books in two trim sizes: 5.5\" x 8.5\" or 6\" x 9\". We do not publish wire-o, plasticomb, three-ring, nor spiral-bound books.",
-              "The chart below lists the binding and paper options available to you at Omni:"
-            ]
+            "features": [],
+            "price_display": ""
           }
         ]
       }
-    ]
+    ],
+    "lead": "Through digital and print-on-demand (POD) technology, we can offer our authors these distinct formats for their books: Electronic Format, AudioBook Publishing, and Print Formats.",
+    "description": "Through digital and print-on-demand (POD) technology, we can offer our authors these distinct formats for their books: Electronic Format, AudioBook Publishing, and Print Formats."
   },
   {
     "id": "design-services",
@@ -523,25 +523,16 @@
             "title": "Black-and-White Illustrations - Fine Detail",
             "price": "",
             "lead": "Introduce a new level of artistry to your book by including beautiful black-and-white imagery that will enhance your readers’ experience of your book. With Omni's Fine Detail line of custom black-and-white illustrations, basic highlights and shadows will be added to illustrated objects and sceneries to add a greater level of depth and dimension. Our talented team of in-house studio artists will use your ideas and creative direction to produce images that can help strengthen both your book’s message and marketability.",
-            "features": [
-              "Juvenile/Whimsical (a sweet, cute style)",
-              "Cartoon/Humor (a humorous, funny style)",
-              "Fantasy (a comic-book or mythical style)",
-              "Science Fiction (a futuristic or technological style)",
-              "Naturalistic (a true-to-life style)"
-            ]
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "black-and-white-illustrations-personalized",
             "title": "Black-and-White Illustrations - Personalized",
             "price": "",
             "lead": "You already did the impressive work of writing a book. Now let Omni help you enhance it with custom black-and-white illustrations. Our talented artists will use your ideas and creative direction to create unique illustrations that will fit perfectly with your book. The clean lines and uniform shading used in creating Personalized illustrations are perfect for a simple, classic look. These black-and-white illustrations can be created in a wide variety of styles and subject matter, from people and landscapes to technical drawings and maps.",
-            "features": [
-              "Juvenile/Whimsical (a sweet, cute style)",
-              "Cartoon/Humor (a humorous, funny style)",
-              "Fantasy (a comic-book or mythical style)",
-              "Science Fiction (a futuristic or technological style)"
-            ]
+            "features": [],
+            "price_display": ""
           }
         ]
       },
@@ -554,38 +545,24 @@
             "title": "Color Illustrations - Intricate Design",
             "price": "",
             "lead": "Intricate Design color illustrations are created by hand and still consist of defining outlines but with varying degrees of line details. By giving greater levels of shading and highlights within the line art, the artist creates more three-dimensional illustrations. This is the only level where the art can be colored digitally or by hand.",
-            "features": [
-              "Juvenile/Whimsical (a sweet, cute style)",
-              "Cartoon/Humor (a humorous, funny style)",
-              "Fantasy (a comic-book or mythical style)",
-              "Science Fiction (a futuristic or technological style)",
-              "Naturalistic (a true-to-life style)"
-            ]
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "color-illustrations-fine-detail",
             "title": "Color Illustrations - Fine Detail",
             "price": "",
             "lead": "Introduce a new level of artistry to your book by including beautiful black-and-white imagery that will enhance your readers’ experience of your book. With Omni's Fine Detail line of custom black-and-white illustrations, basic highlights and shadows will be added to illustrated objects and sceneries to add a greater level of depth and dimension. Our talented team of in-house studio artists will use your ideas and creative direction to produce images that can help strengthen both your book’s message and marketability.",
-            "features": [
-              "Juvenile/Whimsical (a sweet, cute style)",
-              "Cartoon/Humor (a humorous, funny style)",
-              "Fantasy (a comic-book or mythical style)",
-              "Science Fiction (a futuristic or technological style)",
-              "Naturalistic (a true-to-life style)"
-            ]
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "color-illustrations-personalized",
             "title": "Color Illustrations - Personalized",
             "price": "",
             "lead": "Elevate your book to the next creative level with artwork produced by our talented illustration team. Omni's in-house studio artists will follow your ideas and direction to produce striking artwork that accentuates your carefully crafted book.",
-            "features": [
-              "Juvenile/Whimsical (a sweet, cute style)",
-              "Cartoon/Humor (a humorous, funny style)",
-              "Fantasy (a comic-book or mythical style)",
-              "Science Fiction (a futuristic or technological style)"
-            ]
+            "features": [],
+            "price_display": ""
           }
         ]
       },
@@ -597,54 +574,33 @@
             "slug": "elite-cover-design",
             "title": "Elite Cover Design",
             "price": "",
-            "lead": "Please Note: Elite Cover Design is included in select publishing packages and cannot be purchased separately. This page is designed to give you more information about the service and why it is important for your book.",
-            "features": [
-              "Your Omni cover designer will conduct creative research on genre-specific cover trends to determine which design will maximize your book's impact in the marketplace",
-              "Your designer will propose three front cover concepts that reflect the feel of your book",
-              "Once you choose your favorite concept, you and your designer will confirm the details about the design elements",
-              "You will receive the first draft of the cover and have one free round of corrections",
-              "After your designer incorporates any changes per your request to your design, you’ll receive your final cover as a PDF (Please note: any changes requested after the initial round of free corrections will incur a fee)"
-            ]
+            "lead": "When you choose Elite Cover Design, you will have more creative options than if you stay with our Custom Cover Design service.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "custom-cover-illustration",
             "title": "Custom Cover Illustration",
             "price": "",
-            "lead": "If you want your idea translated into an original piece of art, you've come to the right place. Our team of experienced in-house artists will work with you to produce a striking custom cover illustration that will help your book stand out.",
-            "features": [
-              "People really do judge a book by its cover—first and foremost, the purpose of your book cover is to make people pick up your book, or click on the virtual version.",
-              "The artwork created is unique to your book, which both readers and booksellers will notice.",
-              "Artwork can be created in a variety of mediums depending on what you think will enhance your book. View samples here.",
-              "You’ll connect with our art team to discuss the initial book cover concept and timelines.",
-              "They’ll create a sketch from your instructions and work with you through two free rounds of revisions if necessary to create a final illustration to your specifications.",
-              "You’ll work with our design team to create a finished book cover using the final artwork."
-            ]
+            "lead": "Our team of experienced in-house artists will work with you to produce a striking custom cover illustration that will help your book stand out.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "cover-revisions-text",
             "title": "Cover Revisions (Text)",
             "price": "",
-            "lead": "Cover Revisions (Text) are corrections that are made to the text on the cover layout. During your publication process, you are given one round of revisions to the cover at no charge. If after this initial round of edits you would like some additional modifications, this design service enables you to make text changes to your cover for a fee.",
-            "features": [
-              "replacing a few words",
-              "correcting punctuation",
-              "adding additional quotes and other information",
-              "completely replacing sections of cover text"
-            ]
+            "lead": "Text changes range from replacing a few words, correcting punctuation, adding additional quotes and other information, to completely replacing sections of cover text.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "cover-revisions-images-design",
             "title": "Cover Revisions (Images/Design)",
             "price": "",
-            "lead": "Cover Revisions (Images/Design) are changes to imagery and design elements on the cover layout that are NOT text changes. The following services are just a few of many that Omni can complete for an author:",
-            "features": [
-              "Touch-up photographs",
-              "Blend several images together",
-              "Remove components of an image",
-              "Combine elements from several different images into one scene",
-              "Changing/manipulating skin color, eye color, scene color",
-              "Red-eye reduction"
-            ]
+            "lead": "Changes to imagery and design elements on the cover layout that are not text changes can be completed through this service.",
+            "features": [],
+            "price_display": ""
           }
         ]
       },
@@ -656,106 +612,73 @@
             "slug": "elite-interior-design",
             "title": "Elite Interior Design",
             "price": "",
-            "lead": "Please Note: Elite Interior Design is included in select publishing packages and cannot be purchased separately. This page is designed to give you more information about the service and why it’s important for your book.",
-            "features": [
-              "Your Omni designer will conduct creative research on genre-specific book layout trends to determine which design will maximize your book's impact in the marketplace.",
-              "Your designer will discuss concepts that reflect the feel of your book (such as fonts, chapter starts, title page design, etc.).",
-              "Your designer will then create three mock-ups of the front matter, including the first few pages of the first chapter.",
-              "Once you choose your favorite concept, we will confirm the details about the design elements.",
-              "You will receive the first draft of the completed layout as a PDF and have one round of 50 free corrections.",
-              "After your designer incorporates any changes, you’ll receive your final galley as a PDF (Please Note: Any changes requested after the initial round of free corrections will incur a fee)",
-              "Submitted separately from your manuscript as a TIFF (.tif) file format",
-              "CMYK colorspace",
-              "300-dpi resolution",
-              "Written copyright permission from the creator (artist, photographer, etc.) to use the work in your book"
-            ]
+            "lead": "Hold a one-on-one consultation with an Omni book layout specialist who has special training in designing for your book's genre.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "color-image-insertion",
             "title": "Color Image Insertion",
             "price": "",
-            "lead": "If you want to insert additional graphics beyond the allotted number of image insertions of your chosen package, follow the guidelines below. Note that images refer to color photos, tables, charts, diagrams, etc.",
-            "features": [
-              "All interior color graphics (including photos, tables, charts, diagrams, drawings, foreign fonts, and anything else that is not text or would be considered a graphic) should be submitted as individual TIFF (.tif) files.",
-              "The manuscript should identify placeholders for each of the interior graphics.",
-              "There is a fee for each additional image inserted into the manuscript.",
-              "The book cover does not \"count\" as a graphic. It is in full color for no additional charge.",
-              "Printer slang for \"full color\" is \"four color\"; this means the full range of colors, not literally just four colors."
-            ]
+            "lead": "If you want to include color graphics in your book, please follow our guidelines.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "custom-layout-tech",
             "title": "Custom Layout Tech",
             "price": "",
-            "lead": "Please speak with your publishing services associate for more information.",
-            "features": [
-              "Certain books may require a specialized layout technician to work with you on your specific custom layout requirements.",
-              "Duration and cost is dependent on complexity."
-            ]
+            "lead": "An Omni layout specialist will help customize your book.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "table-of-contents-two-or-more",
             "title": "Table of Contents (Two or More)",
             "price": "",
-            "lead": "Please speak to your publishing services associate for more information.",
-            "features": [
-              "Creating a table of contents for your work will demonstrate to your reader how the information has been organized. In order to better organize your work, multiple tables of contents might be necessary. After the first free table of contents, Omni can create your additional tables of contents with this service.",
-              "Duration: Dependent on quantity and complexity"
-            ]
+            "lead": "At times, to better organize your work, multiple tables of contents are needed. After the first free table of contents, Omni can create your additional tables of contents with this service.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "table-creation",
             "title": "Table Creation",
             "price": "",
-            "lead": "Please do not order without first speaking with your publishing services associate.",
-            "features": [
-              "Our designers can create and format professional tables to be inserted into your manuscript as needed.",
-              "Duration and cost dependent on quantity and complexity."
-            ]
+            "lead": "An Omni layout specialist can create tables needed to convey information to readers.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "footnote-formatting",
             "title": "Footnote Formatting",
             "price": "",
-            "lead": "Adding footnotes to your manuscript can be very useful. Omni follows the Chicago Manual of Style citation guidelines when inserting footnotes for you. Most often, footnotes are used as a replacement for long, explanatory notes.They can also be used for other various reasons:",
-            "features": [
-              "To direct the reader to more information pertaining to the subject in the main text;",
-              "To reference a quote or viewpoint; or",
-              "To use as an alternative to parenthetical references."
-            ]
+            "lead": "Most often, footnotes are used as a replacement for long, explanatory notes. Omni follows the Chicago Manual of Style citation guidelines when formatting and inserting footnotes for you.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "custom-headers",
             "title": "Custom Headers",
             "price": "",
-            "lead": "You may find it important to create custom headers within your book. If at any time during the submission process you would like to change a header within your work, you simply need to purchase our Custom Header service.",
-            "features": [
-              "Duration: During design process"
-            ]
+            "lead": "If at any time during the submission process you would like to change a header within your work, you simply need to purchase our Custom Headers service.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "b-w-image-insertion",
             "title": "B&W Image Insertion",
             "price": "",
-            "lead": "If you want to insert additional graphics beyond the allotted number of image insertions of your chosen package, follow the guidelines below. Note that images refer to photos, tables, charts, diagrams, etc.",
-            "features": [
-              "All interior graphics (including photos, tables, charts, diagrams, drawings, foreign fonts, and anything else that is not text or would be considered a graphic) should be submitted as individual TIFF (.tif) files.",
-              "The manuscript should identify placeholders for each of the interior graphics.",
-              "There is a fee per additional image inserted into the manuscript.",
-              "All illustrations are produced in black and white or grayscale; we cannot process color inside the manuscript.",
-              "The book cover does not \"count\" as a graphic. It is in full color for no additional charge.",
-              "Printer slang for \"full color\" is \"four color\"; this means the full range of colors, not literally just four colors."
-            ]
+            "lead": "If you want to include graphics in your book, please follow our guidelines.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "interior-revisions-block-of-25",
             "title": "Interior Revisions (Block of 25)",
             "price": "",
-            "lead": "Omni gives you one opportunity to examine your book proofs and make up to 50 corrections for free. It is imperative that you list these corrections on the proof form provided in order for the changes to be made. Publisher errors such as hyphenation errors, formatting issues or misplaced graphics which occurred during production must also be noted on the proof from, but will not count against the first free 50 corrections.",
-            "features": [
-              "Remember to carefully review each page of your proofs for any formatting or typographical errors that were created by either you or Omni. Our proofing process is designed to give you the final say about your book’s appearance by allowing you to rectify any remaining problems or errors.",
-              "If you wish to make further proofreading corrections after the initial free 50, there is a charge of $100 dollars for every group of 25 changes."
-            ]
+            "lead": "Omni gives you one opportunity to examine your book proofs and make up to 50 corrections for free. If you wish to make further proofreading corrections after the initial free 50, there is a charge for every group of 25 changes.",
+            "features": [],
+            "price_display": ""
           }
         ]
       },
@@ -767,15 +690,15 @@
             "slug": "stock-image-processing",
             "title": "Stock Image Processing",
             "price": "",
-            "lead": "All books published via the Omni standard publishing packages receive custom-designed covers, produced in full color. Within the realm of this custom-designed cover, you have the option to choose two images, free of charge, from the millions found through Getty Images. If you wish to include more than two images on your cover, a Stock Image Processing fee will be assessed. This fee will also be placed on any images found through Getty Images you wish to use in the interior of your book.",
-            "features": [
-              "or speak to an Omni team member for more information about this service Disclaimer: Prices listed do not include applicable taxes (such as sales, use, excise, value-added, goods and services, or other tax), which will be added to the total at the time of purchase. Prices listed do include the copies of the book; the cost of shipping and handling will be calculated and charged after your book is made available for sale.",
-              "To avoid these fees please adhere to the manuscript submission guidelines."
-            ]
+            "lead": "If you wish to include more than two images on your cover, a Stock Image Processing fee will be assessed. This fee will also be placed on any images found through Getty Images you wish to use in the interior of your book.",
+            "features": [],
+            "price_display": ""
           }
         ]
       }
-    ]
+    ],
+    "lead": "Our team will work with you—incorporating your photos, graphics, sketches, and ideas—to create a professional book cover that beautifully represents your book's contents, and an interior page layout that is clean, clear, and easy to read.",
+    "description": "Our team will work with you—incorporating your photos, graphics, sketches, and ideas—to create a professional book cover that beautifully represents your book's contents, and an interior page layout that is clean, clear, and easy to read."
   },
   {
     "id": "production",
@@ -791,22 +714,17 @@
             "slug": "retech",
             "title": "Retech",
             "price": "",
-            "lead": "Please speak with your publishing services associate for more information.",
-            "features": [
-              "Once you have received your first interior proof from your design team, it is possible that the number of errors (usually more than 100 corrections) is such that it's in your best interest to supply us with a revised manuscript to reformat into a new interior proof for you to review. If the retech service is done at your request, there is an initial charge for the retech service and any applicable special formatting fees will need to be paid again (indexing, tables, etc). Please contact your Publishing Services Associate for a complete quote.",
-              "In addition to providing a new manuscript, you will also have another opportunity to re-select your book’s trim size and provide revised formatting suggestions to your Publishing Services Associate. This includes changes of typeface, type size, image treatments, and the overall style in which your book was formatted. It is important that you express these types of formatting requests to your Publishing Services Associate, or supply an interior proof form, along with your newly revised manuscript. If we do not receive revised formatting requests, then the design team will utilize the same styling as the first proof you received from us.",
-              "Please Note: If you are resubmitting to do a retech then the price of the retech is reduced when purchased with the resubmission.",
-              "More About | Retech"
-            ]
+            "lead": "If there are a significant number of author errors in the first galley, then you can supply us with a revised manuscript that we can reformat into a new galley through this service.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "title-change-after-setup",
             "title": "Title Change After Setup",
             "price": "",
-            "lead": "Please speak with your publishing services associate for more information.",
-            "features": [
-              "If an author wants to make changes to the title it impacts many elements within the book and through the registration and marketing of the book."
-            ]
+            "lead": "Changing the title of your book impacts many elements within the book. This service deals with handling those elements across production, catalog registration, and distribution.",
+            "features": [],
+            "price_display": ""
           }
         ]
       },
@@ -818,142 +736,97 @@
             "slug": "color-image-scanning",
             "title": "Color Image Scanning",
             "price": "",
-            "lead": "Omni allows usage of original color art to be placed within a manuscript. Authors who send in hard copies may purchase the Color Image Scanning service. Omni will take the original image and scan it into the correct place in your work.",
-            "features": [
-              "Duration : 1-2 Weeks dependent on quantity"
-            ]
+            "lead": "Authors who send in hard copies of original color images can have them scanned and placed into the correct place in your work.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "basic-manuscript-formatting-corrections",
             "title": "Basic Manuscript Formatting Corrections",
             "price": "",
-            "lead": "Please speak with your publishing services associate for more information.",
-            "features": [
-              "Removing headers, footers, page numbering, etc.",
-              "Insertingpage breaks appropriately",
-              "Correctingsoft and hard returns",
-              "Correcting line and paragraph formatting"
-            ]
+            "lead": "Necessary corrections will be made before the manuscript can be put through the editorial and layout processes.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "extensive-customized-formatting",
             "title": "Extensive Customized Formatting",
             "price": "",
-            "lead": "Please speak with your publishing services associate for more information.",
-            "features": [
-              "Removing text boxes",
-              "Removing embedded graphics",
-              "Removing wrapped text, etc."
-            ]
+            "lead": "More extensive corrections will be made before the manuscript is put through the editorial and layout processes.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "data-entry-standard",
             "title": "Data Entry - Standard",
-            "price": "$1,599.00",
-            "lead": "$1,599.00 Begin your publishing journey with the package that lets you take the extra mile.",
-            "features": [
-              "Digital Formatting and Distribution (E-Book)",
-              "Paperback Publishing",
-              "Hardcover Publishing",
-              "Customization of Interior and Cover",
-              "Image Insertions Up to 25",
-              "Electronic Proofs of Your Book",
-              "Interior Revisions – One Block of 50",
-              "One-On-One Author Support",
-              "West Harmony Bookstore Availability",
-              "Online Distribution through Amazon, Barnes & Noble, and Other Book Retailers",
-              "ISBN Assignment",
-              "U.S. Copyright",
-              "Library of Congress Control Number",
-              "3 Paperback Copies",
-              "1 Hardcover Copy",
-              "Amazon Look Inside",
-              "Google Preview",
-              "Barnes & Noble Read Instantly",
-              "36-Month Bookseller Return Program"
-            ]
+            "price": "",
+            "lead": "With Standard Data Entry, you can send us your printed manuscript and we will convert it into a working digital file. This excludes any handwritten documents or newspaper-type articles.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "data-entry-spanish",
             "title": "Data Entry - Spanish",
             "price": "",
-            "lead": "In order for our professional staff to efficiently work on your manuscript, Omni must have a digital file to manipulate. The Data Entry - Spanish service will convert typed Spanish-language material that you have provided into an electronic format for publication. This excludes any handwritten documents or newspaper-type articles.",
-            "features": [
-              "Duration: 60-75 days"
-            ]
+            "lead": "Spanish-language materials you provide are converted into an electronic format for publication with our Spanish Data Entry service.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "data-entry-handwritten",
             "title": "Data Entry - Handwritten",
             "price": "",
-            "lead": "Is your manuscript handwritten? Now you have the option to have your book converted into a digital file. In order for our professional staff to efficiently work on your manuscript, Omni must have a digital file to manipulate. Leave it to the Omni team of professionals to manually type and convert your document.",
-            "features": [
-              "This service will only be applied to handwritten documents"
-            ]
+            "lead": "Relieve yourself from the tedious task of encoding multiple pages and let us do all the manual encoding for you. This service is only applicable to handwritten documents.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "large-image-scanning",
             "title": "Large Image Scanning",
             "price": "",
-            "lead": "Please contact your publishing services consultant for more information.",
-            "features": [
-              "The Large Image Scanning services include images that are larger than 11\"x17\".",
-              "Duration: 2-3 weeks"
-            ]
+            "lead": "Images larger than 11\" x 17\" can be scanned by Omni and placed in your book.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "b-w-image-scanning",
             "title": "B&W Image Scanning",
             "price": "",
-            "lead": "Omni allows usage of original black and white art to be placed within a manuscript. Authors who send in hard copies may purchase the Black and White Image Scanning service. Omni will take the original image and scan it into the correct place in your work.",
-            "features": [
-              "Duration: 1-2 Weeks dependent on quantity"
-            ]
+            "lead": "Authors who send in hard copies of original black and white images can have them scanned and placed into the correct place in your work.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "manuscript-file-conversion",
             "title": "Manuscript File Conversion",
             "price": "",
-            "lead": "Please speak with your publishing services associate for more information.",
-            "features": [
-              "Omni will make every effort to work with manuscripts created using a wide variety of software packages. We will charge a small conversion fee for documents created under such documents as WordPerfect, Word Pad and Microsoft Works.",
-              "To avoid these fees please adhere to the manuscript submission guidelines.",
-              "Duration: 1 week"
-            ]
+            "lead": "If this service is chosen, Omni will make every effort to work with manuscripts created using any of a wide variety of software packages.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "graphic-file-conversions-quantity-25",
             "title": "Graphic File Conversions (Quantity: 25)",
             "price": "",
-            "lead": "Please speak with your publishing services associate for more information.",
-            "features": [
-              "Authors often send in graphic files (these include graphics, tables, text boxes) that require an extensive amount of work. These include:",
-              "Cropping graphics as requested by the author. Extracting graphics from the manuscript. Convert line art to TIFF (.tif) files Your graphic files will be reviewed and a price quoted based on a price per block of 25 graphic files. The author will have the option of making the changes themselves or pay for Omni staff to make the changes.",
-              "To avoid these fees please adhere to the image submission guidelines.",
-              "Duration: 1-2 weeks"
-            ]
+            "lead": "When authors send in graphic files, they sometimes require an extensive amount of work. With this service, Omni will work to ensure graphics appear correctly in the final product.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "file-merging",
             "title": "File Merging",
             "price": "",
-            "lead": "Please speak with your publishing services associate for more information.",
-            "features": [
-              "If you choose to submit your manuscript with the images included in the body of your work, Omni must extract these images to properly create a professional layout of your book. The images will be placed back into the manuscript once the layout is complete.",
-              "This service will cover the cost of extracting the images to ensure proper interior layout..",
-              "Duration: 1-2 weeks"
-            ]
+            "lead": "If the standard manuscript submission process of sending one file is not followed, files must be merged or combined in order to ensure a correct outcome.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "image-extraction",
             "title": "Image Extraction",
             "price": "",
-            "lead": "Please speak with your publishing services associate for more information.",
-            "features": [
-              "The standard manuscript submission process is based around Omni receiving the manuscript as one file. Some authors may choose to send their manuscript to Omni in several files. The Filing Merging service is used to merge these files into one document for both editorial services and layout.",
-              "To avoid these fees please adhere to the image submission guidelines.",
-              "Duration: 1 week"
-            ]
+            "lead": "If you choose to submit your manuscript with the images included in the body of your work, Omni must extract these images to properly create a professional layout of your book. This service will cover the cost of extracting the images to ensure proper interior layout.",
+            "features": [],
+            "price_display": ""
           }
         ]
       },
@@ -965,27 +838,23 @@
             "slug": "resubmission-one-version",
             "title": "Resubmission (One Version)",
             "price": "",
-            "lead": "When a book has gone live and the author finds problems, errors, or other issues that need to be corrected, we can re-submit the file to the printer to update future copies.",
-            "features": [
-              "Make changes to text in galley",
-              "Make changes to cover text or design",
-              "Change subtitle"
-            ]
+            "lead": "Once your book has gone live and is for sale, you can still correct errors or other issues that might have been missed. Choose this service if you only have either a softcover or a hardcover that needs to be updated.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "resubmission-two-version",
             "title": "Resubmission (Two Version)",
             "price": "",
-            "lead": "When a book has gone live and the author finds problems, errors, or other issues that need to be corrected, we can re-submit the file to the printer to update future copies.",
-            "features": [
-              "Make changes to text in galley",
-              "Make changes to cover text or design",
-              "Change subtitle"
-            ]
+            "lead": "Choose this service if you have a softcover and hardcover book that needs to be updated. When a book has gone live and errors need to be corrected, we re-submit the updated files to the printer for future copies.",
+            "features": [],
+            "price_display": ""
           }
         ]
       }
-    ]
+    ],
+    "lead": "Preparing your manuscript for submission and for publishing is a whole lot easier when we do it for you. We provide these services to help ensure that your book is publishing-ready.",
+    "description": "Preparing your manuscript for submission and for publishing is a whole lot easier when we do it for you. We provide these services to help ensure that your book is publishing-ready."
   },
   {
     "id": "marketing-services",
@@ -1002,98 +871,56 @@
             "title": "Bookblast Video Marketing - Stand-alone (30days)",
             "price": "",
             "lead": "Go the extra mile with your marketing campaign, and place your video as an ad on YouTube. Seize the opportunity to have your book video introduced as an advertising break before, or in between, YouTube videos. Your book information, purchase and availability details are displayed when the ad is clicked.",
-            "features": [
-              "A 30-day* ad placement campaign on YouTube that gives viewers a preview of your book. Your ad will appear at the beginning of a YouTube video, or in between videos. Viewers can get more information about your book by clicking on the video, which redirects them to either your book’s online bookstore page or your own book website.",
-              "Standard Book Video",
-              "Premium Book Video"
-            ]
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "standard-book-video",
             "title": "Standard Book Video",
             "price": "",
             "lead": "A Standard Book Video can help you create and maintain a meaningful presence online in the competitive marketplace. Video book videos are an excellent addition to your press releases, social media sites, and personal websites to help your book stand out in the crowd.",
-            "features": [
-              "Creation of a custom-made video book video, approximately 45 to 60 seconds in length",
-              "Storytelling through text and 2-D graphics and image",
-              "Distribution of your video to YouTube in order to maximize exposure",
-              "Web streaming capability",
-              "Review of your video for TV and film consideration by 5 More Minutes",
-              "Simple text changes",
-              "Changes in font size",
-              "Corrections or additions to book and author information",
-              "Changes to audio levels",
-              "Image changes (if you provided your own or you feel an image is offensive)",
-              "If 5 More Minutes is interested in working with you, they will directly contact you to explain their plan of action to gauge your interest.",
-              "If after reviewing your video 5 More Minutes decides not to engage with your concept, it will then be entered into our Hollywood Database, where registered entertainment professionals can browse and search for new material to adapt into feature films and television series."
-            ]
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "premium-book-video",
             "title": "Premium Book Video",
             "price": "",
             "lead": "Give your fans a sensational preview of your book with the Premium Book Video. Complete with professional voiceover, your custom video will enhance your book marketing efforts and help your book stand out in the crowd. Plus, a Premium Book Video makes an excellent addition to your press releases, social media sites, and personal websites.",
-            "features": [
-              "Creation of a custom-made video book video, approximately 60 to 90 seconds in length",
-              "Audible storytelling through voiceover by a professional actor",
-              "Imagery includes complex design, such as lighting effects, 3-D space, visual effects and motion graphics",
-              "Two live-action video clips",
-              "Distribution of your video to YouTube in order to maximize exposure",
-              "Web streaming capability",
-              "Review of your video for TV and film consideration by 5 More Minutes.",
-              "Simple text changes",
-              "Changes in font size",
-              "Corrections or additions to book and author information",
-              "Changes to audio levels",
-              "Image changes (if you provided your own or you feel an image is offensive)",
-              "If 5 More Minutes is interested in working with you, they will contact you directly and explain their plan of action to gauge your interest.",
-              "If after reviewing your book video 5 More Minutes decides not to engage on your project, your screenplay will be added into our exclusive Hollywood Database where it will be accessible to directors, producers, actors and agents."
-            ]
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "bookblast-video-marketing-standard",
             "title": "Bookblast Video Marketing - Standard",
             "price": "",
             "lead": "The appeal of a book video is undeniable – and the numbers show it. YouTube has over a billion video viewers, and every day, people watch hundreds of millions of hours on YouTube. Make sure your book catches the attention of an engaged and influential audience of online video viewers with the creation of your book video and your YouTube advertising campaign.",
-            "features": [
-              "One Standard Book Video marketing service",
-              "A 30-second version of the Standard Book Video to be used in the YouTube campaign.",
-              "A 30-day ad placement campaign on YouTube that gives viewers a preview of your book. Your ad will appear at the beginning of a YouTube video, or in between videos. Viewers can get more information about your book by clicking on the video, which redirects them to either your book’s online bookstore page or your own book website."
-            ]
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "bookblast-video-marketing-premium",
             "title": "Bookblast Video Marketing - Premium",
             "price": "",
-            "lead": "Strengthen your book’s presence in the marketplace, and boost its selling potential, by showcasing it on YouTube. With this advertising package, you now have the means to widen your reach and attract more readers. YouTube has over a billion video viewers, and every day, people watch hundreds of millions of hours on YouTube. Capture their curiosity by inviting a professional voice actor to narrate your book video, and hold their attention with a strategic YouTube video advertising campaign that targets viewers with keen interest in your book’s genre and style.",
-            "features": [
-              "One Premium Book Video marketing service",
-              "A 30-second version of the Premium Book Video to be used in the YouTube campaign.",
-              "A 30-day ad placement campaign on YouTube that gives viewers a preview of your book. Your ad will appear at the beginning of a YouTube video, or in between videos. Viewers can get more information about your book by clicking on the video, which redirects them to either your book’s online bookstore page or your own book website."
-            ]
+            "lead": "Strengthen your book’s presence in the marketplace, and boost its selling potential, by showcasing it on YouTube. With this advertising package, you now have the means to widen your reach and attract more readers. Capture their curiosity by inviting a professional voice actor to narrate your book video, and hold their attention with a strategic YouTube video advertising campaign that targets viewers with keen interest in your book’s genre and style.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "15-sec-video-marketing",
             "title": "15-sec Video Marketing",
             "price": "",
-            "lead": "With over two billion monthly visitors* (and that’s only counting logged-in users!), it’s no secret that YouTube has become a staple in our daily lives.",
-            "features": [
-              "a 15-second custom-made video ad of your book with a professional voice over",
-              "Your video ad shown 350,000 times on YouTubeb Your entire ad will play uninterrupted at the start, midway, or towards the end before the main video can continue.",
-              "Custom banner of your book that links to the ordering page and displayed alongside your video ad (for desktop)"
-            ]
+            "lead": "Advertise your book in a widely-used platform. Get it in front of a huge and engaged audience with uninterrupted short ads on YouTube.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "video-book-talk",
             "title": "Video Book Talk",
             "price": "",
-            "lead": "Your book shouldn't be confined to a box, whether that's your bookshelf, a storage container, or the four walls of traditional media.",
-            "features": [
-              "Video Interview on the Talking Books show with JT Crowley: A pre-recorded 15-20 minute interview with British author and host JT Crowley. The video will be on top streaming services such as Roku, Amazon Fire TV, and YouTube; and available on ExpertsandAuthors.tv and WebTalkRadio.net.",
-              "Audio podcast: An audio-only interview version will be available on Apple Podcasts, Spotify, iHeart Radio, and other aggregators.",
-              "Social media post sharing your video interview on our active social media pages.",
-              "A link to the video interview, which you can use on your promotional activities"
-            ]
+            "lead": "Benefit from the rise of online streaming services with a video interview about your book and writing process, streamed on Roku and Amazon Fire TV.",
+            "features": [],
+            "price_display": ""
           }
         ]
       },
@@ -1106,68 +933,40 @@
             "title": "Indie Book Review Bundle",
             "price": "",
             "lead": "As a self-published author in the competitive literary industry, securing as many book reviews as you can get helps you stand out. Your potential readers look to professional reviews to get an indication of the quality of a book, so you need to partner with the pros – like BookLife Reviews.",
-            "features": [
-              "An extensive book review by BookLife* that includes: li { list-style-type: disc; /* Default bullet style */ margin-bottom: 8px; /* Spacing between items */ } .inner-list li { list-style-type: circle; /* Inner list uses smaller circle dots */ margin-left: 20px; /* Indent inner list */ } A 300-word review that covers the plot summary, critique, and analysis of your book. It will also include an assessment of which readers are most likely to enjoy the book.",
-              "An honest, positive one-sentence takeaway that summarizes the reviewer's opinion of the book's best aspects and likely audience.",
-              "A list of comparison (comp) titles and/or authors.",
-              "Letter grades (from A+ to C) for five production elements: cover art, interior design and typography, illustrations (if applicable), editing, and marketing copy.",
-              "Online banner ad campaign on PublishersWeekly.com with 10,000 impressions You’ll get a banner featuring your book that will be shown in PublishersWeekly.com. The site has over 14 million annual unique visitors.",
-              "1 out of 8 ad slot in a Publishers Weekly Supplement Depending on your book’s availability, your book ad will appear alongside seven other titles in one of the next available Publishers Weekly’s stand-alone supplements. The Depending on your book’s availability, your book ad will appear alongside seven other titles in one of the next available Publishers Weekly’s stand-alone supplements. The Publishers Weekly Supplement is handed out to attendees in specific industry events or conferences. Learn more about the supplements below. Supplement is handed out to attendees in specific industry events or conferences. Learn more about the supplements below.",
-              "Each of the supplements is also center-stitched to a corresponding Publishers Weekly magazine, which is distributed to Publishers Weekly’s 68,000 print subscribers on the same week as the industry event or conference.",
-              "The entire review published in one of the monthly BookLife sections on the Publishers Weekly print magazine sent to its 68,000 subscribers. We’ll send you a free copy of the issue where your book review appears!",
-              "BookLife submits a copy of your book review to industry database systems such as EBSCO, Ingram and Proquest, making your review accessible to all bookstores and online retailers."
-            ]
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "literary-gateway-bundle",
             "title": "Literary Gateway Bundle",
             "price": "",
-            "lead": "A book award is more than a feather in your cap or an emblem on the front cover. Awards make books more valuable in the eyes of the ordinary consumer. It helps boost credibility, create awareness of the book, and even grow one’s audience. It’s a marketing tool not often explored but one that you, as an author, shouldn’t overlook.",
-            "features": [
-              "6 months access to Awards Finder AwardsFinder is a book award-matching platform that finds you one award opportunity per week throughout your 6-month access. On a monthly basis, AwardsFinder will target one literary award opportunity as the best match, create the nomination package for your book and professionally submit the entry of your behalf.",
-              "BlueInk Review Blueink Review, the brainchild of an internationally known literary agent and an award-winning book review editor, was created with a specific purpose: to respectfully and professionally find and celebrate the best of self-published books. Your Blueink review is a 250- to 300-word objective book review that considers facts and style as the reviewer deems appropriate. Your book review will be posted on the BlueInk website, unless requested otherwise.",
-              "Eligibility for a feature on BookMad If you win an award, it will be featured in BookMad Magazine, an online publication dedicated to empower self-published authors. It will also be announced on Bookmad’s Facebook page.",
-              "Option for Cover Resubmission to add the review blurb and/or any award seals to your book cover."
-            ]
+            "lead": "With Literary Gateway, get a mix of services designed to put you at the forefront of award opportunities to help build your author brand. Find award opportunities and submit your nomination easily using the intelligent matching platform, Awards Finder, and get your book reviewed by the pros with BlueInk Reviews.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "review-duo",
             "title": "Review Duo",
             "price": "",
-            "lead": "Spark reader’s interest and build credibility for your book with the Review Duo service. Receive professional, unbiased assessments for your book from these esteemed book reviewers:",
-            "features": [
-              "PBR Book Review",
-              "USRB Book Review",
-              "Entry to the Eric Hoffer Award",
-              "Entry to the Pacific Book Awards",
-              "Free cover revision option to include a portion of the reviews on the cover"
-            ]
+            "lead": "Spark reader’s interest and build credibility for your book with the Review Duo service. Receive professional, unbiased assessments for your book from these esteemed book reviewers.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "review-duo-plus",
             "title": "Review Duo Plus",
             "price": "",
-            "lead": "Spark reader’s interest and build credibility for your book with the Review Duo Plus service. Receive professional, unbiased assessments for your book from these esteemed book reviewers:",
-            "features": [
-              "PBR Book Review",
-              "USRB Book Review, including placement in their Featured Book Reviews section for one month",
-              "10-15 minute Online Radio Interview, available for download on popular sites such as iTunes",
-              "Entry to the Eric Hoffer Award",
-              "Entry to the Pacific Book Awards",
-              "Free cover revision option to include a portion of the reviews on the cover"
-            ]
+            "lead": "Spark reader’s interest and build credibility for your book with the Review Duo Plus service. Receive professional, unbiased assessments for your book from these esteemed book reviewers.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "the-trifecta-review-service",
             "title": "The Trifecta Review Service",
             "price": "",
-            "lead": "Get unbiased and professional reviews from three different esteemed publications. With the Omni Trifecta Review Service* your marketing efforts will receive an extra boost and give your book that much-needed edge.",
-            "features": [
-              "Kirkus Indie Among the world’s highly acclaimed book review providers, Kirkus Indie delivers honest and fair critiques of your work. Go beyond the ordinary and increase your visibility with a Kirkus review.",
-              "Clarion Review-for-Fee ForeWord Magazine’s paid review service heavily influences the decisions of booksellers and librarians across the country. Clarion is ForeWord’s solution to the increasing demand for a qualified and impartially written review for self-published titles. Expect to receive reviews from the experts of specific genres that promise the same high quality as any other reputable review service.",
-              "BlueInk Review Dedicated to exclusively providing honest, unbiased reviews, BlueInk Review caters exclusively to self-published titles. Created by two trade professionals—an internationally respected literary agent and a widely acclaimed book review editor—this company boasts of carefully vetted independent critics. Everything about BlueInk Review is born of its founders’ vast expertise in the literary world.",
-              "A review can influence the market’s awareness towards your book. The Omni Trifecta Review Service enhances and gives your bookselling strategy an edge among the rest."
-            ]
+            "lead": "Get unbiased and professional reviews from three different esteemed publications. With the Omni Trifecta Review Service your marketing efforts will receive an extra boost and give your book that much-needed edge.",
+            "features": [],
+            "price_display": ""
           }
         ]
       },
@@ -1180,11 +979,8 @@
             "title": "Join the LA Times Festival of Books 2025!",
             "price": "",
             "lead": "Get ready to celebrate the 30th anniversary of the L.A. Times Festival of Books on April 26-27, 2025 at the University of Southern California campus in Los Angeles.",
-            "features": [
-              "The Los Angeles Times Festival of Books is one of the largest and most prestigious book festivals in the United States, attracting more than 150,000 booklovers and media members each year. Since its debut in 1996, the festival has joined literature lovers with hundreds of booksellers, publishers, and literary organizations. The LA Times Festival of Books 2025 is your chance to meet face-to-face with potential readers and promote your book at this major industry event.",
-              "Showcase your book for crowds of avid readers to discover by displaying it in the Author Solutions Bookstore Gallery , or be the star of your own book signing at the Author Solutions booth.",
-              "Contact your marketing consultant to find out more about these options. Spots will be filled on a first-come, first-served basis, so don't wait."
-            ]
+            "features": [],
+            "price_display": ""
           }
         ]
       },
@@ -1196,39 +992,25 @@
             "slug": "hollywood-coverage",
             "title": "Hollywood Coverage",
             "price": "",
-            "lead": "Even with the Internet, it can be quite difficult for most readers to find their next favorite book. But for Ingram’s subscribers, fresh stories aren’t really hard to come by. They know that they can always expect interesting titles from its trusted source: Ingram Advance Catalog Supplements.",
-            "features": [
-              "A thorough synopsis that highlights the main characters and events in your story",
-              "A critical analysis that addresses key story points as well as how your book might be best adapted for the screen",
-              "If 5 More Minutes is interested in working with you, they will contact you directly to explain their plan of action to gauge your interest.",
-              "If after reviewing your screenplay 5 More Minutes decides not to engage on your project, it will be placed into our Hollywood Database where agents, directors, actors and producers will have access to the information. As an alternative to knocking on the doors of Hollywood agents or cold calling production companies, this service gives you legitimate access to entertainment decision-makers."
-            ]
+            "lead": "A cost-effective way to get a professionally written synopsis and critical analysis of your book in a database where Hollywood decision-makers search for new material to adapt into a feature film or television series.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "hollywood-treatment",
             "title": "Hollywood Treatment",
             "price": "",
-            "lead": "Your book has all the elements Hollywood wants—an exciting plot, well-developed characters and fresh content—yet there’s still a crucial piece you need in order to be taken seriously by established entertainment executives.",
-            "features": [
-              "From our network of screenwriters, we’ll match you with the one who best complements your book’s story and genre.",
-              "Your professional screenwriter will provide a thorough five to ten-page treatment detailing how he or she plans to adapt your book’s manuscript into a film and/or television screenplay.",
-              "Once your treatment is prepared, it will be considered for TV or movie adaption by 5 More Minutes. li { list-style-type: disc; /* Default bullet style */ margin-bottom: 8px; /* Spacing between items */ } .inner-list li { list-style-type: circle; /* Inner list uses smaller circle dots */ margin-left: 20px; /* Indent inner list */ } If 5 More Minutes is interested in working with you, they will contact you directly and explain their plan of action to gauge your interest.",
-              "If after reviewing your treatment 5 More Minutes decides not to engage with your concept, we’ll enter your treatment into our Hollywood Database where movie and television writers, agents, directors and producers have access to the information.",
-              "The screenwriter waives all rights to the treatment, so you maintain full ownership of your story."
-            ]
+            "lead": "The framework used to transform your work into a screenplay, Hollywood Treatment is an aggressive approach to making your work available to Hollywood with a thoroughly developed five to ten-page adaptation guide.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "hollywood-screenplay",
             "title": "Hollywood Screenplay",
             "price": "",
-            "lead": "Don't just dream about it—take action. If you’re determined to turn your book into a movie or television series, a screenplay is the way to get noticed by Hollywood executives. A screenplay is a fully fleshed out script that television and movie producers can use as a means of evaluating if an adaptation of your book is something they want to produce. With a professionally adapted screenplay, you will let Hollywood know you're serious about breaking into the entertainment business.",
-            "features": [
-              "A screenwriter will complete a screenplay based on your approved Hollywood Treatment.",
-              "Screenplay elements will include character dialogue and detailed action of the story.",
-              "Once your screenplay is prepared, it will be considered for TV or movie adaption by 5 More Minutes li { list-style-type: disc; /* Default bullet style */ margin-bottom: 8px; /* Spacing between items */ } .inner-list li { list-style-type: circle; /* Inner list uses smaller circle dots */ margin-left: 20px; /* Indent inner list */ } If 5 More Minutes is interested in working with you, they will contact you directly and explain their plan of action to gauge your interest.",
-              "If after reviewing your screenplay 5 More Minutes decides not to engage on your project, your screenplay will be added into our exclusive Hollywood Database where it will be accessible to directors, producers, actors and agents.",
-              "The screenwriter waives all rights to your screenplay, so you maintain full ownership of your story."
-            ]
+            "lead": "Don't just dream about it—take action. If you’re determined to turn your book into a movie or television series, a screenplay is the way to get noticed by Hollywood executives with a fully fleshed out script complete with dialogue and dramatic action.",
+            "features": [],
+            "price_display": ""
           }
         ]
       },
@@ -1240,167 +1022,113 @@
             "slug": "sem-1000-clicks",
             "title": "SEM - 1000 clicks",
             "price": "",
-            "lead": "The digital age has brought more than just innovation—it also gives you the convenience of sending a message in just a few seconds. This is why more and more marketers have taken their promotions to the biggest web player of them all—Google.",
-            "features": [
-              "1,000 clicks - $999, choose up to 20 keywords"
-            ]
+            "lead": "The digital age has brought more than just innovation—it also gives you the convenience of sending a message in just a few seconds. Attract potential readers and drive traffic directly to your website with strategically placed Google search ads and keyword performance tracking.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "social-media-30-day-content-plan",
             "title": "Social Media 30-day Content Plan",
             "price": "",
-            "lead": "Ready to ignite a dynamic conversation about your book's release? Our 30-Day Social Media Content Schedule comes complete with all you require for a unified, powerful online presence that commands attention and encourages reader interaction. This is especially crafted for authors aiming to make a profound impact, featuring not just a Social Media Strategy but also turnkey social media collateral for each day up to your big launch—featuring graphics, captions, and much more, all optimized for enhanced reach and engagement.",
-            "features": [
-              "Weekly Goals: Strategically scheduled each week to dovetail with your promotional calendar, cultivating awareness and piquing curiosity leading up to the release.",
-              "Daily Visuals and Graphics: Receive professionally designed graphics customized daily for the full 30 days, capturing the essence of your book’s branding and appealing directly to your audience.",
-              "Engaging Captions: Crafting post descriptions is no longer a challenge. We provide captions made to invite interaction, stir interest, and foster a connection, including intuitive calls-to-action to accompany your images.",
-              "Book Snippets and Teasers: Highlight the most enticing segments of your book with our selection help, paired with striking visuals designed to grab attention.",
-              "Hashtag Selection and Caption Guidance: Widen your book’s exposure with curated hashtags and gain authenticity with our caption suggestions, helping you personalize each post.",
-              "Engagement Methods: We offer not only content but also strategies for engagement, suggesting conversational prompts to nurture a formidable, responsive community around your book."
-            ]
+            "lead": "Ready to ignite a dynamic conversation about your book's release? Our 30-Day Social Media Content Schedule comes complete with all you require for a unified, powerful online presence that commands attention and encourages reader interaction.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "social-media-30-day-strategy",
             "title": "Social Media 30-day Strategy",
             "price": "",
-            "lead": "Elevate Your Book's Online Presence Maximize the impact and visibility of your book with our 30-Day Social Media Strategy. Tailored to ensure a seamless book launch, this guide provides a step-by-step weekly plan, rich with creative content suggestions, strategic hashtags, and specific goals designed to attract, engage, and resonate with your target readership.",
-            "features": [
-              "Targeted Weekly Goals : Every week brings a targeted aim that complements your launch schedule, setting a pace for generating anticipation early on and intensifying interest as your release date nears.",
-              "Daily Content Ideas: Take the guesswork out of daily postings with individually crafted content ideas that showcase the heart of your book's themes, aiding in accelerating momentum and stimulating follower interaction.",
-              "Hashtag Guidance: Broaden your reach with our bespoke list of hashtags, tailored to draw an audience intrinsically interested in your book's genre and core message.",
-              "Engagement Techniques: In the realm of social media, meaningful connections are key. Our guide includes sage advice on stirring up conversations, captivating your followers, and converting passing interest into a devoted fan base."
-            ]
+            "lead": "Maximize the impact and visibility of your book with our 30-Day Social Media Strategy. Tailored to ensure a seamless book launch, this guide provides a step-by-step weekly plan, rich with creative content suggestions, strategic hashtags, and specific goals designed to attract, engage, and resonate with your target readership.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "kirkus-title-express",
             "title": "Kirkus Title Express",
             "price": "",
-            "lead": "Do you want to establish an online presence for your book and attract a following?",
-            "features": [
-              "A two-week online giveaway. Your book will be listed in one of Kirkus’s Online Giveaways.",
-              "100 digital BookStub™ codes to be given away. The digital BookStub™ codes offer a link to a one-time downloadable free copy of your e-book.",
-              "A standard side box ad announcing the giveaway. It will be placed on Kirkus.com’s homepage and on one issue of Kirkus’ eNewsletters, Critic’s Picks. The ad redirects to Kirkus’s online giveaway page where your book will be displayed along with other works. The side box ad will also have information about the giveaway that should be able to encourage visitors to get a free sample copy of your book."
-            ]
+            "lead": "Do you want to establish an online presence for your book and attract a following? With Kirkus Title Express, your book is featured in an organized two-week online giveaway promoted across the Kirkus website and critic newsletter with 100 digital BookStub™ codes.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "online-booksellers-advertising",
             "title": "Online Booksellers Advertising",
             "price": "",
-            "lead": "If you want to cover a lot of book-marketing ground, advertise on websites that are both popular and specialized. With our Online Booksellers Advertising service, you can do just that.",
-            "features": [
-              "Banner ad campaign on Amazon: Feature your book cover in a banner ad promoted on Amazon (500,000 guaranteed impressions).",
-              "Banner ad campaign on Ingram’s ipage: Feature your book cover on a special landing page with twenty-three other titles. For two weeks, ipage will display a banner ad promoting this landing page. Since ipage is a go-to source for complete title information, you have the opportunity to reach retailers and librarians where they work daily."
-            ]
+            "lead": "If you want to cover a lot of book-marketing ground, advertise on websites that are both popular and specialized. Put your book ad in front of consumers on Amazon and over 50,000 retailers, librarians, and educators on Ingram's ipage.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "e-book-promo-venture-30-days",
             "title": "E-book Promo Venture - 30 days",
             "price": "",
-            "lead": "As a reader, you might already know the allure of book sales and bargain bookstores. There’s nothing like coming across a great book at a discounted price—whether it’s a bestseller or a new yet intriguing title.",
-            "features": [
-              "BookBub , a daily email blast that champions ebook discovery, notifying 62.4 million subscribers* about deals on handpicked recommendations as well as updates from their favorite authors; and",
-              "Facebook , the most popular social media platform, with 1.5 billion users worldwide visiting the site on a daily basis.*",
-              "Limited-time price change of your Kindle book to 99ȼ",
-              "Placement of your book ad on BookBub’s daily email blasts for 30 days. See sample here",
-              "Your e-book promo, along with seven others in the same genre category, will be advertised on Facebook for 30 days. See sample here"
-            ]
+            "lead": "Tap into the excitement that comes with bargains through our E-book Promotion service. We mark down the retail price of your Kindle book for a limited time and advertise it across BookBub and Facebook for 30 days.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "e-book-promo-launcher",
             "title": "E-book Promo Launcher",
             "price": "",
-            "lead": "As a reader, you might already know the allure of book sales and bargain bookstores. There’s nothing like coming across a great book at a discounted price—whether it’s a bestseller or a new yet intriguing title.",
-            "features": [
-              "BookBub , a daily email blast that champions ebook discovery, notifying 62.4 million subscribers* about deals on handpicked recommendations as well as updates from their favorite authors;",
-              "Facebook , the most popular social media platform, with 1.5 billion users worldwide visiting the site on a daily basis;* and",
-              "Amazon , the largest e-commerce company in the world.*",
-              "Limited-time price change of your Kindle book to 99ȼ",
-              "Placement of your book ad on BookBub’s daily email blasts for 30 days. See sample here",
-              "Your book ad, along with seven others in the same genre category, on Facebook for 30 days. See sample here",
-              "Your book ad on amazon.com for 30 days. Sample 1 Sample 2 Sample 3"
-            ]
+            "lead": "Tap into the excitement that comes with bargains through our E-book Promotion service. We mark down the retail price of your Kindle book for a limited time and advertise it across BookBub, Facebook, and Amazon.com for 30 days.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "social-media-advertising-basic",
             "title": "Social Media Advertising Basic",
             "price": "",
-            "lead": "With its huge user database, Facebook has the traffic to help give your book’s marketing campaign some traction. Even Instagram, another social media website owned by Facebook, is a viable marketing platform that is used by many brands. However, to effectively promote your work, you must cut through the online clutter and put your book in front of an audience interested in your book.",
-            "features": [
-              "We will create a custom audience that specifically targets potential readers who might be interested in your book.",
-              "An image ad of your book will be shown at least a million times on Facebook and Instagram’s news feeds. Note: Instagram ads appear on mobile only. See sample here",
-              "We will monitor and manage your ad campaign."
-            ]
+            "lead": "With its huge user database, Facebook has the traffic to help give your book’s marketing campaign some traction. An image ad of your book will be shown at least 1 million times on Facebook and Instagram’s news feeds targeting interested readers.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "social-media-advertising-essential",
             "title": "Social Media Advertising Essential",
             "price": "",
-            "lead": "With its huge user database, Facebook has the traffic to help give your book’s marketing campaign some traction. Even Instagram, another social media website owned by Facebook, is a viable marketing platform that is used by many brands. However, to effectively promote your work, you must cut through the online clutter and put your book in front of an audience interested in your book.",
-            "features": [
-              "We will create a custom audience that specifically targets potential readers who might be interested in your book.",
-              "An image ad and a short video ad for your book will be shown at least 2 million times on Facebook and Instagram’s news feeds. Note: Instagram ads appear on mobile only. Click these links for a sample of the image and video ads.",
-              "We will monitor and manage your ad campaign."
-            ]
+            "lead": "With its huge user database, Facebook has the traffic to help give your book’s marketing campaign some traction. An image ad and short video ad of your book will be shown at least 2 million times on Facebook and Instagram’s news feeds targeting interested readers.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "social-media-advertising-advanced",
             "title": "Social Media Advertising Advanced",
             "price": "",
-            "lead": "With its huge user database, Facebook has the traffic to help give your book’s marketing campaign some traction. Even Instagram, another social media website owned by Facebook, is a viable marketing platform that is used by many brands. However, to effectively promote your work, you must cut through the online clutter and put your book in front of an audience interested in your book.",
-            "features": [
-              "We will create a custom audience that specifically targets potential readers who might be interested in your book.",
-              "An image ad, a short video ad, and an interactive mobile ad will be shown at least 4 million times on Facebook and Instagram’s news feeds and on Facebook’s audience network of mobile apps. Note: Instagram ads appear on mobile only. Click these links for a sample of the image , video, and mobile ads.",
-              "We will monitor and manage your ad campaign."
-            ]
+            "lead": "With its huge user database, Facebook has the traffic to help give your book’s marketing campaign some traction. An image ad, short video ad, and interactive mobile ad will be shown at least 4 million times across Facebook, Instagram, and the Audience Network.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "display-advertising-on-google-30-days-package",
             "title": "Display Advertising on Google - 30 days Package",
             "price": "",
-            "lead": "Consumers, including book buyers, are especially active online, spending 95% of their time interacting and checking out websites and content that interest them. With the Display Advertising on Google services, you can engage potential readers by putting your book advertisement right in front of them on their very screens.",
-            "features": [
-              "Choice of ad format: image with text, text only, or both",
-              "30-day book advertising placement on targeted Google websites and partner-websites on the Google Display Network",
-              "Up to 10 GB of excess bandwidth per month when you use your existing Omni-designed website as a landing page"
-            ]
+            "lead": "Consumers, including book buyers, are especially active online, spending 95% of their time interacting and checking out websites and content that interest them. With Display Advertising on Google, place your book on targeted partner websites across the Google Display Network.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "sem-advanced-campaign",
             "title": "SEM - Advanced Campaign",
             "price": "",
-            "lead": "With millions of Google searches made every minute, you should take the chance of spreading word about your book with the help of this internet giant too.",
-            "features": [
-              "Online Ad Presence for 3 Months. Reach more people and grow your readership with 3 months of premium, targeted ads on Google.",
-              "First page placement of your ad over the campaign period. Think about it: When was the last time you clicked all the way to page 6 on your Google search page? With this service, your ad will show up on the first page search results.",
-              "In-house search experts to help you choose up to 30 keywords. Keywords are the words and/or phrases people use to find content on search engines. The right keywords help you show up on relevant searches, meaning your target audience can find your website—and your book—that much faster. Keyword performance is tracked and managed monthly so only high-performing keywords and phrases are retained.",
-              "Monthly reporting and ability to change campaign details proactively. We’ll keep track and make monthly reports of how well your campaign is doing so we can change our search engine marketing strategy as necessary, with you right at the helm of the whole operation.",
-              "Deluxe Website Setup. Your website is your portfolio, your resume, your brand, and your own digital storefront all in one, so it’s crucial to leave a great first impression on visitors with a well-designed website."
-            ]
+            "lead": "Harness the power of Google with our SEM – Advanced Campaign service. Reach more readers with 3 months of premium first-page ads on Google, up to 30 tracked keywords, monthly reporting, and a deluxe author website setup.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "sem-specialist-campaign",
             "title": "SEM - Specialist Campaign",
             "price": "",
-            "lead": "With millions of Google searches made every minute, you should take the chance of spreading word about your book with the help of this internet giant too.",
-            "features": [
-              "Ad Presence for 5 Months. Reach more people and grow your readership with 5 months of premium, targeted ads on Google.",
-              "First page placement of your ad over campaign period. Think about it: When was the last time you clicked all the way to page 6 on your Google search page? With this service, your ad will show up on the first page search results.",
-              "In-house search experts to assist you in choosing up to 50 keywords. Keywords are the words and/or phrases people use to find content on search engines. The right keywords help you show up on relevant searches, meaning your target audience can find your website—and your book—that much faster. Keyword performance is tracked and managed monthly so only high-performing keywords and phrases are retained.",
-              "Bi-weekly reporting and ability to change campaign details proactively. We’ll keep track and make reports every two weeks of how well your campaign is doing so we can change our search engine marketing strategy as necessary, with you right at the helm of the whole operation.",
-              "Website Design – Premier Service with blog page. Your website is your portfolio, your resume, your brand, and your own digital storefront all in one, so it’s crucial to leave a great first impression on visitors with a well-designed website. We’ll help you set up your own blog, too, where you can keep your readers up to date on all your thoughts and latest projects."
-            ]
+            "lead": "Harness the power of Google with our SEM – Specialist Campaign service. Maximize visibility with 5 months of premium first-page Google search ads, up to 50 tracked keywords, bi-weekly performance reporting, and premier website setup with an author blog.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "author-website-setup",
             "title": "Author Website Setup",
             "price": "",
-            "lead": "Reach out to a worldwide audience with Omni's Author Website Setup service.",
-            "features": [
-              "Having a personal website means that you can be viewed by anyone, anywhere in the world, 24 hours a day, 365 days of the year - as long as they have Internet access. It is one of the truly efficient ways of marketing your work. With your own website, millions around the world will know about you and your books; you can link your website to forge stronger business relationships with online bookstores, book clubs and author organizations; you can practically level the literary playing field with the more established authors; the possibilities, it goes without saying, are endless.",
-              "You can choose to have as many as 10 pages created for your website. No matter how many pages you choose, we will take care of your website’s HTML creative design and content.",
-              "What’s more, the domain name registration and web hosting fulfillment are FREE for a whole year.",
-              "Our web designers will start creating your website based on the following guidelines:"
-            ]
+            "lead": "Reach out to a worldwide audience with Omni's Author Website Setup service. Gain a modern, personalized author website with up to 10 custom pages, professional HTML design, and 1 full year of free domain registration and web hosting.",
+            "features": [],
+            "price_display": ""
           }
         ]
       },
@@ -1412,24 +1140,17 @@
             "slug": "press-release-essential-edition",
             "title": "Press Release - Essential Edition",
             "price": "",
-            "lead": "When done right, a press release is an effective way to get publicity. The Omni Press Release – Essential Edition helps you grab the media’s attention by promoting your book with an expertly crafted press release. Prepared in a format to pique editors' interest in your book, your press release is delivered to numerous media outlets, creating the potential for increased coverage of you and your book. More coverage equals more exposure for your title.",
-            "features": [
-              "Customized one-page press release based on information you provide about your book",
-              "Delivery of your press release to a minimum of 500 media outlets chosen based on location, your book’s genre and more; recipients may include magazines, newspapers, online publications, and radio and TV programs",
-              "Press release tracking for one month through Meltwater's powerful PR platform"
-            ]
+            "lead": "When done right, a press release is an effective way to get publicity. The Omni Press Release – Essential Edition helps you grab the media’s attention by promoting your book with an expertly crafted press release delivered to at least 500 media outlets with Meltwater tracking.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "press-release-web-optimized-edition",
             "title": "Press Release - Web Optimized Edition",
             "price": "",
-            "lead": "With a web-optimized press release, anyone who conducts a web search of you or your book can find you much easier, including members of the press. The Omni Press Release – Web-Optimized Edition is professionally crafted to include keywords that increase your release’s chances of being returned as a higher ranking search engine result. The easier your release is to find, the more likely you are to get promotional coverage for your book.",
-            "features": [
-              "A professional writer crafts your press release and includes keywords to optimize it for search engine results, so that your release has a better chance of being found and read",
-              "Omni distributes the press release to as many as 30,000 opt-in journalists and more than 250,000 news subscribers through our newswire service partner, PRWeb. While we cannot guarantee which websites will display your press release, our distributed press releases commonly appear on websites such as Google News, Yahoo News and other websites where journalists search daily for relevant news and topics for story ideas.",
-              "Press-release tracking for one month",
-              "Activity feedback so you can track the effectiveness of your web-optimized press release"
-            ]
+            "lead": "With a web-optimized press release, anyone who conducts a web search of you or your book can find you much easier. Professionally crafted and distributed to up to 30,000 opt-in journalists and over 250,000 subscribers via PRWeb with activity feedback.",
+            "features": [],
+            "price_display": ""
           }
         ]
       },
@@ -1441,41 +1162,31 @@
             "slug": "radio-book-talk",
             "title": "Radio Book Talk",
             "price": "",
-            "lead": "You'll never run out of places to talk about books. There are cafés, libraries, bookstores, and you can even chat about it on the radio. As an author, you can use the airwaves not only to talk about what you love, but it's where you can promote your book to interested listeners as well.",
-            "features": [
-              "An 8 to 12-minute interview On America Tonight with Emmy-award winning host, Kate Delaney. America Tonight airs on approximately 100 stations across the US. The author will receive a mp3 file after the interview.",
-              "A 15-minute in-depth online interview on Books on Air with Suzanne Harris. This will also be distributed to Apple, iHeart Radio, Spotify and other podcast aggregators.",
-              "Your book featured on WebTalkRadio’s Newsgram show. It will also be distributed to Apple, iHeart Radio, Spotify and other podcast aggregators.",
-              "A digital copy of the radio interviews that you can use in all of your marketing activities."
-            ]
+            "lead": "You'll never run out of places to talk about books. With our Radio Book Talk service, you’ll get both online and terrestrial radio coverage: talk about your book on a radio show hosted by Emmy Award-winning broadcaster Kate Delaney, get interviewed on Books on Air, and get featured on Newsgram.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "audio-snip",
             "title": "Audio Snip",
             "price": "",
-            "lead": "Thirty seconds may seem like an insignificant amount of time but that's not completely true, especially for authors like you. In half a minute, you can probably finish a simple writing exercise, make a working title, and even connect with your target readers.",
-            "features": [
-              "A 30-second professionally produced audio teaser about your published book, informing potential readers of its availability."
-            ]
+            "lead": "Thirty seconds may seem like an insignificant amount of time, but in half a minute you can connect with your target readers. With the Audio Snip service, you get a 30-second professionally produced audio teaser for your book that you can use to launch or enhance your campaign.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "online-interview",
             "title": "Online Interview",
             "price": "",
-            "lead": "Position yourself as an expert on your book’s subject matter and put your voice on the radio. Whatever your reason, getting on the radio can give you a powerful marketing push. The Online Interview service is a strategic marketing tool to enhance your marketing plan. Times are evolving with the rise in popularity of iPods and satellite radio; listeners have more choices and more ways to access content than ever before, and streaming radio is an excellent way to reach new audiences. Plus, you can use your interview recording as a launch pad for your next big promotional push.",
-            "features": [
-              "Recording of a 10- to 15-minute online radio interview completed over the phone",
-              "Your interview aired on one spot of our weekly Internet radio station, Omni Radio with J. Douglas Barker",
-              "Omni Radio airs Saturdays at 3:00 p.m. CT (encore 11 p.m. CT on Thursdays)",
-              "Omni Radio 2 airs Saturdays at 1:00 p.m. CT (encore 1 p.m. CT on Sundays)",
-              "Show is syndicated via iTunes and Toginet.com, and the interview is digitally retrievable for use on mobile devices (iPhone, iPad, etc.)",
-              "A digital copy of the radio interview for use in all of your marketing activities with unlimited rights to burn, distribute, play during speaking engagements, or post on your website, blog, e-mail or future promotions",
-              "Pre-show questionnaire and pre-show conversation with host J. Douglas Barker to cover topics"
-            ]
+            "lead": "Position yourself as an expert on your book’s subject matter and put your voice on the radio. The Online Interview service provides a recorded 10- to 15-minute radio interview aired on Omni Radio with J. Douglas Barker, syndicated via iTunes and Toginet.com.",
+            "features": [],
+            "price_display": ""
           }
         ]
       }
-    ]
+    ],
+    "lead": "If you want your book to sell, you’ll want to do more than just hope for the best. Our selection of promotional products and services allows authors to build a dynamic platform from which they can effectively promote and sell their books.",
+    "description": "If you want your book to sell, you’ll want to do more than just hope for the best. Our selection of promotional products and services allows authors to build a dynamic platform from which they can effectively promote and sell their books."
   },
   {
     "id": "bookselling",
@@ -1491,98 +1202,57 @@
             "slug": "set-your-own-price",
             "title": "Set Your Own Price",
             "price": "",
-            "lead": "Make your book more accessible to librarians and book vendors by cataloging it with the Library of Congress. When you purchase a Library of Congress Control Number (LCCN) through Omni your book will be numbered and linked to the United States Library of Congress, national libraries, bibliographic utilities and other book vendors so your book is easy to find. This unique identifier helps them access the correct cataloging data, which the Library of Congress and third parties make available on the Web and through other media.",
-            "features": [
-              "The LCCN is a serially-based system of numbering and cataloging records. In its most basic form, the number includes the year of registration and a serial number. The year has two digits for 1898 to 2000, and four digits beginning in 2001. The three ambiguous years (1998-2000) are distinguished by the size of the serial number.",
-              "Omni is approved to give out Library of Congress Control Numbers so when you purchase this service we will work with the Library of Congress to obtain a control number for your title. We then print the number on the title page inside your book.",
-              "Note: This service can be purchased together with the publishing package or during the submission of the manuscript. This cannot be purchased for book titles that are already published.",
-              "The Library of Congress reserves the right to refuse cataloguing titles. They do not provide catalog numbers for books under 50 pages unless they are a children's book. They also do not catalog transitory or consumable materials, such as coloring books, comic books, and cut-out books. The Library of Congress will not assign card catalog numbers for books that fall under any of these categories."
-            ]
+            "lead": "Take control of your book's retail price and the royalties you earn. The Set Your Own Price service gives you the flexibility to adjust the retail price of the hardcover and paperback formats of your book.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "author-advantage-royalty-program",
             "title": "Author Advantage Royalty Program",
             "price": "",
-            "lead": "The Author Advantage Royalty Program empowers you to earn substantial financial gains with every print book sold.",
-            "features": [
-              "This Program runs for a 3-Year Term and ensures that you receive maximum profits from sales of your book, and that you can also order copies of your own book at heavily discounted rates.",
-              "Book Pricing & Royalties",
-              "Figuring out how much your book will cost, and how much you will receive from each sale is easy. The retail price* will be based on your final manuscript's page count, and the royalty you receive is determined by the following calculations:",
-              "For print copies sold on our Online Bookstore: your book’s List Price x 60% = your royalty."
-            ]
+            "lead": "The Author Advantage Royalty Program empowers you to earn substantial financial gains with every print book sold. This program runs for a 3-Year Term and ensures you receive maximum profits from sales of your book.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "retail-focus",
             "title": "Retail Focus",
             "price": "",
-            "lead": "Although self-published titles are getting more and more popular these days, self-published authors still have a difficult time getting brick-and-mortar shops to stock their books.",
-            "features": [
-              "Your book, pitched to 25 independent bookstores across the US (with focus on a specific area or state) over the span of three months, using a customized sales kit",
-              "A single-slot print ad in Ingram’s Advance Catalog",
-              "A single-slot print ad in the quarterly publication ForeWord Magazine (1 out of 10 slots)",
-              "The Booksellers Return Program for 12 months",
-              "A guarantee that at least 2 of the bookstores/retailers will agree to test your book",
-              "You also have the option to extend your campaign by adding 25 more independent bookstores.",
-              "In order for us to guarantee that at least two bookstores/retailers will test your book, we may recommend that you allow our professional designers to make your book cover more acceptable to retailers at no extra cost. Retailers also prefer books that have been professionally copyedited. Make sure your book is retail-ready with these editorial services.",
-              "Your book’s official publication date must not be more than two (2) years ago; alternately, you or your book must have received recognition in any form (an award, a 5-star review, or media coverage) in the last 24 months. If your book does not meet these criteria, we cannot guarantee that the bookstores/book retailers will stock a test copy.",
-              "Your book must already be available for sale before the campaign starts."
-            ]
+            "lead": "Promote your book and let it be seen by independent bookstores with strategic print ads in Advance Catalog and ForeWord Magazine, and a customized sales kit pitched directly to 25 independent bookstores across the US.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "retail-focus-for-childrens-books",
             "title": "Retail Focus for Children's Books",
             "price": "",
-            "lead": "Children’s books have always been popular on the book market, and independent titles for children are steadily gaining popularity too. However, it can still be a challenge for self-published authors to get brick-and-mortar bookstores to stock up on their books.",
-            "features": [
-              "Your book, pitched to 25 independent bookstores across the US (with focus on a specific area or state) over the span of three months, using a customized sales kit",
-              "A single-slot print ad in Ingram’s Children’s Advance Catalog",
-              "A single-slot print ad in the quarterly publication ForeWord Magazine",
-              "The Booksellers Return Program for 12 months",
-              "A guarantee that at least 2 of the bookstores/retailers will agree to test your book",
-              "You also have the option to extend your campaign by adding 25 more independent bookstores.",
-              "In order for us to guarantee that at least two bookstores/retailers will test your book, we may recommend that you allow our professional designers to make your book cover more acceptable to retailers at no extra cost. Retailers also prefer books that have been professionally copyedited. Make sure your book is retail-ready with these editorial services.",
-              "Your book’s official publication date must not be more than two (2) years ago; alternately, you or your book must have received recognition in any form (an award, a 5-star review, or media coverage) in the last 24 months. If your book does not meet these criteria, we cannot guarantee that the bookstores/book retailers will stock a test copy.",
-              "Your book must already be available for sale before the campaign starts."
-            ]
+            "lead": "Promote your children's book and let it be seen by independent bookstores with strategic print ads in Children's Advance Catalog and ForeWord Magazine, and a customized sales kit pitched to 25 independent bookstores.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "library-focus",
             "title": "Library Focus",
             "price": "",
-            "lead": "Libraries are beloved sites of community, history, and education. They’ve always been important to readers, and they continue to be essential today, even with digital media and publishing becoming more and more part of our everyday lives. It’s only natural that authors such as yourself strive to make your work available to the community by getting libraries to stock copies of your book. Unfortunately, convincing libraries to stock self-published titles can be challenging even for the savviest authors. The Omni Library Focus Service helps you with your goal of making your book available in libraries through a strategic combination of print ads in two publications popular with librarians and a customized sales kit.",
-            "features": [
-              "Your book, pitched to the Collection Development Departments and Acquisition Librarians of 25 public libraries across the US (with focus on a specific area or state), over the span of three months, using a customized sales kit",
-              "A single-slot print ad in Baker and Taylor’s Forecast Catalog",
-              "A single-slot print ad in the quarterly publication ForeWord Magazine",
-              "The Booksellers Return Program for 12 months",
-              "A guarantee that at least 2 of the libraries will agree to test your book",
-              "You also have the option to extend your campaign by adding 25 more independent bookstores.",
-              "In order for us to guarantee that at least two libraries will test your book, we may recommend that you allow our professional designers to make your book cover more acceptable to libraries at no extra cost. You may also choose from these editorial services to ensure that your book has been professionally copyedited and is library-ready.",
-              "Your book’s official publication date must not be more than two (2) years ago; alternately, you or your book must have received recognition in any form (an award, a 5-star review, or media coverage) in the last 24 months. If your book does not meet these criteria, we cannot guarantee that the bookstores/book retailers will stock a test copy.",
-              "Your book must already be available for sale before the campaign starts."
-            ]
+            "lead": "Make your book available in libraries through strategic print ads in Baker & Taylor's Forecast Catalog and ForeWord Magazine, paired with direct pitching to Acquisition Librarians of 25 public libraries.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "booksellers-return-program",
             "title": "Booksellers Return Program",
             "price": "",
-            "lead": "The ability to return unsold books is a standard publishing business practice that has remained since the Great Depression. Since that time, booksellers have been able to mitigate their own financial risk by relying on publishers to credit returned books. Often, booksellers will hesitate to order and stock books when they aren’t “Returnable.” This means if getting your title stocked on bookstore shelves is part of your marketing plan, Booksellers Return Program is an essential element to earning shelf space and/or in-store book signings.",
-            "features": [
-              "Your book will be designated as “Returnable” in Ingram’s ipage ordering system for retailers and libraries. (Ingram is the world’s largest wholesaler and distributor of books.)*",
-              "Your book will be designated as “Returnable” in Baker & Taylor’s ordering system for retailers and libraries. (Baker & Taylor is a leading distributor of books, with 180 years in the business.)*",
-              "You will not be charged back for royalties earned on the sales to the store if your books are returned."
-            ]
+            "lead": "Make your title meet bookseller standards for retail stocking with the Booksellers Return Program. Your book is designated as \"Returnable\" in Ingram's ipage and Baker & Taylor's ordering systems for 12 months with no royalty chargebacks.",
+            "features": [],
+            "price_display": ""
           },
           {
             "slug": "booksellers-return-program-renewal",
             "title": "Booksellers Return Program Renewal",
             "price": "",
-            "lead": "Renew your book’s participation in the Booksellers Return Program for one year.* When you purchase this program renewal, your book will remain “returnable” in book distributor ordering systems, ensuring bookstores that they can return any unsold copies (if they choose to stock your book).",
-            "features": [
-              "What assurance can Omni give that a bookstore will order and stock my book?",
-              "Omni does not have control over whether a bookstore will order and stock your book. Each bookstore, be it commercial and independently owned, manages its own business operations including which title to stock on its shelves.",
-              "Renew your valuable Booksellers Return Program for one more year and help your title continue to meet bookseller standards for retail stocking. *The Booksellers Return Program Renewal is valid for one year and can be renewed annually."
-            ]
+            "lead": "Renew your book’s participation in the Booksellers Return Program for one year. Your book remains \"Returnable\" in Ingram and Baker & Taylor ordering systems, ensuring bookstores continue stocking your book without risk.",
+            "features": [],
+            "price_display": ""
           }
         ]
       },
@@ -1594,26 +1264,34 @@
             "slug": "us-copyright-registration",
             "title": "US Copyright Registration",
             "price": "",
-            "lead": "Registering your work with the U.S. Copyright Office provides you with peace of mind as well as a public record of your ownership of the material. With the U.S. Copyright Registration service, Omni will complete and submit the necessary paperwork to the U.S. Copyright Office with a copy of your book. Once registration is complete, you will receive an official certificate that verifies your book’s coverage under U.S. copyright regulations.",
+            "lead": "Protect your intellectual property by registering your copyright with the United States Copyright Office. Omni handles the entire application process, legal filing fees, and physical submission of required deposit copies.",
             "features": [
-              "Copyright forms are completed and sent to the U.S. Copyright Office with a copy of your book.",
-              "It takes 6 to 12 months for the author to receive the completed Certificate of Registration from the copyright office. Omni will receive digital notification when the certificate is sent."
-            ]
+              "Official application preparation and filing with the U.S. Copyright Office",
+              "Submission of required physical deposit copies",
+              "Official Certificate of Registration issued in your name",
+              "Public legal record establishing your ownership and rights",
+              "Comprehensive intellectual property protection"
+            ],
+            "price_display": ""
           },
           {
             "slug": "library-of-congress-control-number",
             "title": "Library of Congress Control Number",
             "price": "",
-            "lead": "Make your book more accessible to librarians and book vendors by cataloging it with the Library of Congress. When you purchase a Library of Congress Control Number (LCCN) through Omni your book will be numbered and linked to the United States Library of Congress, national libraries, bibliographic utilities and other book vendors so your book is easy to find. This unique identifier helps them access the correct cataloging data, which the Library of Congress and third parties make available on the Web and through other media.",
+            "lead": "A Library of Congress Control Number (LCCN) makes your book accessible to librarians, bibliographic utilities, and book vendors worldwide. Omni secures this unique identifier and prints it inside your book title page.",
             "features": [
-              "The LCCN is a serially-based system of numbering and cataloging records. In its most basic form, the number includes the year of registration and a serial number. The year has two digits for 1898 to 2000, and four digits beginning in 2001. The three ambiguous years (1998-2000) are distinguished by the size of the serial number.",
-              "Omni is approved to give out Library of Congress Control Numbers so when you purchase this service we will work with the Library of Congress to obtain a control number for your title. We then print the number on the title page inside your book.",
-              "Note: This service can be purchased together with the publishing package or during the submission of the manuscript. This cannot be purchased for book titles that are already published.",
-              "The Library of Congress reserves the right to refuse cataloguing titles. They do not provide catalog numbers for books under 50 pages unless they are a children's book. They also do not catalog transitory or consumable materials, such as coloring books, comic books, and cut-out books. The Library of Congress will not assign card catalog numbers for books that fall under any of these categories."
-            ]
+              "Official LCCN application and assignment through the Library of Congress",
+              "LCCN printed directly on the copyright/title page of your book",
+              "Indexed in national library bibliographic databases",
+              "Facilitates institutional acquisition by public and academic libraries",
+              "Eligible for all qualifying trade publications"
+            ],
+            "price_display": ""
           }
         ]
       }
-    ]
+    ],
+    "lead": "Once your book is published, we will make your book available for order online with online retail outlets worldwide. Our bookselling promotional services provide you the opportunity to actively promote your book.",
+    "description": "Once your book is published, we will make your book available for order online with online retail outlets worldwide. Our bookselling promotional services provide you the opportunity to actively promote your book."
   }
 ]

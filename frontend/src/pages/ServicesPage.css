@@ -317,6 +317,73 @@
   background: #fdfcf9;
 }
 
+.subcategory-group {
+  margin-bottom: 6px;
+}
+
+.subcategory-dropdown-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 10px 7px 12px;
+  margin: 6px 0 3px 0;
+  background: rgba(173, 125, 66, 0.05);
+  border: 1px solid rgba(173, 125, 66, 0.16);
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  gap: 8px;
+}
+
+.subcategory-dropdown-btn:hover {
+  background: rgba(173, 125, 66, 0.12);
+  border-color: rgba(173, 125, 66, 0.35);
+}
+
+.subcategory-dropdown-btn.expanded {
+  background: rgba(173, 125, 66, 0.1);
+  border-color: rgba(173, 125, 66, 0.3);
+}
+
+.subcategory-dropdown-btn .subcategory-label-text {
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #8c5d28;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.subcategory-dropdown-btn .subcat-count-badge {
+  font-size: 0.68rem;
+  padding: 1px 7px;
+  background: #ffffff;
+  color: #8c5d28;
+  border: 1px solid rgba(173, 125, 66, 0.25);
+  border-radius: 10px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.subcategory-dropdown-btn .subcat-chevron {
+  font-size: 0.72rem;
+  color: #ad7d42;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.subcategory-services-list {
+  padding-left: 6px;
+  margin-top: 3px;
+  margin-bottom: 6px;
+  border-left: 2px solid rgba(173, 125, 66, 0.2);
+  margin-left: 6px;
+}
+
 .subcategory-label {
   font-size: 0.72rem;
   font-weight: 700;
@@ -429,9 +496,11 @@
 
 .service-divider {
   border: 0;
-  height: 1px;
-  background: #f0eae1;
-  margin: 18px 0;
+  height: 3px;
+  width: 54px;
+  background: #5bc0de;
+  margin: 14px 0 20px 0;
+  border-radius: 2px;
 }
 
 .service-lead-box {
@@ -484,6 +553,160 @@
   font-size: 1.1rem;
   margin-top: 2px;
   flex-shrink: 0;
+}
+
+/* ==============================================================
+   Refined Custom List & Bullet Styling for Service Detail Content
+   Simple, fixed, subtle, and creative without being overdone
+   ============================================================== */
+
+.service-detail-card ul,
+.service-detail-card ul.ps-3,
+.service-detail-card ul.ps-4 {
+  list-style: none !important;
+  padding-left: 0.25rem !important;
+  margin-left: 0 !important;
+  margin-top: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.service-detail-card ul.mb-0 {
+  margin-bottom: 0 !important;
+}
+
+.service-detail-card ul li {
+  position: relative;
+  list-style: none !important;
+  padding-left: 1.45rem !important;
+  line-height: 1.68;
+  color: #44403c;
+  transition: color 0.18s ease;
+}
+
+/* Elegant Warm Bronze Bullet with Soft Translucent Halo */
+.service-detail-card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0.15rem;
+  top: 0.72em;
+  transform: translateY(-50%);
+  width: 6.5px;
+  height: 6.5px;
+  border-radius: 50%;
+  background: #ad7d42;
+  box-shadow: 0 0 0 3px rgba(173, 125, 66, 0.18);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Subtle Interactive Hover Effect */
+.service-detail-card ul li:hover {
+  color: #1c1917;
+}
+
+.service-detail-card ul li:hover::before {
+  transform: translateY(-50%) scale(1.25);
+  background: #8a5c28;
+  box-shadow: 0 0 0 4px rgba(173, 125, 66, 0.3);
+}
+
+.service-detail-card ul li strong {
+  color: #2b2219;
+  font-weight: 600;
+}
+
+/* Vertical spacing between items if not already using d-flex gap */
+.service-detail-card ul:not([class*="gap-"]) > li + li {
+  margin-top: 0.45rem;
+}
+
+/* Nested Sub-Lists */
+.service-detail-card ul ul,
+.service-detail-card ul ul.ps-3 {
+  margin-top: 0.4rem !important;
+  margin-bottom: 0.35rem !important;
+  padding-left: 0.5rem !important;
+}
+
+.service-detail-card ul ul li {
+  padding-left: 1.2rem !important;
+  font-size: 0.92em;
+  color: #57534e;
+}
+
+.service-detail-card ul ul li::before {
+  width: 5px;
+  height: 5px;
+  left: 0.1rem;
+  background: #c29a6b;
+  box-shadow: none;
+}
+
+.service-detail-card ul ul li:hover::before {
+  transform: translateY(-50%) scale(1.2);
+  background: #ad7d42;
+  box-shadow: 0 0 0 2.5px rgba(173, 125, 66, 0.2);
+}
+
+/* Ordered Lists (Numbered Steps / Procedures) */
+.service-detail-card ol,
+.service-detail-card ol.ps-3,
+.service-detail-card ol.ps-4 {
+  list-style: none !important;
+  counter-reset: omni-service-counter;
+  padding-left: 0.25rem !important;
+  margin-left: 0 !important;
+  margin-top: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.service-detail-card ol.mb-0 {
+  margin-bottom: 0 !important;
+}
+
+.service-detail-card ol li {
+  counter-increment: omni-service-counter;
+  position: relative;
+  list-style: none !important;
+  padding-left: 2rem !important;
+  line-height: 1.68;
+  color: #44403c;
+  transition: color 0.18s ease;
+}
+
+.service-detail-card ol li:hover {
+  color: #1c1917;
+}
+
+.service-detail-card ol li::before {
+  content: counter(omni-service-counter);
+  position: absolute;
+  left: 0;
+  top: 0.22em;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(173, 125, 66, 0.12);
+  border: 1px solid rgba(173, 125, 66, 0.32);
+  color: #8a5c28;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: all 0.2s ease;
+}
+
+.service-detail-card ol li:hover::before {
+  background: #ad7d42;
+  border-color: #ad7d42;
+  color: #ffffff;
+  transform: scale(1.08);
+  box-shadow: 0 2px 8px rgba(173, 125, 66, 0.35);
+}
+
+.service-detail-card ol:not([class*="gap-"]) > li + li {
+  margin-top: 0.55rem;
 }
 
 /* Service CTA Box */
@@ -867,5 +1090,85 @@
   align-items: baseline;
   gap: 8px;
 }
+
+/* ==============================================================
+   Subcategory Overview & Interactive Service Cards
+   ============================================================== */
+.subcategory-dropdown-btn.active-subcategory {
+  background: #faf4eb !important;
+  color: #8a5c28 !important;
+  border-color: #ad7d42 !important;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(173, 125, 66, 0.12);
+}
+
+.subcategory-dropdown-btn.active-subcategory .subcat-count-badge {
+  background: #ad7d42;
+  color: #ffffff;
+}
+
+.subcat-toggle-chevron-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 5px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.subcat-toggle-chevron-btn:hover {
+  background: rgba(173, 125, 66, 0.18);
+  color: #8a5c28;
+}
+
+.cat-toggle-chevron-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.cat-toggle-chevron-btn:hover {
+  background: rgba(173, 125, 66, 0.22);
+  color: #8a5c28;
+}
+
+.subcategory-service-card {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid rgba(194, 154, 107, 0.28);
+  border-left: 4px solid #d9534f;
+  border-radius: 12px;
+  padding: 20px 22px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+}
+
+.subcategory-service-card:hover {
+  background: #fdfbf8;
+  border-color: #d9534f;
+  border-left-width: 5px;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(217, 83, 79, 0.14);
+}
+
+.subcategory-service-card:hover .subcategory-item-title {
+  color: #c9302c !important;
+}
+
+.subcategory-service-card:hover .publishing-package-arrow-badge {
+  background: #d9534f;
+  color: #ffffff;
+  border-color: #d9534f;
+  transform: translateX(3px);
+}
+
 
 
