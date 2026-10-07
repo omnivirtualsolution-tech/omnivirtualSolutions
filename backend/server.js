@@ -242,24 +242,51 @@ const trackVisitLimit = createRateLimit({
   handler: (_req, res) => res.status(429).json({ ok: false, error: "Rate limit exceeded" }),
 });
 
-app.post("/api/v1/track-visit", trackVisitLimit, (req, res) => {
+app.post("/api/v1/track-visit", trackVisitLimit, async (req, res) => {
   const { path: p = "/", referrer = "direct" } = req.body || {};
   const ua = req.headers["user-agent"] || "";
   const ip = req.ip || req.headers["x-forwarded-for"]?.split(",")[0]?.trim() || req.socket?.remoteAddress || "";
+
+  // Ignore loopback, internal IPs, and localhost
+  if (ip === "127.0.0.1" || ip === "::1" || ip === "::ffff:127.0.0.1") {
+    return res.json({ ok: true, skipped: "local" });
+  }
+
+  // Ignore admin traffic with auth token or viewing admin paths
+  if (req.headers.authorization && req.headers.authorization.startsWith("Bearer ")) {
+    return res.json({ ok: true, skipped: "admin" });
+  }
+  if (String(p).includes("/admin") || String(referrer).includes("/admin")) {
+    return res.json({ ok: true, skipped: "admin_path" });
+  }
+
   const ipHash = crypto.createHash("sha256").update(ip + (process.env.JWT_SECRET || "omni-salt")).digest("hex").slice(0, 16);
   const device = /mobile/i.test(ua) ? "mobile" : /tablet|ipad/i.test(ua) ? "tablet" : "desktop";
 
-  appDb.execute({
-    sql: "INSERT INTO page_visits (path, ip_hash, device, referrer) VALUES (?, ?, ?, ?)",
-    args: [String(p).slice(0, 200), ipHash, device, String(referrer).slice(0, 200)],
-  }).then(() => {
+  try {
+    // Session deduplication: only 1 visit per IP hash per 30 minutes
+    const recent = await appDb.execute({
+      sql: "SELECT id FROM page_visits WHERE ip_hash = ? AND visited_at >= datetime('now', '-30 minutes') LIMIT 1",
+      args: [ipHash]
+    });
+
+    if (recent.rows && recent.rows.length > 0) {
+      return res.json({ ok: true, deduplicated: true });
+    }
+
+    await appDb.execute({
+      sql: "INSERT INTO page_visits (path, ip_hash, device, referrer) VALUES (?, ?, ?, ?)",
+      args: [String(p).slice(0, 200), ipHash, device, String(referrer).slice(0, 200)],
+    });
+
     broadcast({
       type: "page_visit",
       path: String(p).slice(0, 200),
       device,
       timestamp: new Date().toISOString(),
     });
-  }).catch(() => {});
+  } catch (_) {}
+
   res.json({ ok: true });
 });
 

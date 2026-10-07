@@ -16,18 +16,28 @@ function ScrollToTopOnNavigate() {
     if (!hash) {
       window.scrollTo(0, 0);
     }
-    // Record real visitor telemetry to SQLite database
-    try {
-      fetch('/api/v1/track-visit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          path: pathname,
-          referrer: document.referrer || 'direct',
-        }),
-      }).catch(() => {});
-    } catch (_) {}
   }, [pathname, hash]);
+
+  // Record visitor telemetry once per authentic visitor session (exclude admins and localhost)
+  useEffect(() => {
+    try {
+      const isAdmin = Boolean(localStorage.getItem('omni_admin_token') || sessionStorage.getItem('omni_admin_token'));
+      const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      const isTracked = sessionStorage.getItem('omni_session_visit');
+
+      if (!isAdmin && !isLocal && !isTracked) {
+        sessionStorage.setItem('omni_session_visit', String(Date.now()));
+        fetch('/api/v1/track-visit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            path: pathname,
+            referrer: document.referrer || 'direct',
+          }),
+        }).catch(() => {});
+      }
+    } catch (_) {}
+  }, []);
 
   return null;
 }

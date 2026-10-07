@@ -1105,30 +1105,21 @@ router.get("/analytics", requireAuth, async (req, res) => {
 
     // ── Attempt Live Cloudflare GraphQL Integration ──
     let isCloudflareLive = false;
-    let cfDataSource = "Edge Database (Filtered Traffic)";
+    let cfDataSource = "Edge Database (Authentic Visitor Sessions)";
 
     try {
       const cf = await fetchCloudflareMetrics(days);
       if (cf && cf.connected) {
-        totalVisitsCount = cf.totalRequests;
-        allTimeVisitsCount = Math.max(cf.totalRequests, allTimeVisitsCount);
         requestsToday = cf.requestsToday;
         isCloudflareLive = true;
-        cfDataSource = "Cloudflare Workers GraphQL API (Live)";
-
-        // Overlay daily visits from Cloudflare if available
-        timeline.forEach(item => {
-          if (cf.dailyMap && cf.dailyMap[item.date] !== undefined) {
-            item.visits = cf.dailyMap[item.date];
-          }
-        });
+        cfDataSource = "Cloudflare Workers Live API";
       }
     } catch (_) {}
 
     const payload = {
       windowDays: days,
       summary: {
-        totalVisits: totalVisitsCount,
+        totalVisits: uniqueVisitsCount > 0 ? uniqueVisitsCount : totalVisitsCount,
         allTimeVisits: allTimeVisitsCount,
         uniqueVisitors: uniqueVisitsCount,
         totalInquiries: totalInquiriesCount,

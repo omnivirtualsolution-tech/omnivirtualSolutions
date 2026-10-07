@@ -3628,14 +3628,6 @@
 
               if (event.type === 'page_visit') {
                 showLiveToast(`Live Visit: <strong>${escapeHtml(event.path)}</strong> (${escapeHtml(event.device || 'web')})`, 'visit');
-                const vEl = document.getElementById('statVisits');
-                if (vEl && vEl.textContent !== '—') {
-                  const curr = parseInt(vEl.textContent.replace(/,/g, ''), 10) || 0;
-                  vEl.textContent = (curr + 1).toLocaleString();
-                  vEl.classList.add('pulse-number');
-                  setTimeout(() => vEl.classList.remove('pulse-number'), 900);
-                }
-                scheduleAnalyticsRefresh();
               } else if (event.type === 'new_lead') {
                 showLiveToast(`New Inquiry: <strong>${escapeHtml(event.lead?.full_name || 'Client Lead')}</strong> — "${escapeHtml(event.lead?.subject || '')}"`, 'success');
                 loadAnalytics(currentTimeWindow);

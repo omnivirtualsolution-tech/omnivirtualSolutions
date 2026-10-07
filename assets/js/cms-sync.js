@@ -36,9 +36,14 @@
   const debounceTimers = {};
   const boundElements = new WeakSet();
 
-  // ── Track Page Visit Telemetry (Real-time to SQLite) ───────────
-  if (!isInsideIframe && !window.location.pathname.startsWith('/admin')) {
+  // ── Track Page Visit Telemetry (Deduplicated per session, exclude admin) ──
+  const isExcluded = isInsideIframe || window.location.pathname.startsWith('/admin') ||
+                     window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ||
+                     Boolean(localStorage.getItem('omni_admin_token') || sessionStorage.getItem('omni_admin_token'));
+
+  if (!isExcluded && !sessionStorage.getItem('omni_session_visit')) {
     try {
+      sessionStorage.setItem('omni_session_visit', String(Date.now()));
       fetch('/api/v1/track-visit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
