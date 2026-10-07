@@ -1013,9 +1013,9 @@ router.get("/analytics", requireAuth, async (req, res) => {
     const dailyEmails = results[10];
     const dbTotals = results[11]?.rows[0] || {};
 
-    const totalVisitsCount = visitsTotal.rows[0]?.count || 0;
+    let totalVisitsCount = visitsTotal.rows[0]?.count || 0;
     const uniqueVisitsCount = visitsUnique.rows[0]?.count || 0;
-    const allTimeVisitsCount = Number(dbTotals.total_visits || totalVisitsCount);
+    let allTimeVisitsCount = Number(dbTotals.total_visits || totalVisitsCount);
     const totalInquiriesCount = contactsTotal.rows[0]?.count || 0;
     const newInquiriesCount = contactsNew.rows[0]?.count || 0;
     const repliesCount = repliesTotal.rows[0]?.count || 0;
@@ -1031,7 +1031,7 @@ router.get("/analytics", requireAuth, async (req, res) => {
     const cloudflareMonthlyLimit = 3000000; // 3,000,000 requests/month
     const todayStr = new Date().toISOString().slice(0, 10);
     const todayVisitsRow = dailyVisits.rows.find(r => r.day === todayStr);
-    const requestsToday = todayVisitsRow ? Number(todayVisitsRow.count || 0) : 0;
+    let requestsToday = todayVisitsRow ? Number(todayVisitsRow.count || 0) : 0;
     const monthlyRequests = Number(dbTotals.monthly_visits || totalVisitsCount);
     const cloudflareRemainingToday = Math.max(0, cloudflareDailyLimit - requestsToday);
     const cloudflareUsedPercent = Number(((requestsToday / cloudflareDailyLimit) * 100).toFixed(2));
