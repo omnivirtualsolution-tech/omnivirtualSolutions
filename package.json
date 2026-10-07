@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "workspaces": [
+    "frontend"
+  ],
   "scripts": {
     "dev": "concurrently -n \"backend,frontend\" -c \"blue,green\" \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "node --watch backend/server.js",
@@ -41,10 +44,15 @@
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.4.0",
     "nodemailer": "^10.0.13",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.4",
     "serverless-http": "^4.0.0",
     "sharp": "^0.35.5"
   },
   "devDependencies": {
-    "concurrently": "^10.0.5"
+    "@vitejs/plugin-react": "^6.1.1",
+    "concurrently": "^10.0.5",
+    "vite": "^8.3.0"
   }
 }
