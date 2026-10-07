@@ -6,6 +6,9 @@ main = "worker.js"
 compatibility_date = "2025-09-01"
 compatibility_flags = ["nodejs_compat", "enable_nodejs_http_server_modules"]
 
+[vars]
+TURSO_DATABASE_URL = "libsql://omni-omnivirtualsolution.aws-ap-northeast-1.turso.io"
+
 [assets]
 directory = "frontend/dist"
 binding = "ASSETS"
