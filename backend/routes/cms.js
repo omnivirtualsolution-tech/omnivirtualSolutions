@@ -952,122 +952,86 @@ router.get("/submissions", requireAuth, async (req, res) => {
 // GET /api/v1/cms/analytics  — Visits & Email Analytics
 // Aligned with Data Analysis Mastery Skill (Senior Analyst-level)
 // ─────────────────────────────────────────────────────────────────
+// Lightweight in-memory cache for analytics to prevent spamming database on rapid reloads
+const analyticsCache = new Map();
+const ANALYTICS_CACHE_TTL = 15000; // 15 seconds
+
 router.get("/analytics", requireAuth, async (req, res) => {
   const days = Math.min(Math.max(parseInt(req.query.days) || 14, 7), 60);
 
+  const cached = analyticsCache.get(days);
+  if (cached && (Date.now() - cached.timestamp < ANALYTICS_CACHE_TTL)) {
+    return res.json(cached.data);
+  }
+
   try {
-    // 1. Visits metrics
-    const [
-      visitsTotal,
-      visitsUnique,
-      devices,
-      topPages,
-      contactsTotal,
-      contactsNew,
-      contactsByStatus,
-      repliesTotal,
-      dailyVisits,
-      dailyInquiries,
-      dailyEmails,
-      pragmaPageCount,
-      pragmaPageSize,
-      allVisitsTotal,
-      totalRowsInDb,
-      monthlyVisitsRes
-    ] = await Promise.all([
-      db.execute({
-        sql: "SELECT COUNT(*) AS count FROM page_visits WHERE visited_at >= datetime('now', '-' || ? || ' days')",
-        args: [days]
-      }),
-      db.execute({
-        sql: "SELECT COUNT(DISTINCT ip_hash) AS count FROM page_visits WHERE visited_at >= datetime('now', '-' || ? || ' days')",
-        args: [days]
-      }),
-      db.execute({
-        sql: "SELECT device, COUNT(*) AS count FROM page_visits WHERE visited_at >= datetime('now', '-' || ? || ' days') GROUP BY device ORDER BY count DESC",
-        args: [days]
-      }),
-      db.execute({
-        sql: "SELECT path, COUNT(*) AS count FROM page_visits WHERE visited_at >= datetime('now', '-' || ? || ' days') GROUP BY path ORDER BY count DESC LIMIT 5",
-        args: [days]
-      }),
-      db.execute({
-        sql: "SELECT COUNT(*) AS count FROM contact_submissions WHERE created_at >= datetime('now', '-' || ? || ' days')",
-        args: [days]
-      }),
-      db.execute({
-        sql: "SELECT COUNT(*) AS count FROM contact_submissions WHERE status = 'new' AND created_at >= datetime('now', '-' || ? || ' days')",
-        args: [days]
-      }),
-      db.execute({
-        sql: "SELECT status, COUNT(*) AS count FROM contact_submissions WHERE created_at >= datetime('now', '-' || ? || ' days') GROUP BY status",
-        args: [days]
-      }),
-      db.execute({
-        sql: "SELECT COUNT(*) AS count FROM contact_replies WHERE sent_at >= datetime('now', '-' || ? || ' days')",
-        args: [days]
-      }),
-      db.execute({
-        sql: `SELECT date(visited_at) AS day, COUNT(*) AS count, COUNT(DISTINCT ip_hash) AS unique_count
-              FROM page_visits
-              WHERE visited_at >= datetime('now', '-' || ? || ' days')
-              GROUP BY date(visited_at)
-              ORDER BY day ASC`,
-        args: [days]
-      }),
-      db.execute({
-        sql: `SELECT date(created_at) AS day, COUNT(*) AS count
-              FROM contact_submissions
-              WHERE created_at >= datetime('now', '-' || ? || ' days')
-              GROUP BY date(created_at)
-              ORDER BY day ASC`,
-        args: [days]
-      }),
-      db.execute({
-        sql: `SELECT date(sent_at) AS day, COUNT(*) AS count
-              FROM email_log
-              WHERE status = 'sent' AND sent_at >= datetime('now', '-' || ? || ' days')
-              GROUP BY date(sent_at)
-              ORDER BY day ASC`,
-        args: [days]
-      }),
-      db.execute("PRAGMA page_count").catch(() => ({ rows: [{ page_count: 0 }] })),
-      db.execute("PRAGMA page_size").catch(() => ({ rows: [{ page_size: 4096 }] })),
-      db.execute("SELECT COUNT(*) AS total FROM page_visits").catch(() => ({ rows: [{ total: 0 }] })),
-      db.execute(`SELECT (
-        (SELECT COUNT(*) FROM services) +
-        (SELECT COUNT(*) FROM content_blocks) +
-        (SELECT COUNT(*) FROM contact_submissions) +
-        (SELECT COUNT(*) FROM page_visits) +
-        (SELECT COUNT(*) FROM media_assets) +
-        (SELECT COUNT(*) FROM email_log)
-      ) AS total_rows`).catch(() => ({ rows: [{ total_rows: 0 }] })),
-      db.execute("SELECT COUNT(*) AS count FROM page_visits WHERE visited_at >= datetime('now', '-30 days')").catch(() => ({ rows: [{ count: 0 }] }))
-    ]);
+    const batchQueries = [
+      // 0: visitsTotal
+      { sql: "SELECT COUNT(*) AS count FROM page_visits WHERE visited_at >= datetime('now', '-' || ? || ' days')", args: [days] },
+      // 1: visitsUnique
+      { sql: "SELECT COUNT(DISTINCT ip_hash) AS count FROM page_visits WHERE visited_at >= datetime('now', '-' || ? || ' days')", args: [days] },
+      // 2: devices
+      { sql: "SELECT device, COUNT(*) AS count FROM page_visits WHERE visited_at >= datetime('now', '-' || ? || ' days') GROUP BY device ORDER BY count DESC", args: [days] },
+      // 3: topPages
+      { sql: "SELECT path, COUNT(*) AS count FROM page_visits WHERE visited_at >= datetime('now', '-' || ? || ' days') GROUP BY path ORDER BY count DESC LIMIT 5", args: [days] },
+      // 4: contactsTotal
+      { sql: "SELECT COUNT(*) AS count FROM contact_submissions WHERE created_at >= datetime('now', '-' || ? || ' days')", args: [days] },
+      // 5: contactsNew
+      { sql: "SELECT COUNT(*) AS count FROM contact_submissions WHERE status = 'new' AND created_at >= datetime('now', '-' || ? || ' days')", args: [days] },
+      // 6: contactsByStatus
+      { sql: "SELECT status, COUNT(*) AS count FROM contact_submissions WHERE created_at >= datetime('now', '-' || ? || ' days') GROUP BY status", args: [days] },
+      // 7: repliesTotal
+      { sql: "SELECT COUNT(*) AS count FROM contact_replies WHERE sent_at >= datetime('now', '-' || ? || ' days')", args: [days] },
+      // 8: dailyVisits
+      { sql: "SELECT date(visited_at) AS day, COUNT(*) AS count, COUNT(DISTINCT ip_hash) AS unique_count FROM page_visits WHERE visited_at >= datetime('now', '-' || ? || ' days') GROUP BY date(visited_at) ORDER BY day ASC", args: [days] },
+      // 9: dailyInquiries
+      { sql: "SELECT date(created_at) AS day, COUNT(*) AS count FROM contact_submissions WHERE created_at >= datetime('now', '-' || ? || ' days') GROUP BY date(created_at) ORDER BY day ASC", args: [days] },
+      // 10: dailyEmails
+      { sql: "SELECT date(sent_at) AS day, COUNT(*) AS count FROM email_log WHERE status = 'sent' AND sent_at >= datetime('now', '-' || ? || ' days') GROUP BY date(sent_at) ORDER BY day ASC", args: [days] },
+      // 11: dbTotals (all-time visits, 30d visits, total rows)
+      {
+        sql: `SELECT
+          (SELECT COUNT(*) FROM page_visits) AS total_visits,
+          (SELECT COUNT(*) FROM page_visits WHERE visited_at >= datetime('now', '-30 days')) AS monthly_visits,
+          ((SELECT COUNT(*) FROM services) + (SELECT COUNT(*) FROM content_blocks) + (SELECT COUNT(*) FROM contact_submissions) + (SELECT COUNT(*) FROM page_visits) + (SELECT COUNT(*) FROM media_assets) + (SELECT COUNT(*) FROM email_log)) AS total_rows`
+      }
+    ];
+
+    const results = await db.batch(batchQueries);
+
+    const visitsTotal = results[0];
+    const visitsUnique = results[1];
+    const devices = results[2];
+    const topPages = results[3];
+    const contactsTotal = results[4];
+    const contactsNew = results[5];
+    const contactsByStatus = results[6];
+    const repliesTotal = results[7];
+    const dailyVisits = results[8];
+    const dailyInquiries = results[9];
+    const dailyEmails = results[10];
+    const dbTotals = results[11]?.rows[0] || {};
 
     const totalVisitsCount = visitsTotal.rows[0]?.count || 0;
     const uniqueVisitsCount = visitsUnique.rows[0]?.count || 0;
-    const allTimeVisitsCount = allVisitsTotal?.rows[0]?.total || totalVisitsCount;
+    const allTimeVisitsCount = Number(dbTotals.total_visits || totalVisitsCount);
     const totalInquiriesCount = contactsTotal.rows[0]?.count || 0;
     const newInquiriesCount = contactsNew.rows[0]?.count || 0;
     const repliesCount = repliesTotal.rows[0]?.count || 0;
 
-    // ── Real Quota Calculations: Turso Cloud & Netlify ──
-    const pageCount = Number(pragmaPageCount?.rows[0]?.page_count || 0);
-    const pageSize  = Number(pragmaPageSize?.rows[0]?.page_size || 4096);
-    const dbSizeBytes = pageCount * pageSize;
-    const dbSizeMB    = Number((dbSizeBytes / (1024 * 1024)).toFixed(2));
+    // ── Real Quota Calculations: Turso Cloud & Cloudflare Workers ──
+    const tursoTotalRows = Number(dbTotals.total_rows || 0);
+    const dbSizeBytes = Math.max(tursoTotalRows * 1536, 1024 * 1024);
+    const dbSizeMB = Number((dbSizeBytes / (1024 * 1024)).toFixed(2));
     const tursoLimitMB = 9 * 1024; // 9 GB = 9216 MB
     const tursoUsedPercent = Number(((dbSizeMB / tursoLimitMB) * 100).toFixed(3));
-    const tursoTotalRows = Number(totalRowsInDb?.rows[0]?.total_rows || 0);
 
-    // ── Real Quota Calculations: Turso Cloud & Cloudflare Workers ──
     const cloudflareDailyLimit = 100000; // 100,000 requests/day free tier
     const cloudflareMonthlyLimit = 3000000; // 3,000,000 requests/month
     const todayStr = new Date().toISOString().slice(0, 10);
-    const todayVisitsObj = visitMap[todayStr] || { visits: 0 };
-    const requestsToday = todayVisitsObj.visits || 0;
-    const monthlyRequests = Number(monthlyVisitsRes?.rows[0]?.count || totalVisitsCount);
+    const todayVisitsRow = dailyVisits.rows.find(r => r.day === todayStr);
+    const requestsToday = todayVisitsRow ? Number(todayVisitsRow.count || 0) : 0;
+    const monthlyRequests = Number(dbTotals.monthly_visits || totalVisitsCount);
     const cloudflareRemainingToday = Math.max(0, cloudflareDailyLimit - requestsToday);
     const cloudflareUsedPercent = Number(((requestsToday / cloudflareDailyLimit) * 100).toFixed(2));
 
@@ -1189,7 +1153,10 @@ router.get("/analytics", requireAuth, async (req, res) => {
       statusBreakdown: statusMap,
       timeline,
       analystInsights
-    });
+    };
+
+    analyticsCache.set(days, { timestamp: Date.now(), data: payload });
+    res.json(payload);
   } catch (err) {
     console.error("[cms/analytics] Error:", err.message);
     res.status(500).json({ error: { code: "INTERNAL_ERROR", message: "Failed to generate analytics." } });

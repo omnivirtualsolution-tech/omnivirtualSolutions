@@ -3748,48 +3748,11 @@
           if (document.getElementById('statResponseRate')) document.getElementById('statResponseRate').textContent = `${s.responseRate ?? 0}%`;
           if (document.getElementById('leadsStatusTotalBadge')) document.getElementById('leadsStatusTotalBadge').textContent = `${s.totalInquiries ?? 0} Total`;
 
-          // Fetch Email Quota Telemetry for Dashboard
-          try {
-            const quotaRes = await fetch('/api/v1/contact/email-settings/quota?tz=' + (-new Date().getTimezoneOffset()), {
-              headers: { 'Authorization': 'Bearer ' + token }
-            });
-            if (quotaRes.ok) {
-              const qData = await quotaRes.json();
-              if (qData.success && qData.quota) {
-                const q = qData.quota;
-                const sentEl = document.getElementById('statEmailsSentToday');
-                const ratioEl = document.getElementById('statEmailQuotaRatio');
-                const badgeEl = document.getElementById('statEmailQuotaBadge');
-                const barEl = document.getElementById('statEmailQuotaBar');
+          // 2. Render Charts & Insights Immediately (No blocking)
+          renderTimelineChart(data.timeline || []);
+          renderStatusChart(data.statusBreakdown || {});
 
-                if (sentEl) sentEl.textContent = q.sentToday ?? q.sent24h ?? 0;
-                if (ratioEl) ratioEl.textContent = `${q.sent24h ?? 0} / ${q.limit ?? 500}`;
-                
-                const pct = Math.min(100, Math.round(((q.sent24h || 0) / (q.limit || 500)) * 100));
-                if (barEl) {
-                  barEl.style.width = pct + '%';
-                  barEl.style.background = pct >= 95 ? '#ef4444' : pct >= 75 ? '#f59e0b' : 'linear-gradient(90deg, #22c55e, #eba22d)';
-                }
-
-                if (badgeEl) {
-                  if (q.googleLimitHit || q.isExceeded) {
-                    badgeEl.className = 'stat-badge red';
-                    badgeEl.textContent = '⚠️ 500 Limit Hit';
-                  } else if (q.strategy === 'force_popup') {
-                    badgeEl.className = 'stat-badge gold';
-                    badgeEl.textContent = '🟡 Popup Mode';
-                  } else {
-                    badgeEl.className = 'stat-badge green';
-                    badgeEl.textContent = `${q.remaining} Left Today`;
-                  }
-                }
-              }
-            }
-          } catch (errQuota) {
-            console.warn('[Dashboard Quota fetch failed]', errQuota);
-          }
-
-          // 2. Render Executive Analyst Insights
+          // 3. Render Executive Analyst Insights
           if (data.analystInsights) {
             const ins = data.analystInsights;
             const hEl = document.getElementById('insightsHeadline');
@@ -3804,7 +3767,7 @@
           lastUpdateTimestamp = Date.now();
           updateLastSyncedLabel();
 
-          // 3. Render Top Visited Pages
+          // 4. Render Top Visited Pages
           const topPages = data.topPages || [];
           const topPagesEl = document.getElementById('topPagesList');
           if (topPagesEl) {
@@ -3816,11 +3779,40 @@
             `).join('') : '<div style="color:var(--muted); font-size:11px; padding:6px 0;">No pages recorded.</div>';
           }
 
-          // 4. Render Chart 1: Traffic & Engagement Over Time
-          renderTimelineChart(data.timeline || []);
+          // 5. Fetch Outbound Email Quota Telemetry Asynchronously (Non-blocking)
+          fetch('/api/v1/contact/email-settings/quota?tz=' + (-new Date().getTimezoneOffset()), {
+            headers: { 'Authorization': 'Bearer ' + token }
+          }).then(r => r.ok ? r.json() : null).then(qData => {
+            if (qData && qData.success && qData.quota) {
+              const q = qData.quota;
+              const sentEl = document.getElementById('statEmailsSentToday');
+              const ratioEl = document.getElementById('statEmailQuotaRatio');
+              const badgeEl = document.getElementById('statEmailQuotaBadge');
+              const barEl = document.getElementById('statEmailQuotaBar');
 
-          // 5. Render Chart 2: Lead Funnel & Status Breakdown
-          renderStatusChart(data.statusBreakdown || {});
+              if (sentEl) sentEl.textContent = q.sentToday ?? q.sent24h ?? 0;
+              if (ratioEl) ratioEl.textContent = `${q.sent24h ?? 0} / ${q.limit ?? 500}`;
+              
+              const pct = Math.min(100, Math.round(((q.sent24h || 0) / (q.limit || 500)) * 100));
+              if (barEl) {
+                barEl.style.width = pct + '%';
+                barEl.style.background = pct >= 95 ? '#ef4444' : pct >= 75 ? '#f59e0b' : 'linear-gradient(90deg, #22c55e, #eba22d)';
+              }
+
+              if (badgeEl) {
+                if (q.googleLimitHit || q.isExceeded) {
+                  badgeEl.className = 'stat-badge red';
+                  badgeEl.textContent = '⚠️ 500 Limit Hit';
+                } else if (q.strategy === 'force_popup') {
+                  badgeEl.className = 'stat-badge gold';
+                  badgeEl.textContent = '🟡 Popup Mode';
+                } else {
+                  badgeEl.className = 'stat-badge green';
+                  badgeEl.textContent = `${q.remaining} Left Today`;
+                }
+              }
+            }
+          }).catch(() => {});
 
         } catch (e) {
           console.error('[Dashboard] Analytics error:', e);
@@ -3992,13 +3984,13 @@
 
       // ── Load Overview Stats & Leads ──────────────────────────────
       async function loadDashboard() {
+        // Only load essential overview telemetry
         loadAnalytics(currentTimeWindow);
         loadLeads();
-        loadServices();
-        loadMedia();
-        loadEmailTemplates();
+
+        // Connect real-time stream safely after initial render
         if (!liveEventSource) {
-          initRealtimeStream();
+          setTimeout(() => initRealtimeStream(), 1000);
         }
       }
 
