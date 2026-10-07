@@ -264,14 +264,14 @@ app.post("/api/v1/track-visit", trackVisitLimit, async (req, res) => {
   const device = /mobile/i.test(ua) ? "mobile" : /tablet|ipad/i.test(ua) ? "tablet" : "desktop";
 
   try {
-    // Session deduplication: only 1 visit per IP hash per 30 minutes
+    // Session deduplication: only 1 visit per IP hash per device per 10 minutes
     const recent = await appDb.execute({
-      sql: "SELECT id FROM page_visits WHERE ip_hash = ? AND visited_at >= datetime('now', '-30 minutes') LIMIT 1",
-      args: [ipHash]
+      sql: "SELECT id FROM page_visits WHERE ip_hash = ? AND device = ? AND visited_at >= datetime('now', '-10 minutes') LIMIT 1",
+      args: [ipHash, device]
     });
 
     if (recent.rows && recent.rows.length > 0) {
-      return res.json({ ok: true, deduplicated: true });
+      return res.json({ ok: true, deduplicated: true, device });
     }
 
     await appDb.execute({

@@ -1119,7 +1119,7 @@ router.get("/analytics", requireAuth, async (req, res) => {
     const payload = {
       windowDays: days,
       summary: {
-        totalVisits: uniqueVisitsCount > 0 ? uniqueVisitsCount : totalVisitsCount,
+        totalVisits: totalVisitsCount,
         allTimeVisits: allTimeVisitsCount,
         uniqueVisitors: uniqueVisitsCount,
         totalInquiries: totalInquiriesCount,
