@@ -1186,9 +1186,11 @@
     injectStyles();
     setupServiceBlockKeys();
     loadInitialContent();
-    connectLiveSync();
     setupContactForm();
-    if (isAdmin) initLiveEditor();
+    if (isAdmin) {
+      connectLiveSync();
+      initLiveEditor();
+    }
   }
 
   if (document.readyState === 'loading') {

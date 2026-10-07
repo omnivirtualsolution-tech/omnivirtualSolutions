@@ -278,13 +278,6 @@ app.post("/api/v1/track-visit", trackVisitLimit, async (req, res) => {
       sql: "INSERT INTO page_visits (path, ip_hash, device, referrer) VALUES (?, ?, ?, ?)",
       args: [String(p).slice(0, 200), ipHash, device, String(referrer).slice(0, 200)],
     });
-
-    broadcast({
-      type: "page_visit",
-      path: String(p).slice(0, 200),
-      device,
-      timestamp: new Date().toISOString(),
-    });
   } catch (_) {}
 
   res.json({ ok: true });

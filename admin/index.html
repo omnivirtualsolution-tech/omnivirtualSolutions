@@ -2914,6 +2914,14 @@
           loadServices();
         }
 
+        if (tabId === 'leads') {
+          if (typeof loadLeads === 'function') loadLeads();
+        }
+
+        if (tabId === 'media') {
+          if (typeof loadMedia === 'function') loadMedia();
+        }
+
         const titles = {
           'overview': '<i class="bi bi-grid-1x2-fill text-warning"></i> Overview Dashboard',
           'live-editor': '<i class="bi bi-browser-chrome text-warning"></i> Live In-Place Website Editor',
@@ -4191,7 +4199,11 @@
       };
 
       // ── Load Media ──────────────────────────────────────────────
-      async function loadMedia() {
+      window.loadMedia = async function loadMedia() {
+        const grid = document.getElementById('mediaMainGrid');
+        if (grid && (!grid.children.length || grid.innerHTML.includes('Loading media...'))) {
+          grid.innerHTML = '<div style="color:var(--muted); grid-column:1/-1; padding:20px 0;"><span class="spinner-border spinner-border-sm me-2 text-warning"></span>Loading media library...</div>';
+        }
         try {
           // 1. Fetch live uploaded files directly from Turso database
           let tursoFiles = [];
@@ -4207,11 +4219,16 @@
             } catch (_) {}
           }
 
-          // 2. Fetch site metadata for static assets
-          const res = await fetch('/api/v1/site-meta');
-          if (!res.ok) throw new Error('HTTP ' + res.status);
-          const data = await res.json();
-          const assets = data.media_assets || [];
+          // 2. Fetch site metadata for static assets (with safe fallback)
+          let assets = [];
+          try {
+            const res = await fetch('/api/v1/site-meta');
+            if (res.ok) {
+              const data = await res.json();
+              assets = data.media_assets || [];
+            }
+          } catch (_) {}
+
           const defaultImgs = [
             'assets/img/about_team.webp',
             'assets/img/footer-image.webp',
@@ -4239,6 +4256,7 @@
 
           // Add remaining catalog assets
           assets.forEach(a => {
+            if (!a || !a.file_path) return;
             const fn = a.file_path.split('/').pop();
             const isUpload = a.category === 'upload' || a.file_path.includes('upload_') || a.file_path.includes('/media/');
             if (!itemsMap.has(fn)) {
@@ -4268,50 +4286,59 @@
 
           const allItems = Array.from(itemsMap.values());
 
-          document.getElementById('mediaMainGrid').innerHTML = allItems.map(item => {
-            const clean = item.path.startsWith('/') ? item.path.slice(1) : item.path;
-            const fullUrl = clean.startsWith('http') ? clean : '/' + clean;
-            return `
-              <div style="background:var(--card2); border:1px solid var(--border); border-radius:10px; overflow:hidden; display:flex; flex-direction:column;">
-                <div style="position:relative; width:100%; aspect-ratio:4/3; background:#0b0f19;">
-                  <img src="${fullUrl}" style="width:100%; height:100%; object-fit:cover; display:block;" onerror="this.style.opacity='0.4'">
-                  ${item.isTurso ? `
-                    <span style="position:absolute; top:6px; left:6px; font-size:10px; background:rgba(235,162,45,0.9); color:#000; padding:2px 6px; border-radius:4px; font-weight:700; display:flex; align-items:center; gap:4px; box-shadow:0 2px 4px rgba(0,0,0,0.5);">
-                      <i class="bi bi-cloud-check-fill"></i> Turso DB
-                    </span>
-                  ` : `
-                    <span style="position:absolute; top:6px; left:6px; font-size:10px; background:rgba(15,23,42,0.85); color:#94a3b8; padding:2px 6px; border-radius:4px; font-weight:500;">
-                      Core
-                    </span>
-                  `}
-                </div>
-                <div style="padding:10px; flex:1; display:flex; flex-direction:column; justify-content:space-between; gap:8px;">
-                  <div>
-                    <div style="font-size:11px; font-weight:600; color:#e2e8f0; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;" title="${item.filename}">
-                      ${item.filename}
-                    </div>
-                    ${item.sizeKB ? `<div style="font-size:10px; color:#94a3b8; margin-top:2px;">Size: ${item.sizeKB} KB ${item.dimensions ? '• ' + item.dimensions : ''}</div>` : ''}
+          if (grid) {
+            if (allItems.length === 0) {
+              grid.innerHTML = '<div style="color:var(--muted); grid-column:1/-1; padding:20px 0;">No media assets found.</div>';
+              return;
+            }
+
+            grid.innerHTML = allItems.map(item => {
+              const clean = item.path.startsWith('/') ? item.path.slice(1) : item.path;
+              const fullUrl = clean.startsWith('http') ? clean : '/' + clean;
+              return `
+                <div style="background:var(--card2); border:1px solid var(--border); border-radius:10px; overflow:hidden; display:flex; flex-direction:column;">
+                  <div style="position:relative; width:100%; aspect-ratio:4/3; background:#0b0f19;">
+                    <img src="${fullUrl}" style="width:100%; height:100%; object-fit:cover; display:block;" onerror="this.style.opacity='0.4'">
+                    ${item.isTurso ? `
+                      <span style="position:absolute; top:6px; left:6px; font-size:10px; background:rgba(235,162,45,0.9); color:#000; padding:2px 6px; border-radius:4px; font-weight:700; display:flex; align-items:center; gap:4px; box-shadow:0 2px 4px rgba(0,0,0,0.5);">
+                        <i class="bi bi-cloud-check-fill"></i> Turso DB
+                      </span>
+                    ` : `
+                      <span style="position:absolute; top:6px; left:6px; font-size:10px; background:rgba(15,23,42,0.85); color:#94a3b8; padding:2px 6px; border-radius:4px; font-weight:500;">
+                        Core
+                      </span>
+                    `}
                   </div>
-                  ${item.isTurso ? `
-                    <button type="button" 
-                            class="btn btn-sm btn-outline-danger" 
-                            onclick="deleteMediaFromTurso('${item.filename}', event)"
-                            style="font-size:11px; padding:4px 8px; border-radius:6px; display:flex; align-items:center; justify-content:center; gap:5px;"
-                            title="Delete permanently from Turso Cloud database">
-                      <i class="bi bi-trash3-fill"></i> Delete from Turso
-                    </button>
-                  ` : `
-                    <div style="font-size:10px; color:#64748b; font-style:italic;">Protected system asset</div>
-                  `}
+                  <div style="padding:10px; flex:1; display:flex; flex-direction:column; justify-content:space-between; gap:8px;">
+                    <div>
+                      <div style="font-size:11px; font-weight:600; color:#e2e8f0; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;" title="${item.filename}">
+                        ${item.filename}
+                      </div>
+                      ${item.sizeKB ? `<div style="font-size:10px; color:#94a3b8; margin-top:2px;">Size: ${item.sizeKB} KB ${item.dimensions ? '• ' + item.dimensions : ''}</div>` : ''}
+                    </div>
+                    ${item.isTurso ? `
+                      <button type="button" 
+                              class="btn btn-sm btn-outline-danger" 
+                              onclick="deleteMediaFromTurso('${item.filename}', event)"
+                              style="font-size:11px; padding:4px 8px; border-radius:6px; display:flex; align-items:center; justify-content:center; gap:5px;"
+                              title="Delete permanently from Turso Cloud database">
+                        <i class="bi bi-trash3-fill"></i> Delete from Turso
+                      </button>
+                    ` : `
+                      <div style="font-size:10px; color:#64748b; font-style:italic;">Protected system asset</div>
+                    `}
+                  </div>
                 </div>
-              </div>
-            `;
-          }).join('');
+              `;
+            }).join('');
+          }
         } catch (e) {
           console.error('[Dashboard] Media error:', e);
-          document.getElementById('mediaMainGrid').innerHTML = '<div style="color:var(--muted);">No media loaded.</div>';
+          if (grid) {
+            grid.innerHTML = '<div style="color:var(--muted); grid-column:1/-1; padding:20px 0;">Failed to load media. <button type="button" class="btn btn-sm btn-outline-warning ms-2" onclick="loadMedia()">Retry</button></div>';
+          }
         }
-      }
+      };
 
       window.deleteMediaFromTurso = async function(filePath, e) {
         if (e) {

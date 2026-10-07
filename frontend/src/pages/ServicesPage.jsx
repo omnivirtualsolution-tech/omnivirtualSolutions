@@ -171,62 +171,7 @@ export default function ServicesPage() {
       .catch(() => {});
   }, []);
 
-  // Real-time SSE updates from CMS editor directly
-  useEffect(() => {
-    let es = null;
-    try {
-      es = new EventSource('/api/v1/live');
-      es.onmessage = (event) => {
-        try {
-          const payload = JSON.parse(event.data);
-          if (payload.type === 'cms_block_updated' && payload.key === 'services.catalog.data') {
-            const rawCat = typeof payload.value === 'string' ? JSON.parse(payload.value) : payload.value;
-            if (Array.isArray(rawCat) && rawCat.length > 0) {
-              updateCatalogAndSelected(rawCat);
-            }
-          } else if (payload.type === 'service_updated' && payload.key && payload.value) {
-            const slug = payload.key.replace(/^service\./, '');
-            setSelectedService((current) => {
-              if (!current || current.slug !== slug) return current;
-              return {
-                ...current,
-                title: payload.value.title !== undefined ? payload.value.title : current.title,
-                price: payload.value.price_display || payload.value.price || current.price,
-                price_display: payload.value.price_display || payload.value.price || current.price,
-                lead: payload.value.lead_paragraph || payload.value.lead || current.lead,
-                lead_paragraph: payload.value.lead_paragraph || payload.value.lead || current.lead,
-                features: Array.isArray(payload.value.features) ? payload.value.features : current.features,
-              };
-            });
-            setCatalog((prev) =>
-              prev.map((cat) => ({
-                ...cat,
-                subcategories: (cat.subcategories || []).map((sub) => ({
-                  ...sub,
-                  services: (sub.services || []).map((s) => {
-                    if (s.slug !== slug) return s;
-                    return {
-                      ...s,
-                      title: payload.value.title !== undefined ? payload.value.title : s.title,
-                      price: payload.value.price_display || payload.value.price || s.price,
-                      price_display: payload.value.price_display || payload.value.price || s.price,
-                      lead: payload.value.lead_paragraph || payload.value.lead || s.lead,
-                      lead_paragraph: payload.value.lead_paragraph || payload.value.lead || s.lead,
-                      features: Array.isArray(payload.value.features) ? payload.value.features : s.features,
-                    };
-                  }),
-                })),
-              }))
-            );
-          }
-        } catch (_) {}
-      };
-    } catch (_) {}
 
-    return () => {
-      if (es) es.close();
-    };
-  }, []);
 
   // Synchronize individual service block overrides in real-time only if catalog didn't already supply value
   useEffect(() => {
