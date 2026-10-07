@@ -1721,6 +1721,11 @@
         </a>
       </li>
       <li>
+        <a class="nav-item" onclick="switchTab('services', this)">
+          <i class="bi bi-briefcase-fill" style="color:var(--gold);"></i> Services Catalog
+        </a>
+      </li>
+      <li>
         <a class="nav-item" onclick="switchTab('leads', this)">
           <i class="bi bi-envelope-open-fill"></i> Leads CRM
           <span class="nav-badge" id="leadsBadge">0</span>
@@ -1978,6 +1983,7 @@
                 <span class="editor-bar-label"><i class="bi bi-file-earmark-richtext text-warning"></i> Page:</span>
                 <select id="editorPageSelect" onchange="switchEditorPage(this.value)" class="editor-page-select">
                   <option value="admin/site/index.html?edit=1" selected>🏠 Homepage (index.html)</option>
+                  <option value="admin/editor-services.html">📚 Services Catalog (services.html)</option>
                 </select>
               </div>
 
@@ -2207,7 +2213,30 @@
         </div>
       </section>
 
-
+      <!-- ── SECTION 4: SERVICES CATALOG ── -->
+      <section id="section-services" class="admin-section">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><i class="bi bi-briefcase-fill text-warning"></i> Services Catalog</div>
+            <div class="d-flex align-items-center gap-2">
+              <input type="text" class="search-input" id="searchServices" placeholder="Search service..." oninput="filterServicesTable(this.value)">
+              <button class="btn-header btn-primary-gold" onclick="switchTab('live-editor'); switchEditorPage('admin/editor-services.html');">
+                <i class="bi bi-browser-chrome"></i> Open Live Editor
+              </button>
+            </div>
+          </div>
+          <div class="panel-body" style="padding:0; overflow-x:auto;">
+            <table class="data-table">
+              <thead>
+                <tr><th>Title</th><th>Category</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="servicesTableBody">
+                <tr><td colspan="3" style="text-align:center; padding:24px; color:var(--muted)">Loading services...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
 
       <!-- ── SECTION 5: LEADS CRM ── -->
       <section id="section-leads" class="admin-section">
@@ -2838,10 +2867,15 @@
           loadBusinessProfile();
         }
 
+        if (tabId === 'services') {
+          loadServices();
+        }
+
         const titles = {
           'overview': '<i class="bi bi-grid-1x2-fill text-warning"></i> Overview Dashboard',
           'live-editor': '<i class="bi bi-browser-chrome text-warning"></i> Live In-Place Website Editor',
           'business-profile': '<i class="bi bi-building-gear text-warning"></i> Universal Business Profile & Contact Data',
+          'services': '<i class="bi bi-briefcase-fill text-warning"></i> Services Catalog',
           'leads': '<i class="bi bi-envelope-open-fill text-warning"></i> Contact Leads CRM',
           'email-templates': '<i class="bi bi-palette2 text-warning"></i> Client Email Design Studio',
           'media': '<i class="bi bi-images text-warning"></i> Media Assets Library',
