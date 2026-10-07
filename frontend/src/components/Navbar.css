@@ -41,10 +41,10 @@
    --------------------------------------------------------------- */
 .header-container {
   width: 100%;
-  max-width: 1320px;
+  max-width: 1680px;
   height: 100%;
   margin: 0 auto;
-  padding: 0 clamp(12px, 3vw, 24px);
+  padding: 0 clamp(16px, 2.5vw, 40px);
   display: flex;
   align-items: center;
   position: relative;

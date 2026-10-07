@@ -355,7 +355,7 @@ const categoriesConfig = [
         title: 'Color Illustrations',
         items: [
           { file: 'intricate-Design.html', label: 'Color Illustrations - Intricate Design' },
-          { file: 'fine-Detail.html', label: 'Color Illustrations - Fine Detail' },
+          { file: 'color-Illustrations-Detail.html', label: 'Color Illustrations - Fine Detail' },
           { file: 'color-Illustrations-Personalized.html', label: 'Color Illustrations - Personalized' }
         ]
       },

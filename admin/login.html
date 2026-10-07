@@ -321,6 +321,42 @@
       80%       { transform: translateX(4px); }
     }
     .shake { animation: shake 0.4s ease; }
+
+    /* ── Mobile Responsive Refinement (Responsive Design Mastery) ── */
+    @media (max-width: 480px) {
+      body {
+        padding: 20px 12px;
+      }
+      .login-wrap {
+        padding: 8px;
+        max-width: 100%;
+      }
+      .card {
+        padding: 24px 18px;
+        border-radius: 12px;
+      }
+      .card h2 {
+        font-size: 20px;
+      }
+      .card .subtitle {
+        margin-bottom: 22px;
+      }
+      input[type="text"],
+      input[type="password"],
+      input[type="email"] {
+        font-size: 16px !important; /* Prevents auto-zoom in mobile Safari */
+        padding: 12px 42px 12px 14px;
+        min-height: 48px;
+      }
+      .btn-login {
+        min-height: 48px;
+        font-size: 15px;
+      }
+      .brand-logo {
+        width: 64px;
+        height: 64px;
+      }
+    }
   </style>
 </head>
 <body>

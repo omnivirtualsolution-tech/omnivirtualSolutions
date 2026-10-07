@@ -889,16 +889,11 @@
           {
             "slug": "data-entry-standard",
             "title": "Data Entry - Standard",
-            "price": "$1,599.00",
-            "lead": "$1,599.00 Begin your publishing journey with the package that lets you take the extra mile.",
-            "features": [
-              "Digital Formatting and Distribution (E-Book)",
-              "Paperback Publishing",
-              "Hardcover Publishing",
-              "Customization of Interior and Cover",
-              "Image Insertions Up to 25",
-              "Electronic Proofs of Your Book"
-            ]
+            "price": "",
+            "lead": "At Omni we can take your printed manuscript and convert it into a working digital file. Our professional staff can then work on your manuscript more efficiently. Because we are a print-on-demand publishing company, we must have a digital file available.",
+            "features": [],
+            "price_display": "",
+            "description": "At Omni we can take your printed manuscript and convert it into a working digital file. Our professional staff can then work on your manuscript more efficiently. Because we are a print-on-demand publishing company, we must have a digital file available."
           },
           {
             "slug": "data-entry-spanish",
@@ -1005,7 +1000,8 @@
               "Make changes to text in galley",
               "Make changes to cover text or design",
               "Change subtitle"
-            ]
+            ],
+            "description": "When a book has gone live and the author finds problems, errors, or other issues that need to be corrected, we can re-submit the file to the printer to update future copies."
           },
           {
             "slug": "resubmission-two-version",
@@ -1016,7 +1012,8 @@
               "Make changes to text in galley",
               "Make changes to cover text or design",
               "Change subtitle"
-            ]
+            ],
+            "description": "When a book has gone live and the author finds problems, errors, or other issues that need to be corrected, we can re-submit the file to the printer to update future copies."
           }
         ]
       }
@@ -1475,7 +1472,7 @@
             "slug": "radio-book-talk",
             "title": "Radio Book Talk",
             "price": "",
-            "lead": "Introduce your book to the literary world with Emmy Award-winning host Kate Delaney. Plus, reach thousands of engaged booklovers through two popular literary podcasts: Books on Air and Newsgram.",
+            "lead": "Introduce your book to the literary world with Emmy Award-winning host, Kate Delaney. Plus, reach out to more interested readers through these two bookish podcasts—Books on Air and Newsgram.",
             "features": [
               "8 to 12-minute interview on America Tonight with Kate Delaney",
               "15-minute in-depth online interview featured on Books on Air",
@@ -1488,7 +1485,7 @@
             "slug": "audio-snip",
             "title": "Audio Snip",
             "price": "",
-            "lead": "The Audio Snip service serves as a high-impact audio trailer of your book. With this service, you take your story directly to the airwaves with a professionally produced 30-second teaser talking about your work.",
+            "lead": "The Audio Snip service serves as an audio trailer of your book to promote its presence and inform your audience where they can purchase it. With this service, you can take your story to the airwaves and talk about it yourself.",
             "features": [
               "30-second professionally produced audio teaser commercial",
               "Broadcast on popular radio stations and digital streaming channels",
@@ -1501,7 +1498,7 @@
             "slug": "online-interview",
             "title": "Online Interview",
             "price": "",
-            "lead": "Position yourself as an authority in your genre with a dedicated online radio interview. Digitally recorded and syndicated across podcast platforms, this interview provides evergreen marketing collateral.",
+            "lead": "Position yourself as an expert on your book’s subject matter and put your voice on the radio. Whatever your reason, getting on the radio can give you a powerful marketing push. The Online Interview service is a strategic marketing tool to enhance your marketing plan.",
             "features": [
               "In-depth recorded radio interview focused on you and your book",
               "Syndicated distribution across Apple Podcasts, Spotify, and Toginet",
@@ -1555,79 +1552,43 @@
             "slug": "author-advantage-royalty-program",
             "title": "Author Advantage Royalty Program",
             "price": "",
-            "lead": "The Author Advantage Royalty Program empowers you to earn substantial financial gains with every print book sold. This 3-year term program maximizes your profit margin on all retail distribution channels.",
-            "features": [
-              "3-Year Term maximizing author royalty margins on print sales",
-              "Substantially higher royalty payouts across global retailers",
-              "Comprehensive sales and royalty reporting portal",
-              "Eligible for softcover and hardcover retail editions",
-              "Dedicated author account support"
-            ]
+            "lead": "The Author Advantage Royalty Program empowers you to earn substantial financial gains with every print book sold. This Program runs for a 3-Year Term and ensures that you receive maximum profits from sales of your book, and that you can also order copies of your own book at heavily discounted rates.",
+            "features": []
           },
           {
             "slug": "retail-focus",
             "title": "Retail Focus",
             "price": "",
-            "lead": "Have your book pitched directly to 25 independent bookstores across the United States. Our retail sales specialists actively present your book to regional booksellers to secure shelf space and local bookstore stocking.",
-            "features": [
-              "Direct pitch to 25 curated independent bookstores across the US",
-              "Targeted regional focus tailored to your book genre and themes",
-              "Guaranteed retailer evaluation and stocking consideration",
-              "Professional sales sheet and sell-sheet distribution",
-              "Follow-up reporting on bookseller interest and placement"
-            ]
+            "lead": "Although self-published titles are getting more and more popular these days, self-published authors still have a difficult time getting brick-and-mortar shops to stock their books. If your dream is to see your work displayed on a bookstore shelf, you can get the help you need with our Retail Focus Service!",
+            "features": []
           },
           {
             "slug": "retail-focus-for-childrens-books",
             "title": "Retail Focus for Children's Books",
             "price": "",
-            "lead": "Targeted bookstore pitching specifically designed for children's picture books, middle grade, and young adult titles. We pitch directly to 25 independent children's book retailers and specialty stores nationwide.",
-            "features": [
-              "Direct pitch to 25 specialty children's bookstores across the US",
-              "Focus on independent children’s book buyers and school suppliers",
-              "Customized sales presentation highlighting illustrations and age range",
-              "Professional sell-sheet highlighting themes and reading level",
-              "Detailed outreach reporting"
-            ]
+            "lead": "Children’s books have always been popular on the book market, and independent titles for children are steadily gaining popularity too. However, it can still be a challenge for self-published authors to get brick-and-mortar bookstores to stock up on their books. If you want your book pitched to bookstores, you can get the help you need with our Retail Focus for Children’s Book service!",
+            "features": []
           },
           {
             "slug": "library-focus",
             "title": "Library Focus",
             "price": "",
-            "lead": "Get your book into the hands of librarians and acquisition specialists. Omni pitches your title directly to Collection Development Departments and Acquisition Librarians across public and academic library systems.",
-            "features": [
-              "Direct pitch to Acquisition Librarians and Collection Development Departments",
-              "Custom cataloging presentation compliant with library standards",
-              "Wholesale availability verification via Ingram and Baker & Taylor",
-              "Detailed library outreach and interest reporting",
-              "Enhanced institutional discoverability"
-            ]
+            "lead": "The Omni Library Focus Service helps you with your goal of making your book available in libraries through a strategic combination of print ads in two publications popular with librarians and a customized sales kit.",
+            "features": []
           },
           {
             "slug": "booksellers-return-program",
             "title": "Booksellers Return Program",
             "price": "",
-            "lead": "Bookstores are reluctant to stock titles from independent authors unless they are returnable. The Booksellers Return Program designates your book as 'Returnable' in Ingram and Baker & Taylor systems, eliminating risk for retail buyers.",
-            "features": [
-              "Designated as \"Returnable\" in Ingram ipage ordering system",
-              "Designated as \"Returnable\" in Baker & Taylor ordering system",
-              "Removes financial risk for physical bookstore purchasing",
-              "12-Month coverage period with automatic renewal options",
-              "Dramatically increases probability of physical bookstore shelf stocking"
-            ]
+            "lead": "Help your title meet bookseller standards for retail stocking with Booksellers Return Program. If your book remains unsold, retailers will be able to return it without a loss of profit for them.",
+            "features": []
           },
           {
             "slug": "booksellers-return-program-renewal",
             "title": "Booksellers Return Program Renewal",
             "price": "",
-            "lead": "Renew your valuable Booksellers Return Program for an additional year to maintain active returnable status across Ingram and Baker & Taylor, ensuring bookstores continue stocking your book without hesitation.",
-            "features": [
-              "12-Month extension of active returnable status",
-              "Continuous uninterrupted listing in Ingram and Baker & Taylor",
-              "Ongoing physical bookstore purchase eligibility",
-              "Dedicated distribution account management",
-              "Transparent inventory reporting"
-            ]
+            "lead": "Renew your book’s participation in the Booksellers Return Program for one year. When you purchase this program renewal, your book will remain “returnable” in book distributor ordering systems, ensuring bookstores that they can return any unsold copies (if they choose to stock your book).",
+            "features": []
           }
         ]
       },

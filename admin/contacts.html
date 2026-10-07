@@ -466,12 +466,20 @@
     /* ── Responsive Breakpoints ── */
     @media (max-width: 1024px) {
       #sidebar {
+        width: min(290px, 86vw);
         transform: translateX(-100%);
         transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 4px 0 24px rgba(0,0,0,0.5);
+        box-shadow: 6px 0 36px rgba(0, 0, 0, 0.65);
+        padding-bottom: env(safe-area-inset-bottom, 16px);
       }
       #sidebar.active {
         transform: translateX(0);
+      }
+      .nav-item {
+        min-height: 44px;
+        padding: 11px 14px;
+        font-size: 14px;
+        touch-action: manipulation;
       }
       #mainContent {
         margin-left: 0;
@@ -507,6 +515,8 @@
       }
       .back-to-list-btn {
         display: inline-flex;
+        min-height: 44px;
+        align-items: center;
       }
       .smtp-grid-wrap {
         grid-template-columns: 1fr !important;
@@ -515,26 +525,33 @@
 
     @media (max-width: 640px) {
       .content-area {
-        padding: 16px 12px;
+        padding: 14px 10px;
       }
       .top-header {
         height: auto;
         min-height: 56px;
-        padding: 10px 14px;
+        padding: 8px 12px;
         flex-wrap: wrap;
-        gap: 10px;
+        gap: 8px;
       }
       .page-title {
-        font-size: clamp(14px, 4vw, 16px);
+        font-size: clamp(13px, 3.8vw, 15px);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: calc(100vw - 145px);
       }
       .header-actions {
         gap: 6px;
         flex-wrap: wrap;
       }
       .header-actions .btn {
-        padding: 6px 10px;
-        font-size: 11.5px;
-        min-height: 40px;
+        padding: 8px 10px;
+        font-size: 12px;
+        min-height: 44px;
+        min-width: 44px;
+        justify-content: center;
+        touch-action: manipulation;
       }
       .header-actions .btn span.btn-text {
         display: none;
@@ -542,8 +559,8 @@
       .settings-card-body {
         padding: 16px 14px;
       }
-      .form-input, .form-select-styled, .search-box, .reply-textarea {
-        font-size: 16px; /* Prevents auto-zoom in mobile Safari */
+      .form-input, .form-select-styled, .search-box, .reply-textarea, input, select, textarea {
+        font-size: 16px !important; /* Prevents auto-zoom in mobile Safari */
       }
       .stat-row {
         grid-template-columns: repeat(2, 1fr);
@@ -574,8 +591,9 @@
       }
       .filter-tab {
         white-space: nowrap;
-        min-height: 36px;
-        padding: 6px 12px;
+        min-height: 40px;
+        padding: 8px 12px;
+        touch-action: manipulation;
       }
       .detail-meta {
         gap: 8px;
@@ -587,8 +605,8 @@
         gap: 6px;
       }
       .status-select {
-        min-height: 40px;
-        font-size: 14px;
+        min-height: 44px;
+        font-size: 16px !important;
       }
     }
   </style>

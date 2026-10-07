@@ -10,24 +10,9 @@
         "title": "Publishing Options",
         "services": [
           {
-            "slug": "publishing-packages",
-            "title": "Publishing Packages",
-            "price": "",
-            "lead": "Our packages are designed to offer authors the support and tools they need to maximize their book's potential. Each package guarantees one-on-one author support for every step of the self-publishing journey. We offer unique packages, enabling authors to choose the package that best fits their book's needs.",
-            "features": [
-              "One-on-one author support for every step of the self-publishing journey",
-              "Unique packages enabling authors to choose the tier that best fits their book's needs",
-              "Digital formatting and distribution for e-books, paperbacks, and hardcovers",
-              "Custom cover layout and professional interior formatting",
-              "Worldwide distribution across Amazon, Barnes & Noble, and Ingram",
-              "ISBN assignment, US Copyright registration, and Library of Congress Control Number"
-            ],
-            "price_display": ""
-          },
-          {
             "slug": "basic-package",
             "title": "Basic Package",
-            "price": "",
+            "price": "$899.00",
             "lead": "The Basic package is designed for authors seeking basic publishing needs. It includes digital formatting and distribution for e-books, paperback publishing, and customization options for the interior and cover. This package supports up to 25 image insertions and provides one block of 50 interior revisions. Authors receive electronic proofs, one-on-one support, and distribution across major online retailers like Amazon and Barnes & Noble. The package also features ISBN assignment, U.S. Copyright registration, a Library of Congress Control Number, and three paperback copies. Additional perks include Amazon Look Inside, Google Preview, Barnes & Noble Read Instantly, and a 12-month bookseller return program.",
             "features": [
               "Digital Formatting and Distribution (E-Book)",
@@ -48,12 +33,12 @@
               "Barnes & Noble Read Instantly",
               "12-Month Bookseller Return Program"
             ],
-            "price_display": ""
+            "price_display": "$899.00"
           },
           {
             "slug": "standard-package",
             "title": "Standard Package",
-            "price": "",
+            "price": "$1,299.00",
             "lead": "Building on the Basic, the Standard package adds hardcover publishing to the mix, enhancing the physical presence of your book. This package maintains all the services of the Basic package, including the customization, support, and online distribution features. In addition to the three paperback copies, it also includes one hardcover copy. The bookseller return program is extended to 36 months, providing additional flexibility and support for bookstores to manage inventory.",
             "features": [
               "Digital Formatting and Distribution (E-Book)",
@@ -76,12 +61,12 @@
               "Barnes & Noble Read Instantly",
               "36-Month Bookseller Return Program"
             ],
-            "price_display": ""
+            "price_display": "$1,299.00"
           },
           {
             "slug": "advanced-package",
             "title": "Advanced Package",
-            "price": "",
+            "price": "$4,999.00",
             "lead": "The Advanced package is the most comprehensive, designed for authors who want extensive support and marketing tools. It includes everything from the Standard package, but boosts the number of copies provided to 20 paperbacks and 5 hardcovers. This package distinguishes itself with marketing enhancements such as 30 days of online book ads via Google and a professional book review from Kirkus Reviews. Additionally, it includes a deluxe website setup to further promote the book. The return program is extended to 60 months, offering the maximum return flexibility for retailers.",
             "features": [
               "Digital Formatting and Distribution (E-Book)",
@@ -107,7 +92,7 @@
               "Kirkus Book Review",
               "Deluxe Website Setup"
             ],
-            "price_display": ""
+            "price_display": "$4,999.00"
           }
         ]
       }
@@ -124,42 +109,21 @@
       {
         "id": "editorial-evaluation",
         "title": "Editorial Evaluation",
+        "lead": "Editorial Evaluation Services Regardless of your publishing goals, the editorial quality of your work matters—no one wants to read a book that's riddled with typos and grammatical errors. However, even the best writers make occasional mistakes. Omni provides editorial services that will help you make your book the best it can be.",
         "services": [
-          {
-            "slug": "evaluation-services",
-            "title": "Evaluation Services",
-            "price": "",
-            "lead": "One of the key features that makes an Omni book distinct from other self-published books is our professional editorial evaluation. The evaluation is included in certain publishing packages and is available to purchase separately as well.",
-            "features": [
-              "Editorial Rx Referral: Evaluator recommendation of an appropriate editorial specialist",
-              "Manuscript examination to pinpoint areas in need of improvement",
-              "Comprehensive assessment for works up to 100,000 words",
-              "Constructive commentary and critique across all literary elements",
-              "$299 credit deducted from future Omni Editorial Services",
-              "Turnaround duration: 2-3 Weeks"
-            ],
-            "price_display": ""
-          },
           {
             "slug": "editorial-evaluation",
             "title": "Editorial Evaluation",
             "price": "",
             "lead": "No matter how small or big an audience you want to reach, the editorial quality of your work matters. You've worked hard to get your manuscript written; now let Omni provide you with services that will help you make it the best it can be.",
-            "features": [
-              "Comprehensive manuscript checkup assessing basic publishing requirements",
-              "Detailed evaluation report on manuscript strengths and weaknesses",
-              "Editorial Rx Referral to recommended editorial specialist",
-              "Qualification for Omni's prestigious Editor's Choice program",
-              "Preliminary diagnostic tool examining key sections of the manuscript",
-              "Standard manuscript word count assessment (up to 100,000 words)"
-            ],
+            "features": [],
             "price_display": ""
           }
         ]
       }
     ],
-    "lead": "Regardless of your publishing goals, the editorial quality of your work matters—no one wants to read a book that's riddled with typos and grammatical errors. Omni provides editorial evaluation services that will help you make your book the best it can be.",
-    "description": "Regardless of your publishing goals, the editorial quality of your work matters—no one wants to read a book that's riddled with typos and grammatical errors. Omni provides editorial evaluation services that will help you make your book the best it can be."
+    "lead": "One of the key features that makes an Omni book distinct from other self-published books is our professional editorial evaluation. The evaluation is included in certain publishing packages and is available to purchase separately as well.",
+    "description": "One of the key features that makes an Omni book distinct from other self-published books is our professional editorial evaluation. The evaluation is included in certain publishing packages and is available to purchase separately as well."
   },
   {
     "id": "editorial-services",
@@ -552,7 +516,7 @@
             "slug": "color-illustrations-fine-detail",
             "title": "Color Illustrations - Fine Detail",
             "price": "",
-            "lead": "Introduce a new level of artistry to your book by including beautiful black-and-white imagery that will enhance your readers’ experience of your book. With Omni's Fine Detail line of custom black-and-white illustrations, basic highlights and shadows will be added to illustrated objects and sceneries to add a greater level of depth and dimension. Our talented team of in-house studio artists will use your ideas and creative direction to produce images that can help strengthen both your book’s message and marketability.",
+            "lead": "Enhance your readers' experience with detailed and vibrant illustrations. The Fine Detail illustrations created for your book will be drawn by hand and colored digitally. At this level of artistry, your Omni illustrator will add basic shadows and highlights to objects and scenery, giving your book’s artwork a greater level of depth and dimension.",
             "features": [],
             "price_display": ""
           },
@@ -760,9 +724,10 @@
             "slug": "data-entry-standard",
             "title": "Data Entry - Standard",
             "price": "",
-            "lead": "With Standard Data Entry, you can send us your printed manuscript and we will convert it into a working digital file. This excludes any handwritten documents or newspaper-type articles.",
+            "lead": "At Omni we can take your printed manuscript and convert it into a working digital file. Our professional staff can then work on your manuscript more efficiently. Because we are a print-on-demand publishing company, we must have a digital file available.",
             "features": [],
-            "price_display": ""
+            "price_display": "",
+            "description": "At Omni we can take your printed manuscript and convert it into a working digital file. Our professional staff can then work on your manuscript more efficiently. Because we are a print-on-demand publishing company, we must have a digital file available."
           },
           {
             "slug": "data-entry-spanish",
@@ -838,17 +803,19 @@
             "slug": "resubmission-one-version",
             "title": "Resubmission (One Version)",
             "price": "",
-            "lead": "Once your book has gone live and is for sale, you can still correct errors or other issues that might have been missed. Choose this service if you only have either a softcover or a hardcover that needs to be updated.",
+            "lead": "When a book has gone live and the author finds problems, errors, or other issues that need to be corrected, we can re-submit the file to the printer to update future copies.",
             "features": [],
-            "price_display": ""
+            "price_display": "",
+            "description": "When a book has gone live and the author finds problems, errors, or other issues that need to be corrected, we can re-submit the file to the printer to update future copies."
           },
           {
             "slug": "resubmission-two-version",
             "title": "Resubmission (Two Version)",
             "price": "",
-            "lead": "Choose this service if you have a softcover and hardcover book that needs to be updated. When a book has gone live and errors need to be corrected, we re-submit the updated files to the printer for future copies.",
+            "lead": "When a book has gone live and the author finds problems, errors, or other issues that need to be corrected, we can re-submit the file to the printer to update future copies.",
             "features": [],
-            "price_display": ""
+            "price_display": "",
+            "description": "When a book has gone live and the author finds problems, errors, or other issues that need to be corrected, we can re-submit the file to the printer to update future copies."
           }
         ]
       }
@@ -902,7 +869,7 @@
             "slug": "bookblast-video-marketing-premium",
             "title": "Bookblast Video Marketing - Premium",
             "price": "",
-            "lead": "Strengthen your book’s presence in the marketplace, and boost its selling potential, by showcasing it on YouTube. With this advertising package, you now have the means to widen your reach and attract more readers. Capture their curiosity by inviting a professional voice actor to narrate your book video, and hold their attention with a strategic YouTube video advertising campaign that targets viewers with keen interest in your book’s genre and style.",
+            "lead": "Strengthen your book’s presence in the marketplace, and boost its selling potential, by showcasing it on YouTube. With this advertising package, you now have the means to widen your reach and attract more readers. YouTube has over a billion video viewers, and every day, people watch hundreds of millions of hours on YouTube. Capture their curiosity by inviting a professional voice actor to narrate your book video, and hold their attention with a strategic YouTube video advertising campaign that targets viewers with keen interest in your book’s genre and style.",
             "features": [],
             "price_display": ""
           },
@@ -910,7 +877,7 @@
             "slug": "15-sec-video-marketing",
             "title": "15-sec Video Marketing",
             "price": "",
-            "lead": "Advertise your book in a widely-used platform. Get it in front of a huge and engaged audience with uninterrupted short ads on YouTube.",
+            "lead": "One exciting and impactful way to promote your book is through short video ads on YouTube. It gets your book the attention of an engaged and captive audience on the biggest online video platform in the world today.",
             "features": [],
             "price_display": ""
           },
@@ -918,7 +885,7 @@
             "slug": "video-book-talk",
             "title": "Video Book Talk",
             "price": "",
-            "lead": "Benefit from the rise of online streaming services with a video interview about your book and writing process, streamed on Roku and Amazon Fire TV.",
+            "lead": "Ride the streaming trend with Roku's 70M users, Amazon Fire TV's 50M users, and YouTube's 1B users, and reach new audiences with Video Book Talk!",
             "features": [],
             "price_display": ""
           }
@@ -940,7 +907,7 @@
             "slug": "literary-gateway-bundle",
             "title": "Literary Gateway Bundle",
             "price": "",
-            "lead": "With Literary Gateway, get a mix of services designed to put you at the forefront of award opportunities to help build your author brand. Find award opportunities and submit your nomination easily using the intelligent matching platform, Awards Finder, and get your book reviewed by the pros with BlueInk Reviews.",
+            "lead": "A book award is more than a feather in your cap or an emblem on the front cover. Explore award opportunities at your fingertips and get a professional book review to help build your author brand with Literary Gateway.",
             "features": [],
             "price_display": ""
           },
@@ -1162,7 +1129,7 @@
             "slug": "radio-book-talk",
             "title": "Radio Book Talk",
             "price": "",
-            "lead": "You'll never run out of places to talk about books. With our Radio Book Talk service, you’ll get both online and terrestrial radio coverage: talk about your book on a radio show hosted by Emmy Award-winning broadcaster Kate Delaney, get interviewed on Books on Air, and get featured on Newsgram.",
+            "lead": "Introduce your book to the literary world with Emmy Award-winning host, Kate Delaney. Plus, reach out to more interested readers through these two bookish podcasts—Books on Air and Newsgram.",
             "features": [],
             "price_display": ""
           },
@@ -1170,7 +1137,7 @@
             "slug": "audio-snip",
             "title": "Audio Snip",
             "price": "",
-            "lead": "Thirty seconds may seem like an insignificant amount of time, but in half a minute you can connect with your target readers. With the Audio Snip service, you get a 30-second professionally produced audio teaser for your book that you can use to launch or enhance your campaign.",
+            "lead": "The Audio Snip service serves as an audio trailer of your book to promote its presence and inform your audience where they can purchase it. With this service, you can take your story to the airwaves and talk about it yourself.",
             "features": [],
             "price_display": ""
           },
@@ -1178,7 +1145,7 @@
             "slug": "online-interview",
             "title": "Online Interview",
             "price": "",
-            "lead": "Position yourself as an expert on your book’s subject matter and put your voice on the radio. The Online Interview service provides a recorded 10- to 15-minute radio interview aired on Omni Radio with J. Douglas Barker, syndicated via iTunes and Toginet.com.",
+            "lead": "Position yourself as an expert on your book’s subject matter and put your voice on the radio. Whatever your reason, getting on the radio can give you a powerful marketing push. The Online Interview service is a strategic marketing tool to enhance your marketing plan.",
             "features": [],
             "price_display": ""
           }
@@ -1210,7 +1177,7 @@
             "slug": "author-advantage-royalty-program",
             "title": "Author Advantage Royalty Program",
             "price": "",
-            "lead": "The Author Advantage Royalty Program empowers you to earn substantial financial gains with every print book sold. This program runs for a 3-Year Term and ensures you receive maximum profits from sales of your book.",
+            "lead": "The Author Advantage Royalty Program empowers you to earn substantial financial gains with every print book sold. This Program runs for a 3-Year Term and ensures that you receive maximum profits from sales of your book, and that you can also order copies of your own book at heavily discounted rates.",
             "features": [],
             "price_display": ""
           },
@@ -1218,7 +1185,7 @@
             "slug": "retail-focus",
             "title": "Retail Focus",
             "price": "",
-            "lead": "Promote your book and let it be seen by independent bookstores with strategic print ads in Advance Catalog and ForeWord Magazine, and a customized sales kit pitched directly to 25 independent bookstores across the US.",
+            "lead": "Although self-published titles are getting more and more popular these days, self-published authors still have a difficult time getting brick-and-mortar shops to stock their books. If your dream is to see your work displayed on a bookstore shelf, you can get the help you need with our Retail Focus Service!",
             "features": [],
             "price_display": ""
           },
@@ -1226,7 +1193,7 @@
             "slug": "retail-focus-for-childrens-books",
             "title": "Retail Focus for Children's Books",
             "price": "",
-            "lead": "Promote your children's book and let it be seen by independent bookstores with strategic print ads in Children's Advance Catalog and ForeWord Magazine, and a customized sales kit pitched to 25 independent bookstores.",
+            "lead": "Children’s books have always been popular on the book market, and independent titles for children are steadily gaining popularity too. However, it can still be a challenge for self-published authors to get brick-and-mortar bookstores to stock up on their books. If you want your book pitched to bookstores, you can get the help you need with our Retail Focus for Children’s Book service!",
             "features": [],
             "price_display": ""
           },
@@ -1234,7 +1201,7 @@
             "slug": "library-focus",
             "title": "Library Focus",
             "price": "",
-            "lead": "Make your book available in libraries through strategic print ads in Baker & Taylor's Forecast Catalog and ForeWord Magazine, paired with direct pitching to Acquisition Librarians of 25 public libraries.",
+            "lead": "The Omni Library Focus Service helps you with your goal of making your book available in libraries through a strategic combination of print ads in two publications popular with librarians and a customized sales kit.",
             "features": [],
             "price_display": ""
           },
@@ -1242,7 +1209,7 @@
             "slug": "booksellers-return-program",
             "title": "Booksellers Return Program",
             "price": "",
-            "lead": "Make your title meet bookseller standards for retail stocking with the Booksellers Return Program. Your book is designated as \"Returnable\" in Ingram's ipage and Baker & Taylor's ordering systems for 12 months with no royalty chargebacks.",
+            "lead": "Help your title meet bookseller standards for retail stocking with Booksellers Return Program. If your book remains unsold, retailers will be able to return it without a loss of profit for them.",
             "features": [],
             "price_display": ""
           },
@@ -1250,7 +1217,7 @@
             "slug": "booksellers-return-program-renewal",
             "title": "Booksellers Return Program Renewal",
             "price": "",
-            "lead": "Renew your book’s participation in the Booksellers Return Program for one year. Your book remains \"Returnable\" in Ingram and Baker & Taylor ordering systems, ensuring bookstores continue stocking your book without risk.",
+            "lead": "Renew your book’s participation in the Booksellers Return Program for one year. When you purchase this program renewal, your book will remain “returnable” in book distributor ordering systems, ensuring bookstores that they can return any unsold copies (if they choose to stock your book).",
             "features": [],
             "price_display": ""
           }

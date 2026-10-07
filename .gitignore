@@ -21,3 +21,6 @@ Thumbs.db
 
 # Editor
 .vscode/settings.json
+
+# Scratch and temporary dev scripts
+scratch/

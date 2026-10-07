@@ -1195,11 +1195,50 @@ footer,
     height: auto;
     min-height: auto;
     max-height: none;
-    padding: 24px 0 16px 0 !important;
+    padding: 24px 0 20px 0 !important;
+    background: 
+      radial-gradient(circle at 100% 16%, rgba(234, 216, 195, 0.6) 0%, rgba(246, 238, 228, 0.25) 34%, transparent 58%),
+      radial-gradient(circle at 0% 64%, rgba(230, 211, 190, 0.55) 0%, rgba(246, 238, 228, 0.22) 36%, transparent 62%),
+      radial-gradient(circle at 92% 80%, rgba(238, 224, 206, 0.4) 0%, transparent 46%),
+      linear-gradient(180deg, #f7f3ed 0%, #faf6f0 30%, #fdfcf9 65%, #f4ede3 100%) !important;
+    background-repeat: no-repeat !important;
+    position: relative;
+    overflow: hidden !important;
   }
+
+  .hero-redesign::before {
+    content: '';
+    position: absolute;
+    top: 14%;
+    right: -24px;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: rgba(228, 208, 186, 0.45);
+    filter: blur(1px);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .hero-redesign::after {
+    content: '';
+    position: absolute;
+    bottom: 24%;
+    left: -20px;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: rgba(232, 214, 194, 0.42);
+    filter: blur(1px);
+    pointer-events: none;
+    z-index: 1;
+  }
+
   .hero-inner-container {
     height: auto;
     padding: 0 12px;
+    position: relative;
+    z-index: 2;
   }
   .hero-main-title {
     font-size: clamp(1.65rem, 5.5vw, 2.2rem);
@@ -1214,7 +1253,20 @@ footer,
     opacity: 0.025;
   }
   .hero-showcase-wrapper {
+    position: relative;
     overflow: visible;
+    padding-bottom: 8px;
+  }
+  .hero-showcase-wrapper::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 8%;
+    right: 8%;
+    height: 20px;
+    background: radial-gradient(ellipse at center, rgba(194, 154, 107, 0.22) 0%, transparent 75%);
+    pointer-events: none;
+    z-index: 0;
   }
   .hero-books-swiper {
     padding-top: 48px !important;

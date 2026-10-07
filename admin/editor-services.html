@@ -645,33 +645,145 @@
     }
 
     /* ── Rich Narrative & Editorial Layout Styles (matching ServicesPage.css) ── */
-    .editorial-callout-notice {
-      background: #faf6f0;
-      border-left: 4px solid #ad7d42;
-      border-radius: 0 8px 8px 0;
-      padding: 12px 18px;
-      margin-bottom: 20px;
+    /* Fractional Padding and Spacing Utility Classes (Bootstrap 5 gap/padding fixes) */
+    .p-3\.5,
+    [class*="p-3.5"] {
+      padding: 1.5rem 1.75rem !important;
     }
-    .editorial-callout-notice p {
-      margin: 0;
-      font-size: 0.92rem;
+
+    .p-2\.5,
+    [class*="p-2.5"] {
+      padding: 1.1rem 1.35rem !important;
+    }
+
+    .py-2\.5,
+    [class*="py-2.5"] {
+      padding-top: 0.85rem !important;
+      padding-bottom: 0.85rem !important;
+    }
+
+    .gap-1\.5,
+    [class*="gap-1.5"] {
+      gap: 0.75rem !important;
+    }
+
+    .gap-2\.5,
+    [class*="gap-2.5"] {
+      gap: 1.1rem !important;
+    }
+
+    /* Specification Cards, Trim Size Boxes, Highlight Cards */
+    #serviceCustomDetailContainer div[style*="#fdfaf5"],
+    #serviceCustomDetailContainer div[style*="#fcfbf9"],
+    #serviceCustomDetailContainer div[style*="#fff9f0"],
+    #serviceCustomDetailContainer div[style*="#ffffff"][style*="border"],
+    #serviceCustomDetailContainer div[style*="#faf6f0"][style*="border: 1px"] {
+      padding: 1.5rem 1.75rem !important;
+      border-radius: 12px !important;
+      box-shadow: 0 2px 10px rgba(173, 125, 66, 0.04) !important;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Side-by-Side Trim Size and Specification Grid Columns */
+    #serviceCustomDetailContainer .row.g-4 > [class*="col-"] > div,
+    #serviceCustomDetailContainer .row.g-3 > [class*="col-"] > div {
+      height: 100% !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: flex-start !important;
+    }
+
+    /* Card Titles */
+    #serviceCustomDetailContainer div[style*="#fdfaf5"] h5,
+    #serviceCustomDetailContainer div[style*="#fdfaf5"] h6,
+    #serviceCustomDetailContainer div[style*="#fcfbf9"] h5,
+    #serviceCustomDetailContainer div[style*="#fcfbf9"] h6 {
+      margin-top: 0 !important;
+      margin-bottom: 1.15rem !important;
+      font-weight: 700 !important;
+      line-height: 1.4 !important;
+    }
+
+    /* If list is inside an explicit container card, remove duplicate card border & retain clean indentation */
+    #serviceCustomDetailContainer div[style*="#fcfbf9"] ul,
+    #serviceCustomDetailContainer div[style*="#fdfaf5"] ul,
+    #serviceCustomDetailContainer div[style*="#faf6f0"] ul,
+    #serviceCustomDetailContainer div[style*="#fff9f0"] ul,
+    #serviceCustomDetailContainer div[class*="rounded"] ul {
+      background: transparent !important;
+      border: none !important;
+      padding: 0 0 0 0.35rem !important;
+      margin: 0 !important;
+      box-shadow: none !important;
+    }
+
+    .editorial-callout-notice,
+    #serviceCustomDetailContainer div[style*="#faf6f0"][style*="border-left"],
+    #serviceCustomDetailContainer [class*="-advantages-box"],
+    #serviceCustomDetailContainer [class*="-reasons-box"] {
+      background: #faf6f0 !important;
+      border-top: 1px solid rgba(173, 125, 66, 0.18) !important;
+      border-right: 1px solid rgba(173, 125, 66, 0.18) !important;
+      border-bottom: 1px solid rgba(173, 125, 66, 0.18) !important;
+      border-left: 5px solid #ad7d42 !important;
+      border-radius: 0 12px 12px 0 !important;
+      padding: 1.5rem 1.85rem !important;
+      margin: 1.5rem 0 1.75rem 0 !important;
+      box-shadow: 0 2px 10px rgba(173, 125, 66, 0.04) !important;
+    }
+
+    .editorial-callout-notice h5,
+    .editorial-callout-notice h6,
+    #serviceCustomDetailContainer div[style*="#faf6f0"][style*="border-left"] h5,
+    #serviceCustomDetailContainer div[style*="#faf6f0"][style*="border-left"] h6,
+    #serviceCustomDetailContainer [class*="-advantages-box"] h6,
+    #serviceCustomDetailContainer [class*="-reasons-box"] h6 {
+      margin-top: 0 !important;
+      margin-bottom: 0.85rem !important;
+      color: #ad7d42 !important;
+      font-weight: 700 !important;
+      font-size: 1.02rem !important;
+      letter-spacing: 0.01em !important;
+    }
+
+    .editorial-callout-notice ul,
+    #serviceCustomDetailContainer div[style*="#faf6f0"][style*="border-left"] ul {
+      padding-left: 0.35rem !important;
+      margin-top: 0.5rem !important;
+      margin-bottom: 0 !important;
+    }
+
+    .editorial-callout-notice ul li,
+    #serviceCustomDetailContainer div[style*="#faf6f0"][style*="border-left"] ul li {
+      padding-left: 1.75rem !important;
+      margin-bottom: 0.75rem !important;
+      line-height: 1.7 !important;
+      color: #57534e !important;
+    }
+
+    .editorial-callout-notice p,
+    #serviceCustomDetailContainer div[style*="#faf6f0"][style*="border-left"] p {
+      margin: 0 0 8px 0;
+      font-size: 0.93rem;
       color: #57534e;
-      line-height: 1.6;
+      line-height: 1.68;
     }
+
     .editorial-narrative {
       color: #44403c;
       font-size: 0.98rem;
       line-height: 1.75;
       margin-bottom: 24px;
     }
+
     .editorial-testimonial-quote {
-      margin: 22px 0;
-      padding: 16px 22px;
-      border-left: 4px solid #ad7d42;
-      background: rgba(173, 125, 66, 0.05);
-      border-radius: 0 8px 8px 0;
-      font-style: italic;
-      color: #333;
+      margin: 24px 0 !important;
+      padding: 18px 24px !important;
+      border-left: 4px solid #ad7d42 !important;
+      background: rgba(173, 125, 66, 0.05) !important;
+      border-radius: 0 10px 10px 0 !important;
+      font-style: italic !important;
+      color: #333 !important;
     }
     .editorial-testimonial-quote p {
       margin-bottom: 8px;
@@ -690,7 +802,7 @@
     .service-detail-card ul.ps-3,
     .service-detail-card ul.ps-4 {
       list-style: none !important;
-      padding-left: 0.25rem !important;
+      padding-left: 0.35rem !important;
       margin-left: 0 !important;
       margin-top: 0.5rem;
       margin-bottom: 0.85rem;
@@ -701,19 +813,23 @@
     .service-detail-card ul li {
       position: relative;
       list-style: none !important;
-      padding-left: 1.45rem !important;
-      line-height: 1.68;
+      padding-left: 1.75rem !important;
+      line-height: 1.72;
       color: #44403c;
+      margin-bottom: 0.75rem !important;
       transition: color 0.18s ease;
+    }
+    .service-detail-card ul li:last-child {
+      margin-bottom: 0 !important;
     }
     .service-detail-card ul li::before {
       content: '';
       position: absolute;
-      left: 0.15rem;
+      left: 0.25rem;
       top: 0.72em;
       transform: translateY(-50%);
-      width: 6.5px;
-      height: 6.5px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background: #ad7d42;
       box-shadow: 0 0 0 3px rgba(173, 125, 66, 0.18);
@@ -732,7 +848,44 @@
       font-weight: 600;
     }
     .service-detail-card ul:not([class*="gap-"]) > li + li {
-      margin-top: 0.45rem;
+      margin-top: 0.55rem;
+    }
+
+    /* Nested Sub-Lists: Clear Indented Hierarchy with Accent Guide Line */
+    .service-detail-card ul li ul,
+    .service-detail-card ol li ul,
+    .service-detail-card ul li ol {
+      margin: 0.7rem 0 0.55rem 0.25rem !important;
+      padding-left: 1.1rem !important;
+      border-left: 2px solid rgba(173, 125, 66, 0.25) !important;
+      background: transparent !important;
+      border-top: none !important;
+      border-right: none !important;
+      border-bottom: none !important;
+      border-radius: 0 !important;
+      list-style: none !important;
+    }
+
+    .service-detail-card ul li ul li,
+    .service-detail-card ol li ul li {
+      padding-left: 1.5rem !important;
+      margin-bottom: 0.5rem !important;
+      font-size: 0.94rem !important;
+      color: #57534e !important;
+    }
+
+    .service-detail-card ul li ul li:last-child {
+      margin-bottom: 0 !important;
+    }
+
+    .service-detail-card ul li ul li::before,
+    .service-detail-card ol li ul li::before {
+      left: 0.2rem !important;
+      top: 0.72em !important;
+      width: 5.5px !important;
+      height: 5.5px !important;
+      background: #ad7d42 !important;
+      box-shadow: 0 0 0 2px rgba(173, 125, 66, 0.16) !important;
     }
 
     /* Ordered Lists (Numbered Steps) */
@@ -1222,8 +1375,10 @@
       .services-control-bar {
         margin-top: 12px;
       }
+      .services-search-input, input, select, textarea, .form-control {
+        font-size: 16px !important; /* Prevents auto-zoom on mobile touch devices */
+      }
       .services-search-input {
-        font-size: 16px; /* Prevents auto-zoom on mobile touch devices */
         height: 44px;
       }
       .desktop-services-sidebar {
@@ -1499,7 +1654,7 @@
 
   <!-- ── Main Editor Canvas ── -->
   <main class="services-catalog-page">
-    <div class="container" style="max-width: 1240px; margin: 0 auto; padding: 0 clamp(16px, 3vw, 24px);">
+    <div class="container-fluid services-main-container" style="max-width: 1680px; margin: 0 auto; padding: 0 clamp(16px, 2.5vw, 40px);">
 
       <!-- Top Header Bar (Centered) -->
       <div class="services-top-bar text-center">
@@ -1520,10 +1675,10 @@
       </div>
 
       <!-- Main Layout: Sidebar + Detail View -->
-      <div class="row g-4">
+      <div class="row g-4 align-items-start">
         
         <!-- Left Sidebar: Categories & Services -->
-        <div class="col-lg-4">
+        <div class="col-lg-4 col-xl-4 col-xxl-3">
           <div class="desktop-services-sidebar">
             <div class="sidebar-brand-box">
               <span class="sidebar-brand-title">
@@ -1547,7 +1702,7 @@
         </div>
 
         <!-- Right Column: Detail Presentation -->
-        <div class="col-lg-8">
+        <div class="col-lg-8 col-xl-8 col-xxl-9">
           <div class="service-detail-card" id="serviceDetailCard">
             <!-- Breadcrumbs -->
             <div class="service-breadcrumb" id="serviceBreadcrumb">
@@ -1786,6 +1941,7 @@
       let debounceTimer = null;
       let toastTimer = null;
       let currentBlockMap = {};
+      let activeCompanyEmail = 'admin@omnivirtualsolution.com';
       const expandedCategories = {};
       const expandedSubcategories = {};
 
@@ -1922,6 +2078,7 @@
               metaData.company?.email ||
               metaData.recipient_email;
             if (activeEmail) {
+              activeCompanyEmail = activeEmail;
               const emailEl = document.getElementById('detailCtaEmail');
               if (emailEl) emailEl.textContent = activeEmail;
             }
@@ -2256,7 +2413,7 @@
 
         const badgeEl = document.getElementById('detailBadge');
         if (badgeEl) {
-          badgeEl.textContent = 'Omni Category Overview';
+          badgeEl.textContent = 'Omni Specialist Service';
         }
 
         const priceContainer = document.getElementById('detailPriceContainer');
@@ -2281,8 +2438,7 @@
           leadBox.style.display = 'block';
           const headingEl = document.getElementById('detailOverviewHeading');
           if (headingEl) {
-            headingEl.textContent = (currentBlockMap && currentBlockMap[`service.${cat.id}.overview_heading`]) || 'Category Overview';
-            headingEl.setAttribute('data-block-key', `service.${cat.id}.overview_heading`);
+            headingEl.style.display = 'none';
           }
           const leadEl = document.getElementById('detailLead');
           if (leadEl) {
@@ -2303,45 +2459,28 @@
 
           if (cat.id === 'publishing-packages') {
             html += `
-              <div class="publishing-options-section">
-                <h4 class="fw-bold mb-2 editable-field" style="color: #2b2219; font-size: 1.25rem;" data-block-key="service.publishing-options.title">
-                  Publishing Options
-                </h4>
-                <p class="mb-4 editable-field" style="color: #57534e; font-size: 0.96rem; line-height: 1.65;" data-block-key="service.publishing-options.desc">
-                  Our packages offer various combinations of our publishing, editorial, and marketing services for a truly customized publishing experience. With Omni, you can choose the package that best suits your literary goals.
-                </p>
-
-                <div class="package-card-block mb-4">
-                  <h5 class="fw-bold mb-2 editable-field" style="color: #d9534f; font-size: 1.25rem;" data-block-key="service.basic-package.title">
-                    Basic Package
-                  </h5>
-                  <p class="mb-0 editable-field" style="color: #57534e; font-size: 0.96rem; line-height: 1.72;" data-block-key="service.basic-package.desc">
-                    The Basic package is designed for authors seeking basic publishing needs. It includes digital formatting and distribution for e-books, paperback publishing, and customization options for the interior and cover. This package supports up to 25 image insertions and provides one block of 50 interior revisions. Authors receive electronic proofs, one-on-one support, and distribution across major online retailers like Amazon and Barnes & Noble. The package also features ISBN assignment, U.S. Copyright registration, a Library of Congress Control Number, and three paperback copies. Additional perks include Amazon Look Inside, Google Preview, Barnes & Noble Read Instantly, and a 12-month bookseller return program.
-                  </p>
-                </div>
-
-                <div class="package-card-block mb-4">
-                  <h5 class="fw-bold mb-2 editable-field" style="color: #d9534f; font-size: 1.25rem;" data-block-key="service.standard-package.title">
-                    Standard Package
-                  </h5>
-                  <p class="mb-0 editable-field" style="color: #57534e; font-size: 0.96rem; line-height: 1.72;" data-block-key="service.standard-package.desc">
-                    Building on the Basic, the Standard package adds hardcover publishing to the mix, enhancing the physical presence of your book. This package maintains all the services of the Basic package, including the customization, support, and online distribution features. In addition to the three paperback copies, it also includes one hardcover copy. The bookseller return program is extended to 36 months, providing additional flexibility and support for bookstores to manage inventory.
-                  </p>
-                </div>
-
-                <div class="package-card-block mb-4">
-                  <h5 class="fw-bold mb-2 editable-field" style="color: #d9534f; font-size: 1.25rem;" data-block-key="service.advanced-package.title">
-                    Advanced Package
-                  </h5>
-                  <p class="mb-0 editable-field" style="color: #57534e; font-size: 0.96rem; line-height: 1.72;" data-block-key="service.advanced-package.desc">
-                    The Advanced package is the most comprehensive, designed for authors who want extensive support and marketing tools. It includes everything from the Standard package, but boosts the number of copies provided to 20 paperbacks and 5 hardcovers. This package distinguishes itself with marketing enhancements such as 30 days of online book ads via Google and a professional book review from Kirkus Reviews. Additionally, it includes a deluxe website setup to further promote the book. The return program is extended to 60 months, offering the maximum return flexibility for retailers.
-                  </p>
+              <div class="publishing-options-section mb-4">
+                <div class="publishing-packages-container">
+                  <div class="publishing-package-card" onclick="selectSubcategoryById('publishing-packages', 'publishing-options')">
+                    <div class="publishing-package-card-header">
+                      <h5 class="publishing-package-card-title editable-field" data-block-key="service.publishing-options.title">
+                        Publishing Options
+                      </h5>
+                      <span class="publishing-package-arrow-badge"><i class="bi bi-arrow-right-short"></i></span>
+                    </div>
+                    <p class="publishing-package-card-summary editable-field" data-block-key="service.publishing-options.desc">
+                      Our packages offer various combinations of our publishing, editorial, and marketing services for a truly customized publishing experience. With Omni, you can choose the package that best suits your literary goals.
+                    </p>
+                  </div>
                 </div>
               </div>
             `;
           } else if (cat.id === 'evaluation-services') {
             html += `
               <div class="evaluation-services-overview-content">
+                <p class="mb-4 editable-field" style="color: #57534e; font-size: 0.98rem; line-height: 1.7;" data-block-key="service.evaluation-services.intro">
+                  One of the key features that makes an Omni book distinct from other self-published books is our professional editorial evaluation. The evaluation is included in certain publishing packages and is available to purchase separately as well.
+                </p>
                 <div class="mb-4">
                   <h4 class="fw-bold mb-2 editable-field" style="color: #d9534f; font-size: 1.25rem;" data-block-key="service.evaluation-services.rx_title">
                     Editorial Rx Referral
@@ -2367,13 +2506,13 @@
                   </p>
                 </div>
                 <div class="publishing-packages-container mt-4">
-                  <div class="publishing-package-card" onclick="selectServiceBySlug('editorial-evaluation')">
+                  <div class="publishing-package-card" onclick="selectSubcategoryById('evaluation-services', 'editorial-evaluation')">
                     <div class="publishing-package-card-header">
-                      <h5 class="publishing-package-card-title">Editorial Evaluation</h5>
+                      <h5 class="publishing-package-card-title editable-field" data-block-key="service.editorial-evaluation.title">Evaluation Editorial</h5>
                       <span class="publishing-package-arrow-badge"><i class="bi bi-arrow-right-short"></i></span>
                     </div>
-                    <p class="publishing-package-card-summary">
-                      Explore our complete manuscript diagnostic checkup, detailed observations report, and $299 credit toward professional editorial services.
+                    <p class="publishing-package-card-summary editable-field" data-block-key="service.editorial-evaluation.desc">
+                      Editorial Evaluation Services Regardless of your publishing goals, the editorial quality of your work matters—no one wants to read a book that's riddled with typos and grammatical errors. However, even the best writers make occasional mistakes. Omni provides editorial services that will help you make your book the best it can be.
                     </p>
                   </div>
                 </div>
@@ -2470,7 +2609,7 @@
 
         const badgeEl = document.getElementById('detailBadge');
         if (badgeEl) {
-          badgeEl.textContent = 'Omni Subcategory Overview';
+          badgeEl.textContent = 'Omni Specialist Service';
         }
 
         const priceContainer = document.getElementById('detailPriceContainer');
@@ -2494,18 +2633,21 @@
                         sub.lead ||
                         `Explore all specialized services under ${sub.title}.`;
         if (leadBox) {
-          leadBox.style.display = 'block';
-          const headingEl = document.getElementById('detailOverviewHeading');
-          if (headingEl) {
-            headingEl.textContent = (currentBlockMap && currentBlockMap[`service.${sub.id}.overview_heading`]) || 'Subcategory Overview';
-            headingEl.setAttribute('data-block-key', `service.${sub.id}.overview_heading`);
+          if (sub.id === 'publishing-options' || sub.id === 'editorial-evaluation' || sub.id === 'evaluation-editorial') {
+            leadBox.style.display = 'none';
+          } else {
+            leadBox.style.display = 'block';
+            const headingEl = document.getElementById('detailOverviewHeading');
+            if (headingEl) {
+              headingEl.style.display = 'none';
+            }
+            const leadEl = document.getElementById('detailLead');
+            if (leadEl) {
+              leadEl.textContent = subLead;
+              leadEl.setAttribute('data-block-key', `service.${sub.id}.lead`);
+            }
+            attachEditableFields(leadBox, sub.id);
           }
-          const leadEl = document.getElementById('detailLead');
-          if (leadEl) {
-            leadEl.textContent = subLead;
-            leadEl.setAttribute('data-block-key', `service.${sub.id}.lead`);
-          }
-          attachEditableFields(leadBox, sub.id);
         }
 
         if (customContainer) {
@@ -2520,12 +2662,6 @@
           if (sub.id === 'publishing-options') {
             html += `
               <div class="publishing-options-section">
-                <h4 class="fw-bold mb-2 editable-field" style="color: #2b2219; font-size: 1.25rem;" data-block-key="service.publishing-options.title">
-                  Publishing Options
-                </h4>
-                <p class="mb-4 editable-field" style="color: #57534e; font-size: 0.96rem; line-height: 1.65;" data-block-key="service.publishing-options.desc">
-                  Our packages offer various combinations of our publishing, editorial, and marketing services for a truly customized publishing experience. With Omni, you can choose the package that best suits your literary goals.
-                </p>
 
                 <div class="package-card-block mb-4">
                   <h5 class="fw-bold mb-2 editable-field" style="color: #d9534f; font-size: 1.25rem;" data-block-key="service.basic-package.title">
@@ -2551,6 +2687,23 @@
                   </h5>
                   <p class="mb-0 editable-field" style="color: #57534e; font-size: 0.96rem; line-height: 1.72;" data-block-key="service.advanced-package.desc">
                     The Advanced package is the most comprehensive, designed for authors who want extensive support and marketing tools. It includes everything from the Standard package, but boosts the number of copies provided to 20 paperbacks and 5 hardcovers. This package distinguishes itself with marketing enhancements such as 30 days of online book ads via Google and a professional book review from Kirkus Reviews. Additionally, it includes a deluxe website setup to further promote the book. The return program is extended to 60 months, offering the maximum return flexibility for retailers.
+                  </p>
+                </div>
+              </div>
+            </div>`;
+          } else if (sub.id === 'editorial-evaluation' || sub.id === 'evaluation-editorial') {
+            html += `
+              <div class="evaluation-editorial-content">
+                <p class="mb-4 editable-field" style="color: #44403c; font-size: 0.98rem; line-height: 1.75;" data-block-key="service.editorial-evaluation.intro_p">
+                  Editorial Evaluation Services Regardless of your publishing goals, the editorial quality of your work matters—no one wants to read a book that's riddled with typos and grammatical errors. However, even the best writers make occasional mistakes. Omni provides editorial services that will help you make your book the best it can be.
+                </p>
+
+                <div class="package-card-block mb-4">
+                  <h5 class="fw-bold mb-2 editable-field" style="color: #d9534f; font-size: 1.25rem;" data-block-key="service.editorial-evaluation.sub_heading">
+                    Editorial Evaluation
+                  </h5>
+                  <p class="mb-0 editable-field" style="color: #57534e; font-size: 0.96rem; line-height: 1.72;" data-block-key="service.editorial-evaluation.eval_p">
+                    Omni experienced editorial evaluators will review your manuscript and provide you with a general overview of your manuscript as well as give constructive comments on how to better write your book.
                   </p>
                 </div>
               </div>
@@ -2615,6 +2768,14 @@
           const key = el.getAttribute('data-block-key');
           if (key && currentBlockMap && currentBlockMap[key] !== undefined && currentBlockMap[key] !== null) {
             el.textContent = currentBlockMap[key];
+            if (el.tagName === 'A' && el.getAttribute('href') && el.getAttribute('href').startsWith('mailto:')) {
+              el.setAttribute('href', 'mailto:' + currentBlockMap[key]);
+            }
+          } else if (key && key.endsWith('.email')) {
+            el.textContent = activeCompanyEmail;
+            if (el.tagName === 'A') {
+              el.setAttribute('href', 'mailto:' + activeCompanyEmail);
+            }
           }
         });
       }
@@ -2624,6 +2785,11 @@
         root.querySelectorAll('.editable-field, [data-block-key]').forEach(el => {
           el.contentEditable = isEditMode ? 'true' : 'false';
           el.spellcheck = false;
+          if (el.tagName === 'A') {
+            el.addEventListener('click', function(e) {
+              if (isEditMode) e.preventDefault();
+            });
+          }
           if (!el.getAttribute('data-editor-bound')) {
             el.setAttribute('data-editor-bound', 'true');
             el.addEventListener('blur', function() {
@@ -2637,6 +2803,9 @@
         if (!el) return;
         const blockKey = el.getAttribute('data-block-key') || `service.${slug}.block`;
         const val = el.innerText.trim();
+        if (el.tagName === 'A' && (blockKey.endsWith('.email') || el.getAttribute('href')?.startsWith('mailto:'))) {
+          el.setAttribute('href', 'mailto:' + val);
+        }
         if (currentBlockMap) {
           currentBlockMap[blockKey] = val;
         }
@@ -2752,6 +2921,7 @@
         }
         const overviewHeadingEl = document.getElementById('detailOverviewHeading');
         if (overviewHeadingEl) {
+          overviewHeadingEl.style.display = 'block';
           overviewHeadingEl.textContent = (currentBlockMap && currentBlockMap['services.overview.heading']) || 'Service Overview';
           overviewHeadingEl.setAttribute('data-block-key', 'services.overview.heading');
         }
