@@ -21,6 +21,7 @@
         if (!payload.exp || (payload.exp * 1000) <= Date.now()) {
           throw new Error('Expired');
         }
+        document.documentElement.classList.add('auth-ready');
       } catch (_) {
         localStorage.removeItem('omni_admin_token');
         localStorage.removeItem('omni_admin_user');
@@ -4779,6 +4780,8 @@
             saveBtn.innerHTML = origBtnText;
           }
         }
+      };
+
       window.openCloudflareModal = async function() {
         const modal = document.getElementById('modalCloudflare');
         if (!modal) return;
