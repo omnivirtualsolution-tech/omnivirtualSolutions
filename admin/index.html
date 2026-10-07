@@ -1828,14 +1828,19 @@
         <div class="stats-grid">
           <!-- Card 1: Total Visits (Real Data) -->
           <div class="stat-card">
-            <div class="stat-icon" style="background:rgba(59, 130, 246, 0.12); color:#60a5fa;">
-              <i class="bi bi-globe-americas"></i>
+            <div class="stat-icon" style="background:rgba(249, 115, 22, 0.12); color:#f97316;">
+              <i class="bi bi-cloud-check-fill"></i>
             </div>
-            <div>
-              <div class="stat-val" id="statVisits">—</div>
-              <div class="stat-lbl" id="statVisitsLabel">Total Website Visits</div>
+            <div style="flex:1;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                <div class="stat-val" id="statVisits">—</div>
+                <button type="button" id="statVisitsCfBadge" class="stat-badge blue" style="cursor:pointer; border:none; background:rgba(249,115,22,0.15); color:#f97316; font-size:11px;" onclick="openCloudflareModal()" title="Configure Cloudflare API Token">
+                  <i class="bi bi-gear-fill me-1"></i> Cloudflare Live
+                </button>
+              </div>
+              <div class="stat-lbl" id="statVisitsLabel">Total Website Visits (Cloudflare)</div>
               <div class="stat-sub">
-                <i class="bi bi-activity text-success"></i> <span id="statVisitsSub">Live authentic visits</span>
+                <i class="bi bi-shield-check text-success"></i> <span id="statVisitsSub">Verified authentic traffic</span>
               </div>
               <div class="stat-badge blue" id="statVisitsPace">~0 visits / day</div>
             </div>
@@ -2640,6 +2645,40 @@
       </button>
     </div>
 
+  <!-- Modal: Connect Cloudflare Analytics -->
+  <div id="modalCloudflare" style="display:none; position:fixed; z-index:99999; inset:0; background:rgba(0,0,0,0.75); backdrop-filter:blur(6px); align-items:center; justify-content:center; padding:16px;">
+    <div style="background:#151a23; border:1px solid rgba(255,255,255,0.12); border-radius:14px; max-width:480px; width:100%; padding:24px; box-shadow:0 25px 50px rgba(0,0,0,0.7);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h4 style="margin:0; font-size:17px; font-weight:700; color:#fff; display:flex; align-items:center; gap:8px;">
+          <i class="bi bi-cloud-check-fill" style="color:#f97316;"></i> Connect Cloudflare Live Analytics
+        </h4>
+        <button type="button" onclick="closeCloudflareModal()" style="background:none; border:none; color:var(--muted); font-size:22px; cursor:pointer; line-height:1;">&times;</button>
+      </div>
+      <p style="color:var(--muted); font-size:13px; line-height:1.5; margin-bottom:16px;">
+        Pulls authentic request &amp; visitor telemetry directly from your Cloudflare dashboard via Cloudflare's GraphQL API.
+      </p>
+      <div style="margin-bottom:12px;">
+        <label style="display:block; font-size:12px; font-weight:600; color:#cbd5e1; margin-bottom:6px;">Cloudflare API Token</label>
+        <input type="password" id="cfInputToken" placeholder="Paste Cloudflare API Token..." style="width:100%; background:#0b0e14; border:1px solid var(--border); border-radius:8px; padding:9px 12px; color:#fff; font-size:13px; box-sizing:border-box;">
+        <div style="font-size:11px; color:var(--muted); margin-top:4px;">
+          Created under: Cloudflare Profile &rarr; API Tokens &rarr; Create Token &rarr; <em>Read Analytics and Logs</em>.
+        </div>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="display:block; font-size:12px; font-weight:600; color:#cbd5e1; margin-bottom:6px;">Cloudflare Account ID</label>
+        <input type="text" id="cfInputAccountId" value="433955e29459040a9fe5c7c01f88e4a7" style="width:100%; background:#0b0e14; border:1px solid var(--border); border-radius:8px; padding:9px 12px; color:#fff; font-size:13px; box-sizing:border-box;">
+      </div>
+      <div style="margin-bottom:20px;">
+        <label style="display:block; font-size:12px; font-weight:600; color:#cbd5e1; margin-bottom:6px;">Workers Script Name</label>
+        <input type="text" id="cfInputScriptName" value="omnivirtualsolutions" style="width:100%; background:#0b0e14; border:1px solid var(--border); border-radius:8px; padding:9px 12px; color:#fff; font-size:13px; box-sizing:border-box;">
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:10px;">
+        <button type="button" onclick="closeCloudflareModal()" class="btn-header" style="padding:8px 16px;">Cancel</button>
+        <button type="button" id="btnSaveCloudflare" onclick="saveCloudflareSettings()" class="btn-header btn-primary-gold" style="padding:8px 18px;">
+          <i class="bi bi-cloud-arrow-up-fill me-1"></i> Save &amp; Sync Live Data
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- ── Scripts ── -->
@@ -3660,18 +3699,30 @@
           const s = data.summary || {};
           const q = data.quotas || {};
 
-          // Card 1: Real Visits
+          // Card 1: Real Visits (Cloudflare & Authentic Traffic)
           if (document.getElementById('statVisits')) {
             document.getElementById('statVisits').textContent = (s.totalVisits ?? 0).toLocaleString();
           }
           if (document.getElementById('statVisitsLabel')) {
-            document.getElementById('statVisitsLabel').textContent = `Website Visits (${days} Days)`;
+            document.getElementById('statVisitsLabel').textContent = s.isCloudflareLive ? `Website Visits (Cloudflare Live)` : `Website Visits (${days} Days)`;
           }
           if (document.getElementById('statVisitsSub')) {
-            document.getElementById('statVisitsSub').textContent = `${(s.allTimeVisits ?? s.totalVisits ?? 0).toLocaleString()} all-time recorded`;
+            document.getElementById('statVisitsSub').textContent = s.isCloudflareLive ? `Live from Cloudflare GraphQL API` : `Filtered authentic visitors (${(s.allTimeVisits ?? s.totalVisits ?? 0).toLocaleString()} all-time)`;
           }
           if (document.getElementById('statVisitsPace')) {
             document.getElementById('statVisitsPace').textContent = `~${Math.round((s.totalVisits || 0) / days)} visits / day`;
+          }
+          if (document.getElementById('statVisitsCfBadge')) {
+            const b = document.getElementById('statVisitsCfBadge');
+            if (s.isCloudflareLive) {
+              b.innerHTML = `<i class="bi bi-check-circle-fill me-1"></i> Live Cloudflare`;
+              b.style.color = '#22c55e';
+              b.style.background = 'rgba(34, 197, 94, 0.15)';
+            } else {
+              b.innerHTML = `<i class="bi bi-cloud-arrow-up-fill me-1"></i> Connect API`;
+              b.style.color = '#f97316';
+              b.style.background = 'rgba(249, 115, 22, 0.15)';
+            }
           }
 
           // Card 2: Email & Inquiries
@@ -4734,6 +4785,58 @@
           if (saveBtn) {
             saveBtn.disabled = false;
             saveBtn.innerHTML = origBtnText;
+          }
+        }
+      window.openCloudflareModal = async function() {
+        const modal = document.getElementById('modalCloudflare');
+        if (!modal) return;
+        modal.style.display = 'flex';
+        try {
+          const res = await fetch('/api/v1/cms/cloudflare-config', { headers: { 'Authorization': 'Bearer ' + token } });
+          if (res.ok) {
+            const data = await res.json();
+            if (data.accountId) document.getElementById('cfInputAccountId').value = data.accountId;
+            if (data.scriptName) document.getElementById('cfInputScriptName').value = data.scriptName;
+            if (data.hasToken) document.getElementById('cfInputToken').placeholder = '•••••••••••••••••••••••• (configured)';
+          }
+        } catch (_) {}
+      };
+
+      window.closeCloudflareModal = function() {
+        const modal = document.getElementById('modalCloudflare');
+        if (modal) modal.style.display = 'none';
+      };
+
+      window.saveCloudflareSettings = async function() {
+        const btn = document.getElementById('btnSaveCloudflare');
+        const tokenVal = document.getElementById('cfInputToken').value.trim();
+        const accountId = document.getElementById('cfInputAccountId').value.trim();
+        const scriptName = document.getElementById('cfInputScriptName').value.trim();
+        if (btn) {
+          btn.disabled = true;
+          btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Connecting to Cloudflare...';
+        }
+
+        try {
+          const res = await fetch('/api/v1/cms/cloudflare-config', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+            body: JSON.stringify({ apiToken: tokenVal, accountId, scriptName })
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            showLiveToast('Cloudflare connected successfully! Real traffic metrics synced.', 'success');
+            closeCloudflareModal();
+            loadAnalytics(currentTimeWindow);
+          } else {
+            showLiveToast('Error: ' + (data.error?.message || 'Failed to save'), 'danger');
+          }
+        } catch (e) {
+          showLiveToast('Failed: ' + e.message, 'danger');
+        } finally {
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-cloud-arrow-up-fill me-1"></i> Save &amp; Sync Live Data';
           }
         }
       };

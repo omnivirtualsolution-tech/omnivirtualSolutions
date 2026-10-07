@@ -28,6 +28,7 @@ const { syncUniversalEmail, isEmailKey } = require("../email-sync");
 const { getFullBusinessProfile, updateBusinessProfile } = require("../business-profile-sync");
 
 const { optimizeImage } = require("../utils/image-optimizer");
+const { fetchCloudflareMetrics, saveCloudflareConfig, getCloudflareConfig } = require("../cloudflare-analytics");
 
 // ── Image upload config (multer with memory buffer for optimization) ──
 const _dir = typeof __dirname !== "undefined" ? __dirname : (typeof process !== "undefined" ? process.cwd() : "");
@@ -966,14 +967,14 @@ router.get("/analytics", requireAuth, async (req, res) => {
 
   try {
     const batchQueries = [
-      // 0: visitsTotal
-      { sql: "SELECT COUNT(*) AS count FROM page_visits WHERE visited_at >= datetime('now', '-' || ? || ' days')", args: [days] },
+      // 0: visitsTotal (exclude internal admin previews and localhost)
+      { sql: "SELECT COUNT(*) AS count FROM page_visits WHERE visited_at >= datetime('now', '-' || ? || ' days') AND path NOT LIKE '%admin%' AND referrer NOT LIKE '%localhost%'", args: [days] },
       // 1: visitsUnique
-      { sql: "SELECT COUNT(DISTINCT ip_hash) AS count FROM page_visits WHERE visited_at >= datetime('now', '-' || ? || ' days')", args: [days] },
+      { sql: "SELECT COUNT(DISTINCT ip_hash) AS count FROM page_visits WHERE visited_at >= datetime('now', '-' || ? || ' days') AND path NOT LIKE '%admin%' AND referrer NOT LIKE '%localhost%'", args: [days] },
       // 2: devices
-      { sql: "SELECT device, COUNT(*) AS count FROM page_visits WHERE visited_at >= datetime('now', '-' || ? || ' days') GROUP BY device ORDER BY count DESC", args: [days] },
+      { sql: "SELECT device, COUNT(*) AS count FROM page_visits WHERE visited_at >= datetime('now', '-' || ? || ' days') AND path NOT LIKE '%admin%' AND referrer NOT LIKE '%localhost%' GROUP BY device ORDER BY count DESC", args: [days] },
       // 3: topPages
-      { sql: "SELECT path, COUNT(*) AS count FROM page_visits WHERE visited_at >= datetime('now', '-' || ? || ' days') GROUP BY path ORDER BY count DESC LIMIT 5", args: [days] },
+      { sql: "SELECT path, COUNT(*) AS count FROM page_visits WHERE visited_at >= datetime('now', '-' || ? || ' days') AND path NOT LIKE '%admin%' AND referrer NOT LIKE '%localhost%' GROUP BY path ORDER BY count DESC LIMIT 5", args: [days] },
       // 4: contactsTotal
       { sql: "SELECT COUNT(*) AS count FROM contact_submissions WHERE created_at >= datetime('now', '-' || ? || ' days')", args: [days] },
       // 5: contactsNew
@@ -983,7 +984,7 @@ router.get("/analytics", requireAuth, async (req, res) => {
       // 7: repliesTotal
       { sql: "SELECT COUNT(*) AS count FROM contact_replies WHERE sent_at >= datetime('now', '-' || ? || ' days')", args: [days] },
       // 8: dailyVisits
-      { sql: "SELECT date(visited_at) AS day, COUNT(*) AS count, COUNT(DISTINCT ip_hash) AS unique_count FROM page_visits WHERE visited_at >= datetime('now', '-' || ? || ' days') GROUP BY date(visited_at) ORDER BY day ASC", args: [days] },
+      { sql: "SELECT date(visited_at) AS day, COUNT(*) AS count, COUNT(DISTINCT ip_hash) AS unique_count FROM page_visits WHERE visited_at >= datetime('now', '-' || ? || ' days') AND path NOT LIKE '%admin%' AND referrer NOT LIKE '%localhost%' GROUP BY date(visited_at) ORDER BY day ASC", args: [days] },
       // 9: dailyInquiries
       { sql: "SELECT date(created_at) AS day, COUNT(*) AS count FROM contact_submissions WHERE created_at >= datetime('now', '-' || ? || ' days') GROUP BY date(created_at) ORDER BY day ASC", args: [days] },
       // 10: dailyEmails
@@ -991,8 +992,8 @@ router.get("/analytics", requireAuth, async (req, res) => {
       // 11: dbTotals (all-time visits, 30d visits, total rows)
       {
         sql: `SELECT
-          (SELECT COUNT(*) FROM page_visits) AS total_visits,
-          (SELECT COUNT(*) FROM page_visits WHERE visited_at >= datetime('now', '-30 days')) AS monthly_visits,
+          (SELECT COUNT(*) FROM page_visits WHERE path NOT LIKE '%admin%' AND referrer NOT LIKE '%localhost%') AS total_visits,
+          (SELECT COUNT(*) FROM page_visits WHERE visited_at >= datetime('now', '-30 days') AND path NOT LIKE '%admin%' AND referrer NOT LIKE '%localhost%') AS monthly_visits,
           ((SELECT COUNT(*) FROM services) + (SELECT COUNT(*) FROM content_blocks) + (SELECT COUNT(*) FROM contact_submissions) + (SELECT COUNT(*) FROM page_visits) + (SELECT COUNT(*) FROM media_assets) + (SELECT COUNT(*) FROM email_log)) AS total_rows`
       }
     ];
@@ -1102,7 +1103,29 @@ router.get("/analytics", requireAuth, async (req, res) => {
       provenanceNote: `Data reflects first-party web sessions with SHA-256 IP hashing and active contact database submissions. No third-party cookie dependencies.`
     };
 
-    res.json({
+    // ── Attempt Live Cloudflare GraphQL Integration ──
+    let isCloudflareLive = false;
+    let cfDataSource = "Edge Database (Filtered Traffic)";
+
+    try {
+      const cf = await fetchCloudflareMetrics(days);
+      if (cf && cf.connected) {
+        totalVisitsCount = cf.totalRequests;
+        allTimeVisitsCount = Math.max(cf.totalRequests, allTimeVisitsCount);
+        requestsToday = cf.requestsToday;
+        isCloudflareLive = true;
+        cfDataSource = "Cloudflare Workers GraphQL API (Live)";
+
+        // Overlay daily visits from Cloudflare if available
+        timeline.forEach(item => {
+          if (cf.dailyMap && cf.dailyMap[item.date] !== undefined) {
+            item.visits = cf.dailyMap[item.date];
+          }
+        });
+      }
+    } catch (_) {}
+
+    const payload = {
       windowDays: days,
       summary: {
         totalVisits: totalVisitsCount,
@@ -1112,7 +1135,9 @@ router.get("/analytics", requireAuth, async (req, res) => {
         newInquiries: newInquiriesCount,
         repliesSent: repliesCount,
         conversionRate,
-        responseRate
+        responseRate,
+        isCloudflareLive,
+        cfDataSource
       },
       quotas: {
         turso: {
@@ -1134,8 +1159,9 @@ router.get("/analytics", requireAuth, async (req, res) => {
           monthlyRequests,
           monthlyLimit: cloudflareMonthlyLimit,
           buildMinutesLimit: 3000,
-          status: "Healthy",
-          type: "Cloudflare Workers Edge (100k/day)"
+          status: isCloudflareLive ? "Live API Connected" : "Healthy",
+          isLive: isCloudflareLive,
+          type: isCloudflareLive ? "Cloudflare Workers GraphQL API" : "Cloudflare Edge Requests (100k/day)"
         },
         netlify: {
           usedMB: Number((requestsToday * 0.05).toFixed(1)),
@@ -1160,6 +1186,33 @@ router.get("/analytics", requireAuth, async (req, res) => {
   } catch (err) {
     console.error("[cms/analytics] Error:", err.message);
     res.status(500).json({ error: { code: "INTERNAL_ERROR", message: "Failed to generate analytics." } });
+  }
+});
+
+// GET /api/v1/cms/cloudflare-config — check Cloudflare connection status
+router.get("/cloudflare-config", requireAuth, async (req, res) => {
+  try {
+    const config = await getCloudflareConfig();
+    res.json({
+      success: true,
+      hasToken: !!config.apiToken,
+      accountId: config.accountId,
+      scriptName: config.scriptName
+    });
+  } catch (err) {
+    res.status(500).json({ error: { code: "CONFIG_ERROR", message: err.message } });
+  }
+});
+
+// POST /api/v1/cms/cloudflare-config — save Cloudflare API token
+router.post("/cloudflare-config", requireAuth, async (req, res) => {
+  const { apiToken, accountId, scriptName } = req.body || {};
+  try {
+    await saveCloudflareConfig({ apiToken, accountId, scriptName });
+    analyticsCache.clear();
+    res.json({ success: true, message: "Cloudflare credentials saved successfully." });
+  } catch (err) {
+    res.status(500).json({ error: { code: "SAVE_ERROR", message: err.message } });
   }
 });
 
