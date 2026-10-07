@@ -3,6 +3,10 @@
   publish = "frontend/dist"
   functions = "netlify/functions"
 
+[functions]
+  node_bundler = "esbuild"
+  included_files = ["backend/**", "assets/**"]
+
 # 1. Assets for Admin In-Place Live Editor
 [[redirects]]
   from = "/admin/site/assets/*"

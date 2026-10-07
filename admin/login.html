@@ -657,7 +657,10 @@
           headers: { 'Content-Type': 'application/json' },
           body:    JSON.stringify({ username, password }),
         });
-        const data = await res.json();
+        let data = {};
+        try {
+          data = await res.json();
+        } catch (_) {}
 
         if (res.status === 429) {
           // Server-side rate limited
@@ -666,6 +669,12 @@
           saveRLState(rlState);
           showWarn(data.error?.message || 'Too many attempts. Please wait.');
           startCooldownUI(wait);
+          return;
+        }
+
+        if (res.status >= 500) {
+          // Server-side crash or gateway error
+          showError(data.error?.message || 'Server is temporarily unavailable (status ' + res.status + '). Please try again in a moment.');
           return;
         }
 

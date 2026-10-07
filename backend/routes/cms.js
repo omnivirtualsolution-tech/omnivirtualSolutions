@@ -31,7 +31,11 @@ const { optimizeImage } = require("../utils/image-optimizer");
 
 // ── Image upload config (multer with memory buffer for optimization) ──
 const UPLOADS_DIR = path.resolve(__dirname, "../../assets/uploads");
-if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+try {
+  if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+} catch (_) {
+  // Read-only filesystem in serverless environments (Netlify / AWS Lambda)
+}
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/svg+xml"];
 const MAX_SIZE_BYTES = 15 * 1024 * 1024; // Allow up to 15 MB since we compress it down to ~150KB
