@@ -138,7 +138,12 @@ app.use(cors({
     }
 
     // Default production domain
-    if (/^https:\/\/(www\.)?omnivirtualsolution\.com$/.test(origin)) {
+    if (/^https:\/\/(www\.)?omnivirtualsolution\.com$/i.test(origin)) {
+      return cb(null, true);
+    }
+
+    // Cloudflare Workers and Pages domains
+    if (/^https:\/\/[a-z0-9-.]+\.workers\.dev$/i.test(origin) || /^https:\/\/[a-z0-9-.]+\.pages\.dev$/i.test(origin)) {
       return cb(null, true);
     }
 
@@ -152,7 +157,7 @@ app.use(cors({
       return cb(null, true);
     }
 
-    cb(new Error(`CORS blocked for origin: ${origin}`));
+    cb(null, false);
   },
   methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],

@@ -2,6 +2,7 @@ import { httpServerHandler } from "cloudflare:node";
 import app from "./backend/server.js";
 
 app.listen(3000);
+const nodeHandler = httpServerHandler({ port: 3000 });
 
 export default {
   async fetch(request, env, ctx) {
@@ -16,8 +17,8 @@ export default {
 
     const url = new URL(request.url);
 
-    if (url.pathname.startsWith("/api/")) {
-      return httpServerHandler({ port: 3000 }).fetch(request, env, ctx);
+    if (url.pathname.startsWith("/api")) {
+      return nodeHandler.fetch(request, env, ctx);
     }
 
     return env.ASSETS.fetch(request);

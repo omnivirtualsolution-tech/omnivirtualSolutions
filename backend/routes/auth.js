@@ -44,9 +44,10 @@ const ipRateLimit = rateLimit({
   max:              20,
   standardHeaders: "draft-7",
   legacyHeaders:    false,
-  keyGenerator:     ipKeyGenerator,  // handles both IPv4 and IPv6 correctly
+  validate:         false,
+  keyGenerator:     (req) => getClientIP(req),
   handler: (req, res) => {
-    const ip = req.ip;
+    const ip = getClientIP(req);
     console.warn(`[auth/rate-limit] IP blocked: ${ip} — too many auth requests`);
     res.status(429).json({
       error: {
