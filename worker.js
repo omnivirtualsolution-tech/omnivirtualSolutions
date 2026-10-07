@@ -21,6 +21,18 @@ export default {
       return nodeHandler.fetch(request, env, ctx);
     }
 
-    return env.ASSETS.fetch(request);
+    const response = await env.ASSETS.fetch(request);
+
+    // High-performance caching for static production bundles & media assets
+    if (response.status === 200) {
+      const pathname = url.pathname;
+      if (pathname.startsWith("/assets/") || /\.(js|css|webp|png|jpg|jpeg|svg|woff2?|ico)$/i.test(pathname)) {
+        const headers = new Headers(response.headers);
+        headers.set("Cache-Control", "public, max-age=31536000, immutable");
+        return new Response(response.body, { status: response.status, headers });
+      }
+    }
+
+    return response;
   }
 };

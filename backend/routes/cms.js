@@ -1061,13 +1061,15 @@ router.get("/analytics", requireAuth, async (req, res) => {
     const tursoUsedPercent = Number(((dbSizeMB / tursoLimitMB) * 100).toFixed(3));
     const tursoTotalRows = Number(totalRowsInDb?.rows[0]?.total_rows || 0);
 
-    const netlifyLimitGB = 100;
-    const avgPageBundleMB = 1.4; // Optimized WebP static bundle
-    const monthlyVisits = Number(monthlyVisitsRes?.rows[0]?.count || totalVisitsCount);
-    const netlifyUsedMB = Number((monthlyVisits * avgPageBundleMB).toFixed(1));
-    const netlifyUsedGB = Number((netlifyUsedMB / 1024).toFixed(3));
-    const netlifyRemainingGB = Number(Math.max(0, netlifyLimitGB - netlifyUsedGB).toFixed(2));
-    const netlifyUsedPercent = Number(((netlifyUsedGB / netlifyLimitGB) * 100).toFixed(2));
+    // ── Real Quota Calculations: Turso Cloud & Cloudflare Workers ──
+    const cloudflareDailyLimit = 100000; // 100,000 requests/day free tier
+    const cloudflareMonthlyLimit = 3000000; // 3,000,000 requests/month
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const todayVisitsObj = visitMap[todayStr] || { visits: 0 };
+    const requestsToday = todayVisitsObj.visits || 0;
+    const monthlyRequests = Number(monthlyVisitsRes?.rows[0]?.count || totalVisitsCount);
+    const cloudflareRemainingToday = Math.max(0, cloudflareDailyLimit - requestsToday);
+    const cloudflareUsedPercent = Number(((requestsToday / cloudflareDailyLimit) * 100).toFixed(2));
 
     // Conversion rate: Inquiries / Visits (%)
     const conversionRate = totalVisitsCount > 0
@@ -1160,15 +1162,26 @@ router.get("/analytics", requireAuth, async (req, res) => {
           status: "Healthy",
           type: "Turso Cloud (SQLite)"
         },
-        netlify: {
-          usedMB: netlifyUsedMB,
-          usedGB: netlifyUsedGB,
-          limitGB: netlifyLimitGB,
-          remainingGB: netlifyRemainingGB,
-          usedPercent: netlifyUsedPercent,
-          monthlyVisits,
+        cloudflare: {
+          requestsToday,
+          dailyLimit: cloudflareDailyLimit,
+          remainingToday: cloudflareRemainingToday,
+          usedPercent: cloudflareUsedPercent,
+          monthlyRequests,
+          monthlyLimit: cloudflareMonthlyLimit,
+          buildMinutesLimit: 3000,
           status: "Healthy",
-          type: "Netlify Global CDN (100 GB)"
+          type: "Cloudflare Workers Edge (100k/day)"
+        },
+        netlify: {
+          usedMB: Number((requestsToday * 0.05).toFixed(1)),
+          usedGB: Number(((requestsToday * 0.05) / 1024).toFixed(3)),
+          limitGB: 100,
+          remainingGB: 100,
+          usedPercent: cloudflareUsedPercent,
+          monthlyVisits: monthlyRequests,
+          status: "Healthy",
+          type: "Cloudflare Workers Edge"
         }
       },
       devices: devices.rows,

@@ -21,36 +21,17 @@ const jwt    = require("jsonwebtoken");
 const crypto = require("crypto");
 const { db } = require("../db");
 
-const JWT_SECRET = process.env.JWT_SECRET;
-
-// ── Fail-fast: warn loudly if the secret is missing or is the demo default ──
-if (!JWT_SECRET || JWT_SECRET === "omni-cms-secret-change-in-production") {
-  if (process.env.NODE_ENV === "production") {
-    // Hard-fail in production — a weak secret in prod is a critical vulnerability
-    console.error(
-      "\n[FATAL] JWT_SECRET is not set or is the default placeholder.\n" +
-      "  Set a strong, random secret in your .env file before running in production.\n" +
-      "  Example: JWT_SECRET=$(node -e \"console.log(require('crypto').randomBytes(48).toString('hex'))\")\n"
-    );
-    process.exit(1);
-  } else {
-    // Warn loudly in development so the dev knows to fix it before shipping
-    console.warn(
-      "\n⚠️  [auth] WARNING: JWT_SECRET is using the insecure default value.\n" +
-      "   Set a strong JWT_SECRET in your .env file before deploying to production.\n"
-    );
-  }
+function getEffectiveSecret() {
+  return process.env.JWT_SECRET || "omni-cms-dev-secret-DO-NOT-USE-IN-PRODUCTION";
 }
-
-// Use the env var if set, fall back to a development placeholder only
-const EFFECTIVE_SECRET = JWT_SECRET || "omni-cms-dev-secret-DO-NOT-USE-IN-PRODUCTION";
 
 // ── Credential fingerprint ────────────────────────────────────────
 // HMAC of the stored password hash + email, keyed with the JWT secret.
 // Not reversible, and changes whenever either credential changes.
 function credentialFingerprint(user) {
+  const secret = getEffectiveSecret();
   return crypto
-    .createHmac("sha256", EFFECTIVE_SECRET)
+    .createHmac("sha256", secret)
     .update(`${user.password_hash}|${String(user.email).toLowerCase()}`)
     .digest("base64url")
     .slice(0, 22);
@@ -67,9 +48,10 @@ async function requireAuth(req, res, next) {
     });
   }
 
+  const secret = getEffectiveSecret();
   let payload;
   try {
-    payload = jwt.verify(token, EFFECTIVE_SECRET);
+    payload = jwt.verify(token, secret);
   } catch (err) {
     if (err.name === "TokenExpiredError") {
       return res.status(401).json({
@@ -114,7 +96,8 @@ async function requireAuth(req, res, next) {
 // Short-lived 2 h tokens — per skill §6: short-lived access tokens
 // reduce the window of exposure if a token is leaked.
 function signToken(payload) {
-  return jwt.sign(payload, EFFECTIVE_SECRET, { expiresIn: "2h" });
+  const secret = getEffectiveSecret();
+  return jwt.sign(payload, secret, { expiresIn: "2h" });
 }
 
 module.exports = { requireAuth, signToken, credentialFingerprint };

@@ -1918,22 +1918,22 @@
               </div>
             </div>
 
-            <!-- Netlify Bandwidth Quota & Limit -->
+            <!-- Cloudflare Edge Requests Quota & Limit -->
             <div class="stat-card" style="margin: 0; flex: 1;">
-              <div class="stat-icon" style="background:rgba(20, 184, 166, 0.12); color:#2dd4bf;">
-                <i class="bi bi-cloud-arrow-down-fill"></i>
+              <div class="stat-icon" style="background:rgba(249, 115, 22, 0.12); color:#f97316;">
+                <i class="bi bi-cloud-check-fill"></i>
               </div>
               <div style="flex:1; min-width:0;">
                 <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                  <div class="stat-val" id="statNetlifyUsed">—</div>
-                  <span id="statNetlifyBadge" class="stat-badge green" style="margin-top:0;">🟢 100 GB Free</span>
+                  <div class="stat-val" id="statCloudflareUsed">—</div>
+                  <span id="statCloudflareBadge" class="stat-badge green" style="margin-top:0;">🟢 100k/day Free</span>
                 </div>
-                <div class="stat-lbl">Netlify Bandwidth Quota</div>
+                <div class="stat-lbl">Cloudflare Edge Requests</div>
                 <div class="stat-sub">
-                  <i class="bi bi-speedometer2"></i> <span id="statNetlifyRemaining">100 GB left</span> (Monthly)
+                  <i class="bi bi-speedometer2"></i> <span id="statCloudflareRemaining">100,000 left today</span>
                 </div>
                 <div style="margin-top:8px; background:rgba(255,255,255,0.08); height:6px; border-radius:3px; overflow:hidden;">
-                  <div id="statNetlifyBar" style="height:100%; width:0.5%; background:linear-gradient(90deg, #14b8a6, #10b981); border-radius:3px; transition:width 0.4s ease;"></div>
+                  <div id="statCloudflareBar" style="height:100%; width:0.5%; background:linear-gradient(90deg, #f97316, #eab308); border-radius:3px; transition:width 0.4s ease;"></div>
                 </div>
               </div>
             </div>
@@ -3706,21 +3706,28 @@
             }
           }
 
-          // Card 4: Netlify Bandwidth Quota
-          if (q.netlify) {
-            const netlify = q.netlify;
-            if (document.getElementById('statNetlifyUsed')) {
-              document.getElementById('statNetlifyUsed').innerHTML = `${netlify.usedGB} GB <span style="font-size:13px; font-weight:600; color:var(--muted);">/ 100 GB</span>`;
+          // Card 4: Cloudflare Edge Quota
+          const cf = q.cloudflare || q.netlify;
+          if (cf) {
+            const usedEl = document.getElementById('statCloudflareUsed') || document.getElementById('statNetlifyUsed');
+            const remEl = document.getElementById('statCloudflareRemaining') || document.getElementById('statNetlifyRemaining');
+            const badgeEl = document.getElementById('statCloudflareBadge') || document.getElementById('statNetlifyBadge');
+            const barEl = document.getElementById('statCloudflareBar') || document.getElementById('statNetlifyBar');
+
+            if (usedEl) {
+              const reqs = cf.requestsToday != null ? cf.requestsToday : (cf.monthlyVisits || 0);
+              usedEl.innerHTML = `${reqs.toLocaleString()} <span style="font-size:13px; font-weight:600; color:var(--muted);">/ 100,000 day</span>`;
             }
-            if (document.getElementById('statNetlifyRemaining')) {
-              document.getElementById('statNetlifyRemaining').textContent = `${netlify.remainingGB} GB left`;
+            if (remEl) {
+              const rem = cf.remainingToday != null ? cf.remainingToday : Math.max(0, 100000 - (cf.requestsToday || 0));
+              remEl.textContent = `${rem.toLocaleString()} left today`;
             }
-            if (document.getElementById('statNetlifyBadge')) {
-              document.getElementById('statNetlifyBadge').textContent = `🟢 ${netlify.remainingGB} GB Free`;
+            if (badgeEl) {
+              badgeEl.textContent = `🟢 100k/day Free`;
             }
-            if (document.getElementById('statNetlifyBar')) {
-              const p = Math.max(1, Math.min(100, netlify.usedPercent));
-              document.getElementById('statNetlifyBar').style.width = p + '%';
+            if (barEl) {
+              const p = Math.max(0.5, Math.min(100, cf.usedPercent || 0.5));
+              barEl.style.width = p + '%';
             }
           }
 
