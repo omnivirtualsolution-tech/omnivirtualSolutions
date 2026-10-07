@@ -10,7 +10,9 @@
 
 let sharp = null;
 try {
-  sharp = require("sharp");
+  const req = typeof __non_webpack_require__ !== "undefined" ? __non_webpack_require__ : require;
+  const mod = "sharp";
+  sharp = req(mod);
 } catch (_) {
   // Gracefully fallback when running on serverless environments without native sharp binaries
 }
