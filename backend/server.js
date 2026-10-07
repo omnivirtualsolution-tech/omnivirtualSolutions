@@ -21,7 +21,10 @@
 //   GET   /api/v1/cms/stats
 // =================================================================
 
-require("dotenv").config({ path: require("path").resolve(__dirname, "../.env") });
+const _dir = typeof __dirname !== "undefined" ? __dirname : (typeof process !== "undefined" ? process.cwd() : "");
+try {
+  require("dotenv").config({ path: require("path").resolve(_dir, "../.env") });
+} catch (_) {}
 const express = require("express");
 const cors    = require("cors");
 const path    = require("path");
@@ -188,17 +191,17 @@ app.get(["/assets/uploads/:filename", "/api/v1/media/:filename"], async (req, re
 });
 
 // 1. Shared assets: /assets/* -> ../assets/*
-app.use("/assets", express.static(path.resolve(__dirname, "../assets")));
+app.use("/assets", express.static(path.resolve(_dir, "../assets")));
 
 // 2. Forms: /forms/* -> ../forms/*
-app.use("/forms", express.static(path.resolve(__dirname, "../forms")));
+app.use("/forms", express.static(path.resolve(_dir, "../forms")));
 
 // 3. Admin dashboard: /admin/* -> ../admin/*
-app.use("/admin", express.static(path.resolve(__dirname, "../admin")));
+app.use("/admin", express.static(path.resolve(_dir, "../admin")));
 
 // 4. Live In-Place Editor mirror for admin visual iframe
 // Restrict to safe web document & media extensions only
-const liveEditorStatic = express.static(path.resolve(__dirname, ".."), {
+const liveEditorStatic = express.static(path.resolve(_dir, ".."), {
   index: false,
   dotfiles: "ignore",
 });
@@ -210,7 +213,7 @@ app.use("/admin/site", (req, res, next) => {
 });
 
 // 5. Frontend React distribution build (if built)
-const frontendDistPath = path.resolve(__dirname, "../frontend/dist");
+const frontendDistPath = path.resolve(_dir, "../frontend/dist");
 if (fs.existsSync(frontendDistPath)) {
   app.use(express.static(frontendDistPath));
 }
@@ -290,7 +293,7 @@ app.use("/api", (req, res) => {
 app.use((req, res, next) => {
   if (req.method !== "GET") return next();
   if (req.path.startsWith("/api") || req.path.startsWith("/admin")) return next();
-  const indexFile = path.resolve(__dirname, "../frontend/dist/index.html");
+  const indexFile = path.resolve(_dir, "../frontend/dist/index.html");
   if (fs.existsSync(indexFile)) {
     return res.sendFile(indexFile);
   }

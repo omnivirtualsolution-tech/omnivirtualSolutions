@@ -6,7 +6,10 @@
 // connection string and token in .env need to change.
 // ─────────────────────────────────────────────────────────────────
 
-require("dotenv").config({ path: require("path").resolve(__dirname, "../.env") });
+const _dir = typeof __dirname !== "undefined" ? __dirname : (typeof process !== "undefined" ? process.cwd() : "");
+try {
+  require("dotenv").config({ path: require("path").resolve(_dir, "../.env") });
+} catch (_) {}
 const { createClient } = require("@libsql/client");
 
 const isTursoConfigured = Boolean(
@@ -16,7 +19,7 @@ const isTursoConfigured = Boolean(
 const db = createClient({
   url: isTursoConfigured
     ? process.env.TURSO_DATABASE_URL
-    : "file:" + require("path").resolve(__dirname, "../data/omni.db"),
+    : "file:" + require("path").resolve(_dir, "../data/omni.db"),
   authToken: isTursoConfigured ? process.env.TURSO_AUTH_TOKEN : undefined,
 });
 

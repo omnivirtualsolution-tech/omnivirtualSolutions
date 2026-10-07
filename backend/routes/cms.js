@@ -30,11 +30,12 @@ const { getFullBusinessProfile, updateBusinessProfile } = require("../business-p
 const { optimizeImage } = require("../utils/image-optimizer");
 
 // ── Image upload config (multer with memory buffer for optimization) ──
-const UPLOADS_DIR = path.resolve(__dirname, "../../assets/uploads");
+const _dir = typeof __dirname !== "undefined" ? __dirname : (typeof process !== "undefined" ? process.cwd() : "");
+const UPLOADS_DIR = path.resolve(_dir, "../../assets/uploads");
 try {
   if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 } catch (_) {
-  // Read-only filesystem in serverless environments (Netlify / AWS Lambda)
+  // Read-only filesystem in serverless environments (Netlify / AWS Lambda / Cloudflare)
 }
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/svg+xml"];
