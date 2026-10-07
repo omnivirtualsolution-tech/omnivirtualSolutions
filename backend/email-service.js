@@ -825,11 +825,7 @@ async function sendNewSubmissionNotification(submission) {
     return { success: false, reason: "preference_off" };
   }
 
-  const recipientEmail = settings.recipient_email?.trim();
-  if (!recipientEmail) {
-    await updateNotifyStatus(submission.id, "skipped");
-    return { success: false, reason: "no_recipient_email" };
-  }
+  const recipientEmail = settings.recipient_email?.trim() || company?.recipient_email?.trim() || company?.email?.trim() || "admin@omnivirtualsolution.com";
 
   const transporter = await createTransporter(settings);
   if (!transporter) {
@@ -848,18 +844,17 @@ async function sendNewSubmissionNotification(submission) {
   const subjectTemplate = settings.notification_subject || "New Website Inquiry — {customer_name}";
   const subject = interpolate(subjectTemplate, { customer_name: submission.full_name });
 
-  const senderName  = company.company_name || settings.sender_name  || "Omni Virtual Solutions";
-  const senderEmail = company.email || settings.sender_email?.trim() || settings.recipient_email?.trim() || settings.smtp_user?.trim();
-  if (senderEmail && senderEmail.toLowerCase().includes("nsixx631")) {
-    console.warn("[email-service] Notification blocked: legacy email sender detected");
-    return { success: false, reason: "legacy_sender_blocked" };
-  }
+  const senderName  = company?.company_name || settings.sender_name  || "Omni Virtual Solutions";
+  const smtpUser    = settings.smtp_user?.trim();
+  const fromAddress = smtpUser
+    ? `"${senderName}" <${smtpUser}>`
+    : `"${senderName}" <${company?.email || settings.sender_email?.trim() || recipientEmail}>`;
 
-  const htmlBody = buildNotificationHtml({ submission, settings, senderEmail, recipientEmail, company });
+  const htmlBody = buildNotificationHtml({ submission, settings, senderEmail: recipientEmail, recipientEmail, company });
 
   try {
     await transporter.sendMail({
-      from: `"${senderName}" <${senderEmail}>`,
+      from: fromAddress,
       to:   recipientEmail,
       replyTo: submission.email,
       subject,
@@ -898,19 +893,20 @@ async function sendAutoReply(submission) {
   const subject = interpolate(settings.auto_reply_subject || `We received your message — ${brandName}`, { customer_name: submission.full_name });
   const bodyText = interpolate(settings.auto_reply_body || "Hello {customer_name}, thank you for contacting us!", { customer_name: submission.full_name });
 
+  const recipientEmail = settings.recipient_email?.trim() || company?.recipient_email?.trim() || company?.email?.trim() || "admin@omnivirtualsolution.com";
   const senderName  = company.company_name || settings.sender_name || "Omni Virtual Solutions";
-  const senderEmail = company.email || settings.sender_email?.trim() || settings.recipient_email?.trim() || settings.smtp_user?.trim();
-  if (senderEmail && senderEmail.toLowerCase().includes("nsixx631")) {
-    console.warn("[email-service] Auto-reply blocked: legacy email sender detected");
-    return { success: false, reason: "legacy_sender_blocked" };
-  }
+  const smtpUser    = settings.smtp_user?.trim();
+  const fromAddress = smtpUser
+    ? `"${senderName}" <${smtpUser}>`
+    : `"${senderName}" <${recipientEmail}>`;
 
-  const htmlBody = buildAutoReplyHtml({ submission, settings, bodyText, senderEmail, company });
+  const htmlBody = buildAutoReplyHtml({ submission, settings, bodyText, senderEmail: recipientEmail, company });
 
   try {
     await transporter.sendMail({
-      from: `"${senderName}" <${senderEmail}>`,
+      from: fromAddress,
       to: submission.email,
+      replyTo: recipientEmail,
       subject,
       text: bodyText,
       html: htmlBody,
@@ -983,7 +979,8 @@ async function sendReply({ submission, replyBody, replyId, sentBy }) {
 // Test SMTP connection (for settings page)
 // =================================================================
 async function testSmtpConnection(testSettings) {
-  const transporter = await createTransporter(testSettings, { noCache: true });
+  const settings = testSettings || await getSettings();
+  const transporter = await createTransporter(settings, { noCache: true });
   if (!transporter) return { success: false, reason: "Incomplete SMTP credentials" };
   try {
     await transporter.verify();

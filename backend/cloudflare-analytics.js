@@ -30,10 +30,18 @@ async function getCloudflareConfig() {
   return { apiToken, accountId, scriptName };
 }
 
+let metricsCache = null;
+let metricsCacheExpiry = 0;
+
 /**
  * Fetch authentic Workers traffic metrics from Cloudflare GraphQL API
  */
-async function fetchCloudflareMetrics(days = 14) {
+async function fetchCloudflareMetrics(days = 14, force = false) {
+  const nowMs = Date.now();
+  if (!force && metricsCache && nowMs < metricsCacheExpiry && metricsCache._days === days) {
+    return metricsCache;
+  }
+
   const config = await getCloudflareConfig();
   if (!config.apiToken) {
     return {
@@ -118,15 +126,20 @@ async function fetchCloudflareMetrics(days = 14) {
       }
     });
 
-    return {
+    const result = {
       connected: true,
       totalRequests,
       requestsToday,
       dailyMap,
       source: "Cloudflare Workers GraphQL API",
       accountId: config.accountId,
-      scriptName: config.scriptName
+      scriptName: config.scriptName,
+      _days: days
     };
+
+    metricsCache = result;
+    metricsCacheExpiry = nowMs + (15 * 60 * 1000); // 15-minute cache to conserve Cloudflare quota
+    return result;
   } catch (err) {
     console.error("[cloudflare-analytics] Fetch error:", err.message);
     return { connected: false, error: err.message };
@@ -137,6 +150,8 @@ async function fetchCloudflareMetrics(days = 14) {
  * Save Cloudflare API configuration to database
  */
 async function saveCloudflareConfig({ apiToken, accountId, scriptName }) {
+  metricsCache = null;
+  metricsCacheExpiry = 0;
   const configs = [
     { key: "cloudflare_api_token", val: apiToken ? String(apiToken).trim() : "" },
     { key: "cloudflare_account_id", val: accountId ? String(accountId).trim() : DEFAULT_ACCOUNT_ID },

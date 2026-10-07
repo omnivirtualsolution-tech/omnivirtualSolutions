@@ -78,7 +78,7 @@ const handleContactSubmission = async (req, res) => {
   const message = (req.body.message || "").trim();
   const phone = (req.body.phone || "").trim();
   const rawInterest = req.body.service_interest_id ?? req.body.service_interest;
-  const service_interest_id = (rawInterest !== null && rawInterest !== undefined && rawInterest !== "" && !isNaN(Number(rawInterest)))
+  const parsedInterestId = (rawInterest !== null && rawInterest !== undefined && rawInterest !== "" && !isNaN(Number(rawInterest)))
     ? parseInt(rawInterest, 10)
     : null;
 
@@ -96,6 +96,20 @@ const handleContactSubmission = async (req, res) => {
 
   const ip = req.headers["x-forwarded-for"]?.split(",")[0]?.trim() || req.socket?.remoteAddress || null;
 
+  // Validate service_interest_id against existing services in DB to avoid foreign key errors
+  let safeServiceInterestId = null;
+  if (parsedInterestId) {
+    try {
+      const svcCheck = await db.execute({
+        sql: "SELECT id FROM services WHERE id = ? LIMIT 1",
+        args: [parsedInterestId]
+      });
+      if (svcCheck.rows && svcCheck.rows.length > 0) {
+        safeServiceInterestId = Number(svcCheck.rows[0].id);
+      }
+    } catch (_) {}
+  }
+
   // Duplicate submission guard (10 seconds debounce to prevent accidental double-clicks)
   try {
     const dupeCheck = await db.execute({
@@ -107,7 +121,7 @@ const handleContactSubmission = async (req, res) => {
     }
   } catch (_) {}
 
-  // ── SAVE TO DB FIRST ─────────────────────────────────────────────
+  // ── SAVE TO DB FIRST (Guaranteed Resilience) ──────────────────────
   let newId;
   try {
     const result = await db.execute({
@@ -120,13 +134,38 @@ const handleContactSubmission = async (req, res) => {
         phone || null,
         subject || null,
         message,
-        service_interest_id,
+        safeServiceInterestId,
         ip,
       ],
     });
     newId = Number(result.lastInsertRowid);
     console.log(`[contact] New submission #${newId} from: ${email.toLowerCase()}`);
-    // Broadcast live event to real-time dashboards (privacy-safe: no email or full message on public stream)
+  } catch (err) {
+    console.warn("[contact] Primary insert failed, executing safe fallback:", err.message);
+    try {
+      const fallbackResult = await db.execute({
+        sql: `INSERT INTO contact_submissions
+                (full_name, email, phone, subject, message, service_interest_id, status, ip_address, email_notify_status)
+              VALUES (?,?,?,?,?,NULL,'new',?,'pending')`,
+        args: [
+          full_name,
+          email.toLowerCase(),
+          phone || null,
+          subject || null,
+          message,
+          ip,
+        ],
+      });
+      newId = Number(fallbackResult.lastInsertRowid);
+      console.log(`[contact] Fallback submission #${newId} saved successfully for: ${email.toLowerCase()}`);
+    } catch (fallbackErr) {
+      console.error("[contact] Critical insert error:", fallbackErr.message);
+      return res.status(500).json({ error: { code: "INTERNAL_ERROR", message: "Failed to save your submission. Please try again." } });
+    }
+  }
+
+  // Broadcast live event to real-time dashboards (privacy-safe: no email or full message on public stream)
+  try {
     broadcast({
       type: "new_lead",
       lead: {
@@ -138,10 +177,7 @@ const handleContactSubmission = async (req, res) => {
       },
       timestamp: new Date().toISOString(),
     });
-  } catch (err) {
-    console.error("[contact] Insert error:", err.message);
-    return res.status(500).json({ error: { code: "INTERNAL_ERROR", message: "Failed to save your submission. Please try again." } });
-  }
+  } catch (_) {}
 
   // ── DELIVERY STRATEGY & QUOTA ENGINE ────────────────────────────
   const submission = { id: newId, full_name, email: email.toLowerCase(), phone: phone || null, subject, message, ip_address: ip, created_at: new Date().toISOString() };

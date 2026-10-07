@@ -1806,6 +1806,9 @@
                 <span id="realtimeStatusText">Real-Time DB Sync Active</span>
               </div>
               <span class="last-sync-tag" id="lastUpdatedTime">Synced just now</span>
+              <button class="btn btn-sm" onclick="loadDashboard()" title="Refresh Telemetry Now" style="padding:1px 8px; font-size:11px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); color:#cbd5e1; border-radius:6px; cursor:pointer;">
+                <i class="bi bi-arrow-clockwise me-1"></i>Sync
+              </button>
             </div>
           </div>
 
@@ -4038,11 +4041,7 @@
         }
       }
 
-      // Periodic parity sync every 30s
-      setInterval(() => {
-        loadAnalytics(currentTimeWindow);
-        loadLeads();
-      }, 30000);
+      // Dashboard loads initially on mount; updates occur via SSE events or manual refresh to conserve edge requests
 
       // ── Load Leads ──────────────────────────────────────────────
       async function loadLeads() {
