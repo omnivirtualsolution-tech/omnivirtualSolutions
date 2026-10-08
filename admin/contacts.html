@@ -2190,11 +2190,13 @@
               <i class="bi bi-chat-left-text-fill"></i> Contact Messages
             </a>
           </li>
+          <!-- Contact Leads CRM (Commented out)
           <li>
             <a class="nav-sub-item" onclick="switchTab('leads', this)" id="navSubLeads">
               <i class="bi bi-kanban-fill" style="color:var(--gold);"></i> Contact Leads CRM
             </a>
           </li>
+          -->
           <li>
             <a class="nav-sub-item" onclick="switchTab('email-settings', this)" id="navSubEmailSettings">
               <i class="bi bi-palette2" style="color:var(--gold);"></i> Email UI &amp; Settings
@@ -2340,9 +2342,10 @@
         </div>
       </div>
 
-      <!-- ── TAB: CONTACT LEADS CRM (REAL EXECUTIVE PIPELINE) ── -->
+      <!-- ── TAB: CONTACT LEADS CRM (REAL EXECUTIVE PIPELINE) (COMMENTED OUT) ──
+<!- - ── TAB: CONTACT LEADS CRM (REAL EXECUTIVE PIPELINE) ── - ->
       <div id="tab-leads" class="admin-tab">
-        <!-- 1. Executive KPI Summary Cards -->
+        <!- - 1. Executive KPI Summary Cards - ->
         <div class="crm-kpi-grid">
           <div class="crm-kpi-card gold">
             <div class="crm-kpi-icon"><i class="bi bi-people-fill"></i></div>
@@ -2378,10 +2381,10 @@
           </div>
         </div>
 
-        <!-- 2. CRM Control & Toolbar Strip -->
+        <!- - 2. CRM Control & Toolbar Strip - ->
         <div class="crm-toolbar">
           <div class="crm-toolbar-left">
-            <!-- Search Input -->
+            <!- - Search Input - ->
             <div class="search-box-wrap" style="width:280px; max-width:100%;">
               <i class="bi bi-search search-icon"></i>
               <input type="text" id="crmSearchInput" class="search-input-field" placeholder="Search leads by name, email, topic..." oninput="crmSearchDebounce()">
@@ -2390,7 +2393,7 @@
               </button>
             </div>
             
-            <!-- Stage Filter Pills -->
+            <!- - Stage Filter Pills - ->
             <div class="crm-stage-pills">
               <button type="button" class="crm-stage-pill active" onclick="crmFilterStage('', this)">All</button>
               <button type="button" class="crm-stage-pill" onclick="crmFilterStage('new', this)">New</button>
@@ -2401,7 +2404,7 @@
           </div>
 
           <div class="crm-toolbar-right">
-            <!-- View Switcher Toggle -->
+            <!- - View Switcher Toggle - ->
             <div class="crm-view-switcher">
               <button type="button" id="crmViewKanbanBtn" class="crm-view-btn active" onclick="crmSetView('kanban')" title="Kanban Pipeline View">
                 <i class="bi bi-kanban-fill"></i> Pipeline Board
@@ -2411,7 +2414,7 @@
               </button>
             </div>
 
-            <!-- Action Buttons -->
+            <!- - Action Buttons - ->
             <button type="button" class="btn btn-sm" onclick="runCrmStartToEndAnimation()" title="Replay Start-to-End Scanning Animation" style="padding:7px 12px; background:rgba(235,162,45,0.15); border-color:rgba(235,162,45,0.4); color:var(--gold);">
               <i class="bi bi-lightning-charge-fill"></i> <span>Replay Scan</span>
             </button>
@@ -2424,7 +2427,7 @@
           </div>
         </div>
 
-        <!-- Visual Pipeline Telemetry & Scan Bar (Start to End) -->
+        <!- - Visual Pipeline Telemetry & Scan Bar (Start to End) - ->
         <div id="crmTelemetryStrip" class="crm-telemetry-strip">
           <div class="crm-telemetry-status">
             <div class="crm-telemetry-indicator">
@@ -2439,9 +2442,9 @@
           </div>
         </div>
 
-        <!-- 3. Kanban Pipeline Board Stage Columns -->
+        <!- - 3. Kanban Pipeline Board Stage Columns - ->
         <div id="crmKanbanView" class="crm-kanban-board">
-          <!-- Stage 1: New Leads -->
+          <!- - Stage 1: New Leads - ->
           <div class="crm-column stage-new">
             <div class="crm-column-header">
               <div class="crm-col-title-wrap">
@@ -2451,11 +2454,11 @@
               <span class="crm-col-badge" id="crmCountNew">0</span>
             </div>
             <div class="crm-cards-container" id="crmCardsNew">
-              <!-- Rendered cards -->
+              <!- - Rendered cards - ->
             </div>
           </div>
 
-          <!-- Stage 2: In Review -->
+          <!- - Stage 2: In Review - ->
           <div class="crm-column stage-review">
             <div class="crm-column-header">
               <div class="crm-col-title-wrap">
@@ -2465,11 +2468,11 @@
               <span class="crm-col-badge" id="crmCountReview">0</span>
             </div>
             <div class="crm-cards-container" id="crmCardsReview">
-              <!-- Rendered cards -->
+              <!- - Rendered cards - ->
             </div>
           </div>
 
-          <!-- Stage 3: Contacted / In Discussion -->
+          <!- - Stage 3: Contacted / In Discussion - ->
           <div class="crm-column stage-contacted">
             <div class="crm-column-header">
               <div class="crm-col-title-wrap">
@@ -2479,11 +2482,11 @@
               <span class="crm-col-badge" id="crmCountContacted">0</span>
             </div>
             <div class="crm-cards-container" id="crmCardsContacted">
-              <!-- Rendered cards -->
+              <!- - Rendered cards - ->
             </div>
           </div>
 
-          <!-- Stage 4: Closed / Converted -->
+          <!- - Stage 4: Closed / Converted - ->
           <div class="crm-column stage-closed">
             <div class="crm-column-header">
               <div class="crm-col-title-wrap">
@@ -2493,12 +2496,12 @@
               <span class="crm-col-badge" id="crmCountClosed">0</span>
             </div>
             <div class="crm-cards-container" id="crmCardsClosed">
-              <!-- Rendered cards -->
+              <!- - Rendered cards - ->
             </div>
           </div>
         </div>
 
-        <!-- 4. Detailed Table View (Toggled) -->
+        <!- - 4. Detailed Table View (Toggled) - ->
         <div id="crmTableView" class="crm-table-wrapper" style="display:none;">
           <div class="panel" style="margin-bottom:0; background:var(--card); border:1px solid var(--border); border-radius:14px; overflow:hidden;">
             <div class="panel-body" style="padding:0; overflow-x:auto;">
@@ -2515,17 +2518,17 @@
                   </tr>
                 </thead>
                 <tbody id="crmTableBody">
-                  <!-- Dynamic rows -->
+                  <!- - Dynamic rows - ->
                 </tbody>
               </table>
             </div>
           </div>
         </div>
 
-        <!-- 5. Lead Intelligence Drawer / Modal -->
+        <!- - 5. Lead Intelligence Drawer / Modal - ->
         <div id="crmDrawerBackdrop" class="crm-drawer-backdrop" style="display:none;" onclick="if(event.target===this) closeCrmDrawer()">
           <div class="crm-drawer" role="dialog" aria-modal="true" aria-labelledby="crmDrawerName">
-            <!-- Drawer Header -->
+            <!- - Drawer Header - ->
             <div class="crm-drawer-header">
               <div style="display:flex; align-items:center; gap:12px;">
                 <div class="crm-avatar" id="crmDrawerAvatar" style="width:44px; height:44px; font-size:16px;">—</div>
@@ -2539,9 +2542,9 @@
               </button>
             </div>
 
-            <!-- Drawer Body -->
+            <!- - Drawer Body - ->
             <div class="crm-drawer-body">
-              <!-- Quick Stage Selector Banner -->
+              <!- - Quick Stage Selector Banner - ->
               <div class="crm-drawer-section">
                 <label class="crm-drawer-label">Pipeline Stage Progression</label>
                 <div style="display:flex; gap:10px; align-items:center;">
@@ -2554,7 +2557,7 @@
                 </div>
               </div>
 
-              <!-- Contact Profile Details -->
+              <!- - Contact Profile Details - ->
               <div class="crm-drawer-section">
                 <label class="crm-drawer-label">Contact Intelligence</label>
                 <div class="crm-drawer-info-grid">
@@ -2573,7 +2576,7 @@
                 </div>
               </div>
 
-              <!-- Inquiry Full Message -->
+              <!- - Inquiry Full Message - ->
               <div class="crm-drawer-section">
                 <label class="crm-drawer-label">Client Inquiry Message</label>
                 <div class="crm-message-quote" id="crmDrawerMessage">
@@ -2581,7 +2584,7 @@
                 </div>
               </div>
 
-              <!-- Internal Notes / Follow-up Scratchpad -->
+              <!- - Internal Notes / Follow-up Scratchpad - ->
               <div class="crm-drawer-section">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
                   <label class="crm-drawer-label" style="margin:0;"><i class="bi bi-sticky-fill" style="color:var(--gold);"></i> Admin Follow-up Notes</label>
@@ -2591,7 +2594,7 @@
               </div>
             </div>
 
-            <!-- Drawer Footer Action Bar -->
+            <!- - Drawer Footer Action Bar - ->
             <div class="crm-drawer-footer">
               <button type="button" class="btn" onclick="crmDrawerCopyEmail()" id="crmCopyEmailBtn" style="min-height:42px;">
                 <i class="bi bi-clipboard"></i> Copy Email
@@ -2603,6 +2606,9 @@
           </div>
         </div>
       </div>
+
+      
+      -->
 
       <!-- ── TAB: EMAIL SETTINGS ── -->
       <div id="tab-email-settings" class="admin-tab">
@@ -4348,7 +4354,7 @@
 
     // ── Init ─────────────────────────────────────────────────────
     const initialHash = window.location.hash.replace('#', '');
-    if (initialHash && ['inbox', 'leads', 'email-settings'].includes(initialHash)) {
+    if (initialHash && ['inbox', 'email-settings'].includes(initialHash)) {
       const matchingSub = document.querySelector(`.nav-sub-item[onclick*="'${initialHash}'"]`);
       switchTab(initialHash, matchingSub);
     } else {

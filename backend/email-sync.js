@@ -55,12 +55,6 @@ async function syncUniversalEmail(rawEmail, editor = "admin") {
         args: [bKey, bKey, email, editor],
       });
 
-      // Write revision log
-      await db.execute({
-        sql: `INSERT INTO content_block_revisions (block_key, old_value, new_value, changed_by)
-              VALUES (?, '', ?, ?)`,
-        args: [bKey, email, editor],
-      }).catch(() => {});
 
       // Broadcast content block change
       broadcast({

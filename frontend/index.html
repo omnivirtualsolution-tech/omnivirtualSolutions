@@ -24,9 +24,27 @@
 
     <!-- Main CSS File -->
     <link href="/assets/css/main.css" rel="stylesheet" />
+
+    <!-- Lightweight Lottie Animation Runtime for Instant Preloader -->
+    <script src="/assets/vendor/lottie/lottie.min.js"></script>
   </head>
   <body class="index-page">
+    <!-- Website Loading Preloader (Lottie Book & Animated Label) -->
+    <div id="preloader">
+      <div class="preloader-content">
+        <div id="preloader-lottie" class="preloader-lottie"></div>
+        <div class="preloader-label">
+          <span>Loading</span>
+          <span class="preloader-dots">
+            <span class="preloader-dot">.</span><span class="preloader-dot">.</span><span class="preloader-dot">.</span>
+          </span>
+        </div>
+      </div>
+    </div>
+    <script src="/assets/js/preloader-init.js"></script>
+
     <div id="root"></div>
+
     <!-- Vendor scripts -->
     <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/vendor/aos/aos.js"></script>

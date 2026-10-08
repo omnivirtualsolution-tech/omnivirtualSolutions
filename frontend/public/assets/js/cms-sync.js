@@ -82,7 +82,7 @@
       }
 
       if (el.tagName.toLowerCase() === 'img') {
-        const path = value.startsWith('/') ? value.slice(1) : value;
+        const path = value.startsWith('http') ? value : (value.startsWith('/') ? value : '/' + value);
         el.src = path;
       } else if (el.classList.contains('service-pill') || el.classList.contains('trust-item')) {
         const icon = el.querySelector('i');
@@ -610,6 +610,25 @@
   // Intercept clicks during Edit Mode so clicking cards/text focuses editables and avoids accidental link navigation
   document.addEventListener('click', function (e) {
     if (!isEditMode) return;
+
+    // Delegate clicks for editable images (including Swiper looped/cloned slides and book cards)
+    const imgEl = e.target.closest('img[data-block-key]') || e.target.closest('.book-card-wrap, .about-v2-img-frame, .footer-img-wrapper')?.querySelector('img[data-block-key]');
+    if (imgEl) {
+      const key = imgEl.getAttribute('data-block-key');
+      if (key) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (isInsideIframe) {
+          try {
+            window.parent.postMessage({ type: 'OPEN_MEDIA', key: key }, '*');
+            return;
+          } catch (_) {}
+        }
+        promptImageUpload(key, imgEl);
+        return;
+      }
+    }
+
     const editable = e.target.closest('[contenteditable="true"], [data-block-key]');
     if (editable && editable.tagName.toLowerCase() !== 'img') {
       editable.focus();

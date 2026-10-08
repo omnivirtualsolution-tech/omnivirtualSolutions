@@ -69,6 +69,13 @@ export default function Hero() {
     };
   }, []);
 
+  const getBookImg = (id, fallback) => {
+    const key = `home.hero.book${id}.image`;
+    const val = t(key, fallback);
+    if (!val) return fallback;
+    return val.startsWith('http') || val.startsWith('/') ? val : '/' + val;
+  };
+
   return (
     <section id="hero" className="hero section hero-redesign">
       <div className="hero-inner-container">
@@ -101,13 +108,21 @@ export default function Hero() {
           <div className="hero-books-swiper-container">
             <div className="swiper hero-books-swiper" ref={swiperRef}>
               <div className="swiper-wrapper align-items-center">
-                {displayBooks.map((book, index) => (
-                  <div className="swiper-slide" key={`${book.id}-${index}`}>
-                    <div className="book-card-wrap">
-                      <img src={book.img} alt={book.title} className="book-cover-img" />
+                {displayBooks.map((book, index) => {
+                  const bookImg = getBookImg(book.id, book.img);
+                  return (
+                    <div className="swiper-slide" key={`${book.id}-${index}`}>
+                      <div className="book-card-wrap">
+                        <img
+                          src={bookImg}
+                          alt={book.title}
+                          className="book-cover-img"
+                          data-block-key={`home.hero.book${book.id}.image`}
+                        />
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>

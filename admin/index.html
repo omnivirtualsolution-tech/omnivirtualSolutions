@@ -2041,11 +2041,13 @@
               <i class="bi bi-chat-left-text-fill"></i> Contact Messages
             </a>
           </li>
+          <!-- Contact Leads CRM (Commented out)
           <li>
             <a class="nav-sub-item" href="admin/contacts.html#leads">
               <i class="bi bi-kanban-fill" style="color:var(--gold);"></i> Contact Leads CRM
             </a>
           </li>
+          -->
           <li>
             <a class="nav-sub-item" href="admin/contacts.html#email-settings">
               <i class="bi bi-palette2" style="color:var(--gold);"></i> Email UI &amp; Settings
@@ -2112,14 +2114,9 @@
         <!-- Toolbar: Analysis Scope & Time Selector -->
         <div class="dashboard-toolbar">
           <div>
-            <h2 style="font-size:18px; font-weight:700; color:#fff; display:flex; align-items:center; gap:8px;">
-              <i class="bi bi-graph-up-arrow text-warning"></i> Website & Inquiries Real-time Telemetry
-            </h2>
-            <div class="d-flex align-items-center gap-2" style="margin-top:4px;">
-              <div class="live-status-pill">
-                <span class="live-pulse-dot" id="livePulseDot"></span>
-                <span id="realtimeStatusText">Real-Time DB Sync Active</span>
-              </div>
+            <div class="d-flex align-items-center gap-2">
+              <span id="livePulseDot" style="display:none;"></span>
+              <span id="realtimeStatusText" style="display:none;"></span>
               <span class="last-sync-tag" id="lastUpdatedTime">Synced just now</span>
               <button class="btn btn-sm" onclick="loadDashboard()" title="Refresh Telemetry Now" style="padding:1px 8px; font-size:11px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); color:#cbd5e1; border-radius:6px; cursor:pointer;">
                 <i class="bi bi-arrow-clockwise me-1"></i>Sync
@@ -2149,9 +2146,6 @@
         <div class="stats-grid">
           <!-- Card 1: Total Visits (Real Data) -->
           <div class="stat-card">
-            <div class="stat-icon" style="background:rgba(249, 115, 22, 0.12); color:#f97316;">
-              <i class="bi bi-cloud-check-fill"></i>
-            </div>
             <div style="flex:1;">
               <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                 <div class="stat-val" id="statVisits">—</div>
@@ -2160,19 +2154,13 @@
                 </button>
               </div>
               <div class="stat-lbl" id="statVisitsLabel">Total Website Visits (Cloudflare)</div>
-              <div class="stat-sub">
-                <i class="bi bi-shield-check text-success"></i> <span id="statVisitsSub">Verified authentic traffic</span>
-              </div>
               <div class="stat-badge blue" id="statVisitsPace">~0 visits / day</div>
             </div>
           </div>
 
           <!-- Card 2: Email & Inquiries -->
           <div class="stat-card">
-            <div class="stat-icon" style="background:rgba(16, 185, 129, 0.12); color:#34d399;">
-              <i class="bi bi-envelope-check-fill"></i>
-            </div>
-            <div>
+            <div style="flex:1;">
               <div class="stat-val" id="statTotalInquiries">—</div>
               <div class="stat-lbl">Email Inquiries (Leads)</div>
               <div class="stat-sub">
@@ -2184,9 +2172,6 @@
 
           <!-- Card 3: 24h Outbound Email Quota & Engine -->
           <div class="stat-card" style="cursor:pointer;" onclick="location.href='admin/contacts.html'" title="Click to view Contact Inbox &amp; Email Settings">
-            <div class="stat-icon" style="background:rgba(235, 162, 45, 0.12); color:#eba22d;">
-              <i class="bi bi-send-fill"></i>
-            </div>
             <div style="flex:1; min-width:0;">
               <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                 <div class="stat-val" id="statEmailsSentToday">—</div>
@@ -2217,9 +2202,6 @@
                     <span id="chartTimelineStatusText">Tracing Timeline... 0%</span>
                   </span>
                 </div>
-                <div style="font-size:11px; color:var(--muted); margin-top:2px;">
-                  Website Visits vs. Inquiries vs. Emails Sent
-                </div>
               </div>
               <div style="display:flex; align-items:center; gap:8px;">
                 <button type="button" class="btn btn-sm" onclick="replayTimelineChartAnimation()" title="Replay Start-to-End Timeline Animation" style="padding:4px 10px; font-size:11.5px; background:rgba(235,162,45,0.12); border:1px solid rgba(235,162,45,0.35); color:var(--gold); border-radius:6px; cursor:pointer;">
@@ -2242,9 +2224,6 @@
           <div style="display: flex; flex-direction: column; gap: 16px; justify-content: space-between;">
             <!-- Turso Cloud Database Storage & Limit -->
             <div class="stat-card" style="margin: 0; flex: 1;">
-              <div class="stat-icon" style="background:rgba(6, 182, 212, 0.12); color:#22d3ee;">
-                <i class="bi bi-database-fill-check"></i>
-              </div>
               <div style="flex:1; min-width:0;">
                 <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                   <div class="stat-val" id="statTursoUsed">—</div>
@@ -2262,9 +2241,6 @@
 
             <!-- Cloudflare Edge Requests Quota & Limit -->
             <div class="stat-card" style="margin: 0; flex: 1;">
-              <div class="stat-icon" style="background:rgba(249, 115, 22, 0.12); color:#f97316;">
-                <i class="bi bi-cloud-check-fill"></i>
-              </div>
               <div style="flex:1; min-width:0;">
                 <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                   <div class="stat-val" id="statCloudflareUsed">—</div>
@@ -3843,18 +3819,19 @@
         if (!activeImageBlockKey) return;
         const targetKey = activeImageBlockKey;
         const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
+        const normalizedSrc = cleanPath.startsWith('http') ? cleanPath : '/' + cleanPath;
         
         // 1. Immediately update image inside liveEditorIframe
         const iframe = document.getElementById('liveEditorIframe');
         if (iframe && iframe.contentDocument) {
           iframe.contentDocument.querySelectorAll(`img[data-block-key="${targetKey}"]`).forEach(img => {
-            img.src = cleanPath;
+            img.src = normalizedSrc;
             img.classList.add('cms-live-pulsing');
             setTimeout(() => img.classList.remove('cms-live-pulsing'), 1200);
           });
           // Also post message to iframe for deep sync
           try {
-            iframe.contentWindow.postMessage({ type: 'IMAGE_CHANGED', key: targetKey, src: cleanPath }, '*');
+            iframe.contentWindow.postMessage({ type: 'IMAGE_CHANGED', key: targetKey, src: normalizedSrc }, '*');
           } catch (_) {}
         }
 
@@ -3872,7 +3849,7 @@
               'Content-Type': 'application/json',
               'Authorization': 'Bearer ' + token
             },
-            body: JSON.stringify({ value: cleanPath })
+            body: JSON.stringify({ value: normalizedSrc })
           });
           const data = await res.json();
           if (res.ok && data.success) {
@@ -3884,7 +3861,7 @@
             if (typeof BroadcastChannel !== 'undefined') {
               try {
                 const ch = new BroadcastChannel('omni_cms_channel');
-                ch.postMessage({ type: 'cms_block_updated', key: targetKey, value: cleanPath });
+                ch.postMessage({ type: 'cms_block_updated', key: targetKey, value: normalizedSrc });
                 ch.close();
               } catch (_) {}
             }

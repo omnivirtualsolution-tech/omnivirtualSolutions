@@ -28,6 +28,9 @@
   <link href="assets/css/main.css" rel="stylesheet">
   <link href="assets/css/navbar-luxury.css" rel="stylesheet">
   <link href="assets/css/about-v2.css" rel="stylesheet">
+
+  <!-- Lightweight Lottie Animation Runtime for Instant Preloader -->
+  <script src="assets/vendor/lottie/lottie.min.js"></script>
 </head>
 
 <body class="index-page">
@@ -568,7 +571,19 @@
   <!-- Scroll Top -->
   <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-  <div id="preloader"></div>
+  <!-- Website Loading Preloader (Lottie Book & Animated Label) -->
+  <div id="preloader">
+    <div class="preloader-content">
+      <div id="preloader-lottie" class="preloader-lottie"></div>
+      <div class="preloader-label">
+        <span>Loading</span>
+        <span class="preloader-dots">
+          <span class="preloader-dot">.</span><span class="preloader-dot">.</span><span class="preloader-dot">.</span>
+        </span>
+      </div>
+    </div>
+  </div>
+  <script src="assets/js/preloader-init.js"></script>
 
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="assets/vendor/php-email-form/validate.js"></script>

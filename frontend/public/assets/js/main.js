@@ -23,16 +23,37 @@
   window.addEventListener('load', toggleScrolled);
 
   /**
+   * Anonymous First-Party Visit Telemetry (Data Analysis Mastery Skill)
+   */
+  try {
+    if (!window.location.pathname.startsWith('/admin')) {
+      const payload = JSON.stringify({
+        path: window.location.pathname || '/',
+        referrer: document.referrer || 'direct'
+      });
+      fetch('/api/v1/track-visit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: payload
+      }).catch(() => {});
+    }
+  } catch (_) {}
+
+
+  /**
    * Mobile nav toggle
    */
   const mobileNavToggleBtn = document.querySelector('.mobile-nav-toggle');
 
   function mobileNavToogle() {
     document.querySelector('body').classList.toggle('mobile-nav-active');
+    if (!mobileNavToggleBtn) return;
     mobileNavToggleBtn.classList.toggle('bi-list');
     mobileNavToggleBtn.classList.toggle('bi-x');
   }
-  mobileNavToggleBtn.addEventListener('click', mobileNavToogle);
+  if (mobileNavToggleBtn) {
+    mobileNavToggleBtn.addEventListener('click', mobileNavToogle);
+  }
 
   /**
    * Smooth navigation redirect to each section with header offset & mobile nav handling
@@ -132,9 +153,21 @@
    */
   const preloader = document.querySelector('#preloader');
   if (preloader) {
-    window.addEventListener('load', () => {
-      preloader.remove();
-    });
+    const removePreloader = () => {
+      if (typeof window.dismissPreloader === 'function') {
+        window.dismissPreloader();
+      } else {
+        preloader.classList.add('preloader-hidden');
+        setTimeout(() => { if (preloader.isConnected) preloader.remove(); }, 600);
+      }
+    };
+    if (document.readyState === 'complete') {
+      setTimeout(removePreloader, 300);
+    } else {
+      window.addEventListener('load', () => setTimeout(removePreloader, 300));
+    }
+    // Safety net: never leave the page stuck behind the preloader
+    setTimeout(removePreloader, 5000);
   }
 
   /**
@@ -147,13 +180,15 @@
       window.scrollY > 100 ? scrollTop.classList.add('active') : scrollTop.classList.remove('active');
     }
   }
-  scrollTop.addEventListener('click', (e) => {
-    e.preventDefault();
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
+  if (scrollTop) {
+    scrollTop.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
     });
-  });
+  }
 
   window.addEventListener('load', toggleScrollTop);
   document.addEventListener('scroll', toggleScrollTop);

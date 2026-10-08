@@ -34,6 +34,27 @@ function formatCatalog(rawList) {
   }));
 }
 
+// Safely highlight matching search tokens in text
+function highlightMatch(text, query) {
+  if (!query || !text) return text;
+  const trimmed = query.trim();
+  if (!trimmed) return text;
+  try {
+    const escaped = trimmed.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`(${escaped})`, 'gi');
+    const parts = text.split(regex);
+    return parts.map((part, i) =>
+      part.toLowerCase() === trimmed.toLowerCase() ? (
+        <mark key={i} className="search-highlight-match">{part}</mark>
+      ) : (
+        part
+      )
+    );
+  } catch (_) {
+    return text;
+  }
+}
+
 export default function ServicesPage() {
   const [searchParams] = useSearchParams();
   const openParam = searchParams.get('open');
@@ -71,13 +92,31 @@ export default function ServicesPage() {
   });
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const [emailCopied, setEmailCopied] = useState(false);
 
-  // Refs for locking category cabinet scroll and smooth-scrolling content area
+  // Refs for locking category cabinet scroll, smooth-scrolling, and search wrapper
   const sidebarRef = useRef(null);
   const contentColRef = useRef(null);
   const detailCardRef = useRef(null);
   const keepCabinetScrollRef = useRef(null);
+  const searchWrapRef = useRef(null);
+
+  // Close search dropdown on click outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (searchWrapRef.current && !searchWrapRef.current.contains(e.target)) {
+        setIsSearchOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, []);
 
   // Synchronize expanded state to sessionStorage
   useEffect(() => {
@@ -877,6 +916,137 @@ const AUTHENTIC_SERVICE_SUMMARIES = {
       .filter((cat) => cat.subcategories.length > 0);
   }, [catalog, activeCategoryTag, searchQuery]);
 
+  // Real-time search index & smart relevance ranking across all services, packages, and categories
+  const searchResults = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return [];
+
+    const matches = [];
+
+    allServicesList.forEach((service) => {
+      const title = (service.title || '').toLowerCase();
+      const lead = (service.lead || service.lead_paragraph || AUTHENTIC_SERVICE_SUMMARIES[service.slug] || '').toLowerCase();
+      const catTitle = (service.categoryTitle || '').toLowerCase();
+      const subTitle = (service.subcategoryTitle || '').toLowerCase();
+      const slug = (service.slug || '').toLowerCase();
+
+      let score = 0;
+
+      // Exact title match gets highest priority
+      if (title === q) {
+        score += 100;
+      } else if (title.startsWith(q)) {
+        score += 70;
+      } else if (title.includes(q)) {
+        score += 50;
+      }
+
+      // Slug match
+      if (slug.includes(q)) {
+        score += 30;
+      }
+
+      // Subcategory / category matches
+      if (subTitle.includes(q)) {
+        score += 25;
+      } else if (catTitle.includes(q)) {
+        score += 15;
+      }
+
+      // Description / lead text match
+      if (lead.includes(q)) {
+        score += 10;
+      }
+
+      if (score > 0) {
+        matches.push({ service, score });
+      }
+    });
+
+    matches.sort((a, b) => b.score - a.score || a.service.title.localeCompare(b.service.title));
+    return matches.slice(0, 8).map((m) => m.service);
+  }, [allServicesList, searchQuery]);
+
+  // Navigate user directly to service from search dropdown
+  const handleSelectSearchResult = (service) => {
+    if (!service) return;
+
+    // Find parent category and subcategory from live catalog
+    const cat = catalog.find((c) => c.id === service.categoryId || c.tag === service.categoryTag);
+    const sub = (cat?.subcategories || []).find((s) => s.id === service.subcategoryId) || cat?.subcategories?.[0];
+
+    // Ensure category and subcategory are expanded in the sidebar cabinet
+    if (cat?.tag || cat?.id) {
+      setExpandedCategories((prev) => ({
+        ...prev,
+        [cat.id]: true,
+        [cat.tag]: true,
+      }));
+    }
+    if (sub?.id) {
+      setExpandedSubcategories((prev) => ({
+        ...prev,
+        [sub.id]: true,
+      }));
+    }
+
+    if (service.isCategoryOverview) {
+      handleSelectService(
+        {
+          ...service,
+          title: service.title || t(`service.${service.slug}.title`, cat?.title || ''),
+          lead: service.lead || service.lead_paragraph || t(`service.${service.slug}.lead`, ''),
+        },
+        cat,
+        sub,
+        true
+      );
+    } else {
+      handleSelectService(service, cat, sub);
+    }
+
+    setIsSearchOpen(false);
+    setHighlightedIndex(-1);
+    setSearchQuery('');
+    scrollToContentTop();
+  };
+
+  // Keyboard navigation for search input
+  const handleSearchKeyDown = (e) => {
+    if (e.key === 'Escape') {
+      setIsSearchOpen(false);
+      setHighlightedIndex(-1);
+      return;
+    }
+
+    if (searchResults.length === 0) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (!isSearchOpen) {
+        setIsSearchOpen(true);
+        setHighlightedIndex(0);
+      } else {
+        setHighlightedIndex((prev) => (prev < searchResults.length - 1 ? prev + 1 : 0));
+      }
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (!isSearchOpen) {
+        setIsSearchOpen(true);
+        setHighlightedIndex(searchResults.length - 1);
+      } else {
+        setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : searchResults.length - 1));
+      }
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (highlightedIndex >= 0 && highlightedIndex < searchResults.length) {
+        handleSelectSearchResult(searchResults[highlightedIndex]);
+      } else if (searchResults.length > 0) {
+        handleSelectSearchResult(searchResults[0]);
+      }
+    }
+  };
+
   return (
     <div className="services-page-wrapper">
       <main className="main services-catalog-page">
@@ -893,33 +1063,120 @@ const AUTHENTIC_SERVICE_SUMMARIES = {
 
             {/* Search & Mobile Drawer Trigger Bar */}
             <div className="services-control-bar">
-              <div className="services-search-wrap">
+              <div className="services-search-wrap" ref={searchWrapRef}>
                 <i className="bi bi-search services-search-icon"></i>
                 <input
                   type="text"
                   className="services-search-input"
                   placeholder="Search all services, packages, editorial..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setIsSearchOpen(true);
+                    setHighlightedIndex(-1);
+                  }}
+                  onFocus={() => {
+                    if (searchQuery.trim().length > 0) {
+                      setIsSearchOpen(true);
+                    }
+                  }}
+                  onKeyDown={handleSearchKeyDown}
                   aria-label="Search services"
+                  autoComplete="off"
+                  role="combobox"
+                  aria-expanded={isSearchOpen && searchQuery.trim().length > 0}
+                  aria-haspopup="listbox"
+                  aria-autocomplete="list"
+                  aria-controls="services-search-dropdown-menu"
                 />
                 {searchQuery && (
                   <button
                     type="button"
-                    onClick={() => setSearchQuery('')}
-                    style={{
-                      position: 'absolute',
-                      right: '12px',
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      background: 'transparent',
-                      border: 'none',
-                      color: '#8a827a',
-                      cursor: 'pointer',
+                    className="services-search-clear-btn"
+                    onClick={() => {
+                      setSearchQuery('');
+                      setIsSearchOpen(false);
+                      setHighlightedIndex(-1);
                     }}
+                    aria-label="Clear search"
                   >
                     <i className="bi bi-x-circle-fill"></i>
                   </button>
+                )}
+
+                {/* Live Dropdown Results */}
+                {isSearchOpen && searchQuery.trim().length > 0 && (
+                  <div
+                    id="services-search-dropdown-menu"
+                    className="services-search-dropdown shadow-lg"
+                    role="listbox"
+                  >
+                    {searchResults.length > 0 ? (
+                      <>
+                        <div className="services-search-dropdown-header">
+                          <span>
+                            Found <strong>{searchResults.length}</strong> matching {searchResults.length === 1 ? 'service' : 'services'}
+                          </span>
+                          <span className="search-shortcut-hint">
+                            Press <kbd>↑</kbd><kbd>↓</kbd> to navigate, <kbd>Enter</kbd> to view
+                          </span>
+                        </div>
+                        <div className="services-search-dropdown-list">
+                          {searchResults.map((item, idx) => {
+                            const isHighlighted = idx === highlightedIndex;
+                            const snippet = item.lead || item.lead_paragraph || AUTHENTIC_SERVICE_SUMMARIES[item.slug] || '';
+                            const categoryLabel = item.categoryTitle || 'Omni Services';
+                            const subcategoryLabel = item.subcategoryTitle ? ` › ${item.subcategoryTitle}` : '';
+
+                            return (
+                              <div
+                                key={item.slug || idx}
+                                className={`search-result-item ${isHighlighted ? 'is-highlighted' : ''}`}
+                                onClick={() => handleSelectSearchResult(item)}
+                                onMouseEnter={() => setHighlightedIndex(idx)}
+                                role="option"
+                                aria-selected={isHighlighted}
+                              >
+                                <div className="search-result-main">
+                                  <div className="search-result-breadcrumbs">
+                                    <span className="search-result-badge">
+                                      {categoryLabel}{subcategoryLabel}
+                                    </span>
+                                    {item.price && (
+                                      <span className="search-result-price">{item.price}</span>
+                                    )}
+                                  </div>
+                                  <h4 className="search-result-title">
+                                    {highlightMatch(item.title, searchQuery)}
+                                  </h4>
+                                  {snippet && (
+                                    <p className="search-result-snippet">
+                                      {snippet.length > 130 ? snippet.slice(0, 130) + '…' : snippet}
+                                    </p>
+                                  )}
+                                </div>
+                                <div className="search-result-action">
+                                  <span className="search-result-arrow">
+                                    <i className="bi bi-arrow-right-short"></i>
+                                  </span>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </>
+                    ) : (
+                      <div className="search-empty-state">
+                        <i className="bi bi-search search-empty-icon"></i>
+                        <p className="search-empty-title">
+                          No services found for &ldquo;{searchQuery}&rdquo;
+                        </p>
+                        <p className="search-empty-hint">
+                          Try searching for keywords like <em>marketing</em>, <em>editorial</em>, <em>illustrations</em>, or <em>bookstore</em>.
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
 

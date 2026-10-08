@@ -55,7 +55,12 @@ export const CmsProvider = ({ children }) => {
         // Fallback gracefully to default static text
         console.warn('[CMS] Running in standalone/fallback mode:', err.message);
       } finally {
-        if (isMounted) setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+          if (typeof window !== 'undefined' && typeof window.dismissPreloader === 'function') {
+            window.dismissPreloader();
+          }
+        }
       }
     };
 

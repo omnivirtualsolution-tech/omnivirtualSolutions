@@ -153,11 +153,21 @@
    */
   const preloader = document.querySelector('#preloader');
   if (preloader) {
-    const removePreloader = () => { if (preloader.isConnected) preloader.remove(); };
-    if (document.readyState === 'complete') removePreloader();
-    window.addEventListener('load', removePreloader);
-    // Safety net: never leave the page stuck behind the spinner
-    setTimeout(removePreloader, 4000);
+    const removePreloader = () => {
+      if (typeof window.dismissPreloader === 'function') {
+        window.dismissPreloader();
+      } else {
+        preloader.classList.add('preloader-hidden');
+        setTimeout(() => { if (preloader.isConnected) preloader.remove(); }, 600);
+      }
+    };
+    if (document.readyState === 'complete') {
+      setTimeout(removePreloader, 300);
+    } else {
+      window.addEventListener('load', () => setTimeout(removePreloader, 300));
+    }
+    // Safety net: never leave the page stuck behind the preloader
+    setTimeout(removePreloader, 5000);
   }
 
   /**

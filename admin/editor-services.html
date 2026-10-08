@@ -249,7 +249,7 @@
       display: block;
     }
 
-    /* Search bar */
+    /* Search bar & Control Bar */
     .services-control-bar {
       display: flex;
       align-items: center;
@@ -258,21 +258,30 @@
       max-width: 680px;
       margin-left: auto;
       margin-right: auto;
+      position: relative;
+      width: 100%;
     }
     .services-search-wrap {
       flex: 1;
       position: relative;
+      min-width: 0;
     }
     .services-search-input {
       width: 100%;
-      height: 46px;
+      height: 48px;
       border-radius: 12px;
       border: 1px solid rgba(194, 154, 107, 0.3);
-      padding: 0 16px 0 42px;
+      padding: 0 44px 0 42px;
       background: #ffffff;
       color: #1c1917;
       font-size: 0.95rem;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .services-search-input:focus {
+      outline: none;
+      border-color: #ad7d42;
+      box-shadow: 0 0 0 3px rgba(173, 125, 66, 0.15);
     }
     .services-search-icon {
       position: absolute;
@@ -280,6 +289,138 @@
       top: 50%;
       transform: translateY(-50%);
       color: #a8a29e;
+      font-size: 1rem;
+      pointer-events: none;
+    }
+    .services-search-clear-btn {
+      position: absolute;
+      right: 2px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      color: #8a827a;
+      cursor: pointer;
+      border-radius: 50%;
+      transition: color 0.15s ease, background-color 0.15s ease;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .services-search-clear-btn:hover,
+    .services-search-clear-btn:active {
+      color: #2b2219;
+      background: rgba(194, 154, 107, 0.12);
+    }
+
+    /* Mobile Categories Trigger Button (matching ServicesPage.css) */
+    .drawer-trigger-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 48px;
+      min-height: 44px;
+      padding: 0 18px;
+      border-radius: 12px;
+      background: #2b2219;
+      color: #fae2b2;
+      border: 1px solid rgba(194, 154, 107, 0.4);
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .drawer-trigger-btn:hover {
+      background: #3e3226;
+      color: #ffffff;
+      border-color: rgba(194, 154, 107, 0.6);
+    }
+    .drawer-trigger-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* Off-Canvas Slide-Over Drawer for Mobile */
+    .mobile-drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(18, 15, 12, 0.6);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 99998;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .mobile-drawer-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .mobile-drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: min(340px, 85vw);
+      background: #ffffff;
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(-100%);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 4px 0 24px rgba(0, 0, 0, 0.25);
+      padding-bottom: env(safe-area-inset-bottom, 16px);
+    }
+    .mobile-drawer.open {
+      transform: translateX(0);
+    }
+    .drawer-header {
+      padding: 18px 20px;
+      background: #2b2219;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .drawer-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fae2b2;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .drawer-close-btn {
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      font-size: 1.35rem;
+      cursor: pointer;
+      min-width: 44px;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .drawer-close-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fae2b2;
+    }
+    .drawer-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
     }
 
     /* ── Sidebar (Responsive & Container Query Ready) ── */
@@ -1463,6 +1604,25 @@
       }
     }
 
+    @media (max-width: 576px) {
+      .services-control-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        width: 100%;
+        padding: 0 4px;
+      }
+
+      .services-search-wrap {
+        width: 100%;
+      }
+
+      .drawer-trigger-btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
     @media (max-width: 480px) {
       .container {
         padding-left: 12px !important;
@@ -1665,20 +1825,29 @@
           Explore our full spectrum of publishing, editorial, and author marketing solutions.
         </p>
 
-        <!-- Search Bar -->
+        <!-- Search & Mobile Drawer Trigger Bar -->
         <div class="services-control-bar">
           <div class="services-search-wrap">
             <i class="bi bi-search services-search-icon"></i>
             <input type="text" class="services-search-input" id="catalogSearchInput" placeholder="Search services..." oninput="handleSearch(this.value)">
+            <button type="button" class="services-search-clear-btn" id="catalogSearchClearBtn" style="display: none;" onclick="clearCatalogSearch()" aria-label="Clear search">
+              <i class="bi bi-x-circle-fill"></i>
+            </button>
           </div>
+
+          <!-- Mobile Categories Button -->
+          <button type="button" class="drawer-trigger-btn d-lg-none" id="drawerTriggerBtn" onclick="openMobileDrawer()" aria-label="Open categories menu">
+            <i class="bi bi-grid-fill"></i>
+            <span>Categories</span>
+          </button>
         </div>
       </div>
 
       <!-- Main Layout: Sidebar + Detail View -->
       <div class="row g-4 align-items-start">
         
-        <!-- Left Sidebar: Categories & Services -->
-        <div class="col-lg-4 col-xl-4 col-xxl-3">
+        <!-- Left Sidebar: Categories & Services (Desktop Only) -->
+        <div class="col-lg-4 col-xl-4 col-xxl-3 d-none d-lg-block services-sidebar-col">
           <div class="desktop-services-sidebar">
             <div class="sidebar-brand-box">
               <span class="sidebar-brand-title">
@@ -1919,6 +2088,23 @@
           <i class="bi bi-check-lg"></i> Create Service
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- ── Modern Slide-Over Off-Canvas Drawer for Mobile / Tablet Responsive View ── -->
+  <div class="mobile-drawer-overlay" id="mobileDrawerOverlay" onclick="closeMobileDrawer()" aria-hidden="true"></div>
+  <div class="mobile-drawer" id="mobileDrawer" role="dialog" aria-modal="true" aria-label="Service Categories">
+    <div class="drawer-header">
+      <h3 class="drawer-title">
+        <i class="bi bi-grid-fill" style="color: #d8aa71;"></i>
+        Service Categories
+      </h3>
+      <button type="button" class="drawer-close-btn" onclick="closeMobileDrawer()" aria-label="Close categories menu">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+    <div class="drawer-body" id="mobileDrawerBody">
+      <!-- Populated dynamically with the category tree -->
     </div>
   </div>
 
@@ -2260,14 +2446,49 @@
         });
       }
 
+      window.openMobileDrawer = function() {
+        const overlay = document.getElementById('mobileDrawerOverlay');
+        const drawer = document.getElementById('mobileDrawer');
+        if (overlay) overlay.classList.add('open');
+        if (drawer) drawer.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      };
+
+      window.closeMobileDrawer = function() {
+        const overlay = document.getElementById('mobileDrawerOverlay');
+        const drawer = document.getElementById('mobileDrawer');
+        if (overlay) overlay.classList.remove('open');
+        if (drawer) drawer.classList.remove('open');
+        document.body.style.overflow = '';
+      };
+
+      window.handleSearch = function(val) {
+        const clearBtn = document.getElementById('catalogSearchClearBtn');
+        if (clearBtn) clearBtn.style.display = (val && val.trim().length > 0) ? 'inline-flex' : 'none';
+        renderCategories(val);
+      };
+
+      window.clearCatalogSearch = function() {
+        const input = document.getElementById('catalogSearchInput');
+        const clearBtn = document.getElementById('catalogSearchClearBtn');
+        if (input) {
+          input.value = '';
+          input.focus();
+        }
+        if (clearBtn) clearBtn.style.display = 'none';
+        renderCategories('');
+      };
+
       function renderCategories(filter = '') {
-        const container = document.getElementById('categoriesContainer');
-        if (!container) return;
-        document.getElementById('catTotalCount').textContent = catalog.length;
+        const desktopContainer = document.getElementById('categoriesContainer');
+        const drawerContainer = document.getElementById('mobileDrawerBody');
+        if (!desktopContainer && !drawerContainer) return;
+        const totalCountEl = document.getElementById('catTotalCount');
+        if (totalCountEl) totalCountEl.textContent = catalog.length;
 
         const q = filter.toLowerCase().trim();
 
-        container.innerHTML = catalog.map((cat, catIdx) => {
+        const html = catalog.map((cat, catIdx) => {
           const isExpanded = q.length > 0 || (expandedCategories[cat.id] !== undefined ? Boolean(expandedCategories[cat.id]) : catIdx === 0);
           const matchingServices = (cat.subcategories || []).map(sub => ({
             ...sub,
@@ -2288,7 +2509,7 @@
 
           return `
             <div class="sidebar-category-group mb-2" data-cat-id="${cat.id}">
-              <div class="category-accordion-row ${isExpanded ? 'expanded' : ''} ${isCatActive ? 'active-cat-selected' : ''}" id="cat-row-${cat.id}" data-cat-id="${cat.id}">
+              <div class="category-accordion-row ${isExpanded ? 'expanded' : ''} ${isCatActive ? 'active-cat-selected' : ''}" data-cat-row="${cat.id}" data-cat-id="${cat.id}">
                 <div class="category-accordion-label" onclick="selectCategoryById('${cat.id}')">
                   <i class="bi ${cat.icon || cat.icon_class || 'bi-bookmark-star'} text-warning cat-icon" onclick="openIconPicker('${cat.id}', event)" title="Click to change icon"></i>
                   <span class="category-name-text editable-field" contenteditable="${isEditMode ? 'true' : 'false'}" spellcheck="false" onblur="handleRenameCategory('${cat.id}', this.innerText.trim())" onclick="event.stopPropagation()">${escapeHtml(cat.title)}</span>
@@ -2299,12 +2520,12 @@
                     <i class="bi bi-plus-lg"></i>
                   </button>
                   <button type="button" class="btn-cat-toggle" onclick="event.stopPropagation(); toggleCatAccordion('${cat.id}')" title="Toggle category">
-                    <i class="bi bi-chevron-${isExpanded ? 'down' : 'right'} small" id="cat-chevron-${cat.id}"></i>
+                    <i class="bi bi-chevron-${isExpanded ? 'down' : 'right'} small" data-cat-chevron="${cat.id}"></i>
                   </button>
                 </div>
               </div>
 
-              <div class="subcategories-list" id="subcat-box-${cat.id}" style="display: ${isExpanded ? 'block' : 'none'};">
+              <div class="subcategories-list" data-cat-subbox="${cat.id}" style="display: ${isExpanded ? 'block' : 'none'};">
                 ${(q ? matchingServices : (cat.subcategories || [])).map(sub => {
                   const filteredServices = (sub.services || []).filter(svc => 
                     !(cat.id === 'publishing-packages' && svc.slug === 'publishing-packages') &&
@@ -2316,10 +2537,10 @@
 
                   return `
                   <div class="subcategory-group mb-2" data-sub-id="${sub.id}">
-                    <div class="subcategory-accordion-row ${isSubOpen ? 'expanded' : ''} ${isSubActive ? 'active-sub-selected' : ''}" id="sub-row-${sub.id}" data-sub-id="${sub.id}">
+                    <div class="subcategory-accordion-row ${isSubOpen ? 'expanded' : ''} ${isSubActive ? 'active-sub-selected' : ''}" data-sub-row="${sub.id}" data-sub-id="${sub.id}">
                       <div class="subcategory-accordion-label" onclick="selectSubcategoryById('${cat.id}', '${sub.id}')">
                         <button type="button" class="btn btn-link p-0 text-decoration-none" onclick="event.stopPropagation(); toggleSubcatAccordion('${sub.id}')" style="color: inherit; font-size: inherit;">
-                          <i class="bi bi-chevron-${isSubOpen ? 'down' : 'right'} subcat-chevron" id="sub-chevron-${sub.id}"></i>
+                          <i class="bi bi-chevron-${isSubOpen ? 'down' : 'right'} subcat-chevron" data-sub-chevron="${sub.id}"></i>
                         </button>
                         <span class="subcategory-name-text editable-field" contenteditable="${isEditMode ? 'true' : 'false'}" spellcheck="false" onblur="handleRenameSubcat('${cat.id}', '${sub.id}', this.innerText.trim())" onclick="event.stopPropagation()">${escapeHtml(sub.title)}</span>
                       </div>
@@ -2330,7 +2551,7 @@
                         </button>
                       </div>
                     </div>
-                    <div class="subcategory-services-box" id="sub-services-box-${sub.id}" style="display: ${isSubOpen ? 'block' : 'none'};">
+                    <div class="subcategory-services-box" data-sub-box="${sub.id}" style="display: ${isSubOpen ? 'block' : 'none'};">
                       ${filteredServices.map(svc => `
                         <button type="button" class="service-nav-item ${currentViewMode === 'service' && selectedService?.slug === svc.slug ? 'active' : ''}" data-svc-slug="${svc.slug}" onclick="selectServiceBySlug('${svc.slug}')">
                           <span class="text-truncate">${escapeHtml(svc.title)}</span>
@@ -2344,49 +2565,54 @@
             </div>
           `;
         }).join('');
+
+        if (desktopContainer) desktopContainer.innerHTML = html;
+        if (drawerContainer) drawerContainer.innerHTML = html;
       }
 
       window.toggleSubcatAccordion = function(subId) {
-        const box = document.getElementById('sub-services-box-' + subId);
-        const row = document.getElementById('sub-row-' + subId);
-        const chevron = document.getElementById('sub-chevron-' + subId);
-        if (!box) return;
-        const isOpen = box.style.display !== 'none';
-        const nextOpen = !isOpen;
+        const isCurrentlyOpen = Boolean(expandedSubcategories[subId]);
+        const nextOpen = !isCurrentlyOpen;
         expandedSubcategories[subId] = nextOpen;
-        box.style.display = nextOpen ? 'block' : 'none';
-        if (row) row.classList.toggle('expanded', nextOpen);
-        if (chevron) {
+        document.querySelectorAll(`[data-sub-box="${subId}"]`).forEach(box => {
+          box.style.display = nextOpen ? 'block' : 'none';
+        });
+        document.querySelectorAll(`[data-sub-row="${subId}"]`).forEach(row => {
+          row.classList.toggle('expanded', nextOpen);
+        });
+        document.querySelectorAll(`[data-sub-chevron="${subId}"]`).forEach(chevron => {
           chevron.className = `bi bi-chevron-${nextOpen ? 'down' : 'right'} subcat-chevron`;
-        }
+        });
       };
 
       window.toggleCatAccordion = function(catId) {
-        const box = document.getElementById('subcat-box-' + catId);
-        const row = document.getElementById('cat-row-' + catId);
-        const chevron = document.getElementById('cat-chevron-' + catId);
-        if (!box) return;
-        const isOpen = box.style.display !== 'none';
-        const nextOpen = !isOpen;
+        const isCurrentlyOpen = Boolean(expandedCategories[catId]);
+        const nextOpen = !isCurrentlyOpen;
         expandedCategories[catId] = nextOpen;
-        box.style.display = nextOpen ? 'block' : 'none';
-        if (row) row.classList.toggle('expanded', nextOpen);
-        if (chevron) {
+        document.querySelectorAll(`[data-cat-subbox="${catId}"]`).forEach(box => {
+          box.style.display = nextOpen ? 'block' : 'none';
+        });
+        document.querySelectorAll(`[data-cat-row="${catId}"]`).forEach(row => {
+          row.classList.toggle('expanded', nextOpen);
+        });
+        document.querySelectorAll(`[data-cat-chevron="${catId}"]`).forEach(chevron => {
           chevron.className = `bi bi-chevron-${nextOpen ? 'down' : 'right'} small`;
-        }
+        });
       };
 
       window.selectCategoryById = function(catId) {
         const cat = catalog.find(c => String(c.id) === String(catId));
         if (cat) {
           expandedCategories[cat.id] = true;
-          const box = document.getElementById('subcat-box-' + cat.id);
-          const row = document.getElementById('cat-row-' + cat.id);
-          const chevron = document.getElementById('cat-chevron-' + cat.id);
-          if (box) box.style.display = 'block';
-          if (row) row.classList.add('expanded');
-          if (chevron) chevron.className = 'bi bi-chevron-down small';
+          document.querySelectorAll(`[data-cat-subbox="${cat.id}"]`).forEach(box => { box.style.display = 'block'; });
+          document.querySelectorAll(`[data-cat-row="${cat.id}"]`).forEach(row => { row.classList.add('expanded'); });
+          document.querySelectorAll(`[data-cat-chevron="${cat.id}"]`).forEach(ch => { ch.className = 'bi bi-chevron-down small'; });
+          closeMobileDrawer();
           selectCategory(cat);
+          const card = document.getElementById('serviceDetailCard');
+          if (card && window.innerWidth < 992) {
+            card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
         }
       };
 
@@ -2569,21 +2795,20 @@
         expandedCategories[cat.id] = true;
         expandedSubcategories[sub.id] = true;
 
-        const box = document.getElementById('subcat-box-' + cat.id);
-        const row = document.getElementById('cat-row-' + cat.id);
-        const chevron = document.getElementById('cat-chevron-' + cat.id);
-        if (box) box.style.display = 'block';
-        if (row) row.classList.add('expanded');
-        if (chevron) chevron.className = 'bi bi-chevron-down small';
+        document.querySelectorAll(`[data-cat-subbox="${cat.id}"]`).forEach(box => { box.style.display = 'block'; });
+        document.querySelectorAll(`[data-cat-row="${cat.id}"]`).forEach(row => { row.classList.add('expanded'); });
+        document.querySelectorAll(`[data-cat-chevron="${cat.id}"]`).forEach(ch => { ch.className = 'bi bi-chevron-down small'; });
 
-        const subBox = document.getElementById('sub-services-box-' + sub.id);
-        const subRow = document.getElementById('sub-row-' + sub.id);
-        const subChevron = document.getElementById('sub-chevron-' + sub.id);
-        if (subBox) subBox.style.display = 'block';
-        if (subRow) subRow.classList.add('expanded');
-        if (subChevron) subChevron.className = 'bi bi-chevron-down subcat-chevron';
+        document.querySelectorAll(`[data-sub-box="${sub.id}"]`).forEach(box => { box.style.display = 'block'; });
+        document.querySelectorAll(`[data-sub-row="${sub.id}"]`).forEach(row => { row.classList.add('expanded'); });
+        document.querySelectorAll(`[data-sub-chevron="${sub.id}"]`).forEach(ch => { ch.className = 'bi bi-chevron-down subcat-chevron'; });
 
+        closeMobileDrawer();
         selectSubcategory(cat, sub);
+        const card = document.getElementById('serviceDetailCard');
+        if (card && window.innerWidth < 992) {
+          card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
       };
 
       window.selectSubcategory = function(cat, sub) {
@@ -2743,6 +2968,7 @@
       };
 
       window.selectServiceBySlug = function(slug) {
+        closeMobileDrawer();
         for (const cat of catalog) {
           if (cat.id === slug) {
             selectCategoryById(cat.id);
@@ -2756,6 +2982,10 @@
             const found = (sub.services || []).find(s => s.slug === slug);
             if (found) {
               selectService(found, cat.title);
+              const card = document.getElementById('serviceDetailCard');
+              if (card && window.innerWidth < 992) {
+                card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
               return;
             }
           }
@@ -2844,6 +3074,7 @@
 
       function selectService(svc, catTitle = '') {
         if (!svc) return;
+        closeMobileDrawer();
         currentViewMode = 'service';
         selectedService = svc;
 
@@ -2864,23 +3095,17 @@
         if (parentCat) {
           selectedCategory = parentCat;
           expandedCategories[parentCat.id] = true;
-          const box = document.getElementById('subcat-box-' + parentCat.id);
-          const row = document.getElementById('cat-row-' + parentCat.id);
-          const chevron = document.getElementById('cat-chevron-' + parentCat.id);
-          if (box) box.style.display = 'block';
-          if (row) row.classList.add('expanded');
-          if (chevron) chevron.className = 'bi bi-chevron-down small';
+          document.querySelectorAll(`[data-cat-subbox="${parentCat.id}"]`).forEach(box => { box.style.display = 'block'; });
+          document.querySelectorAll(`[data-cat-row="${parentCat.id}"]`).forEach(row => { row.classList.add('expanded'); });
+          document.querySelectorAll(`[data-cat-chevron="${parentCat.id}"]`).forEach(ch => { ch.className = 'bi bi-chevron-down small'; });
         }
 
         if (parentSub) {
           selectedSubcategory = parentSub;
           expandedSubcategories[parentSub.id] = true;
-          const subBox = document.getElementById('sub-services-box-' + parentSub.id);
-          const subRow = document.getElementById('sub-row-' + parentSub.id);
-          const subChevron = document.getElementById('sub-chevron-' + parentSub.id);
-          if (subBox) subBox.style.display = 'block';
-          if (subRow) subRow.classList.add('expanded');
-          if (subChevron) subChevron.className = 'bi bi-chevron-down subcat-chevron';
+          document.querySelectorAll(`[data-sub-box="${parentSub.id}"]`).forEach(box => { box.style.display = 'block'; });
+          document.querySelectorAll(`[data-sub-row="${parentSub.id}"]`).forEach(row => { row.classList.add('expanded'); });
+          document.querySelectorAll(`[data-sub-chevron="${parentSub.id}"]`).forEach(ch => { ch.className = 'bi bi-chevron-down subcat-chevron'; });
         }
 
         updateSidebarHighlights();

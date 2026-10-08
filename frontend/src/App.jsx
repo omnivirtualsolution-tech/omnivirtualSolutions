@@ -53,6 +53,13 @@ export default function App() {
         mirror: false,
       });
     }
+    // Safety fallback: ensure preloader is dismissed after React mounts
+    const timer = setTimeout(() => {
+      if (typeof window !== 'undefined' && typeof window.dismissPreloader === 'function') {
+        window.dismissPreloader();
+      }
+    }, 1200);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
