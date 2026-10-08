@@ -200,7 +200,21 @@
       justify-content:space-between; padding:0 28px;
       position:sticky; top:0; z-index:900;
     }
-    .page-title { font-size:17px; font-weight:700; display:flex; align-items:center; gap:10px; }
+    .top-header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-height: 38px;
+    }
+    .page-title {
+      font-size: 16.5px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      line-height: 1;
+      white-space: nowrap;
+    }
     .header-actions { display:flex; align-items:center; gap:12px; }
 
     /* Buttons */
@@ -218,167 +232,522 @@
     .admin-tab { display:none; }
     .admin-tab.active { display:block; }
 
-    /* ── Inbox Layout (3-pane) ─────────────────────────────────── */
+    /* ── Inbox Layout (Modern 2-pane) ─────────────────────────── */
     .inbox-shell {
       display: grid;
-      grid-template-columns: 300px 1fr;
+      grid-template-columns: 340px 1fr;
       gap: 0;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+      background: #0b0f19;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
       overflow: hidden;
-      height: calc(100vh - 140px);
-      min-height: 500px;
+      height: calc(100vh - 128px);
+      min-height: 580px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    }
+
+    /* Completely hide scrollbars while preserving fluid scrolling */
+    .inbox-list,
+    .detail-body,
+    #detailBodyScroll,
+    .inbox-shell,
+    .inbox-list-pane,
+    .inbox-detail-pane,
+    .inbox-shell * {
+      scrollbar-width: none !important;
+      -ms-overflow-style: none !important;
+    }
+    .inbox-list::-webkit-scrollbar,
+    .detail-body::-webkit-scrollbar,
+    #detailBodyScroll::-webkit-scrollbar,
+    .inbox-shell::-webkit-scrollbar,
+    .inbox-list-pane::-webkit-scrollbar,
+    .inbox-detail-pane::-webkit-scrollbar,
+    .inbox-shell *::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
     }
 
     /* Message list pane */
     .inbox-list-pane {
-      border-right: 1px solid var(--border);
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      background: #090d16;
       display: flex;
       flex-direction: column;
       overflow: hidden;
     }
     .inbox-toolbar {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
+      padding: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(13, 17, 27, 0.9);
+      backdrop-filter: blur(10px);
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
       flex-shrink: 0;
     }
+    .search-box-wrap {
+      position: relative;
+      width: 100%;
+      display: flex;
+      align-items: center;
+    }
+    .search-box-wrap .search-icon {
+      position: absolute;
+      left: 14px;
+      color: #64748b;
+      font-size: 13.5px;
+      pointer-events: none;
+      transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
     .search-box {
-      background: rgba(0,0,0,0.3);
-      border: 1px solid var(--border);
-      color: #fff;
-      padding: 8px 12px;
-      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #f8fafc;
+      padding: 10px 14px 10px 38px;
+      border-radius: 10px;
       font-size: 13px;
       width: 100%;
       font-family: inherit;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .search-box:focus { outline: none; border-color: var(--gold); }
-    .filter-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
-    .filter-tab { font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; transition: all 0.2s; font-family: inherit; }
-    .filter-tab:hover, .filter-tab.active { background: var(--gold-dim); color: var(--gold); border-color: rgba(235,162,45,0.3); }
-
-    .inbox-list { flex: 1; overflow-y: auto; }
-    .msg-item {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
+    .search-box-wrap:focus-within .search-icon {
+      color: var(--gold);
+    }
+    .search-box:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.07);
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(235, 162, 45, 0.16);
+    }
+    .search-box::placeholder {
+      color: #64748b;
+    }
+    .filter-tabs {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+    .filter-tab {
+      font-size: 11.5px;
+      font-weight: 500;
+      padding: 5px 11px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.03);
+      color: #94a3b8;
       cursor: pointer;
-      transition: background 0.15s;
-      position: relative;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: inherit;
     }
-    .msg-item:hover { background: rgba(255,255,255,0.03); }
-    .msg-item.selected { background: var(--gold-dim); border-left: 3px solid var(--gold); }
-    .msg-item.unread .msg-name { font-weight: 700; color: #fff; }
-    .msg-item.unread .msg-preview { color: #cbd5e0; }
-    .msg-unread-dot { position:absolute; top:18px; right:14px; width:8px; height:8px; background:var(--gold); border-radius:50%; }
-    .msg-name { font-size: 13.5px; font-weight: 500; color: #e2e8f0; margin-bottom: 3px; display: flex; align-items: center; gap: 8px; }
-    .msg-subject { font-size: 12px; color: #cbd5e0; margin-bottom: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .msg-preview { font-size: 11.5px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .msg-meta { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; }
-    .msg-time { font-size: 11px; color: var(--muted); }
-    .msg-empty { text-align:center; padding:48px 20px; color:var(--muted); font-size:14px; }
+    .filter-tab:hover {
+      background: rgba(255, 255, 255, 0.07);
+      color: #f1f5f9;
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+    .filter-tab.active {
+      background: rgba(235, 162, 45, 0.16);
+      color: var(--gold);
+      border-color: rgba(235, 162, 45, 0.4);
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(235, 162, 45, 0.12);
+    }
+
+    .inbox-list {
+      flex: 1;
+      overflow-y: auto;
+    }
+    .msg-item {
+      padding: 16px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      background: transparent;
+    }
+    .msg-item:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .msg-item.selected {
+      background: linear-gradient(90deg, rgba(235, 162, 45, 0.14) 0%, rgba(235, 162, 45, 0.02) 100%);
+      border-left: 3px solid var(--gold);
+      box-shadow: inset 0 1px 0 rgba(235, 162, 45, 0.1);
+    }
+    .msg-item.unread .msg-name {
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .msg-item.unread .msg-preview {
+      color: #cbd5e1;
+    }
+    .msg-unread-dot {
+      position: absolute;
+      top: 20px;
+      right: 16px;
+      width: 8px;
+      height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(235, 162, 45, 0.8);
+      animation: pulseDot 2s infinite ease-in-out;
+    }
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.25); opacity: 0.75; }
+    }
+    .msg-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #f1f5f9;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .msg-subject {
+      font-size: 12.5px;
+      font-weight: 500;
+      color: #cbd5e1;
+      margin-bottom: 4px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .msg-preview {
+      font-size: 12px;
+      color: #64748b;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      line-height: 1.45;
+    }
+    .msg-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 8px;
+    }
+    .msg-time {
+      font-size: 11px;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .msg-empty {
+      text-align: center;
+      padding: 60px 24px;
+      color: #64748b;
+      font-size: 13.5px;
+      line-height: 1.6;
+    }
 
     /* Status badges */
-    .badge { display:inline-flex; align-items:center; gap:4px; font-size:10.5px; font-weight:600; padding:2px 8px; border-radius:20px; text-transform:capitalize; }
-    .badge-new      { background:rgba(239,68,68,0.15);   color:#f87171; border:1px solid rgba(239,68,68,0.3); }
-    .badge-in_review{ background:rgba(235,162,45,0.15);  color:#fbbf24; border:1px solid rgba(235,162,45,0.3); }
-    .badge-contacted{ background:rgba(59,130,246,0.15);  color:#60a5fa; border:1px solid rgba(59,130,246,0.3); }
-    .badge-replied  { background:rgba(139,92,246,0.15);  color:#a78bfa; border:1px solid rgba(139,92,246,0.3); }
-    .badge-closed   { background:rgba(16,185,129,0.15);  color:#34d399; border:1px solid rgba(16,185,129,0.3); }
-    .badge-sent     { background:rgba(16,185,129,0.15);  color:#34d399; border:1px solid rgba(16,185,129,0.3); }
-    .badge-failed   { background:rgba(239,68,68,0.15);   color:#f87171; border:1px solid rgba(239,68,68,0.3); }
-    .badge-skipped  { background:rgba(255,255,255,0.06); color:var(--muted); border:1px solid var(--border); }
-    .badge-pending  { background:rgba(235,162,45,0.1);   color:#fbbf24; border:1px solid rgba(235,162,45,0.25); }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 2.5px 8.5px;
+      border-radius: 9999px;
+      text-transform: capitalize;
+      letter-spacing: 0.02em;
+    }
+    .badge-new {
+      background: rgba(244, 63, 94, 0.12);
+      color: #fb7185;
+      border: 1px solid rgba(244, 63, 94, 0.3);
+    }
+    .badge-in_review {
+      background: rgba(245, 158, 11, 0.12);
+      color: #f59e0b;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    .badge-contacted {
+      background: rgba(59, 130, 246, 0.12);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+    .badge-replied {
+      background: rgba(168, 85, 247, 0.14);
+      color: #c084fc;
+      border: 1px solid rgba(168, 85, 247, 0.3);
+    }
+    .badge-closed {
+      background: rgba(16, 185, 129, 0.12);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .badge-sent {
+      background: rgba(16, 185, 129, 0.12);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .badge-failed {
+      background: rgba(239, 68, 68, 0.14);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.32);
+    }
+    .badge-skipped {
+      background: rgba(255, 255, 255, 0.06);
+      color: #94a3b8;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .badge-pending {
+      background: rgba(235, 162, 45, 0.12);
+      color: #fbbf24;
+      border: 1px solid rgba(235, 162, 45, 0.28);
+    }
 
     /* Detail pane */
     .inbox-detail-pane {
+      background: #0d121f;
       display: flex;
       flex-direction: column;
       overflow: hidden;
     }
     .detail-empty {
-      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-      color: var(--muted); gap: 12px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+      gap: 14px;
+      padding: 32px;
+      text-align: center;
     }
-    .detail-empty i { font-size: 48px; color: rgba(255,255,255,0.08); }
+    .detail-empty i {
+      font-size: 54px;
+      color: rgba(235, 162, 45, 0.25);
+      background: rgba(235, 162, 45, 0.05);
+      padding: 24px;
+      border-radius: 50%;
+      border: 1px solid rgba(235, 162, 45, 0.15);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+    }
+    .detail-empty p {
+      font-size: 15px;
+      color: #94a3b8;
+      font-weight: 500;
+    }
 
     /* Opened message */
-    #msgDetailView { display: none; flex-direction: column; height: 100%; overflow: hidden; }
-    #msgDetailView.visible { display: flex; }
+    #msgDetailView {
+      display: none;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+    }
+    #msgDetailView.visible {
+      display: flex;
+    }
     .detail-header {
-      padding: 18px 22px;
-      border-bottom: 1px solid var(--border);
+      padding: 20px 26px;
+      background: linear-gradient(180deg, rgba(17, 24, 39, 0.8) 0%, rgba(13, 18, 31, 0.5) 100%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       flex-shrink: 0;
     }
-    .detail-subject { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 10px; }
-    .detail-meta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-    .detail-meta-item { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
-    .detail-meta-item strong { color: #e2e8f0; }
-    .detail-actions {
-      padding: 12px 22px;
-      border-bottom: 1px solid var(--border);
+    .detail-subject {
+      font-size: 20px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.015em;
+      line-height: 1.35;
+      margin-bottom: 12px;
+    }
+    .detail-meta {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .detail-meta-item {
+      font-size: 12px;
+      color: #94a3b8;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      padding: 5px 10px;
+    }
+    .detail-meta-item strong {
+      color: #f1f5f9;
+    }
+    .detail-meta-item a {
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .detail-meta-item a:hover {
+      text-decoration: underline;
+    }
+    .detail-actions {
+      padding: 10px 26px;
+      background: rgba(255, 255, 255, 0.015);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      display: flex;
+      align-items: center;
+      gap: 10px;
       flex-wrap: wrap;
       flex-shrink: 0;
     }
     .status-select {
-      background: var(--card2); color: #fff; border: 1px solid var(--border);
-      border-radius: 7px; padding: 5px 10px; font-size: 12.5px; font-family: inherit;
+      background: #111827;
+      color: #f8fafc;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 12.5px;
+      font-weight: 600;
+      font-family: inherit;
       cursor: pointer;
+      transition: all 0.2s;
+    }
+    .status-select:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 2px rgba(235, 162, 45, 0.2);
     }
 
     /* Scrollable body */
-    .detail-body { flex: 1; overflow-y: auto; padding: 22px; }
+    .detail-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 26px;
+      background: #0d121f;
+    }
     .msg-body-card {
-      background: var(--card2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 20px;
+      background: rgba(18, 25, 41, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 22px 24px;
       line-height: 1.7;
-      font-size: 14px;
-      color: #e2e8f0;
+      font-size: 14.5px;
+      color: #f1f5f9;
       white-space: pre-wrap;
       word-break: break-word;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
     }
 
     /* Thread / replies */
-    .thread-divider { display: flex; align-items: center; gap: 10px; margin: 20px 0 16px; }
-    .thread-divider span { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
-    .thread-divider::before, .thread-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .thread-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 26px 0 18px;
+    }
+    .thread-divider span {
+      font-size: 11px;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      white-space: nowrap;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+    .thread-divider::before,
+    .thread-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.07);
+    }
 
     .reply-bubble {
-      background: rgba(235,162,45,0.06);
-      border: 1px solid rgba(235,162,45,0.2);
-      border-radius: 10px;
-      padding: 16px 18px;
+      background: linear-gradient(135deg, rgba(235, 162, 45, 0.07) 0%, rgba(15, 23, 42, 0.65) 100%);
+      border: 1px solid rgba(235, 162, 45, 0.24);
+      border-radius: 12px;
+      padding: 18px 22px;
       margin-bottom: 14px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
     }
-    .reply-meta { font-size: 11.5px; color: var(--muted); margin-bottom: 8px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .reply-meta strong { color: var(--gold); }
-    .reply-body-text { font-size: 14px; color: #e2e8f0; white-space: pre-wrap; line-height: 1.65; }
+    .reply-meta {
+      font-size: 11.5px;
+      color: #94a3b8;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .reply-meta strong {
+      color: var(--gold);
+      font-weight: 700;
+    }
+    .reply-body-text {
+      font-size: 14px;
+      color: #f1f5f9;
+      white-space: pre-wrap;
+      line-height: 1.65;
+    }
 
     /* Reply compose */
     .reply-compose {
-      border-top: 1px solid var(--border);
-      padding: 16px 22px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 18px 26px;
       flex-shrink: 0;
-      background: var(--sidebar);
+      background: #0a0e18;
     }
-    .reply-compose-title { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+    .reply-compose-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
     .reply-textarea {
-      width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border);
-      color: #fff; padding: 12px 14px; border-radius: 9px; font-size: 14px;
-      font-family: inherit; resize: vertical; min-height: 90px; transition: border-color 0.2s;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      padding: 14px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      line-height: 1.6;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 96px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .reply-textarea:focus { outline: none; border-color: var(--gold); }
-    .reply-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; gap: 10px; }
-    .reply-to-info { font-size: 12px; color: var(--muted); }
+    .reply-textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+      background: rgba(0, 0, 0, 0.5);
+      box-shadow: 0 0 0 3px rgba(235, 162, 45, 0.16);
+    }
+    .reply-textarea::placeholder {
+      color: #64748b;
+    }
+    .reply-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 12px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .reply-to-info {
+      font-size: 12px;
+      color: #94a3b8;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 6px;
+      padding: 6px 12px;
+    }
 
     /* ── Email Settings Panel ───────────────────────────────────── */
     .settings-grid { display: grid; gap: 24px; }
@@ -513,14 +882,115 @@
       opacity: 1;
     }
 
-    /* Desktop Sidebar Collapsed State */
+    /* ── Desktop Sidebar Collapsed State: Mini Icon Rail (72px) ── */
     @media (min-width: 1025px) {
       body.sidebar-collapsed #sidebar {
-        transform: translateX(-100%);
+        width: 72px !important;
+        transform: translateX(0) !important;
+        overflow: visible;
+        transition: width 0.28s cubic-bezier(0.4, 0, 0.2, 1);
       }
       body.sidebar-collapsed #mainContent {
-        margin-left: 0 !important;
-        width: 100% !important;
+        margin-left: 72px !important;
+        width: calc(100% - 72px) !important;
+        transition: margin-left 0.28s cubic-bezier(0.4, 0, 0.2, 1), width 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      body.sidebar-collapsed #sidebar .brand-box {
+        padding: 16px 0;
+        justify-content: center;
+      }
+      body.sidebar-collapsed #sidebar .brand-box > div:not(.brand-icon),
+      body.sidebar-collapsed #sidebar .sidebar-close-btn {
+        display: none !important;
+      }
+      body.sidebar-collapsed #sidebar .brand-icon {
+        width: 38px;
+        height: 38px;
+        margin: 0 auto;
+      }
+      body.sidebar-collapsed #sidebar .nav-label {
+        display: none !important;
+      }
+      body.sidebar-collapsed #sidebar .nav-list {
+        padding: 12px 8px;
+        overflow: visible;
+      }
+      body.sidebar-collapsed #sidebar .nav-item,
+      body.sidebar-collapsed #sidebar .nav-dropdown-toggle {
+        justify-content: center;
+        padding: 11px 0;
+        position: relative;
+        border-radius: 10px;
+        gap: 0;
+      }
+      body.sidebar-collapsed #sidebar .nav-item span:not(.nav-badge),
+      body.sidebar-collapsed #sidebar .nav-dropdown-toggle span:not(.nav-badge),
+      body.sidebar-collapsed #sidebar .nav-dropdown-arrow {
+        display: none !important;
+      }
+      body.sidebar-collapsed #sidebar .nav-item i,
+      body.sidebar-collapsed #sidebar .nav-dropdown-toggle i {
+        font-size: 19px;
+        margin: 0;
+      }
+      body.sidebar-collapsed #sidebar .nav-badge {
+        position: absolute;
+        top: 6px;
+        right: 14px;
+        width: 8px;
+        height: 8px;
+        min-width: 8px;
+        min-height: 8px;
+        padding: 0;
+        font-size: 0;
+        border-radius: 50%;
+      }
+      /* Floating Tooltips */
+      body.sidebar-collapsed #sidebar .nav-item[data-tooltip]:hover::after,
+      body.sidebar-collapsed #sidebar .nav-dropdown-toggle[data-tooltip]:hover::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        left: 74px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: #151a24;
+        color: #ffffff;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 6px 12px;
+        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
+        white-space: nowrap;
+        z-index: 1060;
+        pointer-events: none;
+      }
+      /* Flyout Submenu in Rail Mode */
+      body.sidebar-collapsed #sidebar .nav-dropdown {
+        position: relative;
+      }
+      body.sidebar-collapsed #sidebar .nav-dropdown.open .nav-submenu {
+        position: absolute;
+        left: 74px;
+        top: 0;
+        width: 210px;
+        background: #0f131a;
+        border: 1px solid rgba(235, 162, 45, 0.3);
+        border-radius: 10px;
+        padding: 8px;
+        margin: 0;
+        box-shadow: 0 12px 35px rgba(0,0,0,0.7);
+        z-index: 1050;
+      }
+      body.sidebar-collapsed #sidebar .sidebar-footer {
+        padding: 14px 0;
+        justify-content: center;
+      }
+      body.sidebar-collapsed #sidebar .user-info {
+        justify-content: center;
+      }
+      body.sidebar-collapsed #sidebar .user-info > div {
+        display: none !important;
       }
     }
 
@@ -544,7 +1014,102 @@
       color: var(--gold);
     }
 
-    /* ── Responsive Breakpoints ── */
+    /* ── Delete Confirmation Modal ──────────────────────────────── */
+    .delete-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.78);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      animation: fadeInDelModal 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .delete-modal-dialog {
+      background: #0d121e;
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 24px 65px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      overflow: hidden;
+      animation: popInDelModal 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes fadeInDelModal {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes popInDelModal {
+      from { transform: scale(0.95) translateY(8px); opacity: 0; }
+      to { transform: scale(1) translateY(0); opacity: 1; }
+    }
+    .delete-modal-header {
+      padding: 18px 22px;
+      background: rgba(239, 68, 68, 0.06);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .delete-modal-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .delete-modal-icon-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #f87171;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .delete-modal-close {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 16px;
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .delete-modal-close:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+    .delete-modal-body {
+      padding: 22px;
+    }
+    .delete-modal-target {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .delete-modal-footer {
+      padding: 16px 22px;
+      background: rgba(0, 0, 0, 0.25);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    /* ── Responsive Breakpoints (Mobile-First Polish) ── */
     @media (max-width: 1024px) {
       #sidebar {
         width: min(290px, 86vw);
@@ -570,22 +1135,28 @@
       .top-header {
         padding: 0 16px;
       }
+      .inbox-shell {
+        height: calc(100dvh - 120px);
+      }
     }
 
     @media (max-width: 860px) {
       .inbox-shell {
         grid-template-columns: 1fr;
-        height: calc(100dvh - 120px);
+        height: calc(100dvh - 110px);
         min-height: 480px;
         position: relative;
+        border-radius: 12px;
       }
       .inbox-list-pane {
         width: 100%;
         border-right: none;
+        height: 100%;
       }
       .inbox-detail-pane {
         width: 100%;
         display: none;
+        height: 100%;
       }
       .inbox-shell.show-detail .inbox-list-pane {
         display: none;
@@ -595,18 +1166,48 @@
         flex: 1;
       }
       .back-to-list-btn {
-        display: inline-flex;
+        display: inline-flex !important;
         min-height: 44px;
         align-items: center;
+        gap: 8px;
+        font-weight: 600;
+        padding: 8px 16px;
+        margin-bottom: 14px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+        border-radius: 8px;
+        touch-action: manipulation;
+      }
+      .back-to-list-btn:hover {
+        background: rgba(235, 162, 45, 0.2);
+        border-color: var(--gold);
+        color: var(--gold);
       }
       .smtp-grid-wrap {
         grid-template-columns: 1fr !important;
+      }
+      .detail-header {
+        padding: 16px 18px;
+      }
+      .detail-subject {
+        font-size: 18px;
+      }
+      .detail-actions {
+        padding: 10px 18px;
+        gap: 8px;
+      }
+      .detail-body {
+        padding: 18px;
+      }
+      .reply-compose {
+        padding: 14px 18px;
       }
     }
 
     @media (max-width: 640px) {
       .content-area {
-        padding: 14px 10px;
+        padding: 10px 8px;
       }
       .top-header {
         height: auto;
@@ -646,17 +1247,70 @@
       .stat-row {
         grid-template-columns: repeat(2, 1fr);
       }
+      .inbox-toolbar {
+        padding: 12px 14px;
+        gap: 10px;
+      }
+      .filter-tabs {
+        display: flex;
+        gap: 6px;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 4px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        -webkit-overflow-scrolling: touch;
+      }
+      .filter-tabs::-webkit-scrollbar {
+        display: none;
+      }
+      .filter-tab {
+        flex-shrink: 0;
+        padding: 6px 14px;
+        font-size: 12px;
+        min-height: 38px;
+        touch-action: manipulation;
+      }
+      .msg-item {
+        padding: 14px 14px;
+      }
+      .detail-meta {
+        gap: 6px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .detail-meta-item {
+        font-size: 11.5px;
+        padding: 4px 8px;
+      }
+      .detail-actions {
+        justify-content: space-between;
+        padding: 10px 14px;
+        gap: 6px;
+      }
+      .status-select {
+        min-height: 44px;
+        font-size: 16px !important;
+      }
       .reply-compose {
-        padding: 14px 16px;
+        padding: 12px 14px;
       }
       .reply-footer {
         flex-direction: column;
         align-items: stretch;
+        gap: 10px;
+      }
+      .reply-footer > div {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
       }
       .reply-footer .btn {
         width: 100%;
         justify-content: center;
         min-height: 44px;
+        touch-action: manipulation;
       }
     }
 
@@ -664,30 +1318,820 @@
       .stat-row {
         grid-template-columns: 1fr;
       }
-      .filter-tabs {
-        overflow-x: auto;
-        flex-wrap: nowrap;
-        padding-bottom: 4px;
+      .delete-modal-footer {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .delete-modal-footer .btn {
+        width: 100%;
+        min-height: 44px;
+        justify-content: center;
+      }
+    }
+    /* ════════════════════════════════════════════════════════════
+       CONTACT LEADS CRM (REAL EXECUTIVE CRM PIPELINE & BOARD)
+       ════════════════════════════════════════════════════════════ */
+    .crm-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+    .crm-kpi-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .crm-kpi-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .crm-kpi-card.gold  { border-color: rgba(235, 162, 45, 0.25); background: linear-gradient(135deg, rgba(235, 162, 45, 0.08) 0%, rgba(21, 26, 35, 0.95) 100%); }
+    .crm-kpi-card.red   { border-color: rgba(239, 68, 68, 0.25);   background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(21, 26, 35, 0.95) 100%); }
+    .crm-kpi-card.blue  { border-color: rgba(59, 130, 246, 0.25);  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(21, 26, 35, 0.95) 100%); }
+    .crm-kpi-card.green { border-color: rgba(16, 185, 129, 0.25); background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(21, 26, 35, 0.95) 100%); }
+
+    .crm-kpi-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .crm-kpi-card.gold .crm-kpi-icon  { background: rgba(235, 162, 45, 0.15); color: var(--gold); }
+    .crm-kpi-card.red .crm-kpi-icon   { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+    .crm-kpi-card.blue .crm-kpi-icon  { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+    .crm-kpi-card.green .crm-kpi-icon { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+
+    .crm-kpi-content { flex: 1; min-width: 0; }
+    .crm-kpi-val { font-size: 26px; font-weight: 800; line-height: 1.1; color: #fff; margin-bottom: 4px; }
+    .crm-kpi-label { font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .crm-kpi-trend {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+    .crm-pulse-dot {
+      width: 7px; height: 7px; border-radius: 50%; display: inline-block;
+    }
+    .crm-pulse-dot.red { background: #ef4444; box-shadow: 0 0 8px #ef4444; animation: pulseRed 1.8s infinite; }
+    @keyframes pulseRed { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.85); } }
+
+    /* CRM Toolbar */
+    .crm-toolbar {
+      background: rgba(13, 17, 27, 0.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 18px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .crm-toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      flex: 1;
+    }
+    .crm-toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .crm-stage-pills {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 3px;
+      border-radius: 9px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .crm-stage-pill {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .crm-stage-pill:hover { color: #fff; }
+    .crm-stage-pill.active {
+      background: rgba(235, 162, 45, 0.18);
+      color: var(--gold);
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .crm-view-switcher {
+      display: flex;
+      background: rgba(0,0,0,0.3);
+      padding: 3px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .crm-view-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .crm-view-btn:hover { color: #fff; }
+    .crm-view-btn.active {
+      background: var(--gold);
+      color: #0b0e14;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(235,162,45,0.3);
+    }
+
+    /* ── Kanban Pipeline Board ── */
+    .crm-kanban-board {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(280px, 1fr));
+      gap: 16px;
+      overflow-x: auto;
+      padding-bottom: 16px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .crm-column {
+      background: #090d16;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      max-height: calc(100vh - 280px);
+      min-height: 520px;
+      overflow: hidden;
+      position: relative;
+    }
+    .crm-column::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3.5px;
+    }
+    .crm-column.stage-new::before       { background: var(--gold); }
+    .crm-column.stage-review::before    { background: #60a5fa; }
+    .crm-column.stage-contacted::before { background: #a78bfa; }
+    .crm-column.stage-closed::before    { background: #34d399; }
+
+    .crm-column-header {
+      padding: 14px 16px;
+      background: rgba(13, 17, 27, 0.95);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .crm-col-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .crm-col-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+    }
+    .crm-col-dot.gold   { background: var(--gold); box-shadow: 0 0 8px rgba(235,162,45,0.6); }
+    .crm-col-dot.blue   { background: #60a5fa; box-shadow: 0 0 8px rgba(96,165,250,0.6); }
+    .crm-col-dot.purple { background: #a78bfa; box-shadow: 0 0 8px rgba(167,139,250,0.6); }
+    .crm-col-dot.green  { background: #34d399; box-shadow: 0 0 8px rgba(52,211,153,0.6); }
+
+    .crm-col-title { font-size: 13.5px; font-weight: 700; color: #fff; }
+    .crm-col-badge {
+      background: rgba(255, 255, 255, 0.08);
+      color: #cbd5e1;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+
+    .crm-cards-container {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .crm-cards-container::-webkit-scrollbar { width: 5px; }
+    .crm-cards-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+    /* ── Lead Card ── */
+    .crm-card {
+      background: #121722;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 14px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .crm-card:hover {
+      background: #171d2b;
+      border-color: rgba(235, 162, 45, 0.45);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.55);
+    }
+    .crm-card-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .crm-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1e293b, #334155);
+      color: #f1f5f9;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .crm-card-user {
+      flex: 1;
+      min-width: 0;
+    }
+    .crm-card-name {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #fff;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-bottom: 2px;
+    }
+    .crm-card-time {
+      font-size: 11px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .crm-card-topic {
+      display: inline-block;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gold);
+      background: rgba(235, 162, 45, 0.12);
+      border: 1px solid rgba(235, 162, 45, 0.25);
+      padding: 3px 8px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+    .crm-card-snippet {
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.45;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .crm-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .crm-chips-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .crm-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #cbd5e1;
+      font-size: 12px;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .crm-chip:hover {
+      background: rgba(235, 162, 45, 0.18);
+      border-color: rgba(235, 162, 45, 0.4);
+      color: var(--gold);
+    }
+    .crm-advance-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #cbd5e1;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.18s;
+    }
+    .crm-advance-btn:hover {
+      background: var(--gold);
+      color: #0b0e14;
+      border-color: var(--gold);
+    }
+
+    /* ── Empty Column State ── */
+    .crm-col-empty {
+      padding: 30px 16px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 100%;
+    }
+    .crm-col-empty i { font-size: 24px; opacity: 0.4; }
+
+    /* ── Lead Intelligence Drawer Modal ── */
+    .crm-drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 10000;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .crm-drawer {
+      width: min(540px, 94vw);
+      height: 100%;
+      background: #0d121c;
+      border-left: 1px solid rgba(235, 162, 45, 0.25);
+      box-shadow: -15px 0 45px rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+      animation: drawerSlideIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes drawerSlideIn {
+      from { transform: translateX(100%); }
+      to { transform: translateX(0); }
+    }
+    .crm-drawer-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #111724;
+    }
+    .crm-drawer-body {
+      padding: 24px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .crm-drawer-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--gold);
+      margin-bottom: 8px;
+      display: block;
+    }
+    .crm-drawer-info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .crm-info-box {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+    }
+    .crm-info-title {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .crm-info-val {
+      font-size: 13px;
+      color: #fff;
+      word-break: break-all;
+    }
+    .crm-info-val.highlight {
+      color: var(--gold);
+      text-decoration: none;
+    }
+    .crm-message-quote {
+      background: rgba(0, 0, 0, 0.35);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      font-size: 13.5px;
+      color: #e2e8f0;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+    .crm-drawer-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+      background: #111724;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    /* ── Responsive Design Mastery for Contact Leads CRM ── */
+    @media (max-width: 1024px) {
+      .crm-kanban-board {
+        grid-template-columns: repeat(4, minmax(260px, 1fr));
+        gap: 14px;
+        scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
       }
-      .filter-tab {
-        white-space: nowrap;
+      .crm-column {
+        scroll-snap-align: start;
+        max-height: calc(100dvh - 240px);
+      }
+    }
+
+    @media (max-width: 860px) {
+      .crm-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+        padding: 14px;
+      }
+      .crm-toolbar-left {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        gap: 12px;
+      }
+      .crm-toolbar-left .search-box-wrap {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+      .crm-stage-pills {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding: 4px;
+        gap: 4px;
+      }
+      .crm-stage-pills::-webkit-scrollbar { display: none; }
+      .crm-stage-pill {
+        flex: 1 0 auto;
+        text-align: center;
         min-height: 40px;
-        padding: 8px 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        touch-action: manipulation;
+        font-size: 13px;
+        padding: 6px 14px;
+      }
+      .crm-toolbar-right {
+        width: 100%;
+        justify-content: space-between;
+        gap: 8px;
+      }
+      .crm-view-switcher {
+        flex: 1;
+      }
+      .crm-view-btn {
+        flex: 1;
+        justify-content: center;
+        min-height: 40px;
         touch-action: manipulation;
       }
-      .detail-meta {
-        gap: 8px;
-        flex-direction: column;
-        align-items: flex-start;
+      .crm-toolbar-right .btn {
+        min-height: 40px;
+        touch-action: manipulation;
       }
-      .detail-actions {
-        padding: 10px 14px;
-        gap: 6px;
+
+      /* Kanban Board Mobile Snap Swiping */
+      .crm-kanban-board {
+        grid-template-columns: repeat(4, minmax(calc(100vw - 56px), 1fr));
+        gap: 14px;
+        scroll-snap-type: x mandatory;
+        padding-bottom: 20px;
       }
-      .status-select {
+      .crm-column {
+        min-width: calc(100vw - 56px);
+        max-width: calc(100vw - 56px);
+        scroll-snap-align: center;
+        max-height: calc(100dvh - 300px);
+        min-height: 460px;
+      }
+      .crm-card {
+        padding: 16px;
+      }
+      .crm-card-footer {
+        padding-top: 12px;
+      }
+      .crm-chip {
+        width: 38px;
+        height: 38px;
+        font-size: 14px;
+        touch-action: manipulation;
+      }
+      .crm-advance-btn {
+        min-height: 38px;
+        padding: 6px 14px;
+        font-size: 12.5px;
+        touch-action: manipulation;
+      }
+
+      /* Drawer Modal on Mobile */
+      .crm-drawer {
+        width: 100vw !important;
+        max-width: 100vw !important;
+        height: 100dvh !important;
+        max-height: 100dvh !important;
+        border-radius: 0;
+        border-left: none;
+      }
+      .crm-drawer-header {
+        padding: 16px 18px;
+      }
+      .crm-drawer-body {
+        padding: 18px;
+        gap: 16px;
+      }
+      .crm-drawer-info-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .crm-drawer-footer {
+        padding: 14px 18px max(14px, env(safe-area-inset-bottom));
+        flex-direction: column-reverse;
+        align-items: stretch;
+        gap: 10px;
+      }
+      .crm-drawer-footer .btn {
+        width: 100%;
         min-height: 44px;
-        font-size: 16px !important;
+        justify-content: center;
+        font-size: 14px;
+        touch-action: manipulation;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .crm-kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+      .crm-kpi-card {
+        padding: 12px 14px;
+        gap: 10px;
+        border-radius: 10px;
+      }
+      .crm-kpi-icon {
+        width: 38px;
+        height: 38px;
+        font-size: 16px;
+        border-radius: 9px;
+      }
+      .crm-kpi-val {
+        font-size: 20px;
+        margin-bottom: 2px;
+      }
+      .crm-kpi-label {
+        font-size: 10.5px;
+        letter-spacing: 0.2px;
+      }
+      .crm-kpi-trend {
+        display: none;
+      }
+      .crm-toolbar-right {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .crm-toolbar-right > * {
+        width: 100%;
+      }
+      .crm-toolbar-right .btn {
+        width: 100%;
+        justify-content: center;
+      }
+      .crm-kanban-board {
+        grid-template-columns: repeat(4, minmax(calc(100vw - 36px), 1fr));
+      }
+      .crm-column {
+        min-width: calc(100vw - 36px);
+        max-width: calc(100vw - 36px);
+      }
+    }
+
+    @media (max-width: 380px) {
+      .crm-kpi-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .crm-table-wrapper .panel-body {
+      -webkit-overflow-scrolling: touch;
+    }
+    .crm-table-wrapper .data-table th,
+    .crm-table-wrapper .data-table td {
+      white-space: nowrap;
+    }
+    .crm-table-wrapper .data-table td:nth-child(4) {
+      white-space: normal;
+      min-width: 180px;
+      max-width: 280px;
+    }
+
+    /* ── CRM Visual Telemetry Strip (Start to End Scanning Animation) ── */
+    .crm-telemetry-strip {
+      background: rgba(13, 17, 27, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 10px 16px;
+      margin-bottom: 18px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+      transition: all 0.3s ease;
+    }
+    .crm-telemetry-strip.ready {
+      border-color: rgba(52, 211, 153, 0.35);
+      background: linear-gradient(90deg, rgba(13, 17, 27, 0.9) 0%, rgba(16, 185, 129, 0.08) 100%);
+    }
+    .crm-telemetry-status {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      gap: 12px;
+    }
+    .crm-telemetry-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #e2e8f0;
+      letter-spacing: 0.3px;
+    }
+    .crm-telemetry-pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 10px var(--gold);
+      display: inline-block;
+      animation: pulseTelemetry 1.2s infinite;
+    }
+    .crm-telemetry-strip.ready .crm-telemetry-pulse {
+      background: #34d399;
+      box-shadow: 0 0 10px #34d399;
+    }
+    @keyframes pulseTelemetry {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+    .crm-telemetry-percent {
+      font-size: 12px;
+      font-weight: 800;
+      font-family: monospace;
+      color: var(--gold);
+      background: rgba(235, 162, 45, 0.15);
+      padding: 2px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(235, 162, 45, 0.3);
+      transition: all 0.25s ease;
+    }
+    .crm-telemetry-strip.ready .crm-telemetry-percent {
+      color: #34d399;
+      background: rgba(52, 211, 153, 0.15);
+      border-color: rgba(52, 211, 153, 0.3);
+    }
+    .crm-telemetry-track {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 4px;
+      position: relative;
+      overflow: visible;
+    }
+    .crm-telemetry-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #f59e0b 0%, #eba22d 70%, #34d399 100%);
+      border-radius: 4px;
+      position: relative;
+      transition: width 0.08s linear;
+      box-shadow: 0 0 12px rgba(235, 162, 45, 0.6);
+    }
+    .crm-telemetry-spark {
+      position: absolute;
+      top: -2.5px;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 10px #fff, 0 0 18px var(--gold);
+      transform: translateX(-50%);
+      left: 0%;
+      pointer-events: none;
+      transition: left 0.08s linear;
+    }
+
+    /* Column Scan Illumination Glow */
+    .crm-column {
+      transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
+    }
+    .crm-column.scanned {
+      border-color: rgba(235, 162, 45, 0.7) !important;
+      box-shadow: 0 0 25px rgba(235, 162, 45, 0.35) !important;
+      transform: translateY(-3px);
+    }
+    .crm-column.stage-review.scanned {
+      border-color: rgba(96, 165, 250, 0.7) !important;
+      box-shadow: 0 0 25px rgba(96, 165, 250, 0.35) !important;
+    }
+    .crm-column.stage-contacted.scanned {
+      border-color: rgba(167, 139, 250, 0.7) !important;
+      box-shadow: 0 0 25px rgba(167, 139, 250, 0.35) !important;
+    }
+    .crm-column.stage-closed.scanned {
+      border-color: rgba(52, 211, 153, 0.7) !important;
+      box-shadow: 0 0 25px rgba(52, 211, 153, 0.35) !important;
+    }
+
+    /* Counting Animation on KPI Values */
+    .crm-kpi-val.counting {
+      color: var(--gold) !important;
+      text-shadow: 0 0 14px rgba(235, 162, 45, 0.6);
+      transform: scale(1.05);
+      transition: transform 0.15s ease;
+    }
+
+    @media (max-width: 600px) {
+      .crm-telemetry-strip {
+        padding: 8px 12px;
+      }
+      .crm-telemetry-indicator {
+        font-size: 11px;
       }
     }
   </style>
@@ -714,32 +2158,27 @@
     <ul class="nav-list">
       <li class="nav-label">Navigation</li>
       <li>
-        <a class="nav-item" href="admin/#overview">
-          <i class="bi bi-grid-1x2-fill"></i> Overview Dashboard
+        <a class="nav-item" href="admin/#overview" data-tooltip="Overview Dashboard">
+          <i class="bi bi-grid-1x2-fill"></i> <span>Overview Dashboard</span>
         </a>
       </li>
       <li>
-        <a class="nav-item" href="admin/#live-editor">
-          <i class="bi bi-browser-chrome" style="color:var(--gold);"></i> Live Website Editor
+        <a class="nav-item" href="admin/#live-editor" data-tooltip="Live Website Editor">
+          <i class="bi bi-browser-chrome" style="color:var(--gold);"></i> <span>Live Website Editor</span>
         </a>
       </li>
       <li>
-        <a class="nav-item" href="admin/#business-profile">
-          <i class="bi bi-building-gear" style="color:var(--gold);"></i> Business Profile &amp; Contact
+        <a class="nav-item" href="admin/#business-profile" data-tooltip="Business Profile &amp; Contact">
+          <i class="bi bi-building-gear" style="color:var(--gold);"></i> <span>Business Profile &amp; Contact</span>
         </a>
       </li>
       <li>
-        <a class="nav-item" href="admin/#services">
-          <i class="bi bi-briefcase-fill" style="color:var(--gold);"></i> Services Catalog
-        </a>
-      </li>
-      <li>
-        <a class="nav-item" href="admin/#leads">
-          <i class="bi bi-envelope-open-fill"></i> Leads CRM
+        <a class="nav-item" href="admin/#services" data-tooltip="Services Catalog">
+          <i class="bi bi-briefcase-fill" style="color:var(--gold);"></i> <span>Services Catalog</span>
         </a>
       </li>
       <li class="nav-dropdown open" id="contactNavDropdown">
-        <div class="nav-dropdown-toggle" onclick="toggleContactDropdown()" role="button" aria-expanded="true" tabindex="0">
+        <div class="nav-dropdown-toggle" onclick="toggleContactDropdown()" role="button" aria-expanded="true" tabindex="0" data-tooltip="Contact Messages">
           <i class="bi bi-inbox-fill" style="color:var(--gold);"></i>
           <span>Contact Messages</span>
           <span class="nav-badge" id="unreadBadge" style="background:#e53e3e; color:#fff; margin-left:auto;">0</span>
@@ -747,30 +2186,30 @@
         </div>
         <ul class="nav-submenu" id="contactSubmenu">
           <li>
-            <a class="nav-sub-item active" onclick="switchTab('inbox', this)">
+            <a class="nav-sub-item active" onclick="switchTab('inbox', this)" id="navSubInbox">
               <i class="bi bi-chat-left-text-fill"></i> Contact Messages
             </a>
           </li>
           <li>
-            <a class="nav-sub-item" onclick="switchTab('email-settings', this)">
-              <i class="bi bi-palette2" style="color:var(--gold);"></i> Email UI &amp; Settings
+            <a class="nav-sub-item" onclick="switchTab('leads', this)" id="navSubLeads">
+              <i class="bi bi-kanban-fill" style="color:var(--gold);"></i> Contact Leads CRM
             </a>
           </li>
           <li>
-            <a class="nav-sub-item" onclick="switchTab('email-stats', this)">
-              <i class="bi bi-bar-chart-fill"></i> Email Usage Stats
+            <a class="nav-sub-item" onclick="switchTab('email-settings', this)" id="navSubEmailSettings">
+              <i class="bi bi-palette2" style="color:var(--gold);"></i> Email UI &amp; Settings
             </a>
           </li>
         </ul>
       </li>
       <li>
-        <a class="nav-item" href="admin/#media">
-          <i class="bi bi-images"></i> Media Library
+        <a class="nav-item" href="admin/#media" data-tooltip="Media Library">
+          <i class="bi bi-images"></i> <span>Media Library</span>
         </a>
       </li>
       <li>
-        <a class="nav-item" href="admin/#account-security">
-          <i class="bi bi-shield-lock-fill" style="color:var(--gold);"></i> Account Security
+        <a class="nav-item" href="admin/#account-security" data-tooltip="Account Security">
+          <i class="bi bi-shield-lock-fill" style="color:var(--gold);"></i> <span>Account Security</span>
         </a>
       </li>
     </ul>
@@ -790,12 +2229,12 @@
   <!-- ── Main Content ── -->
   <main id="mainContent">
     <header class="top-header">
-      <div style="display:flex; align-items:center;">
-        <button class="sidebar-toggle-btn" id="sidebarToggleBtn" aria-label="Toggle Navigation">
+      <div class="top-header-left">
+        <button class="sidebar-toggle-btn" id="sidebarToggleBtn" aria-label="Toggle Navigation" title="Toggle navigation rail (Ctrl+B)">
           <i class="bi bi-list"></i>
         </button>
         <div class="page-title" id="topTitle">
-          <i class="bi bi-inbox-fill" style="color:var(--gold)"></i> Contact Messages
+          <i class="bi bi-inbox-fill" style="color:var(--gold)"></i> <span>Contact Messages</span>
         </div>
       </div>
       <div class="header-actions">
@@ -814,7 +2253,10 @@
           <!-- Left: message list -->
           <div class="inbox-list-pane">
             <div class="inbox-toolbar">
-              <input class="search-box" type="text" id="inboxSearch" placeholder="🔍  Search messages..." oninput="searchDebounce()">
+              <div class="search-box-wrap">
+                <i class="bi bi-search search-icon"></i>
+                <input class="search-box" type="text" id="inboxSearch" placeholder="Search messages..." oninput="searchDebounce()">
+              </div>
               <div class="filter-tabs">
                 <button class="filter-tab active" onclick="setFilter('', this)">All</button>
                 <button class="filter-tab" onclick="setFilter('new', this)">New</button>
@@ -852,11 +2294,11 @@
 
               <div class="detail-actions">
                 <select class="status-select" id="statusSelect" onchange="updateStatus(this.value)">
-                  <option value="new">● New</option>
-                  <option value="in_review">● In Review</option>
-                  <option value="contacted">● Contacted</option>
-                  <option value="replied">● Replied</option>
-                  <option value="closed">● Closed</option>
+                  <option value="new">New</option>
+                  <option value="in_review">In Review</option>
+                  <option value="contacted">Contacted</option>
+                  <option value="replied">Replied</option>
+                  <option value="closed">Closed</option>
                 </select>
                 <button class="btn btn-sm" onclick="markUnread()" title="Mark as unread"><i class="bi bi-envelope"></i> Mark Unread</button>
                 <button class="btn btn-sm" onclick="retryNotification()" id="retryBtn" style="display:none"><i class="bi bi-arrow-repeat"></i> Retry Email</button>
@@ -866,7 +2308,10 @@
 
               <div class="detail-body" id="detailBodyScroll">
                 <!-- Original message -->
-                <div style="font-size:12px; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:10px;">Original Message</div>
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+                  <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--gold);"></span>
+                  <span style="font-size:11px; color:#94a3b8; font-weight:700; text-transform:uppercase; letter-spacing:0.08em;">Original Customer Message</span>
+                </div>
                 <div class="msg-body-card" id="detailMessage">—</div>
 
                 <!-- Thread -->
@@ -875,16 +2320,16 @@
 
               <!-- Compose reply -->
               <div class="reply-compose">
-                <div class="reply-compose-title"><i class="bi bi-reply-fill"></i> Reply to Customer</div>
+                <div class="reply-compose-title"><i class="bi bi-reply-fill" style="color:var(--gold);"></i> Reply to Customer</div>
                 <textarea class="reply-textarea" id="replyTextarea" placeholder="Write your reply here..."></textarea>
                 <div class="reply-footer">
-                  <div class="reply-to-info">Sending to: <span id="replyToEmail" style="color:var(--gold);">—</span></div>
-                  <div style="display:flex; gap:8px; align-items:center;">
+                  <div class="reply-to-info">Sending to: <span id="replyToEmail" style="color:var(--gold); font-weight:600;">—</span></div>
+                  <div style="display:flex; gap:10px; align-items:center;">
                     <button class="btn btn-gold" id="replyGmailBtn" onclick="replyInGmail()">
                       <i class="bi bi-google"></i> Reply via Gmail
                     </button>
-                    <button class="btn btn-sm" id="sendReplyBtn" onclick="sendReply()" style="color:var(--muted); font-size:12px;">
-                      <i class="bi bi-send-fill"></i> Send via Server
+                    <button class="btn btn-sm" id="sendReplyBtn" onclick="sendReply()" style="color:#cbd5e1; font-weight:600; border-color:rgba(255,255,255,0.12);">
+                      <i class="bi bi-send-fill" style="color:var(--gold);"></i> Send via Server
                     </button>
                   </div>
                 </div>
@@ -892,6 +2337,270 @@
             </div>
           </div>
 
+        </div>
+      </div>
+
+      <!-- ── TAB: CONTACT LEADS CRM (REAL EXECUTIVE PIPELINE) ── -->
+      <div id="tab-leads" class="admin-tab">
+        <!-- 1. Executive KPI Summary Cards -->
+        <div class="crm-kpi-grid">
+          <div class="crm-kpi-card gold">
+            <div class="crm-kpi-icon"><i class="bi bi-people-fill"></i></div>
+            <div class="crm-kpi-content">
+              <div class="crm-kpi-val" id="crmKpiTotal">0</div>
+              <div class="crm-kpi-label">Total Leads Ingested</div>
+            </div>
+            <div class="crm-kpi-trend"><i class="bi bi-arrow-up-right"></i> All Time</div>
+          </div>
+          <div class="crm-kpi-card red">
+            <div class="crm-kpi-icon"><i class="bi bi-lightning-charge-fill"></i></div>
+            <div class="crm-kpi-content">
+              <div class="crm-kpi-val" id="crmKpiNew">0</div>
+              <div class="crm-kpi-label">New / Action Required</div>
+            </div>
+            <div class="crm-kpi-trend" style="color:#f87171;"><span class="crm-pulse-dot red"></span> Urgent</div>
+          </div>
+          <div class="crm-kpi-card blue">
+            <div class="crm-kpi-icon"><i class="bi bi-chat-dots-fill"></i></div>
+            <div class="crm-kpi-content">
+              <div class="crm-kpi-val" id="crmKpiActive">0</div>
+              <div class="crm-kpi-label">Active Outreach / Review</div>
+            </div>
+            <div class="crm-kpi-trend" style="color:#60a5fa;"><i class="bi bi-arrow-repeat"></i> In Progress</div>
+          </div>
+          <div class="crm-kpi-card green">
+            <div class="crm-kpi-icon"><i class="bi bi-trophy-fill"></i></div>
+            <div class="crm-kpi-content">
+              <div class="crm-kpi-val" id="crmKpiClosed">0</div>
+              <div class="crm-kpi-label">Closed / Converted</div>
+            </div>
+            <div class="crm-kpi-trend" style="color:#34d399;"><i class="bi bi-check2-circle"></i> Resolved</div>
+          </div>
+        </div>
+
+        <!-- 2. CRM Control & Toolbar Strip -->
+        <div class="crm-toolbar">
+          <div class="crm-toolbar-left">
+            <!-- Search Input -->
+            <div class="search-box-wrap" style="width:280px; max-width:100%;">
+              <i class="bi bi-search search-icon"></i>
+              <input type="text" id="crmSearchInput" class="search-input-field" placeholder="Search leads by name, email, topic..." oninput="crmSearchDebounce()">
+              <button type="button" id="crmSearchClear" onclick="crmClearSearch()" style="display:none; position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; color:#94a3b8; cursor:pointer;" aria-label="Clear search">
+                <i class="bi bi-x-circle-fill"></i>
+              </button>
+            </div>
+            
+            <!-- Stage Filter Pills -->
+            <div class="crm-stage-pills">
+              <button type="button" class="crm-stage-pill active" onclick="crmFilterStage('', this)">All</button>
+              <button type="button" class="crm-stage-pill" onclick="crmFilterStage('new', this)">New</button>
+              <button type="button" class="crm-stage-pill" onclick="crmFilterStage('in_review', this)">In Review</button>
+              <button type="button" class="crm-stage-pill" onclick="crmFilterStage('contacted', this)">Contacted</button>
+              <button type="button" class="crm-stage-pill" onclick="crmFilterStage('closed', this)">Closed</button>
+            </div>
+          </div>
+
+          <div class="crm-toolbar-right">
+            <!-- View Switcher Toggle -->
+            <div class="crm-view-switcher">
+              <button type="button" id="crmViewKanbanBtn" class="crm-view-btn active" onclick="crmSetView('kanban')" title="Kanban Pipeline View">
+                <i class="bi bi-kanban-fill"></i> Pipeline Board
+              </button>
+              <button type="button" id="crmViewTableBtn" class="crm-view-btn" onclick="crmSetView('table')" title="Detailed Table View">
+                <i class="bi bi-table"></i> Grid Table
+              </button>
+            </div>
+
+            <!-- Action Buttons -->
+            <button type="button" class="btn btn-sm" onclick="runCrmStartToEndAnimation()" title="Replay Start-to-End Scanning Animation" style="padding:7px 12px; background:rgba(235,162,45,0.15); border-color:rgba(235,162,45,0.4); color:var(--gold);">
+              <i class="bi bi-lightning-charge-fill"></i> <span>Replay Scan</span>
+            </button>
+            <button type="button" class="btn btn-sm" onclick="exportLeadsCsv()" title="Export CSV Report" style="padding:7px 12px;">
+              <i class="bi bi-download"></i> <span>Export CSV</span>
+            </button>
+            <button type="button" class="btn btn-sm" onclick="loadLeadsCRM()" title="Reload Leads" style="padding:7px 12px;">
+              <i class="bi bi-arrow-clockwise"></i> <span>Refresh</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Visual Pipeline Telemetry & Scan Bar (Start to End) -->
+        <div id="crmTelemetryStrip" class="crm-telemetry-strip">
+          <div class="crm-telemetry-status">
+            <div class="crm-telemetry-indicator">
+              <span class="crm-telemetry-pulse"></span>
+              <span id="crmTelemetryText" class="crm-telemetry-text">Initializing Pipeline Telemetry...</span>
+            </div>
+            <div class="crm-telemetry-percent" id="crmTelemetryPercent">0%</div>
+          </div>
+          <div class="crm-telemetry-track">
+            <div class="crm-telemetry-bar" id="crmTelemetryBar"></div>
+            <div class="crm-telemetry-spark" id="crmTelemetrySpark"></div>
+          </div>
+        </div>
+
+        <!-- 3. Kanban Pipeline Board Stage Columns -->
+        <div id="crmKanbanView" class="crm-kanban-board">
+          <!-- Stage 1: New Leads -->
+          <div class="crm-column stage-new">
+            <div class="crm-column-header">
+              <div class="crm-col-title-wrap">
+                <span class="crm-col-dot gold"></span>
+                <span class="crm-col-title">New Inquiries</span>
+              </div>
+              <span class="crm-col-badge" id="crmCountNew">0</span>
+            </div>
+            <div class="crm-cards-container" id="crmCardsNew">
+              <!-- Rendered cards -->
+            </div>
+          </div>
+
+          <!-- Stage 2: In Review -->
+          <div class="crm-column stage-review">
+            <div class="crm-column-header">
+              <div class="crm-col-title-wrap">
+                <span class="crm-col-dot blue"></span>
+                <span class="crm-col-title">In Review</span>
+              </div>
+              <span class="crm-col-badge" id="crmCountReview">0</span>
+            </div>
+            <div class="crm-cards-container" id="crmCardsReview">
+              <!-- Rendered cards -->
+            </div>
+          </div>
+
+          <!-- Stage 3: Contacted / In Discussion -->
+          <div class="crm-column stage-contacted">
+            <div class="crm-column-header">
+              <div class="crm-col-title-wrap">
+                <span class="crm-col-dot purple"></span>
+                <span class="crm-col-title">Contacted / Discussion</span>
+              </div>
+              <span class="crm-col-badge" id="crmCountContacted">0</span>
+            </div>
+            <div class="crm-cards-container" id="crmCardsContacted">
+              <!-- Rendered cards -->
+            </div>
+          </div>
+
+          <!-- Stage 4: Closed / Converted -->
+          <div class="crm-column stage-closed">
+            <div class="crm-column-header">
+              <div class="crm-col-title-wrap">
+                <span class="crm-col-dot green"></span>
+                <span class="crm-col-title">Closed / Converted</span>
+              </div>
+              <span class="crm-col-badge" id="crmCountClosed">0</span>
+            </div>
+            <div class="crm-cards-container" id="crmCardsClosed">
+              <!-- Rendered cards -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Detailed Table View (Toggled) -->
+        <div id="crmTableView" class="crm-table-wrapper" style="display:none;">
+          <div class="panel" style="margin-bottom:0; background:var(--card); border:1px solid var(--border); border-radius:14px; overflow:hidden;">
+            <div class="panel-body" style="padding:0; overflow-x:auto;">
+              <table class="data-table" style="width:100%;">
+                <thead>
+                  <tr>
+                    <th style="padding:14px 18px;">Customer Lead</th>
+                    <th>Contact Details</th>
+                    <th>Inquiry Topic</th>
+                    <th>Message Snippet</th>
+                    <th>Pipeline Stage</th>
+                    <th>Date Received</th>
+                    <th style="text-align:right; padding-right:18px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="crmTableBody">
+                  <!-- Dynamic rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Lead Intelligence Drawer / Modal -->
+        <div id="crmDrawerBackdrop" class="crm-drawer-backdrop" style="display:none;" onclick="if(event.target===this) closeCrmDrawer()">
+          <div class="crm-drawer" role="dialog" aria-modal="true" aria-labelledby="crmDrawerName">
+            <!-- Drawer Header -->
+            <div class="crm-drawer-header">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <div class="crm-avatar" id="crmDrawerAvatar" style="width:44px; height:44px; font-size:16px;">—</div>
+                <div>
+                  <h3 id="crmDrawerName" style="margin:0; font-size:17px; font-weight:700; color:#fff;">Lead Profile</h3>
+                  <span id="crmDrawerDate" style="font-size:12px; color:#94a3b8;">—</span>
+                </div>
+              </div>
+              <button type="button" class="delete-modal-close" onclick="closeCrmDrawer()" aria-label="Close dossier">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
+
+            <!-- Drawer Body -->
+            <div class="crm-drawer-body">
+              <!-- Quick Stage Selector Banner -->
+              <div class="crm-drawer-section">
+                <label class="crm-drawer-label">Pipeline Stage Progression</label>
+                <div style="display:flex; gap:10px; align-items:center;">
+                  <select id="crmDrawerStageSelect" onchange="crmUpdateDrawerStage(this.value)" class="search-input" style="width:100%; font-weight:700;">
+                    <option value="new">🟡 New Inquiry</option>
+                    <option value="in_review">🔵 In Review</option>
+                    <option value="contacted">🟣 Contacted / Replied</option>
+                    <option value="closed">🟢 Closed / Converted</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Contact Profile Details -->
+              <div class="crm-drawer-section">
+                <label class="crm-drawer-label">Contact Intelligence</label>
+                <div class="crm-drawer-info-grid">
+                  <div class="crm-info-box">
+                    <span class="crm-info-title"><i class="bi bi-envelope-fill"></i> Email Address</span>
+                    <a id="crmDrawerEmail" href="#" class="crm-info-val highlight">—</a>
+                  </div>
+                  <div class="crm-info-box">
+                    <span class="crm-info-title"><i class="bi bi-telephone-fill"></i> Phone Number</span>
+                    <span id="crmDrawerPhone" class="crm-info-val">—</span>
+                  </div>
+                  <div class="crm-info-box" style="grid-column:1 / -1;">
+                    <span class="crm-info-title"><i class="bi bi-bookmark-fill"></i> Inquiry Topic / Subject</span>
+                    <span id="crmDrawerSubject" class="crm-info-val" style="font-weight:700;">—</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Inquiry Full Message -->
+              <div class="crm-drawer-section">
+                <label class="crm-drawer-label">Client Inquiry Message</label>
+                <div class="crm-message-quote" id="crmDrawerMessage">
+                  —
+                </div>
+              </div>
+
+              <!-- Internal Notes / Follow-up Scratchpad -->
+              <div class="crm-drawer-section">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                  <label class="crm-drawer-label" style="margin:0;"><i class="bi bi-sticky-fill" style="color:var(--gold);"></i> Admin Follow-up Notes</label>
+                  <span style="font-size:11px; color:#94a3b8;">Local autosave</span>
+                </div>
+                <textarea id="crmDrawerNotes" class="search-input" style="width:100%; height:90px; resize:vertical; font-size:13px; font-family:inherit; padding:10px;" placeholder="Add private notes on negotiations, follow-up calls, custom quote details..."></textarea>
+              </div>
+            </div>
+
+            <!-- Drawer Footer Action Bar -->
+            <div class="crm-drawer-footer">
+              <button type="button" class="btn" onclick="crmDrawerCopyEmail()" id="crmCopyEmailBtn" style="min-height:42px;">
+                <i class="bi bi-clipboard"></i> Copy Email
+              </button>
+              <button type="button" class="btn btn-gold" onclick="crmDrawerReplyGmail()" style="min-height:42px; font-weight:700;">
+                <i class="bi bi-google"></i> Reply in Gmail
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1210,32 +2919,6 @@
         </div>
       </div>
 
-      <!-- ── TAB: EMAIL STATS ── -->
-      <div id="tab-email-stats" class="admin-tab">
-
-        <div class="stat-row" id="statsRow">
-          <div class="mini-stat"><div class="mini-stat-val" id="statTotalSub">—</div><div class="mini-stat-lbl">Total Submissions</div></div>
-          <div class="mini-stat"><div class="mini-stat-val" id="statNewSub" style="color:var(--danger)">—</div><div class="mini-stat-lbl">New (Unactioned)</div></div>
-          <div class="mini-stat"><div class="mini-stat-val" id="statEmailSent" style="color:var(--success)">—</div><div class="mini-stat-lbl">Emails Sent</div></div>
-          <div class="mini-stat"><div class="mini-stat-val" id="statEmailFailed" style="color:var(--danger)">—</div><div class="mini-stat-lbl">Failed Notifications</div></div>
-          <div class="mini-stat"><div class="mini-stat-val" id="statEmailSkipped" style="color:var(--muted)">—</div><div class="mini-stat-lbl">Skipped / Disabled</div></div>
-        </div>
-
-        <div class="settings-card">
-          <div class="settings-card-header"><i class="bi bi-list-ul" style="color:var(--gold)"></i> Recent Email Log (last 20)</div>
-          <div style="overflow-x:auto;">
-            <table class="log-table" id="emailLogTable">
-              <thead>
-                <tr><th>Event</th><th>Submission #</th><th>Recipient</th><th>Subject</th><th>Status</th><th>Time</th></tr>
-              </thead>
-              <tbody id="emailLogBody">
-                <tr><td colspan="6" style="text-align:center; padding:24px; color:var(--muted)">Loading...</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
     </div><!-- /content-area -->
   </main>
 
@@ -1375,6 +3058,11 @@
         toggleSidebar();
       }
       if (e.key === 'Escape') {
+        const delModal = document.getElementById('deleteModal');
+        if (delModal && delModal.style.display === 'flex') {
+          closeDeleteModal();
+          return;
+        }
         if (!isDesktop() && sidebarEl && sidebarEl.classList.contains('active')) {
           closeSidebar();
         }
@@ -1413,14 +3101,20 @@
       if (el) el.classList.add('active');
 
       const titles = {
-        inbox: '<i class="bi bi-inbox-fill" style="color:var(--gold)"></i> Contact Messages',
-        'email-settings': '<i class="bi bi-gear-fill" style="color:var(--gold)"></i> Email Settings',
-        'email-stats': '<i class="bi bi-bar-chart-fill" style="color:var(--gold)"></i> Email Usage Stats',
+        inbox: '<i class="bi bi-inbox-fill" style="color:var(--gold)"></i> <span>Contact Messages</span>',
+        leads: '<i class="bi bi-kanban-fill" style="color:var(--gold)"></i> <span>Contact Leads CRM</span>',
+        'email-settings': '<i class="bi bi-gear-fill" style="color:var(--gold)"></i> <span>Email Settings</span>',
       };
       document.getElementById('topTitle').innerHTML = titles[id] || 'Admin';
 
+      if (id === 'inbox')          loadInbox();
+      if (id === 'leads') {
+        loadLeadsCRM();
+        if (typeof crmAllLeads !== 'undefined' && crmAllLeads.length > 0) {
+          runCrmStartToEndAnimation();
+        }
+      }
       if (id === 'email-settings') loadEmailSettings();
-      if (id === 'email-stats')    loadEmailStats();
     };
 
     // ── Contact Messages Dropdown Toggle ──────────────────────
@@ -1435,7 +3129,10 @@
     // ── Toast ────────────────────────────────────────────────────
     function toast(msg, type = 'success') {
       const el = document.getElementById('toastEl');
-      el.textContent = (type === 'success' ? '✅ ' : type === 'error' ? '❌ ' : 'ℹ️ ') + msg;
+      const icon = type === 'success' ? '<i class="bi bi-check-circle-fill" style="color:#34d399"></i>'
+                 : type === 'error'   ? '<i class="bi bi-x-circle-fill" style="color:#f87171"></i>'
+                 : '<i class="bi bi-info-circle-fill" style="color:#60a5fa"></i>';
+      el.innerHTML = `${icon} <span>${escHtml(msg)}</span>`;
       el.className = 'toast-msg ' + type;
       el.style.display = 'flex';
       clearTimeout(window._toastTimer);
@@ -1525,14 +3222,14 @@
           <div class="msg-item${unread ? ' unread' : ''}${selected}" onclick="openMessage(${m.id})" id="msgItem-${m.id}">
             ${unread ? '<div class="msg-unread-dot"></div>' : ''}
             <div class="msg-name">
-              ${escHtml(m.full_name)}
-              <span class="badge badge-${m.status}" style="font-size:9.5px;">${m.status}</span>
+              <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:210px;">${escHtml(m.full_name)}</span>
+              <span class="badge badge-${m.status}" style="font-size:9.5px; flex-shrink:0;">${m.status}</span>
             </div>
             <div class="msg-subject">${escHtml(m.subject || 'No subject')}</div>
             <div class="msg-preview">${escHtml(m.message)}</div>
             <div class="msg-meta">
-              <span class="msg-time">${fmt(m.created_at)}</span>
-              ${m.reply_count > 0 ? `<span style="font-size:10.5px; color:var(--muted);"><i class="bi bi-chat-left-fill"></i> ${m.reply_count}</span>` : ''}
+              <span class="msg-time"><i class="bi bi-clock"></i> ${fmt(m.created_at)}</span>
+              ${m.reply_count > 0 ? `<span style="font-size:10.5px; color:var(--gold); font-weight:600;"><i class="bi bi-chat-left-fill"></i> ${m.reply_count}</span>` : ''}
             </div>
           </div>`;
       }).join('');
@@ -1597,13 +3294,15 @@
         const thread = document.getElementById('replyThread');
         if (replies.length > 0) {
           thread.innerHTML = `
-            <div class="thread-divider"><span>Reply Thread (${replies.length})</span></div>
+            <div class="thread-divider"><span>Conversation History (${replies.length})</span></div>
             ${replies.map(r => `
               <div class="reply-bubble">
                 <div class="reply-meta">
-                  <strong>${escHtml(r.sent_by || 'Admin')}</strong>
-                  <span>${fmt(r.sent_at)}</span>
-                  <span class="badge badge-${r.email_sent ? 'sent' : 'failed'}" style="font-size:9px;">${r.email_sent ? '✓ Emailed' : '✗ Email failed'}</span>
+                  <span style="display:inline-flex; align-items:center; gap:5px; color:var(--gold); font-weight:700;">
+                    <i class="bi bi-shield-lock-fill"></i> ${escHtml(r.sent_by || 'Admin')}
+                  </span>
+                  <span><i class="bi bi-clock"></i> ${fmt(r.sent_at)}</span>
+                  <span class="badge badge-${r.email_sent ? 'sent' : 'failed'}" style="font-size:9.5px; margin-left:auto;">${r.email_sent ? '✓ Emailed' : '✗ Email failed'}</span>
                   ${r.email_error ? `<span style="font-size:10.5px; color:var(--danger);" title="${escHtml(r.email_error)}">⚠ ${escHtml(r.email_error.substring(0,50))}</span>` : ''}
                 </div>
                 <div class="reply-body-text">${escHtml(r.reply_body)}</div>
@@ -1674,7 +3373,7 @@
         if (data.success) {
           toast('Notification email sent!');
           btn.style.display = 'none';
-          document.getElementById('detailEmailNotify').innerHTML = '<span class="badge badge-sent">✉ sent</span>';
+          document.getElementById('detailEmailNotify').innerHTML = '<span class="badge badge-sent"><i class="bi bi-envelope-check-fill"></i> sent</span>';
         } else {
           toast('Email still failing: ' + (data.reason || 'unknown'), 'error');
         }
@@ -1683,21 +3382,58 @@
       btn.innerHTML = '<i class="bi bi-arrow-repeat"></i> Retry Email';
     };
 
-    window.deleteMessage = async function () {
+    window.deleteMessage = function () {
+      if (!currentMsgId || !currentSubmission) return;
+      document.getElementById('delTargetSubject').textContent = currentSubmission.subject || 'No subject';
+      document.getElementById('delTargetSender').textContent = currentSubmission.full_name || 'Customer';
+      document.getElementById('delTargetEmail').textContent = currentSubmission.email || '—';
+      const modal = document.getElementById('deleteModal');
+      if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        document.getElementById('confirmDeleteBtn')?.focus();
+      }
+    };
+
+    window.closeDeleteModal = function () {
+      const modal = document.getElementById('deleteModal');
+      if (modal) modal.style.display = 'none';
+      document.body.style.overflow = '';
+    };
+
+    window.confirmDeleteMessage = async function () {
       if (!currentMsgId) return;
-      if (!confirm('Delete this message and all its replies? This cannot be undone.')) return;
+      const btn = document.getElementById('confirmDeleteBtn');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-sm"></span> Deleting...';
+      }
       try {
-        await fetch('/api/v1/contact/submissions/' + currentMsgId, {
+        const res = await fetch('/api/v1/contact/submissions/' + currentMsgId, {
           method: 'DELETE',
           headers: { Authorization: 'Bearer ' + token },
         });
-        toast('Message deleted');
-        allMessages = allMessages.filter(m => m.id !== currentMsgId);
-        currentMsgId = null;
-        document.getElementById('msgDetailView').classList.remove('visible');
-        document.getElementById('detailEmpty').style.display = '';
-        renderList();
-      } catch (e) { toast('Failed to delete', 'error'); }
+        if (res.ok) {
+          toast('Message deleted successfully');
+          allMessages = allMessages.filter(m => m.id !== currentMsgId);
+          currentMsgId = null;
+          currentSubmission = null;
+          closeDeleteModal();
+          document.getElementById('msgDetailView').classList.remove('visible');
+          document.getElementById('detailEmpty').style.display = '';
+          document.querySelector('.inbox-shell')?.classList.remove('show-detail');
+          renderList();
+        } else {
+          toast('Failed to delete message', 'error');
+        }
+      } catch (e) {
+        toast('Failed to delete message', 'error');
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="bi bi-trash3-fill"></i> Delete Message';
+        }
+      }
     };
 
     window.replyInGmail = async function () {
@@ -1758,6 +3494,491 @@
       } catch (e) { toast('Failed to send reply', 'error'); }
       btn.disabled = false;
       btn.innerHTML = '<i class="bi bi-send-fill"></i> Send Reply';
+    };
+
+    // ════════════════════════════════════════════════════════════
+    // CONTACT LEADS CRM (REAL EXECUTIVE PIPELINE)
+    // ════════════════════════════════════════════════════════════
+    let crmAllLeads = [];
+    let crmFilterStatus = '';
+    let crmSearchTerm = '';
+    let crmSearchTimer = null;
+    let crmCurrentView = 'kanban'; // 'kanban' or 'table'
+    let crmSelectedLead = null;
+
+    let crmAnimationRaf = null;
+
+    window.runCrmStartToEndAnimation = function() {
+      if (crmAnimationRaf) cancelAnimationFrame(crmAnimationRaf);
+
+      const strip = document.getElementById('crmTelemetryStrip');
+      const bar = document.getElementById('crmTelemetryBar');
+      const spark = document.getElementById('crmTelemetrySpark');
+      const pct = document.getElementById('crmTelemetryPercent');
+      const txt = document.getElementById('crmTelemetryText');
+
+      const elTotal = document.getElementById('crmKpiTotal');
+      const elNew = document.getElementById('crmKpiNew');
+      const elActive = document.getElementById('crmKpiActive');
+      const elClosed = document.getElementById('crmKpiClosed');
+
+      const colNew = document.querySelector('.crm-column.stage-new');
+      const colRev = document.querySelector('.crm-column.stage-review');
+      const colCon = document.querySelector('.crm-column.stage-contacted');
+      const colClo = document.querySelector('.crm-column.stage-closed');
+
+      const total = crmAllLeads.length;
+      const newCount = crmAllLeads.filter(l => l.status === 'new').length;
+      const activeCount = crmAllLeads.filter(l => l.status === 'in_review' || l.status === 'contacted' || l.status === 'replied').length;
+      const closedCount = crmAllLeads.filter(l => l.status === 'closed').length;
+
+      // Reset Start (0%)
+      if (strip) strip.classList.remove('ready');
+      if (bar) bar.style.width = '0%';
+      if (spark) spark.style.left = '0%';
+      if (pct) pct.textContent = '0%';
+      if (txt) txt.innerHTML = '<i class="bi bi-cpu-fill" style="color:var(--gold);"></i> Initializing Pipeline Telemetry... Scanning stages (0/4)';
+
+      [elTotal, elNew, elActive, elClosed].forEach(el => {
+        if (el) {
+          el.textContent = '0';
+          el.classList.add('counting');
+        }
+      });
+      [colNew, colRev, colCon, colClo].forEach(c => c && c.classList.remove('scanned'));
+
+      const startTime = performance.now();
+      const duration = 1400; // 1.4s smooth executive scan
+
+      function step(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(1, elapsed / duration);
+        // Cubic ease out
+        const ease = 1 - Math.pow(1 - progress, 3);
+
+        const currentPct = Math.round(ease * 100);
+        if (bar) bar.style.width = (ease * 100).toFixed(1) + '%';
+        if (spark) spark.style.left = (ease * 100).toFixed(1) + '%';
+        if (pct) pct.textContent = currentPct + '%';
+
+        // Counter roll
+        if (elTotal) elTotal.textContent = Math.round(ease * total);
+        if (elNew) elNew.textContent = Math.round(ease * newCount);
+        if (elActive) elActive.textContent = Math.round(ease * activeCount);
+        if (elClosed) elClosed.textContent = Math.round(ease * closedCount);
+
+        // Sequential stage highlights from start to end
+        if (progress >= 0.08 && colNew && !colNew.classList.contains('scanned')) {
+          colNew.classList.add('scanned');
+          if (txt) txt.innerHTML = '<i class="bi bi-search" style="color:var(--gold);"></i> [1/4] Scanned New Inquiries stage...';
+        }
+        if (progress >= 0.38 && colRev && !colRev.classList.contains('scanned')) {
+          colRev.classList.add('scanned');
+          if (txt) txt.innerHTML = '<i class="bi bi-search" style="color:#60a5fa;"></i> [2/4] Scanned In Review stage...';
+        }
+        if (progress >= 0.68 && colCon && !colCon.classList.contains('scanned')) {
+          colCon.classList.add('scanned');
+          if (txt) txt.innerHTML = '<i class="bi bi-search" style="color:#a78bfa;"></i> [3/4] Scanned Contacted / Discussion stage...';
+        }
+        if (progress >= 0.92 && colClo && !colClo.classList.contains('scanned')) {
+          colClo.classList.add('scanned');
+          if (txt) txt.innerHTML = '<i class="bi bi-search" style="color:#34d399;"></i> [4/4] Scanned Closed / Converted stage...';
+        }
+
+        if (progress < 1) {
+          crmAnimationRaf = requestAnimationFrame(step);
+        } else {
+          // Reached 100% (End of Animation)
+          if (bar) bar.style.width = '100%';
+          if (spark) spark.style.left = '100%';
+          if (pct) pct.textContent = '100%';
+          if (strip) strip.classList.add('ready');
+
+          if (elTotal) { elTotal.textContent = total; elTotal.classList.remove('counting'); }
+          if (elNew) { elNew.textContent = newCount; elNew.classList.remove('counting'); }
+          if (elActive) { elActive.textContent = activeCount; elActive.classList.remove('counting'); }
+          if (elClosed) { elClosed.textContent = closedCount; elClosed.classList.remove('counting'); }
+
+          if (txt) {
+            txt.innerHTML = `<i class="bi bi-check2-circle" style="color:#34d399;"></i> <strong>Pipeline Ready</strong> • All 4 stages synchronized (${total} total leads active)`;
+          }
+
+          // Softly fade scanned highlights after 1.2s so columns look pristine
+          setTimeout(() => {
+            [colNew, colRev, colCon, colClo].forEach(c => c && c.classList.remove('scanned'));
+          }, 1200);
+        }
+      }
+
+      crmAnimationRaf = requestAnimationFrame(step);
+    };
+
+    window.loadLeadsCRM = async function() {
+      try {
+        const res = await fetch('/api/v1/contact/submissions?limit=300', {
+          headers: { Authorization: 'Bearer ' + token }
+        });
+        const data = await res.json();
+        crmAllLeads = data.submissions || [];
+        crmRenderAll();
+        runCrmStartToEndAnimation();
+      } catch (err) {
+        console.error('Failed to load leads CRM:', err);
+        toast('Could not load CRM leads', 'error');
+      }
+    };
+
+    function crmRenderAll() {
+      crmUpdateKpis();
+      crmRenderKanban();
+      crmRenderTable();
+    }
+
+    function crmUpdateKpis() {
+      const total = crmAllLeads.length;
+      const newCount = crmAllLeads.filter(l => l.status === 'new').length;
+      const activeCount = crmAllLeads.filter(l => l.status === 'in_review' || l.status === 'contacted' || l.status === 'replied').length;
+      const closedCount = crmAllLeads.filter(l => l.status === 'closed').length;
+
+      const elTotal = document.getElementById('crmKpiTotal');
+      const elNew = document.getElementById('crmKpiNew');
+      const elActive = document.getElementById('crmKpiActive');
+      const elClosed = document.getElementById('crmKpiClosed');
+
+      if (elTotal) elTotal.textContent = total;
+      if (elNew) elNew.textContent = newCount;
+      if (elActive) elActive.textContent = activeCount;
+      if (elClosed) elClosed.textContent = closedCount;
+    }
+
+    function crmGetFilteredLeads() {
+      return crmAllLeads.filter(l => {
+        // Stage filter
+        if (crmFilterStatus) {
+          if (crmFilterStatus === 'contacted') {
+            if (l.status !== 'contacted' && l.status !== 'replied') return false;
+          } else if (l.status !== crmFilterStatus) {
+            return false;
+          }
+        }
+        // Search filter
+        if (crmSearchTerm) {
+          const s = crmSearchTerm.toLowerCase();
+          const matchName = (l.full_name || '').toLowerCase().includes(s);
+          const matchEmail = (l.email || '').toLowerCase().includes(s);
+          const matchSubject = (l.subject || '').toLowerCase().includes(s);
+          const matchMsg = (l.message || '').toLowerCase().includes(s);
+          const matchPhone = (l.phone || '').toLowerCase().includes(s);
+          if (!matchName && !matchEmail && !matchSubject && !matchMsg && !matchPhone) return false;
+        }
+        return true;
+      });
+    }
+
+    function crmGetInitials(name) {
+      if (!name) return '—';
+      const parts = name.trim().split(/\s+/);
+      if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+
+    function crmGetAvatarColor(name) {
+      const colors = [
+        'linear-gradient(135deg, #f59e0b, #d97706)',
+        'linear-gradient(135deg, #3b82f6, #1d4ed8)',
+        'linear-gradient(135deg, #8b5cf6, #6d28d9)',
+        'linear-gradient(135deg, #10b981, #047857)',
+        'linear-gradient(135deg, #ec4899, #be185d)',
+        'linear-gradient(135deg, #06b6d4, #0e7490)'
+      ];
+      let hash = 0;
+      for (let i = 0; i < (name || '').length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+      return colors[Math.abs(hash) % colors.length];
+    }
+
+    function crmRenderKanban() {
+      const filtered = crmGetFilteredLeads();
+      const stages = {
+        new: filtered.filter(l => l.status === 'new'),
+        review: filtered.filter(l => l.status === 'in_review'),
+        contacted: filtered.filter(l => l.status === 'contacted' || l.status === 'replied'),
+        closed: filtered.filter(l => l.status === 'closed')
+      };
+
+      const cNew = document.getElementById('crmCountNew');
+      const cRev = document.getElementById('crmCountReview');
+      const cCon = document.getElementById('crmCountContacted');
+      const cClo = document.getElementById('crmCountClosed');
+      if (cNew) cNew.textContent = stages.new.length;
+      if (cRev) cRev.textContent = stages.review.length;
+      if (cCon) cCon.textContent = stages.contacted.length;
+      if (cClo) cClo.textContent = stages.closed.length;
+
+      const renderCol = (containerId, list, nextStage, nextLabel) => {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        if (!list.length) {
+          container.innerHTML = `<div class="crm-col-empty"><i class="bi bi-inbox"></i><span>No inquiries</span></div>`;
+          return;
+        }
+        container.innerHTML = list.map(l => {
+          const initials = crmGetInitials(l.full_name);
+          const bg = crmGetAvatarColor(l.full_name);
+          const topic = escHtml(l.subject || 'General Inquiry');
+          return `
+            <div class="crm-card" onclick="openCrmLeadDrawer(${l.id})">
+              <div class="crm-card-header">
+                <div class="crm-avatar" style="background:${bg};">${initials}</div>
+                <div class="crm-card-user">
+                  <div class="crm-card-name" title="${escHtml(l.full_name)}">${escHtml(l.full_name)}</div>
+                  <div class="crm-card-time"><i class="bi bi-clock"></i> ${fmt(l.created_at)}</div>
+                </div>
+              </div>
+              <div class="crm-card-topic" title="${topic}">${topic}</div>
+              <div class="crm-card-snippet">${escHtml(l.message || '—')}</div>
+              <div class="crm-card-footer" onclick="event.stopPropagation()">
+                <div class="crm-chips-wrap">
+                  <a href="mailto:${escHtml(l.email)}" class="crm-chip" title="Email: ${escHtml(l.email)}"><i class="bi bi-envelope"></i></a>
+                  ${l.phone ? `<a href="tel:${escHtml(l.phone)}" class="crm-chip" title="Call: ${escHtml(l.phone)}"><i class="bi bi-telephone"></i></a>` : ''}
+                </div>
+                ${nextStage ? `
+                  <button type="button" class="crm-advance-btn" onclick="crmAdvanceStage(${l.id}, '${nextStage}')" title="Move to ${nextLabel}">
+                    ${nextLabel} &rarr;
+                  </button>
+                ` : `
+                  <span style="font-size:11px; color:#34d399; font-weight:700;"><i class="bi bi-check-circle-fill"></i> Closed</span>
+                `}
+              </div>
+            </div>
+          `;
+        }).join('');
+      };
+
+      renderCol('crmCardsNew', stages.new, 'in_review', 'Review');
+      renderCol('crmCardsReview', stages.review, 'contacted', 'Contacted');
+      renderCol('crmCardsContacted', stages.contacted, 'closed', 'Close');
+      renderCol('crmCardsClosed', stages.closed, null, null);
+    }
+
+    function crmRenderTable() {
+      const tbody = document.getElementById('crmTableBody');
+      if (!tbody) return;
+      const filtered = crmGetFilteredLeads();
+      if (!filtered.length) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:32px; color:var(--muted)">No inquiries matching current filter.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = filtered.map(l => {
+        const initials = crmGetInitials(l.full_name);
+        const bg = crmGetAvatarColor(l.full_name);
+        return `
+          <tr style="cursor:pointer;" onclick="openCrmLeadDrawer(${l.id})">
+            <td style="padding:14px 18px;">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <div class="crm-avatar" style="background:${bg}; width:32px; height:32px; font-size:11px;">${initials}</div>
+                <div style="font-weight:700; color:#fff;">${escHtml(l.full_name)}</div>
+              </div>
+            </td>
+            <td>
+              <div style="font-size:12.5px;"><a href="mailto:${escHtml(l.email)}" style="color:var(--gold); text-decoration:none;" onclick="event.stopPropagation()">${escHtml(l.email)}</a></div>
+              ${l.phone ? `<div style="font-size:11.5px; color:var(--muted);">${escHtml(l.phone)}</div>` : ''}
+            </td>
+            <td><span class="crm-card-topic" style="margin:0;">${escHtml(l.subject || 'General Inquiry')}</span></td>
+            <td style="max-width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#94a3b8;" title="${escHtml(l.message)}">${escHtml(l.message)}</td>
+            <td onclick="event.stopPropagation()">
+              <select onchange="crmUpdateLeadStatusDirect(${l.id}, this.value)" style="background:#1a202c; color:#fff; border:1px solid var(--border); border-radius:6px; padding:4px 8px; font-size:12px; font-weight:600;">
+                <option value="new" ${l.status === 'new' ? 'selected' : ''}>🟡 New</option>
+                <option value="in_review" ${l.status === 'in_review' ? 'selected' : ''}>🔵 In Review</option>
+                <option value="contacted" ${l.status === 'contacted' || l.status === 'replied' ? 'selected' : ''}>🟣 Contacted</option>
+                <option value="closed" ${l.status === 'closed' ? 'selected' : ''}>🟢 Closed</option>
+              </select>
+            </td>
+            <td style="font-size:12px; color:var(--muted); white-space:nowrap;">${fmt(l.created_at)}</td>
+            <td style="text-align:right; padding-right:18px;" onclick="event.stopPropagation()">
+              <button type="button" class="btn btn-sm" onclick="openCrmLeadDrawer(${l.id})" style="padding:4px 10px; font-size:11.5px;">
+                <i class="bi bi-eye"></i> Dossier
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    window.crmAdvanceStage = async function(id, nextStage) {
+      await crmUpdateLeadStatusDirect(id, nextStage);
+    };
+
+    window.crmUpdateLeadStatusDirect = async function(id, status) {
+      try {
+        const res = await fetch('/api/v1/contact/submissions/' + id, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+          body: JSON.stringify({ status })
+        });
+        if (res.ok) {
+          toast('Lead moved to ' + status.replace('_', ' '));
+          const lead = crmAllLeads.find(l => l.id === id);
+          if (lead) lead.status = status;
+          crmRenderAll();
+        } else {
+          toast('Failed to update status', 'error');
+        }
+      } catch (err) {
+        toast('Network error updating status', 'error');
+      }
+    };
+
+    window.crmSetView = function(view) {
+      crmCurrentView = view;
+      const bKanban = document.getElementById('crmViewKanbanBtn');
+      const bTable = document.getElementById('crmViewTableBtn');
+      const vKanban = document.getElementById('crmKanbanView');
+      const vTable = document.getElementById('crmTableView');
+      if (bKanban) bKanban.classList.toggle('active', view === 'kanban');
+      if (bTable) bTable.classList.toggle('active', view === 'table');
+      if (vKanban) vKanban.style.display = view === 'kanban' ? 'grid' : 'none';
+      if (vTable) vTable.style.display = view === 'table' ? 'block' : 'none';
+    };
+
+    window.crmFilterStage = function(status, btn) {
+      crmFilterStatus = status;
+      document.querySelectorAll('.crm-stage-pill').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      crmRenderAll();
+
+      // On mobile viewports with horizontal scroll snapping, scroll to target stage column
+      if (window.innerWidth <= 860 && status) {
+        const colMap = {
+          new: 'crmCardsNew',
+          in_review: 'crmCardsReview',
+          contacted: 'crmCardsContacted',
+          closed: 'crmCardsClosed'
+        };
+        const targetId = colMap[status];
+        if (targetId) {
+          const colEl = document.getElementById(targetId)?.parentElement;
+          if (colEl) {
+            colEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+          }
+        }
+      }
+    };
+
+    window.crmSearchDebounce = function() {
+      clearTimeout(crmSearchTimer);
+      crmSearchTimer = setTimeout(() => {
+        crmSearchTerm = document.getElementById('crmSearchInput').value.trim();
+        const clearBtn = document.getElementById('crmSearchClear');
+        if (clearBtn) clearBtn.style.display = crmSearchTerm ? 'block' : 'none';
+        crmRenderAll();
+      }, 250);
+    };
+
+    window.crmClearSearch = function() {
+      const input = document.getElementById('crmSearchInput');
+      if (input) input.value = '';
+      crmSearchTerm = '';
+      const clearBtn = document.getElementById('crmSearchClear');
+      if (clearBtn) clearBtn.style.display = 'none';
+      crmRenderAll();
+    };
+
+    window.openCrmLeadDrawer = function(id) {
+      const lead = crmAllLeads.find(l => l.id === id);
+      if (!lead) return;
+      crmSelectedLead = lead;
+
+      const initials = crmGetInitials(lead.full_name);
+      const bg = crmGetAvatarColor(lead.full_name);
+      const elAvatar = document.getElementById('crmDrawerAvatar');
+      const elName = document.getElementById('crmDrawerName');
+      const elDate = document.getElementById('crmDrawerDate');
+      const elEmail = document.getElementById('crmDrawerEmail');
+      const elPhone = document.getElementById('crmDrawerPhone');
+      const elSubject = document.getElementById('crmDrawerSubject');
+      const elMsg = document.getElementById('crmDrawerMessage');
+      const elStage = document.getElementById('crmDrawerStageSelect');
+      const elNotes = document.getElementById('crmDrawerNotes');
+
+      if (elAvatar) { elAvatar.textContent = initials; elAvatar.style.background = bg; }
+      if (elName) elName.textContent = lead.full_name;
+      if (elDate) elDate.textContent = 'Received ' + fmt(lead.created_at) + (lead.created_at ? ' (' + lead.created_at.substring(0, 10) + ')' : '');
+      if (elEmail) { elEmail.textContent = lead.email || '—'; elEmail.href = 'mailto:' + (lead.email || ''); }
+      if (elPhone) elPhone.textContent = lead.phone || 'No phone provided';
+      if (elSubject) elSubject.textContent = lead.subject || 'General Inquiry';
+      if (elMsg) elMsg.textContent = lead.message || '—';
+      if (elStage) elStage.value = lead.status === 'replied' ? 'contacted' : lead.status;
+
+      // LocalStorage notes
+      const notesKey = 'omni_crm_notes_' + lead.id;
+      if (elNotes) elNotes.value = localStorage.getItem(notesKey) || '';
+
+      const backdrop = document.getElementById('crmDrawerBackdrop');
+      if (backdrop) backdrop.style.display = 'flex';
+    };
+
+    window.closeCrmDrawer = function() {
+      if (crmSelectedLead) {
+        const elNotes = document.getElementById('crmDrawerNotes');
+        if (elNotes) {
+          localStorage.setItem('omni_crm_notes_' + crmSelectedLead.id, elNotes.value);
+        }
+      }
+      const backdrop = document.getElementById('crmDrawerBackdrop');
+      if (backdrop) backdrop.style.display = 'none';
+    };
+
+    window.crmUpdateDrawerStage = async function(status) {
+      if (!crmSelectedLead) return;
+      await crmUpdateLeadStatusDirect(crmSelectedLead.id, status);
+      crmSelectedLead.status = status;
+    };
+
+    window.crmDrawerCopyEmail = function() {
+      if (!crmSelectedLead || !crmSelectedLead.email) return;
+      navigator.clipboard.writeText(crmSelectedLead.email).then(() => {
+        toast('Email copied to clipboard');
+        const btn = document.getElementById('crmCopyEmailBtn');
+        if (btn) {
+          btn.innerHTML = '<i class="bi bi-check2"></i> Copied!';
+          setTimeout(() => { btn.innerHTML = '<i class="bi bi-clipboard"></i> Copy Email'; }, 2000);
+        }
+      });
+    };
+
+    window.crmDrawerReplyGmail = function() {
+      if (!crmSelectedLead || !crmSelectedLead.email) return;
+      const subject = encodeURIComponent('Re: ' + (crmSelectedLead.subject || 'Omni Virtual Solutions Inquiry'));
+      const body = encodeURIComponent(`Hi ${crmSelectedLead.full_name},\n\nThank you for reaching out to Omni Virtual Solutions.\n\nBest regards,\nOmni Virtual Solutions Team`);
+      const url = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(crmSelectedLead.email)}&su=${subject}&body=${body}`;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    };
+
+    window.exportLeadsCsv = function() {
+      if (!crmAllLeads.length) {
+        toast('No leads to export', 'error');
+        return;
+      }
+      const headers = ['ID', 'Full Name', 'Email', 'Phone', 'Subject', 'Message', 'Status', 'Date Received'];
+      const rows = crmAllLeads.map(l => [
+        l.id,
+        `"${(l.full_name || '').replace(/"/g, '""')}"`,
+        `"${(l.email || '').replace(/"/g, '""')}"`,
+        `"${(l.phone || '').replace(/"/g, '""')}"`,
+        `"${(l.subject || '').replace(/"/g, '""')}"`,
+        `"${(l.message || '').replace(/"/g, '""')}"`,
+        `"${(l.status || '').replace(/"/g, '""')}"`,
+        `"${(l.created_at || '').replace(/"/g, '""')}"`
+      ]);
+      const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', `omni-contact-leads-${new Date().toISOString().substring(0, 10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      toast('Leads CSV exported successfully');
     };
 
     // ════════════════════════════════════════════════════════════
@@ -1930,35 +4151,6 @@
       ]);
       ok ? toast('Templates saved!') : toast('Save failed', 'error');
     };
-
-    // ════════════════════════════════════════════════════════════
-    // EMAIL STATS
-    // ════════════════════════════════════════════════════════════
-    async function loadEmailStats() {
-      try {
-        const res = await fetch('/api/v1/contact/email-stats', { headers: { Authorization: 'Bearer ' + token } });
-        const data = await res.json();
-
-        document.getElementById('statTotalSub').textContent  = data.contactStats?.total_submissions ?? '—';
-        document.getElementById('statNewSub').textContent    = data.contactStats?.new_count ?? '—';
-        document.getElementById('statEmailSent').textContent = data.emailStats?.sent ?? '—';
-        document.getElementById('statEmailFailed').textContent = data.emailStats?.failed ?? '—';
-        document.getElementById('statEmailSkipped').textContent = data.emailStats?.skipped ?? '—';
-
-        const log = data.recentLog || [];
-        document.getElementById('emailLogBody').innerHTML = log.length ? log.map(l => `
-          <tr>
-            <td><code style="color:var(--gold); font-size:11px;">${escHtml(l.event_type)}</code></td>
-            <td>${l.submission_id ? `#${l.submission_id}` : '—'}</td>
-            <td style="color:var(--muted);">${escHtml(l.recipient_email || '—')}</td>
-            <td style="max-width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escHtml(l.subject || '—')}</td>
-            <td><span class="badge badge-${l.status}">${l.status}</span></td>
-            <td style="color:var(--muted); font-size:11px;">${fmt(l.sent_at)}</td>
-          </tr>
-        `).join('') : '<tr><td colspan="6" style="text-align:center; padding:24px; color:var(--muted)">No email activity yet.</td></tr>';
-
-      } catch (e) { toast('Failed to load stats', 'error'); }
-    }
 
     // ════════════════════════════════════════════════════════════
     // EMAIL TEMPLATES STUDIO
@@ -2156,7 +4348,7 @@
 
     // ── Init ─────────────────────────────────────────────────────
     const initialHash = window.location.hash.replace('#', '');
-    if (initialHash && ['inbox', 'email-settings', 'email-stats'].includes(initialHash)) {
+    if (initialHash && ['inbox', 'leads', 'email-settings'].includes(initialHash)) {
       const matchingSub = document.querySelector(`.nav-sub-item[onclick*="'${initialHash}'"]`);
       switchTab(initialHash, matchingSub);
     } else {
@@ -2220,6 +4412,50 @@
         </div>
       </div>
 
+    </div>
+  </div>
+
+  <!-- ── Delete Message Confirmation Modal ── -->
+  <div id="deleteModal" class="delete-modal-backdrop" style="display:none;" onclick="if(event.target===this) closeDeleteModal()">
+    <div class="delete-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+      <div class="delete-modal-header">
+        <div class="delete-modal-title" id="deleteModalTitle">
+          <div class="delete-modal-icon-badge">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+          </div>
+          <div>
+            <h3 style="margin:0; font-size:16px; font-weight:700; color:#fff;">Delete Conversation</h3>
+            <span style="font-size:11.5px; color:#94a3b8;">This action permanently erases customer record</span>
+          </div>
+        </div>
+        <button class="delete-modal-close" onclick="closeDeleteModal()" aria-label="Close dialog">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+      <div class="delete-modal-body">
+        <p style="margin:0 0 14px 0; font-size:13.5px; color:#cbd5e1; line-height:1.55;">
+          Are you sure you want to permanently delete this message along with all replied threads and history?
+        </p>
+        <div class="delete-modal-target" id="deleteModalTargetInfo">
+          <div style="font-weight:700; color:#fff; font-size:13.5px; margin-bottom:4px;" id="delTargetSubject">—</div>
+          <div style="font-size:12px; color:#94a3b8; display:flex; align-items:center; gap:8px;">
+            <span><i class="bi bi-person-fill" style="color:var(--gold);"></i> <strong id="delTargetSender" style="color:#e2e8f0;">—</strong></span>
+            <span><i class="bi bi-envelope-fill"></i> <span id="delTargetEmail">—</span></span>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; margin-top:14px; font-size:12px; color:#f87171; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.2); border-radius:8px; padding:10px 12px;">
+          <i class="bi bi-shield-slash-fill" style="font-size:15px; flex-shrink:0;"></i>
+          <span>Database record and threads will be irreversibly removed from Turso.</span>
+        </div>
+      </div>
+      <div class="delete-modal-footer">
+        <button type="button" class="btn" onclick="closeDeleteModal()" style="min-height:40px; padding:8px 18px;">
+          Cancel
+        </button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn" onclick="confirmDeleteMessage()" style="min-height:40px; padding:8px 20px; font-weight:700;">
+          <i class="bi bi-trash3-fill"></i> Delete Message
+        </button>
+      </div>
     </div>
   </div>
 </body>

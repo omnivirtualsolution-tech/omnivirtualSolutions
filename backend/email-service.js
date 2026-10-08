@@ -126,6 +126,8 @@ async function logEmail({ eventType, submissionId, recipientEmail, subject, stat
             VALUES (?,?,?,?,?,?)`,
       args: [eventType, submissionId || null, recipientEmail || null, subject || null, status, errorMessage || null],
     });
+    // Auto-prune logs older than 48h to prevent database bloat and keep Turso cloud storage near 0 KB
+    await db.execute("DELETE FROM email_log WHERE sent_at <= datetime('now', '-48 hours')");
   } catch (err) {
     console.error("[email-service] Failed to write email log:", err.message);
   }

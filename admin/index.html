@@ -280,12 +280,20 @@
       top: 0;
       z-index: 900;
     }
-    .page-title {
-      font-size: 17px;
-      font-weight: 700;
+    .top-header-left {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 14px;
+      min-height: 38px;
+    }
+    .page-title {
+      font-size: 16.5px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      line-height: 1;
+      white-space: nowrap;
     }
     .header-actions {
       display: flex;
@@ -1401,14 +1409,115 @@
       pointer-events: auto;
     }
 
-    /* Desktop Sidebar Collapsed State */
+    /* ── Desktop Sidebar Collapsed State: Mini Icon Rail (72px) ── */
     @media (min-width: 1025px) {
       body.sidebar-collapsed #sidebar {
-        transform: translateX(-100%);
+        width: 72px !important;
+        transform: translateX(0) !important;
+        overflow: visible;
+        transition: width 0.28s cubic-bezier(0.4, 0, 0.2, 1);
       }
       body.sidebar-collapsed #mainContent {
-        margin-left: 0 !important;
-        width: 100% !important;
+        margin-left: 72px !important;
+        width: calc(100% - 72px) !important;
+        transition: margin-left 0.28s cubic-bezier(0.4, 0, 0.2, 1), width 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      body.sidebar-collapsed #sidebar .brand-box {
+        padding: 16px 0;
+        justify-content: center;
+      }
+      body.sidebar-collapsed #sidebar .brand-box > div:not(.brand-icon),
+      body.sidebar-collapsed #sidebar .sidebar-close-btn {
+        display: none !important;
+      }
+      body.sidebar-collapsed #sidebar .brand-icon {
+        width: 38px;
+        height: 38px;
+        margin: 0 auto;
+      }
+      body.sidebar-collapsed #sidebar .nav-label {
+        display: none !important;
+      }
+      body.sidebar-collapsed #sidebar .nav-list {
+        padding: 12px 8px;
+        overflow: visible;
+      }
+      body.sidebar-collapsed #sidebar .nav-item,
+      body.sidebar-collapsed #sidebar .nav-dropdown-toggle {
+        justify-content: center;
+        padding: 11px 0;
+        position: relative;
+        border-radius: 10px;
+        gap: 0;
+      }
+      body.sidebar-collapsed #sidebar .nav-item span:not(.nav-badge),
+      body.sidebar-collapsed #sidebar .nav-dropdown-toggle span:not(.nav-badge),
+      body.sidebar-collapsed #sidebar .nav-dropdown-arrow {
+        display: none !important;
+      }
+      body.sidebar-collapsed #sidebar .nav-item i,
+      body.sidebar-collapsed #sidebar .nav-dropdown-toggle i {
+        font-size: 19px;
+        margin: 0;
+      }
+      body.sidebar-collapsed #sidebar .nav-badge {
+        position: absolute;
+        top: 6px;
+        right: 14px;
+        width: 8px;
+        height: 8px;
+        min-width: 8px;
+        min-height: 8px;
+        padding: 0;
+        font-size: 0;
+        border-radius: 50%;
+      }
+      /* Floating Tooltips */
+      body.sidebar-collapsed #sidebar .nav-item[data-tooltip]:hover::after,
+      body.sidebar-collapsed #sidebar .nav-dropdown-toggle[data-tooltip]:hover::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        left: 74px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: #151a24;
+        color: #ffffff;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 6px 12px;
+        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
+        white-space: nowrap;
+        z-index: 1060;
+        pointer-events: none;
+      }
+      /* Flyout Submenu in Rail Mode */
+      body.sidebar-collapsed #sidebar .nav-dropdown {
+        position: relative;
+      }
+      body.sidebar-collapsed #sidebar .nav-dropdown.open .nav-submenu {
+        position: absolute;
+        left: 74px;
+        top: 0;
+        width: 210px;
+        background: #0f131a;
+        border: 1px solid rgba(235, 162, 45, 0.3);
+        border-radius: 10px;
+        padding: 8px;
+        margin: 0;
+        box-shadow: 0 12px 35px rgba(0,0,0,0.7);
+        z-index: 1050;
+      }
+      body.sidebar-collapsed #sidebar .sidebar-footer {
+        padding: 14px 0;
+        justify-content: center;
+      }
+      body.sidebar-collapsed #sidebar .user-info {
+        justify-content: center;
+      }
+      body.sidebar-collapsed #sidebar .user-info > div {
+        display: none !important;
       }
     }
 
@@ -1789,36 +1898,30 @@
     <ul class="nav-list">
       <li class="nav-label">Navigation</li>
       <li>
-        <a class="nav-item active" onclick="switchTab('overview', this)">
-          <i class="bi bi-grid-1x2-fill"></i> Overview Dashboard
+        <a class="nav-item active" onclick="switchTab('overview', this)" data-tooltip="Overview Dashboard">
+          <i class="bi bi-grid-1x2-fill"></i> <span>Overview Dashboard</span>
         </a>
       </li>
       <li>
-        <a class="nav-item" onclick="switchTab('live-editor', this)">
-          <i class="bi bi-browser-chrome" style="color:var(--gold);"></i> Live Website Editor
+        <a class="nav-item" onclick="switchTab('live-editor', this)" data-tooltip="Live Website Editor">
+          <i class="bi bi-browser-chrome" style="color:var(--gold);"></i> <span>Live Website Editor</span>
         </a>
       </li>
       <li>
-        <a class="nav-item" onclick="switchTab('business-profile', this)">
-          <i class="bi bi-building-gear" style="color:var(--gold);"></i> Business Profile & Contact
+        <a class="nav-item" onclick="switchTab('business-profile', this)" data-tooltip="Business Profile & Contact">
+          <i class="bi bi-building-gear" style="color:var(--gold);"></i> <span>Business Profile & Contact</span>
         </a>
       </li>
       <li>
-        <a class="nav-item" onclick="switchTab('services', this)">
-          <i class="bi bi-briefcase-fill" style="color:var(--gold);"></i> Services Catalog
-        </a>
-      </li>
-      <li>
-        <a class="nav-item" onclick="switchTab('leads', this)">
-          <i class="bi bi-envelope-open-fill"></i> Leads CRM
-          <span class="nav-badge" id="leadsBadge">0</span>
+        <a class="nav-item" onclick="switchTab('services', this)" data-tooltip="Services Catalog">
+          <i class="bi bi-briefcase-fill" style="color:var(--gold);"></i> <span>Services Catalog</span>
         </a>
       </li>
       <li class="nav-dropdown" id="contactNavDropdown">
-        <div class="nav-dropdown-toggle" onclick="toggleContactDropdown()" role="button" aria-expanded="false" tabindex="0">
+        <div class="nav-dropdown-toggle" onclick="toggleContactDropdown()" role="button" aria-expanded="false" tabindex="0" data-tooltip="Contact Messages">
           <i class="bi bi-inbox-fill" style="color:var(--gold);"></i>
           <span>Contact Messages</span>
-          <span class="nav-badge" id="inboxBadge" style="background:#eba22d; color:#0d1117; margin-left:auto;">✉</span>
+          <span class="nav-badge" id="inboxBadge" style="background:#eba22d; color:#0d1117; margin-left:auto;"><i class="bi bi-envelope-fill"></i></span>
           <i class="bi bi-chevron-down nav-dropdown-arrow" id="contactDropdownArrow"></i>
         </div>
         <ul class="nav-submenu" id="contactSubmenu">
@@ -1828,25 +1931,25 @@
             </a>
           </li>
           <li>
-            <a class="nav-sub-item" href="admin/contacts.html#email-settings">
-              <i class="bi bi-palette2" style="color:var(--gold);"></i> Email UI &amp; Settings
+            <a class="nav-sub-item" href="admin/contacts.html#leads">
+              <i class="bi bi-kanban-fill" style="color:var(--gold);"></i> Contact Leads CRM
             </a>
           </li>
           <li>
-            <a class="nav-sub-item" href="admin/contacts.html#email-stats">
-              <i class="bi bi-bar-chart-fill"></i> Email Usage Stats
+            <a class="nav-sub-item" href="admin/contacts.html#email-settings">
+              <i class="bi bi-palette2" style="color:var(--gold);"></i> Email UI &amp; Settings
             </a>
           </li>
         </ul>
       </li>
       <li>
-        <a class="nav-item" onclick="switchTab('media', this)">
-          <i class="bi bi-images"></i> Media Library
+        <a class="nav-item" onclick="switchTab('media', this)" data-tooltip="Media Library">
+          <i class="bi bi-images"></i> <span>Media Library</span>
         </a>
       </li>
       <li>
-        <a class="nav-item" onclick="switchTab('account-security', this)">
-          <i class="bi bi-shield-lock-fill" style="color:var(--gold);"></i> Account Security
+        <a class="nav-item" onclick="switchTab('account-security', this)" data-tooltip="Account Security">
+          <i class="bi bi-shield-lock-fill" style="color:var(--gold);"></i> <span>Account Security</span>
         </a>
       </li>
     </ul>
@@ -1872,8 +1975,8 @@
 
     <!-- Top Header -->
     <header class="top-header">
-      <div class="d-flex align-items-center gap-2">
-        <button class="sidebar-toggle-btn" id="sidebarToggleBtn" aria-label="Toggle navigation menu">
+      <div class="top-header-left">
+        <button class="sidebar-toggle-btn" id="sidebarToggleBtn" aria-label="Toggle navigation menu" title="Toggle navigation rail (Ctrl+B)">
           <i class="bi bi-list"></i>
         </button>
         <div class="page-title" id="topHeaderTitle">
@@ -1990,14 +2093,30 @@
         <!-- Visualizations & Stacked Cloud Quotas -->
         <div class="charts-row">
           <!-- Chart 1: Traffic & Engagement Over Time (Line Chart) -->
-          <div class="panel" style="margin-bottom:0;">
-            <div class="panel-header">
-              <div class="panel-title">
-                <i class="bi bi-activity text-warning"></i> Traffic & Lead Generation Over Time
+          <div class="panel" style="margin-bottom:0; overflow:hidden;">
+            <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+              <div>
+                <div class="panel-title" style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                  <i class="bi bi-activity text-warning"></i>
+                  <span>Traffic & Lead Generation Over Time</span>
+                  <span id="chartTimelineStatus" class="stat-badge gold" style="margin-top:0; font-size:10.5px; padding:3px 8px; display:inline-flex; align-items:center; gap:6px;">
+                    <span class="live-pulse-dot" id="chartTimelinePulse" style="width:7px; height:7px; background:#eba22d; box-shadow:0 0 8px #eba22d;"></span>
+                    <span id="chartTimelineStatusText">Tracing Timeline... 0%</span>
+                  </span>
+                </div>
+                <div style="font-size:11px; color:var(--muted); margin-top:2px;">
+                  Website Visits vs. Inquiries vs. Emails Sent
+                </div>
               </div>
-              <div style="font-size:11px; color:var(--muted);">
-                Website Visits vs. Inquiries vs. Emails Sent
+              <div style="display:flex; align-items:center; gap:8px;">
+                <button type="button" class="btn btn-sm" onclick="replayTimelineChartAnimation()" title="Replay Start-to-End Timeline Animation" style="padding:4px 10px; font-size:11.5px; background:rgba(235,162,45,0.12); border:1px solid rgba(235,162,45,0.35); color:var(--gold); border-radius:6px; cursor:pointer;">
+                  <i class="bi bi-play-circle-fill me-1"></i> Replay
+                </button>
               </div>
+            </div>
+            <!-- Start-to-End Progress Beam -->
+            <div style="background:rgba(255,255,255,0.06); height:3px; position:relative; overflow:visible;">
+              <div id="chartTimelineProgressBar" style="height:100%; width:0%; background:linear-gradient(90deg, #eba22d, #38bdf8); border-radius:2px; transition:width 0.08s linear; box-shadow:0 0 8px rgba(235,162,45,0.6);"></div>
             </div>
             <div class="panel-body">
               <div class="chart-container">
@@ -3003,6 +3122,12 @@
           }
         }
 
+        if (tabId === 'overview') {
+          if (typeof replayTimelineChartAnimation === 'function') {
+            replayTimelineChartAnimation();
+          }
+        }
+
         if (tabId === 'email-templates') {
           loadEmailTemplates();
         }
@@ -3016,7 +3141,8 @@
         }
 
         if (tabId === 'leads') {
-          if (typeof loadLeads === 'function') loadLeads();
+          window.location.href = 'admin/contacts.html#leads';
+          return;
         }
 
         if (tabId === 'media') {
@@ -3984,14 +4110,150 @@
         }
       }
 
+      let currentTimelineData = [];
+      let timelineAnimationRaf = null;
+
+      const timelineHorizontalRevealPlugin = {
+        id: 'timelineHorizontalReveal',
+        beforeDatasetsDraw(chart) {
+          const ctx = chart.ctx;
+          const chartArea = chart.chartArea;
+          if (!chartArea) return;
+          const progress = chart._revealProgress !== undefined ? chart._revealProgress : 1;
+          ctx.save();
+          ctx.beginPath();
+          ctx.rect(
+            chartArea.left,
+            chartArea.top,
+            Math.max(0, (chartArea.right - chartArea.left) * progress),
+            chartArea.bottom - chartArea.top
+          );
+          ctx.clip();
+        },
+        afterDatasetsDraw(chart) {
+          chart.ctx.restore();
+          const progress = chart._revealProgress !== undefined ? chart._revealProgress : 1;
+          if (progress > 0 && progress < 1) {
+            const chartArea = chart.chartArea;
+            const x = chartArea.left + (chartArea.right - chartArea.left) * progress;
+            const ctx = chart.ctx;
+            ctx.save();
+
+            // Trailing aura glow behind the beam
+            const grad = ctx.createLinearGradient(x - 28, 0, x, 0);
+            grad.addColorStop(0, 'rgba(235, 162, 45, 0)');
+            grad.addColorStop(0.7, 'rgba(235, 162, 45, 0.18)');
+            grad.addColorStop(1, 'rgba(235, 162, 45, 0.45)');
+            ctx.fillStyle = grad;
+            ctx.fillRect(x - 28, chartArea.top, 28, chartArea.bottom - chartArea.top);
+
+            // Leading vertical laser beam
+            ctx.beginPath();
+            ctx.strokeStyle = '#eba22d';
+            ctx.shadowColor = '#eba22d';
+            ctx.shadowBlur = 10;
+            ctx.lineWidth = 2;
+            ctx.moveTo(x, chartArea.top);
+            ctx.lineTo(x, chartArea.bottom);
+            ctx.stroke();
+
+            // Spark bead at top of beam
+            ctx.beginPath();
+            ctx.fillStyle = '#ffffff';
+            ctx.shadowColor = '#ffffff';
+            ctx.shadowBlur = 12;
+            ctx.arc(x, chartArea.top + 6, 3, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.restore();
+          }
+        }
+      };
+
+      function animateTimelineStartToEnd() {
+        if (!chartVisits) return;
+        if (timelineAnimationRaf) cancelAnimationFrame(timelineAnimationRaf);
+
+        const statusPill = document.getElementById('chartTimelineStatus');
+        const statusText = document.getElementById('chartTimelineStatusText');
+        const statusPulse = document.getElementById('chartTimelinePulse');
+        const progressBar = document.getElementById('chartTimelineProgressBar');
+
+        if (statusPill) {
+          statusPill.className = 'stat-badge gold';
+        }
+        if (statusPulse) {
+          statusPulse.style.background = '#eba22d';
+          statusPulse.style.boxShadow = '0 0 8px #eba22d';
+        }
+        if (statusText) statusText.textContent = 'Tracing Timeline... 0%';
+        if (progressBar) {
+          progressBar.style.width = '0%';
+          progressBar.style.opacity = '1';
+          progressBar.style.background = 'linear-gradient(90deg, #eba22d, #38bdf8)';
+        }
+
+        const duration = 1800; // 1.8s smooth progressive sweep from start to end
+        const startTime = performance.now();
+
+        function frame(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(1, elapsed / duration);
+          // Ease-out cubic
+          const ease = 1 - Math.pow(1 - progress, 3);
+
+          chartVisits._revealProgress = ease;
+          chartVisits.draw();
+
+          const pct = Math.round(ease * 100);
+          if (progressBar) progressBar.style.width = (ease * 100).toFixed(1) + '%';
+          if (statusText) statusText.textContent = `Tracing Timeline... ${pct}%`;
+
+          if (progress < 1) {
+            timelineAnimationRaf = requestAnimationFrame(frame);
+          } else {
+            // Reached 100% (End of Timeline)
+            chartVisits._revealProgress = 1;
+            chartVisits.draw();
+
+            if (progressBar) {
+              progressBar.style.width = '100%';
+              progressBar.style.background = 'linear-gradient(90deg, #38bdf8, #34d399)';
+            }
+            if (statusPill) {
+              statusPill.className = 'stat-badge green';
+            }
+            if (statusPulse) {
+              statusPulse.style.background = '#34d399';
+              statusPulse.style.boxShadow = '0 0 10px #34d399';
+            }
+            const daysCount = (currentTimelineData && currentTimelineData.length) ? currentTimelineData.length : 14;
+            if (statusText) {
+              statusText.innerHTML = `✓ Live Timeline Synced • ${daysCount} Days Active`;
+            }
+          }
+        }
+
+        timelineAnimationRaf = requestAnimationFrame(frame);
+      }
+
+      window.replayTimelineChartAnimation = function() {
+        if (!chartVisits && currentTimelineData.length) {
+          renderTimelineChart(currentTimelineData);
+        } else {
+          animateTimelineStartToEnd();
+        }
+      };
+
       function renderTimelineChart(timeline) {
         const ctx = document.getElementById('chartVisitsTimeline');
         if (!ctx) return;
 
-        const labels = timeline.map(t => t.label);
-        const visits = timeline.map(t => t.visits);
-        const emails = timeline.map(t => t.emailsSent ?? 0);
-        const inquiries = timeline.map(t => t.inquiries);
+        currentTimelineData = timeline || [];
+        const labels = currentTimelineData.map(t => t.label);
+        const visits = currentTimelineData.map(t => t.visits);
+        const emails = currentTimelineData.map(t => t.emailsSent ?? 0);
+        const inquiries = currentTimelineData.map(t => t.inquiries);
 
         if (chartVisits) {
           chartVisits.destroy();
@@ -3999,6 +4261,7 @@
 
         chartVisits = new Chart(ctx, {
           type: 'line',
+          plugins: [timelineHorizontalRevealPlugin],
           data: {
             labels,
             datasets: [
@@ -4041,6 +4304,7 @@
             ]
           },
           options: {
+            animation: false,
             responsive: true,
             maintainAspectRatio: false,
             interaction: {
@@ -4091,6 +4355,9 @@
             }
           }
         });
+
+        chartVisits._revealProgress = 0;
+        animateTimelineStartToEnd();
       }
 
       function renderStatusChart(statusMap) {
