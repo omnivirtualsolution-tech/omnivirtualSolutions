@@ -67,7 +67,7 @@ router.get("/", async (req, res) => {
       blockMap['footer.copyright'] = company.copyright_text;
     }
 
-    res.set("Cache-Control", "public, max-age=60, stale-while-revalidate=300");
+    res.set("Cache-Control", "no-cache, no-store, must-revalidate");
     res.json({
       company,
       recipient_email: configuredEmail || company.email || null,

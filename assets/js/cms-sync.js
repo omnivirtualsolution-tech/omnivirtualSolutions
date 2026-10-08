@@ -302,6 +302,13 @@
       if (res.ok && data.success) {
         updateStatus('saved');
         showToast(`Saved: ${key}`);
+        if (typeof BroadcastChannel !== 'undefined') {
+          try {
+            const ch = new BroadcastChannel('omni_cms_channel');
+            ch.postMessage({ type: 'cms_block_updated', key, value });
+            ch.close();
+          } catch (_) {}
+        }
       } else {
         updateStatus('error');
       }
@@ -729,6 +736,14 @@
       }
     }
     initSSE();
+
+    // ── Local Cross-Tab BroadcastChannel for 0ms same-origin sync ──
+    if (typeof BroadcastChannel !== 'undefined') {
+      try {
+        const localChannel = new BroadcastChannel('omni_cms_channel');
+        localChannel.onmessage = (e) => handleLivePayload(e.data);
+      } catch (_) {}
+    }
   }
 
   // ── 10. Handle Contact Form submission ──────────────────────────
@@ -1187,8 +1202,8 @@
     setupServiceBlockKeys();
     loadInitialContent();
     setupContactForm();
+    connectLiveSync();
     if (isAdmin) {
-      connectLiveSync();
       initLiveEditor();
     }
   }

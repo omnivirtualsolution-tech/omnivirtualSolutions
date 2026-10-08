@@ -565,6 +565,23 @@
       flex-wrap: wrap;
       gap: 12px;
     }
+    .dashboard-time-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .time-window-label {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 600;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .time-control-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
     .time-selector {
       display: inline-flex;
       background: rgba(255, 255, 255, 0.04);
@@ -583,6 +600,8 @@
       border-radius: 6px;
       cursor: pointer;
       transition: all 0.2s;
+      white-space: nowrap;
+      line-height: 1.2;
     }
     .time-pill:hover { color: #fff; }
     .time-pill.active {
@@ -590,6 +609,25 @@
       color: #0b0e14;
       font-weight: 700;
       box-shadow: 0 2px 8px rgba(235, 162, 45, 0.3);
+    }
+    .btn-refresh-telemetry {
+      padding: 6px 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s;
+      min-width: 32px;
+      height: 32px;
+    }
+    .btn-refresh-telemetry:hover {
+      background: rgba(255, 255, 255, 0.09);
+      border-color: rgba(235, 162, 45, 0.4);
+      color: #fff;
     }
     .charts-row {
       display: grid;
@@ -1598,25 +1636,61 @@
       .dashboard-toolbar {
         flex-direction: column;
         align-items: stretch;
-        gap: 12px;
+        gap: 10px;
       }
       .dashboard-toolbar > div {
         width: 100%;
       }
-      .time-selector {
+      .dashboard-time-control {
         width: 100%;
         display: flex;
-        justify-content: stretch;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-left: 0;
+      }
+      .time-window-label {
+        font-size: 11px;
+        flex-shrink: 0;
+      }
+      .time-control-group {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex: 1;
+        min-width: 0;
+        justify-content: flex-end;
+      }
+      .time-selector {
+        display: flex;
+        flex: 1;
+        max-width: 280px;
+        width: auto;
+        padding: 2.5px;
+        gap: 2px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--border);
+        border-radius: 7px;
       }
       .time-pill {
         flex: 1;
         text-align: center;
-        padding: 8px 4px;
-        min-height: 44px;
+        padding: 6px 4px;
+        font-size: 11px;
+        min-height: 32px;
+        border-radius: 5px;
         display: flex;
         align-items: center;
         justify-content: center;
         touch-action: manipulation;
+      }
+      .btn-refresh-telemetry {
+        flex-shrink: 0;
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        padding: 0;
+        border-radius: 7px;
       }
       .stats-grid {
         grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
@@ -1869,10 +1943,47 @@
       .dashboard-toolbar h2 {
         font-size: 15px !important;
       }
+      .dashboard-time-control {
+        gap: 6px;
+      }
+      .time-window-label {
+        font-size: 10.5px;
+      }
+      .time-control-group {
+        gap: 5px;
+      }
+      .time-selector {
+        padding: 2px;
+        gap: 2px;
+        border-radius: 6px;
+      }
+      .time-pill {
+        font-size: 10.5px;
+        padding: 5px 3px;
+        min-height: 29px;
+        border-radius: 4px;
+      }
+      .btn-refresh-telemetry {
+        width: 29px;
+        height: 29px;
+        min-width: 29px;
+        border-radius: 6px;
+        font-size: 11.5px;
+      }
       .data-table th,
       .data-table td {
         padding: 8px 10px;
         font-size: 12px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .dashboard-time-control .time-window-label {
+        display: none;
+      }
+      .time-pill {
+        font-size: 10px;
+        padding: 5px 2px;
       }
     }
   </style>
@@ -2016,16 +2127,18 @@
             </div>
           </div>
 
-          <div class="d-flex align-items-center gap-2">
-            <span style="font-size:11px; color:var(--muted); font-weight:600;">Time Window:</span>
-            <div class="time-selector">
-              <button class="time-pill" onclick="setTimeWindow(7, this)">7 Days</button>
-              <button class="time-pill active" onclick="setTimeWindow(14, this)">14 Days</button>
-              <button class="time-pill" onclick="setTimeWindow(30, this)">30 Days</button>
+          <div class="dashboard-time-control">
+            <span class="time-window-label">Time Window:</span>
+            <div class="time-control-group">
+              <div class="time-selector">
+                <button type="button" class="time-pill" onclick="setTimeWindow(7, this)">7 Days</button>
+                <button type="button" class="time-pill active" onclick="setTimeWindow(14, this)">14 Days</button>
+                <button type="button" class="time-pill" onclick="setTimeWindow(30, this)">30 Days</button>
+              </div>
+              <button type="button" class="btn-header btn-refresh-telemetry" onclick="loadDashboard()" title="Refresh All Data from Database" aria-label="Refresh Dashboard">
+                <i class="bi bi-arrow-clockwise"></i>
+              </button>
             </div>
-            <button class="btn-header" onclick="loadDashboard()" title="Refresh All Data from Database" style="padding:6px 10px;">
-              <i class="bi bi-arrow-clockwise"></i>
-            </button>
           </div>
         </div>
 
@@ -3768,6 +3881,13 @@
               saveStatus.style.color = '#94a3b8';
             }
             showLiveToast(`Image updated: ${targetKey}`, 'success');
+            if (typeof BroadcastChannel !== 'undefined') {
+              try {
+                const ch = new BroadcastChannel('omni_cms_channel');
+                ch.postMessage({ type: 'cms_block_updated', key: targetKey, value: cleanPath });
+                ch.close();
+              } catch (_) {}
+            }
           }
         } catch (e) {
           alert('Save failed: ' + e.message);
