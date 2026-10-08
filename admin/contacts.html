@@ -97,8 +97,89 @@
     }
     .nav-item:hover { background:rgba(255,255,255,0.04); color:#fff; }
     .nav-item.active { background:var(--gold-dim); color:var(--gold); font-weight:600; border:1px solid rgba(235,162,45,0.25); }
-    .nav-item i { font-size:16px; }
     .nav-badge { margin-left:auto; background:#e53e3e; color:#fff; font-size:10.5px; font-weight:700; padding:2px 7px; border-radius:20px; }
+
+    /* ── Sidebar Dropdown & Sub-Menu (website-creation-design standard) ── */
+    .nav-dropdown {
+      list-style: none;
+      margin-bottom: 4px;
+    }
+    .nav-dropdown-toggle {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 10px 14px;
+      min-height: 44px; /* 44px touch-target compliance */
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s ease, color 0.2s ease;
+      user-select: none;
+      touch-action: manipulation;
+    }
+    .nav-dropdown-toggle:hover {
+      background: rgba(255, 255, 255, 0.04);
+      color: #ffffff;
+    }
+    .nav-dropdown.open .nav-dropdown-toggle {
+      background: rgba(235, 162, 45, 0.08);
+      color: #ffffff;
+      border: 1px solid rgba(235, 162, 45, 0.2);
+    }
+    .nav-dropdown-arrow {
+      margin-left: 8px;
+      font-size: 11px;
+      transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      color: #64748b;
+    }
+    .nav-dropdown.open .nav-dropdown-arrow {
+      transform: rotate(180deg);
+      color: var(--gold);
+    }
+    .nav-submenu {
+      list-style: none;
+      padding: 4px 0 6px 14px;
+      margin: 4px 0 6px 16px;
+      display: none;
+      flex-direction: column;
+      gap: 2px;
+      border-left: 2px solid rgba(235, 162, 45, 0.25);
+    }
+    .nav-dropdown.open .nav-submenu {
+      display: flex;
+      animation: submenuSlideDown 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes submenuSlideDown {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .nav-sub-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      min-height: 40px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      color: #94a3b8;
+      text-decoration: none;
+      transition: all 0.18s ease;
+      cursor: pointer;
+    }
+    .nav-sub-item:hover {
+      background: rgba(235, 162, 45, 0.08);
+      color: #ffffff;
+      transform: translateX(2px);
+    }
+    .nav-sub-item.active {
+      background: var(--gold-dim);
+      color: var(--gold);
+      font-weight: 600;
+      border: 1px solid rgba(235, 162, 45, 0.25);
+    }
     .sidebar-footer { padding:16px; border-top:1px solid var(--border); }
     .user-info { display:flex; align-items:center; justify-content:space-between; }
     .user-details { font-size:12px; color:var(--muted); }
@@ -632,19 +713,66 @@
     </div>
     <ul class="nav-list">
       <li class="nav-label">Navigation</li>
-      <li><a class="nav-item" href="admin/">
-        <i class="bi bi-grid-1x2-fill"></i> Overview Dashboard
-      </a></li>
-      <li><a class="nav-item active" onclick="switchTab('inbox', this)">
-        <i class="bi bi-inbox-fill"></i> Contact Messages
-        <span class="nav-badge" id="unreadBadge">0</span>
-      </a></li>
-      <li><a class="nav-item" onclick="switchTab('email-settings', this)">
-        <i class="bi bi-palette2" style="color:var(--gold);"></i> Email UI &amp; Settings
-      </a></li>
-      <li><a class="nav-item" onclick="switchTab('email-stats', this)">
-        <i class="bi bi-bar-chart-fill"></i> Email Usage Stats
-      </a></li>
+      <li>
+        <a class="nav-item" href="admin/#overview">
+          <i class="bi bi-grid-1x2-fill"></i> Overview Dashboard
+        </a>
+      </li>
+      <li>
+        <a class="nav-item" href="admin/#live-editor">
+          <i class="bi bi-browser-chrome" style="color:var(--gold);"></i> Live Website Editor
+        </a>
+      </li>
+      <li>
+        <a class="nav-item" href="admin/#business-profile">
+          <i class="bi bi-building-gear" style="color:var(--gold);"></i> Business Profile &amp; Contact
+        </a>
+      </li>
+      <li>
+        <a class="nav-item" href="admin/#services">
+          <i class="bi bi-briefcase-fill" style="color:var(--gold);"></i> Services Catalog
+        </a>
+      </li>
+      <li>
+        <a class="nav-item" href="admin/#leads">
+          <i class="bi bi-envelope-open-fill"></i> Leads CRM
+        </a>
+      </li>
+      <li class="nav-dropdown open" id="contactNavDropdown">
+        <div class="nav-dropdown-toggle" onclick="toggleContactDropdown()" role="button" aria-expanded="true" tabindex="0">
+          <i class="bi bi-inbox-fill" style="color:var(--gold);"></i>
+          <span>Contact Messages</span>
+          <span class="nav-badge" id="unreadBadge" style="background:#e53e3e; color:#fff; margin-left:auto;">0</span>
+          <i class="bi bi-chevron-down nav-dropdown-arrow" id="contactDropdownArrow"></i>
+        </div>
+        <ul class="nav-submenu" id="contactSubmenu">
+          <li>
+            <a class="nav-sub-item active" onclick="switchTab('inbox', this)">
+              <i class="bi bi-chat-left-text-fill"></i> Contact Messages
+            </a>
+          </li>
+          <li>
+            <a class="nav-sub-item" onclick="switchTab('email-settings', this)">
+              <i class="bi bi-palette2" style="color:var(--gold);"></i> Email UI &amp; Settings
+            </a>
+          </li>
+          <li>
+            <a class="nav-sub-item" onclick="switchTab('email-stats', this)">
+              <i class="bi bi-bar-chart-fill"></i> Email Usage Stats
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a class="nav-item" href="admin/#media">
+          <i class="bi bi-images"></i> Media Library
+        </a>
+      </li>
+      <li>
+        <a class="nav-item" href="admin/#account-security">
+          <i class="bi bi-shield-lock-fill" style="color:var(--gold);"></i> Account Security
+        </a>
+      </li>
     </ul>
     <div class="sidebar-footer">
       <div class="user-info">
@@ -1280,6 +1408,7 @@
       }
       document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.querySelectorAll('.nav-sub-item').forEach(n => n.classList.remove('active'));
       document.getElementById('tab-' + id)?.classList.add('active');
       if (el) el.classList.add('active');
 
@@ -1292,6 +1421,15 @@
 
       if (id === 'email-settings') loadEmailSettings();
       if (id === 'email-stats')    loadEmailStats();
+    };
+
+    // ── Contact Messages Dropdown Toggle ──────────────────────
+    window.toggleContactDropdown = function () {
+      const dd = document.getElementById('contactNavDropdown');
+      if (!dd) return;
+      const isOpen = dd.classList.toggle('open');
+      const toggle = dd.querySelector('.nav-dropdown-toggle');
+      if (toggle) toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     };
 
     // ── Toast ────────────────────────────────────────────────────
@@ -2017,7 +2155,13 @@
     };
 
     // ── Init ─────────────────────────────────────────────────────
-    loadInbox();
+    const initialHash = window.location.hash.replace('#', '');
+    if (initialHash && ['inbox', 'email-settings', 'email-stats'].includes(initialHash)) {
+      const matchingSub = document.querySelector(`.nav-sub-item[onclick*="'${initialHash}'"]`);
+      switchTab(initialHash, matchingSub);
+    } else {
+      loadInbox();
+    }
 
   })();
   </script>
