@@ -2032,7 +2032,7 @@
         <div class="nav-dropdown-toggle" onclick="toggleContactDropdown()" role="button" aria-expanded="false" tabindex="0" data-tooltip="Contact Messages">
           <i class="bi bi-inbox-fill" style="color:var(--gold);"></i>
           <span>Contact Messages</span>
-          <span class="nav-badge" id="inboxBadge" style="background:#eba22d; color:#0d1117; margin-left:auto;"><i class="bi bi-envelope-fill"></i></span>
+          <span class="nav-badge" id="inboxBadge" style="background:#e53e3e; color:#fff; margin-left:auto;">0</span>
           <i class="bi bi-chevron-down nav-dropdown-arrow" id="contactDropdownArrow"></i>
         </div>
         <ul class="nav-submenu" id="contactSubmenu">
@@ -3948,10 +3948,13 @@
 
       setInterval(updateLastSyncedLabel, 2000);
 
+      let liveReconnectTimer = null;
+
       function initRealtimeStream() {
         if (liveEventSource) {
           try { liveEventSource.close(); } catch(_) {}
         }
+        clearTimeout(liveReconnectTimer);
 
         const statusEl = document.getElementById('realtimeStatusText');
         const pulseEl = document.getElementById('livePulseDot');
@@ -3971,15 +3974,21 @@
 
               if (event.type === 'page_visit') {
                 showLiveToast(`Live Visit: <strong>${escapeHtml(event.path)}</strong> (${escapeHtml(event.device || 'web')})`, 'visit');
-              } else if (event.type === 'new_lead') {
-                showLiveToast(`New Inquiry: <strong>${escapeHtml(event.lead?.full_name || 'Client Lead')}</strong> — "${escapeHtml(event.lead?.subject || '')}"`, 'success');
+              } else if (event.type === 'new_submission' || event.type === 'new_lead') {
+                showLiveToast(`New Inquiry: <strong>${escapeHtml(event.submission?.full_name || event.lead?.full_name || 'Client Lead')}</strong> — "${escapeHtml(event.submission?.subject || event.lead?.subject || '')}"`, 'success');
+                if (typeof updateInboxBadge === 'function') updateInboxBadge();
+                loadAnalytics(currentTimeWindow);
+                loadLeads();
+              } else if (event.type === 'inbound_reply_received') {
+                showLiveToast(`💬 New client reply from <strong>${escapeHtml(event.senderName || 'Customer')}</strong>!`, 'info');
+                if (typeof updateInboxBadge === 'function') updateInboxBadge();
                 loadAnalytics(currentTimeWindow);
                 loadLeads();
               } else if (event.type === 'email_failed') {
                 showLiveToast(`⚠️ Outbound Email Failed: <strong>${escapeHtml(event.customerName || event.recipient || 'Lead')}</strong> — ${escapeHtml(event.error || 'Check CRM for 1-click retry')}`, 'error');
                 loadLeads();
-              } else if (event.type === 'lead_updated' || event.type === 'reply_sent' || event.type === 'lead_deleted') {
-                showLiveToast(`Inquiry records updated in database`, 'info');
+              } else if (event.type === 'lead_updated' || event.type === 'reply_sent' || event.type === 'lead_deleted' || event.type === 'lead_read') {
+                if (typeof updateInboxBadge === 'function') updateInboxBadge();
                 loadAnalytics(currentTimeWindow);
                 loadLeads();
               } else if (event.type === 'business_profile_updated' || event.type === 'company_updated') {
@@ -4008,9 +4017,14 @@
           liveEventSource.onerror = () => {
             if (statusEl) statusEl.textContent = 'Reconnecting real-time stream...';
             if (pulseEl) pulseEl.className = 'live-pulse-dot reconnecting';
+            try { liveEventSource.close(); } catch(_) {}
+            clearTimeout(liveReconnectTimer);
+            liveReconnectTimer = setTimeout(initRealtimeStream, 2500);
           };
         } catch (e) {
           console.error('[SSE Init error]', e);
+          clearTimeout(liveReconnectTimer);
+          liveReconnectTimer = setTimeout(initRealtimeStream, 3000);
         }
       }
 
@@ -4512,11 +4526,27 @@
         });
       }
 
+      // ── Unread Badge Counter ────────────────────────────────────
+      async function updateInboxBadge() {
+        try {
+          const res = await fetch('/api/v1/contact/submissions?limit=200', {
+            headers: { 'Authorization': 'Bearer ' + token }
+          });
+          if (!res.ok) return;
+          const data = await res.json();
+          const unread = (data.submissions || []).filter(s => !s.read_at).length;
+          const badge = document.getElementById('inboxBadge');
+          if (badge) badge.textContent = unread;
+        } catch (_) {}
+      }
+      window.updateInboxBadge = updateInboxBadge;
+
       // ── Load Overview Stats & Leads ──────────────────────────────
       async function loadDashboard() {
         // Only load essential overview telemetry
         loadAnalytics(currentTimeWindow);
         loadLeads();
+        updateInboxBadge();
 
         // Connect real-time stream safely after initial render
         if (!liveEventSource) {
@@ -4537,6 +4567,11 @@
           if (!res.ok) throw new Error('HTTP ' + res.status);
           const data = await res.json();
           allLeads = data.submissions || [];
+
+          // Sync unread badge immediately from lead data
+          const unreadCount = allLeads.filter(l => !l.read_at).length;
+          const badge = document.getElementById('inboxBadge');
+          if (badge) badge.textContent = unreadCount;
 
           // Recent leads table
           const recent = allLeads.slice(0, 5);

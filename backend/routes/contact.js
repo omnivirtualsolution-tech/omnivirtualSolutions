@@ -329,6 +329,15 @@ router.get("/submissions/:id", requireAuth, async (req, res) => {
         sql: "UPDATE contact_submissions SET read_at = CURRENT_TIMESTAMP WHERE id = ?",
         args: [id],
       });
+      subRow.rows[0].read_at = new Date().toISOString();
+      try {
+        broadcast({
+          type: "lead_read",
+          submissionId: id,
+          read_at: subRow.rows[0].read_at,
+          timestamp: new Date().toISOString()
+        });
+      } catch (_) {}
     }
 
     res.json({ submission: subRow.rows[0], replies: replies.rows });
@@ -339,11 +348,11 @@ router.get("/submissions/:id", requireAuth, async (req, res) => {
 
 // =================================================================
 // PATCH /api/v1/contact/submissions/:id  — Admin: update status/notes
-// Body: { status?, admin_notes?, mark_unread? }
+// Body: { status?, admin_notes?, mark_unread?, mark_read?, read? }
 // =================================================================
 router.patch("/submissions/:id", requireAuth, async (req, res) => {
   const id = parseInt(req.params.id, 10);
-  const { status, admin_notes, mark_unread } = req.body;
+  const { status, admin_notes, mark_unread, mark_read, read } = req.body;
   const VALID_STATUSES = ["new", "in_review", "contacted", "replied", "closed"];
 
   const updates = [];
@@ -360,7 +369,9 @@ router.patch("/submissions/:id", requireAuth, async (req, res) => {
     updates.push("admin_notes = ?");
     args.push(admin_notes);
   }
-  if (mark_unread === true) {
+  if (mark_read === true || read === true) {
+    updates.push("read_at = CURRENT_TIMESTAMP");
+  } else if (mark_unread === true) {
     updates.push("read_at = NULL");
   }
 
@@ -372,13 +383,18 @@ router.patch("/submissions/:id", requireAuth, async (req, res) => {
   try {
     await db.execute({ sql: `UPDATE contact_submissions SET ${updates.join(", ")} WHERE id = ?`, args });
     console.log(`[cms] admin updated submission #${id}`);
-    broadcast({
-      type: "lead_updated",
-      id,
-      status: status || null,
-      timestamp: new Date().toISOString()
-    });
-    res.json({ success: true, id, status });
+    const isMarkedRead = mark_read === true || read === true;
+    const isMarkedUnread = mark_unread === true;
+    try {
+      broadcast({
+        type: "lead_updated",
+        id,
+        status: status || null,
+        read_at: isMarkedRead ? new Date().toISOString() : (isMarkedUnread ? null : undefined),
+        timestamp: new Date().toISOString()
+      });
+    } catch (_) {}
+    res.json({ success: true, id, status, read_at: isMarkedRead ? new Date().toISOString() : (isMarkedUnread ? null : undefined) });
   } catch (err) {
     res.status(500).json({ error: { code: "INTERNAL_ERROR", message: "Failed to update submission." } });
   }
@@ -439,6 +455,15 @@ router.post("/submissions/:id/reply", requireAuth, async (req, res) => {
     broadcast({
       type: "reply_sent",
       submissionId: id,
+      reply: {
+        id: replyId,
+        submission_id: id,
+        direction: "outbound",
+        reply_body: reply_body.trim(),
+        sent_by: req.admin.username,
+        email_sent: 0,
+        sent_at: new Date().toISOString()
+      },
       timestamp: new Date().toISOString()
     });
   } catch (err) {

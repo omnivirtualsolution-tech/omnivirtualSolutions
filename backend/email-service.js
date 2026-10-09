@@ -30,15 +30,6 @@ function escapeHtml(str) {
     .replace(/'/g, "&#39;");
 }
 
-const LOGO_PATH = path.join(__dirname, "../assets/img/OmniLogo2.png");
-const LOGO_ATTACHMENT = fs.existsSync(LOGO_PATH)
-  ? [{
-      filename: "OmniLogo2.png",
-      path: LOGO_PATH,
-      cid: "omni_logo",
-    }]
-  : [];
-
 let cachedTransporter = null;
 
 let cachedTransporterKey = null;
@@ -194,7 +185,7 @@ function buildEmailShell({
   const siteBaseUrl = (process.env.PUBLIC_URL || process.env.URL || "https://www.omnivirtualsolution.com").replace(/\/$/, "");
   const logoSrc = isWebPreview
     ? "/assets/img/OmniLogo2.png"
-    : (LOGO_ATTACHMENT.length > 0 ? "cid:omni_logo" : `${siteBaseUrl}/assets/img/OmniLogo2.png`);
+    : `${siteBaseUrl}/assets/img/OmniLogo2.png`;
   const brandGold = "#eba22d";
 
   // ─────────────────────────────────────────────────────────────────
@@ -1064,7 +1055,6 @@ async function sendEmailFailureAlert({
       subject: alertSubject,
       html: htmlBody,
       text: `EMAIL DELIVERY FAILED\n\nIntended Recipient: ${originalRecipient}\nCustomer: ${submission?.full_name || "N/A"}\nError: ${errorMessage}\n\nPlease check the admin portal or reply via direct Gmail.`,
-      attachments: LOGO_ATTACHMENT,
     });
 
     await logEmail({
@@ -1146,7 +1136,6 @@ async function sendNewSubmissionNotification(submission) {
       subject,
       html: htmlBody,
       text: `New inquiry from ${submission.full_name} (${submission.email})\n\nSubject: ${submission.subject || "General Inquiry"}\n\nMessage:\n${submission.message}`,
-      attachments: LOGO_ATTACHMENT,
     });
 
     await updateNotifyStatus(submission.id, "sent");
@@ -1207,7 +1196,6 @@ async function sendAutoReply(submission) {
       text: bodyText,
       html: htmlBody,
       messageId: `<submission-${submission.id}@omnivirtualsolution.com>`,
-      attachments: LOGO_ATTACHMENT,
     });
     await logEmail({ eventType: "auto_reply", submissionId: submission.id, recipientEmail: submission.email, subject, status: "sent" });
     return { success: true };
@@ -1266,7 +1254,6 @@ async function sendReply({ submission, replyBody, replyId, sentBy }) {
       messageId: `<submission-${submission.id}-reply-${replyId || Date.now()}@omnivirtualsolution.com>`,
       inReplyTo: `<submission-${submission.id}@omnivirtualsolution.com>`,
       references: `<submission-${submission.id}@omnivirtualsolution.com>`,
-      attachments: LOGO_ATTACHMENT,
     });
 
     await db.execute({

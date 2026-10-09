@@ -936,7 +936,7 @@ router.get("/submissions", requireAuth, async (req, res) => {
     const whereClause = status ? `WHERE cs.status = '${status}'` : "";
     const result = await db.execute(
       `SELECT cs.id, cs.full_name, cs.email, cs.subject, cs.message,
-              cs.status, cs.created_at,
+              cs.status, cs.created_at, cs.read_at,
               s.title AS service_interest_title
        FROM contact_submissions cs
        LEFT JOIN services s ON cs.service_interest_id = s.id

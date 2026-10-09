@@ -2894,6 +2894,8 @@
       .crm-telemetry-indicator {
         font-size: 11px;
       }
+    }
+
     /* ── Template Editor Modal ────────────────────────────────────── */
     .template-modal-backdrop {
       position: fixed;
@@ -4062,6 +4064,11 @@
           closeDeleteModal();
           return;
         }
+        const tplModal = document.getElementById('templateEditorModal');
+        if (tplModal && tplModal.style.display === 'flex') {
+          closeTemplateModal();
+          return;
+        }
         if (!isDesktop() && sidebarEl && sidebarEl.classList.contains('active')) {
           closeSidebar();
         }
@@ -4318,6 +4325,22 @@
       document.getElementById('msgItem-' + id)?.classList.add('selected');
       document.getElementById('msgItem-' + id)?.classList.remove('unread');
       document.querySelector('#msgItem-' + id + ' .msg-unread-dot')?.remove();
+
+      // Immediately mark as read in local memory and persist to backend
+      const targetMsg = allMessages.find(x => x.id === Number(id));
+      if (targetMsg && !targetMsg.read_at) {
+        targetMsg.read_at = new Date().toISOString();
+        fetch('/api/v1/contact/submissions/' + id, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+          body: JSON.stringify({ mark_read: true })
+        }).catch(() => {});
+      }
+      const remainingUnread = allMessages.filter(x => !x.read_at).length;
+      const bDesktop = document.getElementById('unreadBadge');
+      if (bDesktop) bDesktop.textContent = remainingUnread;
+      const bMob = document.getElementById('mobUnreadBadge');
+      if (bMob) bMob.textContent = remainingUnread;
 
       document.getElementById('detailEmpty').style.display = 'none';
       const view = document.getElementById('msgDetailView');
@@ -6003,37 +6026,80 @@
     }
 
     // ── Live Real-time SSE updates for Messenger & Inbound Replies ──
-    try {
-      const liveSource = new EventSource('/api/v1/live');
-      liveSource.onmessage = (evt) => {
-        try {
-          const payload = JSON.parse(evt.data);
-          if (payload.type === 'inbound_reply_received') {
-            const subId = Number(payload.submissionId);
-            if (currentMsgId && Number(currentMsgId) === subId) {
-              if (payload.reply) {
-                appendReplyToThread(payload.reply, true);
+    let liveSource = null;
+    let sseReconnectTimer = null;
+
+    function initRealtimeContacts() {
+      if (liveSource) {
+        try { liveSource.close(); } catch (_) {}
+      }
+      clearTimeout(sseReconnectTimer);
+
+      try {
+        liveSource = new EventSource('/api/v1/live');
+
+        liveSource.onopen = () => {
+          console.log('[contacts] Real-time SSE stream connected');
+        };
+
+        liveSource.onmessage = async (evt) => {
+          try {
+            const payload = JSON.parse(evt.data);
+            if (!payload || !payload.type) return;
+
+            if (payload.type === 'inbound_reply_received') {
+              const subId = Number(payload.submissionId);
+              if (currentMsgId && Number(currentMsgId) === subId) {
+                if (payload.reply) {
+                  appendReplyToThread(payload.reply, true);
+                } else {
+                  fetch('/api/v1/contact/submissions/' + subId, { headers: { Authorization: 'Bearer ' + token } })
+                    .then(r => r.json())
+                    .then(d => {
+                      (d.replies || []).forEach(r => appendReplyToThread(r, true));
+                    }).catch(() => {});
+                }
+                // Actively viewing this thread: mark read on backend immediately
+                fetch('/api/v1/contact/submissions/' + subId, {
+                  method: 'PATCH',
+                  headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+                  body: JSON.stringify({ mark_read: true })
+                }).catch(() => {});
               } else {
-                fetch('/api/v1/contact/submissions/' + subId, { headers: { Authorization: 'Bearer ' + token } })
-                  .then(r => r.json())
-                  .then(d => {
-                    (d.replies || []).forEach(r => appendReplyToThread(r, true));
-                  }).catch(() => {});
+                const item = document.getElementById('msgItem-' + subId);
+                if (item) item.classList.add('unread');
+                if (typeof playMessageChime === 'function') playMessageChime();
               }
-            } else {
-              const item = document.getElementById('msgItem-' + subId);
-              if (item) item.classList.add('unread');
+              toast(`💬 New client reply from ${payload.senderName || 'Customer'}!`);
+              await loadInbox();
+            } else if (payload.type === 'new_submission' || payload.type === 'new_lead') {
+              if (typeof playMessageChime === 'function') playMessageChime();
+              toast('✉️ New contact message received from ' + (payload.submission?.full_name || payload.lead?.full_name || 'Visitor') + '!');
+              await loadInbox();
+            } else if (payload.type === 'reply_sent') {
+              const subId = Number(payload.submissionId);
+              if (currentMsgId && Number(currentMsgId) === subId && payload.reply) {
+                appendReplyToThread(payload.reply, false);
+              }
+              await loadInbox();
+            } else if (payload.type === 'lead_read' || payload.type === 'lead_updated' || payload.type === 'lead_deleted') {
+              await loadInbox();
             }
-            toast(`💬 New client reply from ${payload.senderName || 'Customer'}!`);
-            loadInbox();
-          } else if (payload.type === 'new_submission' || payload.type === 'new_lead') {
-            loadInbox();
-            if (typeof playMessageChime === 'function') playMessageChime();
-            toast('✉️ New contact message received from ' + (payload.submission?.full_name || payload.lead?.full_name || 'Visitor') + '!');
-          }
-        } catch (_) {}
-      };
-    } catch (_) {}
+          } catch (_) {}
+        };
+
+        liveSource.onerror = () => {
+          try { liveSource.close(); } catch (_) {}
+          clearTimeout(sseReconnectTimer);
+          sseReconnectTimer = setTimeout(initRealtimeContacts, 2500);
+        };
+      } catch (_) {
+        clearTimeout(sseReconnectTimer);
+        sseReconnectTimer = setTimeout(initRealtimeContacts, 3000);
+      }
+    }
+
+    initRealtimeContacts();
 
     // Fast periodic polling (every 12s) to guarantee instant messenger freshness
     setInterval(() => {
@@ -6249,6 +6315,8 @@
         </button>
       </div>
     </div>
+  </div>
+
   <!-- ── Reply & Auto-Reply Template Full Editor Modal ── -->
   <div id="templateEditorModal" class="template-modal-backdrop" style="display:none;" onclick="if(event.target===this) closeTemplateModal()">
     <div class="template-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="templateModalTitle">
