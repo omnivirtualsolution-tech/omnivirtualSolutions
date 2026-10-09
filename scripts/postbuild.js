@@ -41,9 +41,10 @@ if (fs.existsSync(assetsSrc)) {
   console.log("  ✅ Assets copied to frontend/dist/assets");
 }
 
-// 4. Generate Cloudflare Pages / Netlify _redirects file
-const redirectsContent = `# Cloudflare & Netlify Redirects
+const redirectsContent = `# Cloudflare Pages & Netlify Redirects
 /admin/site/assets/*   /assets/:splat         200
+/assets/*              /assets/:splat         200
+/*                     /index.html            200
 `;
 fs.writeFileSync(path.join(dist, "_redirects"), redirectsContent, "utf8");
 console.log("  ✅ Cloudflare _redirects file generated");

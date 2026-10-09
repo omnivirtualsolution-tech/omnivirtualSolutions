@@ -147,6 +147,7 @@ export default function Contact() {
           message,
           service_interest_id: formData.service_interest ? parseInt(formData.service_interest, 10) : null,
           form_load_time: formLoadTime,
+          _form_load_time: formLoadTime,
         }),
       });
 

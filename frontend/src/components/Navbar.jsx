@@ -10,6 +10,7 @@ export default function Navbar() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   const [activeSection, setActiveSection] = useState('hero');
+  const logoSrc = t('site.logo', '/assets/img/OmniLogo2.png');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -105,7 +106,7 @@ export default function Navbar() {
 
           {/* Logo & Title — centered on mobile, left-aligned on desktop */}
           <Link to="/" className="logo header-center-brand" onClick={closeMobileNav}>
-            <img src="/assets/img/OmniLogo2.png" alt="Omni Virtual Solutions Logo" />
+            <img src={logoSrc} alt={company?.company_name || t('site.name', 'Omni Virtual Solutions Logo')} />
             <span className="sitename">{company?.company_name || t('site.name', 'Omni Virtual Solutions')}</span>
           </Link>
 
@@ -215,7 +216,7 @@ export default function Navbar() {
         {/* Cabinet Header: Brand + Close Button */}
         <div className="mobile-drawer-header">
           <Link to="/" className="mobile-drawer-brand" onClick={closeMobileNav}>
-            <img src="/assets/img/OmniLogo2.png" alt="Omni Virtual Solutions Logo" />
+            <img src={logoSrc} alt={company?.company_name || t('site.name', 'Omni Virtual Solutions Logo')} />
             <span className="drawer-sitename">{company?.company_name || t('site.name', 'Omni Virtual Solutions')}</span>
           </Link>
           <button

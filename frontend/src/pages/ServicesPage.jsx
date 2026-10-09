@@ -322,6 +322,11 @@ export default function ServicesPage() {
 
   // Synchronize current active service to URL and sessionStorage for reload persistence
   useEffect(() => {
+    if (selectedService?.title) {
+      document.title = `${selectedService.title} — Omni Virtual Solutions`;
+    } else {
+      document.title = 'Services Catalog — Omni Virtual Solutions';
+    }
     if (selectedService?.slug) {
       sessionStorage.setItem('omni_reading_service_slug', selectedService.slug);
       try {

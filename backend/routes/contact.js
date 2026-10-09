@@ -38,6 +38,7 @@ try {
     max: maxSubmissions,
     standardHeaders: "draft-7",
     legacyHeaders: false,
+    validate: false,
     message: { error: { code: "RATE_LIMIT", message: "Too many submissions. Please wait a few minutes before trying again." } },
     keyGenerator: (req) => req.ip || req.socket?.remoteAddress || "unknown",
   });
@@ -55,8 +56,9 @@ function isBot(body) {
   // If a hidden "website" field is filled, it's almost certainly a bot
   if (body.website && body.website.trim().length > 0) return true;
   // If timestamps are impossibly fast (< 300ms from load)
-  if (body._form_load_time) {
-    const elapsed = Date.now() - parseInt(body._form_load_time, 10);
+  const loadTime = body._form_load_time || body.form_load_time;
+  if (loadTime) {
+    const elapsed = Date.now() - parseInt(loadTime, 10);
     if (elapsed > 0 && elapsed < 300) return true;
   }
   return false;

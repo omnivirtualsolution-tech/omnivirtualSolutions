@@ -847,10 +847,17 @@ router.post("/upload", requireAuth, upload.single("image"), async (req, res) => 
       });
       const prevVal = prevBlock.rows[0]?.value;
 
-      await db.execute({
-        sql: "UPDATE content_blocks SET value = ?, updated_at = CURRENT_TIMESTAMP, updated_by = ? WHERE block_key = ?",
-        args: [servedPath, editor, blockKey],
-      });
+      if (prevBlock.rows.length === 0) {
+        await db.execute({
+          sql: "INSERT INTO content_blocks (block_key, block_type, label, value, updated_by) VALUES (?, 'image', ?, ?, ?)",
+          args: [blockKey, blockKey, servedPath, editor],
+        });
+      } else {
+        await db.execute({
+          sql: "UPDATE content_blocks SET value = ?, updated_at = CURRENT_TIMESTAMP, updated_by = ? WHERE block_key = ?",
+          args: [servedPath, editor, blockKey],
+        });
+      }
       broadcast({ type: "cms_block_updated", key: blockKey, value: servedPath, blockType: "image", updatedBy: editor, table: "content_blocks" });
 
       // If replacing an existing uploaded image, clean up the old file from Turso if unreferenced elsewhere

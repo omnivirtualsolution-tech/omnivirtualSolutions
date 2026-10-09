@@ -1,12 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { CmsProvider } from './context/CmsContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ScrollTop from './components/ScrollTop';
-import Home from './pages/Home';
-import ServicesPage from './pages/ServicesPage';
 import './App.css';
+
+const Home = lazy(() => import('./pages/Home'));
+const ServicesPage = lazy(() => import('./pages/ServicesPage'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 // Automatically scrolls to top on route change & logs real visits to SQLite
 function ScrollToTopOnNavigate() {
@@ -67,13 +69,15 @@ export default function App() {
       <Router>
         <ScrollToTopOnNavigate />
         <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/services" element={<ServicesPage />} />
-          <Route path="/index.html" element={<Navigate to="/" replace />} />
-          <Route path="/services.html" element={<Navigate to="/services" replace />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <Suspense fallback={<div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#c9a84c' }}><span className="spinner-border spinner-border-sm me-2"></span>Loading...</div>}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/services" element={<ServicesPage />} />
+            <Route path="/index.html" element={<Navigate to="/" replace />} />
+            <Route path="/services.html" element={<Navigate to="/services" replace />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
         <Footer />
         <ScrollTop />
       </Router>

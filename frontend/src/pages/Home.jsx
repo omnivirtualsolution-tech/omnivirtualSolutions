@@ -10,6 +10,10 @@ export default function Home() {
   const location = useLocation();
 
   useEffect(() => {
+    document.title = 'Omni Virtual Solutions — Empowering Individuals & Businesses';
+  }, []);
+
+  useEffect(() => {
     if (location.hash) {
       const element = document.querySelector(location.hash);
       if (element) {

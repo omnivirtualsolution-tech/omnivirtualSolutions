@@ -17,7 +17,7 @@ export default {
 
     const url = new URL(request.url);
 
-    if (url.pathname.startsWith("/api")) {
+    if (url.pathname.startsWith("/api") || url.pathname.startsWith("/assets/uploads/")) {
       return nodeHandler.fetch(request, env, ctx);
     }
 

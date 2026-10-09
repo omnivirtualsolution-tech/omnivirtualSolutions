@@ -483,6 +483,7 @@
 
       // Listen for messages from parent dashboard or inner iframe
       window.addEventListener('message', (e) => {
+        if (e.origin && e.origin !== window.location.origin) return;
         if (!e.data) return;
         if (e.data.type === 'SET_MODE') {
           if (typeof window.setEditorMode === 'function') {
@@ -655,8 +656,11 @@
                   });
                 }
               } catch (_) {}
+              await saveBlock(targetImgKey, data.path);
+              closeMediaPicker();
+            } else {
+              loadMedia();
             }
-            loadMedia();
           } else {
             alert('Upload error: ' + (data.error?.message || 'Failed'));
           }

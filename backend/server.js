@@ -205,17 +205,20 @@ app.use("/forms", express.static(path.resolve(_dir, "../forms")));
 app.use("/admin", express.static(path.resolve(_dir, "../admin")));
 
 // 4. Live In-Place Editor mirror for admin visual iframe
-// Restrict to safe web document & media extensions only
-const liveEditorStatic = express.static(path.resolve(_dir, ".."), {
-  index: false,
-  dotfiles: "ignore",
-});
+// Allow only the designated preview HTML documents and assets (prevents root scripts/configs exposure)
+const ALLOWED_PREVIEW_HTML = new Set(["index.html", "services.html", "sev.html", "starter-page.html", "dropdown.html"]);
+app.use("/admin/site/assets", express.static(path.resolve(_dir, "../assets")));
 app.use("/admin/site", (req, res, next) => {
-  if (req.path.endsWith("/") || /\.(html|htm|css|js|png|jpg|jpeg|webp|svg|ico)$/i.test(req.path)) {
-    return liveEditorStatic(req, res, next);
+  const reqFile = req.path.replace(/^\/+/, "");
+  if (!reqFile || ALLOWED_PREVIEW_HTML.has(reqFile)) {
+    const target = path.resolve(_dir, "..", reqFile || "index.html");
+    if (fs.existsSync(target)) {
+      return res.sendFile(target);
+    }
   }
   return res.status(403).json({ error: { code: "FORBIDDEN", message: "Access denied." } });
 });
+
 
 // 5. Frontend React distribution build (if built)
 const frontendDistPath = path.resolve(_dir, "../frontend/dist");

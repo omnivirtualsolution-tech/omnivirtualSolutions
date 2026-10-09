@@ -206,8 +206,10 @@ export const CmsProvider = ({ children }) => {
 
     const val = blocks[key];
     if (val !== undefined && val !== null) {
-      if (typeof val === 'string' && (key.includes('image') || key.includes('img') || key.includes('logo')) && val.startsWith('assets/')) {
-        return '/' + val;
+      if (typeof val === 'string' && (key.includes('image') || key.includes('img') || key.includes('logo'))) {
+        if (!val.startsWith('http') && !val.startsWith('/')) {
+          return '/' + val;
+        }
       }
       return val;
     }

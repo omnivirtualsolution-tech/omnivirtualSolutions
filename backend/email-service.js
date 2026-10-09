@@ -17,10 +17,21 @@ const { getFullBusinessProfile } = require("./business-profile-sync");
 if (dns && typeof dns.setDefaultResultOrder === "function") {
   try {
     dns.setDefaultResultOrder("ipv4first");
-  } catch (_) {}
+} catch (_) {}
+}
+
+function escapeHtml(str) {
+  if (str === null || str === undefined) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 let cachedTransporter = null;
+
 let cachedTransporterKey = null;
 
 function clearTransporterCache() {
@@ -87,7 +98,7 @@ async function createTransporter(settings, { noCache = false } = {}) {
       port: parseInt(settings.smtp_port || "587", 10),
       secure: settings.smtp_secure === "true",
       auth: { user, pass },
-      tls: { rejectUnauthorized: false }, // allow self-signed for local testing
+      tls: { rejectUnauthorized: process.env.NODE_ENV === "production" },
       pool: !noCache,
       maxConnections: 3,
       connectionTimeout: 8000,
@@ -701,11 +712,11 @@ function buildReplyHtml({ submission, settings, fullBody, senderEmail, isWebPrev
 
   const bodyContent = `
     <div style="background-color: ${boxBg}; border: 1px solid ${boxBorder}; border-radius: 10px; padding: 20px 22px; font-size: 15px; line-height: 1.7; color: ${textColor}; margin-bottom: 20px;">
-      ${fullBody.replace(/\n/g, "<br>")}
+      ${escapeHtml(fullBody).replace(/\n/g, "<br>")}
     </div>
 
     <div style="background-color: ${metaBg}; border: 1px solid ${boxBorder}; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: ${metaColor};">
-      <strong>Regarding:</strong> ${inquirySubject} &nbsp;|&nbsp; Submitted by ${customerName}
+      <strong>Regarding:</strong> ${escapeHtml(inquirySubject)} &nbsp;|&nbsp; Submitted by ${escapeHtml(customerName)}
     </div>
   `;
 
@@ -765,24 +776,24 @@ function buildNotificationHtml({ submission, settings, senderEmail, recipientEma
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-size: 14px;">
             <tr>
               <td width="110" style="padding: 8px 0; font-weight: 700; color: ${labelColor};">From:</td>
-              <td style="padding: 8px 0; color: ${valColor}; font-weight: 600;">${submission.full_name}</td>
+              <td style="padding: 8px 0; color: ${valColor}; font-weight: 600;">${escapeHtml(submission.full_name)}</td>
             </tr>
             <tr>
               <td width="110" style="padding: 8px 0; font-weight: 700; color: ${labelColor};">Email:</td>
-              <td style="padding: 8px 0;"><a href="mailto:${submission.email}" style="color: #eba22d; font-weight: 600; text-decoration: none;">${submission.email}</a></td>
+              <td style="padding: 8px 0;"><a href="mailto:${encodeURIComponent(submission.email || '')}" style="color: #eba22d; font-weight: 600; text-decoration: none;">${escapeHtml(submission.email)}</a></td>
             </tr>
             ${submission.phone ? `
             <tr>
               <td width="110" style="padding: 8px 0; font-weight: 700; color: ${labelColor};">Phone:</td>
-              <td style="padding: 8px 0; color: ${valColor};">${submission.phone}</td>
+              <td style="padding: 8px 0; color: ${valColor};">${escapeHtml(submission.phone)}</td>
             </tr>` : ""}
             <tr>
               <td width="110" style="padding: 8px 0; font-weight: 700; color: ${labelColor};">Subject:</td>
-              <td style="padding: 8px 0; color: ${valColor}; font-weight: 600;">${submission.subject || "General Inquiry"}</td>
+              <td style="padding: 8px 0; color: ${valColor}; font-weight: 600;">${escapeHtml(submission.subject || "General Inquiry")}</td>
             </tr>
             <tr>
               <td width="110" style="padding: 8px 0; font-weight: 700; color: ${labelColor}; vertical-align: top;">Message:</td>
-              <td style="padding: 8px 0; color: ${msgColor}; line-height: 1.6;">${(submission.message || "").replace(/\n/g, "<br>")}</td>
+              <td style="padding: 8px 0; color: ${msgColor}; line-height: 1.6;">${escapeHtml(submission.message || "").replace(/\n/g, "<br>")}</td>
             </tr>
           </table>
         </td>
@@ -844,7 +855,8 @@ async function sendNewSubmissionNotification(submission) {
   }
 
   const subjectTemplate = settings.notification_subject || "New Website Inquiry — {customer_name}";
-  const subject = interpolate(subjectTemplate, { customer_name: submission.full_name });
+  const safeCustomerName = (submission.full_name || "").replace(/[\r\n]+/g, " ").trim();
+  const subject = interpolate(subjectTemplate, { customer_name: safeCustomerName });
 
   const senderName  = company?.company_name || settings.sender_name  || "Omni Virtual Solutions";
   const smtpUser    = settings.smtp_user?.trim();

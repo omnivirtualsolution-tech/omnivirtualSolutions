@@ -38,7 +38,7 @@ export default function Footer() {
           <div className="col-lg-5 col-md-8 footer-brand-wrap" data-aos="fade-up" data-aos-delay="150">
             <Link to="/" className="footer-brand-header">
               <img
-                src="/assets/img/OmniLogo2.png"
+                src={t('site.logo', '/assets/img/OmniLogo2.png')}
                 alt={`${companyName} Logo`}
                 className="footer-brand-logo"
               />
