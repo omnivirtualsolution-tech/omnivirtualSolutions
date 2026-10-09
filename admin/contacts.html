@@ -5592,10 +5592,31 @@
       };
     } catch (_) {}
 
-    // Periodic safety polling (every 45s) to guarantee unread badge freshness
+    // Fast periodic polling (every 12s) to guarantee instant messenger freshness
     setInterval(() => {
       loadInbox().catch(() => {});
-    }, 45000);
+      if (currentMsgId && typeof openMessage === 'function') {
+        fetch('/api/v1/contact/submissions/' + currentMsgId, { headers: { Authorization: 'Bearer ' + token } })
+          .then(r => r.json())
+          .then(data => {
+            const replies = data?.replies || [];
+            const renderedCount = document.querySelectorAll('#replyThread .reply-bubble').length;
+            if (replies.length !== renderedCount) {
+              openMessage(currentMsgId);
+            }
+          }).catch(() => {});
+      }
+    }, 12000);
+
+    // Immediate refresh when tab/window regains focus
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        loadInbox().catch(() => {});
+        if (currentMsgId && typeof openMessage === 'function') {
+          openMessage(currentMsgId).catch(() => {});
+        }
+      }
+    });
 
   })();
   </script>

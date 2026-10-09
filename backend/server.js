@@ -356,7 +356,7 @@ if (require.main === module) {
     // Start background Gmail IMAP sync service
     try {
       const { startInboundSync } = require("./inbound-sync");
-      startInboundSync(45000);
+      startInboundSync(12000);
     } catch (syncErr) {
       console.warn("[server] Inbound sync service failed to initialize:", syncErr.message);
     }

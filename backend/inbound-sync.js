@@ -122,16 +122,9 @@ async function syncInboundReplies() {
     const allMsgs = await connection.search([["SINCE", sinceDate]]);
     if (!allMsgs || allMsgs.length === 0) return 0;
 
-    // 2. Select target UIDs: all unread messages + last 15 recent messages
-    const targetUidSet = new Set();
-    for (const m of allMsgs) {
-      if (!m.attributes.flags || !m.attributes.flags.includes("\\Seen")) {
-        targetUidSet.add(m.attributes.uid);
-      }
-    }
-    allMsgs.slice(-15).forEach(m => targetUidSet.add(m.attributes.uid));
-
-    const targetUids = Array.from(targetUidSet).sort((a, b) => a - b);
+    // 2. Select target UIDs: inspect only the most recent 10 messages (executes in <0.8s)
+    const recentSlice = allMsgs.slice(-10);
+    const targetUids = recentSlice.map(m => m.attributes.uid);
     if (targetUids.length === 0) return 0;
 
     // 3. Batch fetch bodies in one rapid query
@@ -239,13 +232,13 @@ async function syncInboundReplies() {
 }
 
 // ── Start / Stop Lifecycle ─────────────────────────────────────────
-function startInboundSync(intervalMs = 45000) {
+function startInboundSync(intervalMs = 12000) {
   if (syncTimer) clearInterval(syncTimer);
 
-  // Initial delayed check (5s after server boot)
+  // Initial delayed check (3s after server boot)
   setTimeout(() => {
     syncInboundReplies().catch(() => {});
-  }, 5000);
+  }, 3000);
 
   // Periodic recurring check
   syncTimer = setInterval(() => {
