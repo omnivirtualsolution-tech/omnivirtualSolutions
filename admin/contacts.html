@@ -4559,7 +4559,20 @@
       const thread = document.getElementById('replyThread');
       if (!thread) return;
 
-      if (r.id && thread.querySelector(`[data-reply-id="${r.id}"]`)) return;
+      if (r.id) {
+        const existing = thread.querySelector(`[data-reply-id="${r.id}"]`);
+        if (existing) {
+          const badge = existing.querySelector('.badge');
+          if (badge) {
+            const isSentViaEmail = (r.sent_by || '').toLowerCase().includes('email');
+            badge.className = isSentViaEmail ? 'badge' : `badge badge-${r.email_sent ? 'sent' : 'failed'}`;
+            badge.innerHTML = isSentViaEmail
+              ? '<i class="bi bi-envelope-fill"></i> Sent via Email'
+              : (r.email_sent ? '✓ Emailed' : '✗ Email failed');
+          }
+          return;
+        }
+      }
 
       let divider = thread.querySelector('.thread-divider');
       if (!divider) {
@@ -4827,9 +4840,12 @@
         } else {
           toast(data.error?.message || 'Failed to send reply', 'error');
         }
-      } catch (e) { toast('Failed to send reply', 'error'); }
-      btn.disabled = false;
-      btn.innerHTML = '<i class="bi bi-send-fill"></i> Send Reply';
+      } catch (e) {
+        toast('Failed to send reply', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-send-fill"></i> Send Reply';
+      }
     };
 
     // ════════════════════════════════════════════════════════════

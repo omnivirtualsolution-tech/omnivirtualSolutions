@@ -435,25 +435,11 @@ router.post("/submissions/:id/reply", requireAuth, async (req, res) => {
     replyId = Number(r.lastInsertRowid);
     // Auto-update status to 'replied'
     await db.execute({ sql: "UPDATE contact_submissions SET status = 'replied' WHERE id = ?", args: [id] });
-    broadcast({
-      type: "reply_sent",
-      submissionId: id,
-      reply: {
-        id: replyId,
-        submission_id: id,
-        direction: "outbound",
-        reply_body: reply_body.trim(),
-        sent_by: req.admin.username,
-        email_sent: 0,
-        sent_at: new Date().toISOString()
-      },
-      timestamp: new Date().toISOString()
-    });
   } catch (err) {
     return res.status(500).json({ error: { code: "INTERNAL_ERROR", message: "Failed to save reply." } });
   }
 
-  // Send email in background
+  // Send email via SMTP
   const emailResult = await emailSvc.sendReply({
     submission,
     replyBody: reply_body.trim(),
@@ -462,6 +448,23 @@ router.post("/submissions/:id/reply", requireAuth, async (req, res) => {
   });
 
   console.log(`[cms] admin replied to submission #${id} — email: ${emailResult.success ? "sent" : "failed"}`);
+
+  // Broadcast accurate status to connected admins after email sending completes
+  broadcast({
+    type: "reply_sent",
+    submissionId: id,
+    reply: {
+      id: replyId,
+      submission_id: id,
+      direction: "outbound",
+      reply_body: reply_body.trim(),
+      sent_by: req.admin.username,
+      email_sent: emailResult.success ? 1 : 0,
+      email_error: emailResult.reason || null,
+      sent_at: new Date().toISOString()
+    },
+    timestamp: new Date().toISOString()
+  });
 
   res.json({
     success: true,
