@@ -187,6 +187,7 @@ function buildEmailShell({
     ? "/assets/img/OmniLogo2.png"
     : `${siteBaseUrl}/assets/img/OmniLogo2.png`;
   const brandGold = "#eba22d";
+  const hasHero = Boolean(heroPill || heroTitle || heroSubtitle);
 
   // ─────────────────────────────────────────────────────────────────
   // TEMPLATE 1: LUXURY GOLD (Executive Dark Obsidian & Gold Accent)
@@ -214,7 +215,7 @@ function buildEmailShell({
 </head>
 <body style="margin: 0; padding: 0; background-color: #0b0f17; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
   <div style="display: none; max-height: 0px; overflow: hidden; mso-hide: all;">
-    ${heroTitle} — Omni Virtual Solutions
+    ${heroTitle ? `${heroTitle} — ` : ""}${title || "Omni Virtual Solutions"}
   </div>
 
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0b0f17">
@@ -244,25 +245,26 @@ function buildEmailShell({
           </tr>
 
           <!-- Hero Headline -->
+          ${hasHero ? `
           <tr>
             <td class="mobile-p" style="padding: 34px 32px 18px 32px; background-color: #111622;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                   <td>
                     ${heroPill || ""}
-                    <h1 class="mobile-h1" style="margin: 0 0 10px 0; font-size: 25px; line-height: 32px; font-weight: 800; color: #ffffff;">
+                    ${heroTitle ? `<h1 class="mobile-h1" style="margin: 0 0 10px 0; font-size: 25px; line-height: 32px; font-weight: 800; color: #ffffff;">
                       ${heroTitle}
-                    </h1>
+                    </h1>` : ""}
                     ${heroSubtitle ? `<p style="margin: 0; font-size: 15px; line-height: 24px; color: #94a3b8;">${heroSubtitle}</p>` : ""}
                   </td>
                 </tr>
               </table>
             </td>
-          </tr>
+          </tr>` : ""}
 
           <!-- Body Content -->
           <tr>
-            <td class="mobile-p" style="padding: 0 32px 24px 32px; background-color: #111622;">
+            <td class="mobile-p" style="padding: ${hasHero ? "0 32px 24px 32px" : "28px 32px 24px 32px"}; background-color: #111622;">
               ${bodyContent}
             </td>
           </tr>
@@ -333,7 +335,7 @@ function buildEmailShell({
 </head>
 <body style="margin: 0; padding: 0; background-color: #f4f6f9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
   <div style="display: none; max-height: 0px; overflow: hidden; mso-hide: all;">
-    ${heroTitle} — Omni Virtual Solutions
+    ${heroTitle ? `${heroTitle} — ` : ""}${title || "Omni Virtual Solutions"}
   </div>
 
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f4f6f9">
@@ -370,25 +372,26 @@ function buildEmailShell({
           </tr>
 
           <!-- Hero Headline -->
+          ${hasHero ? `
           <tr>
             <td class="mobile-p" style="padding: 32px 32px 18px 32px; background-color: #ffffff;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                   <td>
                     ${heroPill || ""}
-                    <h1 class="mobile-h1" style="margin: 0 0 10px 0; font-size: 25px; line-height: 32px; font-weight: 800; color: #0f172a;">
+                    ${heroTitle ? `<h1 class="mobile-h1" style="margin: 0 0 10px 0; font-size: 25px; line-height: 32px; font-weight: 800; color: #0f172a;">
                       ${heroTitle}
-                    </h1>
+                    </h1>` : ""}
                     ${heroSubtitle ? `<p style="margin: 0; font-size: 15px; line-height: 24px; color: #475569;">${heroSubtitle}</p>` : ""}
                   </td>
                 </tr>
               </table>
             </td>
-          </tr>
+          </tr>` : ""}
 
           <!-- Body Content -->
           <tr>
-            <td class="mobile-p" style="padding: 0 32px 24px 32px; background-color: #ffffff;">
+            <td class="mobile-p" style="padding: ${hasHero ? "0 32px 24px 32px" : "28px 32px 24px 32px"}; background-color: #ffffff;">
               ${bodyContent}
             </td>
           </tr>
@@ -458,7 +461,7 @@ function buildEmailShell({
 </head>
 <body style="margin: 0; padding: 0; background-color: #f7f4ed; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
   <div style="display: none; max-height: 0px; overflow: hidden; mso-hide: all;">
-    ${heroTitle} — Omni Virtual Solutions
+    ${heroTitle ? `${heroTitle} — ` : ""}${title || "Omni Virtual Solutions"}
   </div>
 
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f7f4ed">
@@ -495,25 +498,26 @@ function buildEmailShell({
           </tr>
 
           <!-- Hero Section -->
+          ${hasHero ? `
           <tr>
             <td class="mobile-p" style="padding: 34px 32px 18px 32px; background-color: #ffffff;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                   <td>
                     ${heroPill || ""}
-                    <h1 class="mobile-h1" style="margin: 0 0 12px 0; font-family: 'Georgia', 'Times New Roman', serif; font-size: 26px; line-height: 33px; font-weight: 700; color: #1c1917; letter-spacing: -0.3px;">
+                    ${heroTitle ? `<h1 class="mobile-h1" style="margin: 0 0 12px 0; font-family: 'Georgia', 'Times New Roman', serif; font-size: 26px; line-height: 33px; font-weight: 700; color: #1c1917; letter-spacing: -0.3px;">
                       ${heroTitle}
-                    </h1>
+                    </h1>` : ""}
                     ${heroSubtitle ? `<p style="margin: 0; font-family: -apple-system, sans-serif; font-size: 15px; line-height: 25px; color: #57534e;">${heroSubtitle}</p>` : ""}
                   </td>
                 </tr>
               </table>
             </td>
-          </tr>
+          </tr>` : ""}
 
           <!-- Body Content -->
           <tr>
-            <td class="mobile-p" style="padding: 0 32px 24px 32px; background-color: #ffffff;">
+            <td class="mobile-p" style="padding: ${hasHero ? "0 32px 24px 32px" : "28px 32px 24px 32px"}; background-color: #ffffff;">
               ${bodyContent}
             </td>
           </tr>
@@ -694,17 +698,6 @@ function buildReplyHtml({ submission, settings, fullBody, senderEmail, isWebPrev
   const isEditorial = templateStyle === "warm_editorial" || templateStyle === "gradient_glass";
   const brandName = company?.company_name || "Omni Virtual Solutions";
 
-  const heroPill = isEditorial ? `
-    <div style="display: inline-block; background-color: #f4efe6; border: 1px solid #ded4c3; border-radius: 20px; padding: 4px 14px; font-size: 11.5px; font-weight: 700; color: #855f2d; margin-bottom: 14px; letter-spacing: 0.5px;">
-      ✦ Executive Advisory Response
-    </div>` : isLight ? `
-    <div style="display: inline-block; background-color: #eff6ff; border: 1px solid #bfdbfe; border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: 700; color: #1d4ed8; margin-bottom: 14px;">
-      ● Team Response
-    </div>` : `
-    <div style="display: inline-block; background-color: rgba(235, 162, 45, 0.15); border: 1px solid rgba(235, 162, 45, 0.35); border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: 700; color: #eba22d; margin-bottom: 14px;">
-      ● Team Response
-    </div>`;
-
   const boxBg = isEditorial ? "#ffffff" : isLight ? "#ffffff" : "#151b29";
   const boxBorder = isEditorial ? "#e7ded0" : isLight ? "#e2e8f0" : "rgba(255, 255, 255, 0.08)";
   const textColor = isEditorial ? "#292524" : isLight ? "#1f2937" : "#e2e8f0";
@@ -723,9 +716,9 @@ function buildReplyHtml({ submission, settings, fullBody, senderEmail, isWebPrev
 
   return buildEmailShell({
     title: `Re: ${inquirySubject} — ${brandName}`,
-    heroPill,
-    heroTitle: `Response to: ${inquirySubject}`,
-    heroSubtitle: `A message from the team at ${brandName} for ${customerName}.`,
+    heroPill: "",
+    heroTitle: "",
+    heroSubtitle: "",
     bodyContent,
     ctaText: `Visit ${brandName}`,
     ctaUrl: siteUrl,

@@ -323,23 +323,6 @@ router.get("/submissions/:id", requireAuth, async (req, res) => {
       return res.status(404).json({ error: { code: "NOT_FOUND", message: "Submission not found." } });
     }
 
-    // Auto-mark as read on first open
-    if (!subRow.rows[0].read_at) {
-      await db.execute({
-        sql: "UPDATE contact_submissions SET read_at = CURRENT_TIMESTAMP WHERE id = ?",
-        args: [id],
-      });
-      subRow.rows[0].read_at = new Date().toISOString();
-      try {
-        broadcast({
-          type: "lead_read",
-          submissionId: id,
-          read_at: subRow.rows[0].read_at,
-          timestamp: new Date().toISOString()
-        });
-      } catch (_) {}
-    }
-
     res.json({ submission: subRow.rows[0], replies: replies.rows });
   } catch (err) {
     res.status(500).json({ error: { code: "INTERNAL_ERROR", message: "Failed to load submission." } });

@@ -75,6 +75,19 @@ function extractSubmissionId(subject, inReplyTo, references) {
   return null;
 }
 
+// In-memory processed Message-ID and UID cache (Layer 1 deduplication)
+// Prevents concurrent IDLE push + periodic fallback race conditions
+const processedMessageIds = new Set();
+
+function trackProcessedEmail(key) {
+  if (!key) return;
+  processedMessageIds.add(key);
+  if (processedMessageIds.size > 2000) {
+    const oldest = Array.from(processedMessageIds).slice(0, 500);
+    oldest.forEach(k => processedMessageIds.delete(k));
+  }
+}
+
 // ── Core Message Ingestion & DB Validation (Shared) ───────────────
 async function handleParsedRawEmail(rawSource, uid, imapOrConnection) {
   if (!rawSource) return false;
@@ -89,6 +102,14 @@ async function handleParsedRawEmail(rawSource, uid, imapOrConnection) {
   }
 
   const parsed = await simpleParser(rawSource);
+  const messageId = parsed.messageId ? parsed.messageId.trim() : "";
+  const dedupeKey = messageId || (uid ? `uid:${uid}` : "");
+
+  // Layer 1: Fast in-memory deduplication check
+  if (dedupeKey && processedMessageIds.has(dedupeKey)) {
+    return false; // Already processed by a concurrent push or heartbeat
+  }
+
   const subject = parsed.subject || "";
   const fromAddress = parsed.from?.value?.[0]?.address || "";
   const fromName = parsed.from?.value?.[0]?.name || fromAddress;
@@ -97,6 +118,7 @@ async function handleParsedRawEmail(rawSource, uid, imapOrConnection) {
 
   // Ignore automated bounces, mailer-daemons, or self-sent emails
   if (!fromAddress || fromAddress.includes("mailer-daemon") || fromAddress.includes("postmaster")) {
+    if (dedupeKey) trackProcessedEmail(dedupeKey);
     return false;
   }
 
@@ -146,7 +168,10 @@ async function handleParsedRawEmail(rawSource, uid, imapOrConnection) {
     sql: "SELECT id FROM contact_replies WHERE submission_id = ? AND direction = 'inbound' AND reply_body = ? LIMIT 1",
     args: [targetSubId, cleanText],
   });
-  if (dupeCheck.rows.length > 0) return false;
+  if (dupeCheck.rows.length > 0) {
+    if (dedupeKey) trackProcessedEmail(dedupeKey);
+    return false;
+  }
 
   // Insert into contact_replies
   const insRes = await db.execute({
@@ -156,6 +181,7 @@ async function handleParsedRawEmail(rawSource, uid, imapOrConnection) {
   });
 
   const newReplyId = insRes.lastInsertRowid || Date.now();
+  if (dedupeKey) trackProcessedEmail(dedupeKey);
 
   // Reset read_at to NULL so conversation becomes UNREAD (lights up badges)
   await db.execute({
