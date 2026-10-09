@@ -12,6 +12,14 @@
 // Isolated: Failures never interrupt website forms or SMTP sending.
 // =================================================================
 
+const dns = require("dns");
+// Force IPv4 DNS resolution first to avoid Windows IPv6 delays on imap.gmail.com
+if (dns && typeof dns.setDefaultResultOrder === "function") {
+  try {
+    dns.setDefaultResultOrder("ipv4first");
+  } catch (_) {}
+}
+
 const imaps = require("imap-simple");
 const { simpleParser } = require("mailparser");
 const { db } = require("./db");
@@ -23,15 +31,21 @@ let syncTimer = null;
 // ── Clean quoted email chain from raw text ────────────────────────
 function cleanReplyText(text) {
   if (!text) return "";
-  const lines = text.split(/\r?\n/);
+  let clean = text.replace(/\r\n/g, "\n");
+
+  // Cut off multi-line "On ... wrote:" (matches across newlines in mobile Gmail)
+  clean = clean.replace(/\n\s*On\s+[\s\S]+?wrote:\s*[\s\S]*/i, "");
+
+  // Cut off divider lines / original message blocks
+  clean = clean.replace(/\n\s*---+[\s\S]*?(Original Message|Forwarded Message)[\s\S]*/i, "");
+  clean = clean.replace(/\n\s*_{5,}[\s\S]*/, "");
+
+  const lines = clean.split("\n");
   const cleanLines = [];
   for (let i = 0; i < lines.length; i++) {
     const trimmed = lines[i].trim();
-    // Stop if common reply quote header is encountered
-    if (/^On\s+.+wrote:$/i.test(trimmed)) break;
-    if (/^On\s+.+,\s+.+\s+at\s+.+wrote:$/i.test(trimmed)) break;
-    if (/^---+\s*(Original Message|Forwarded Message)\s*---+/i.test(trimmed)) break;
-    if (/^_{5,}/.test(trimmed)) break; // divider line
+    if (/^On\s+.+wrote:?$/i.test(trimmed)) break;
+    if (/^On\s+.+,\s+.+\s+at\s+.+wrote:?$/i.test(trimmed)) break;
     if (/^From:\s+/i.test(trimmed) && cleanLines.length > 0) break;
     if (/^>/.test(trimmed)) continue; // ignore quotation lines
     cleanLines.push(lines[i]);
@@ -41,25 +55,26 @@ function cleanReplyText(text) {
 
 // ── Extract submission ID from email headers or subject ───────────
 function extractSubmissionId(subject, inReplyTo, references) {
-  // 1. Check subject tag [Ref: #14] or [Ref: 14] or [Ticket #14]
+  // 1. Invisible RFC headers (preferred): submission-58@omnivirtualsolution.com
+  const headersToCheck = [inReplyTo, references].filter(Boolean).join(" ");
+  const hMatch = headersToCheck.match(/submission-(\d+)/i);
+  if (hMatch) return parseInt(hMatch[1], 10);
+
+  // 2. Legacy / subject tags: [Ref: #58] or [Ref: 58] or #58
   if (subject) {
     const sMatch = subject.match(/\[(?:Ref|Ticket|Inquiry):\s*#?(\d+)\]/i) ||
                    subject.match(/#(\d+)\b/);
     if (sMatch) return parseInt(sMatch[1], 10);
   }
 
-  // 2. Check In-Reply-To header
-  const headersToCheck = [inReplyTo, references].filter(Boolean).join(" ");
-  const hMatch = headersToCheck.match(/submission-(\d+)/i);
-  if (hMatch) return parseInt(hMatch[1], 10);
-
   return null;
 }
 
 // ── Single sync tick ──────────────────────────────────────────────
 async function syncInboundReplies() {
-  if (isSyncing) return;
+  if (isSyncing) return 0;
   isSyncing = true;
+  let newRepliesCount = 0;
 
   let connection = null;
   try {
@@ -74,7 +89,7 @@ async function syncInboundReplies() {
 
     // Require valid Gmail credentials
     if (!smtpUser || !smtpPass) {
-      return;
+      return 0;
     }
 
     // Determine IMAP host (default imap.gmail.com for Gmail users)
@@ -98,19 +113,33 @@ async function syncInboundReplies() {
     connection = await imaps.connect(config);
     await connection.openBox("INBOX");
 
-    // Search for UNSEEN messages received in recent days
-    const searchCriteria = ["UNSEEN"];
-    const fetchOptions = {
-      bodies: ["HEADER", "TEXT", ""],
-      markSeen: false,
-    };
+    // 1. Fast metadata search for messages from the last 2 days
+    const d = new Date();
+    d.setDate(d.getDate() - 2);
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const sinceDate = `${d.getDate()}-${months[d.getMonth()]}-${d.getFullYear()}`;
 
-    const messages = await connection.search(searchCriteria, fetchOptions);
+    const allMsgs = await connection.search([["SINCE", sinceDate]]);
+    if (!allMsgs || allMsgs.length === 0) return 0;
 
-    if (messages && messages.length > 0) {
-      console.log(`[inbound-sync] Found ${messages.length} unread email(s) in inbox. Inspecting for client replies...`);
+    // 2. Select target UIDs: all unread messages + last 15 recent messages
+    const targetUidSet = new Set();
+    for (const m of allMsgs) {
+      if (!m.attributes.flags || !m.attributes.flags.includes("\\Seen")) {
+        targetUidSet.add(m.attributes.uid);
+      }
+    }
+    allMsgs.slice(-15).forEach(m => targetUidSet.add(m.attributes.uid));
 
-      for (const item of messages) {
+    const targetUids = Array.from(targetUidSet).sort((a, b) => a - b);
+    if (targetUids.length === 0) return 0;
+
+    // 3. Batch fetch bodies in one rapid query
+    const range = `${targetUids[0]}:${targetUids[targetUids.length - 1]}`;
+    const candidateMessages = await connection.search([["UID", range]], { bodies: [""], markSeen: false });
+
+    if (candidateMessages && candidateMessages.length > 0) {
+      for (const item of candidateMessages) {
         try {
           const allPart = item.parts.find(p => !p.which || p.which === "") || item.parts[0];
           const rawSource = allPart?.body || "";
@@ -134,7 +163,7 @@ async function syncInboundReplies() {
 
           let submissionId = extractSubmissionId(subject, inReplyTo, references);
 
-          // Fallback: If no tag in subject, match against open customer email
+          // Fallback: If no tag in subject or headers, match against open customer email
           if (!submissionId && fromAddress) {
             const findSub = await db.execute({
               sql: "SELECT id FROM contact_submissions WHERE lower(email) = lower(?) ORDER BY created_at DESC LIMIT 1",
@@ -147,7 +176,7 @@ async function syncInboundReplies() {
 
           if (submissionId) {
             const cleanText = cleanReplyText(parsed.text || parsed.html || "");
-            if (cleanText && cleanText.length > 2) {
+            if (cleanText && cleanText.length > 0) {
               // Deduplicate: avoid re-inserting identical reply
               const dupeCheck = await db.execute({
                 sql: "SELECT id FROM contact_replies WHERE submission_id = ? AND direction = 'inbound' AND reply_body = ? LIMIT 1",
@@ -170,7 +199,8 @@ async function syncInboundReplies() {
                   args: [submissionId],
                 });
 
-                console.log(`[inbound-sync] Successfully captured customer reply for submission #${submissionId} from '${fromAddress}'!`);
+                newRepliesCount++;
+                console.log(`[inbound-sync] Successfully captured customer reply for submission #${submissionId} from '${fromAddress}': "${cleanText.substring(0, 40)}"`);
 
                 // Real-time broadcast
                 try {
@@ -193,11 +223,13 @@ async function syncInboundReplies() {
         }
       }
     }
+    return newRepliesCount;
   } catch (err) {
     // Graceful error logging — never crash
     if (!err.message?.includes("Timed out") && !err.message?.includes("ECONNRESET")) {
       console.warn("[inbound-sync] IMAP check notice:", err.message);
     }
+    return 0;
   } finally {
     if (connection) {
       try { await connection.end(); } catch (_) {}
@@ -210,10 +242,10 @@ async function syncInboundReplies() {
 function startInboundSync(intervalMs = 45000) {
   if (syncTimer) clearInterval(syncTimer);
 
-  // Initial delayed check (10s after server boot)
+  // Initial delayed check (5s after server boot)
   setTimeout(() => {
     syncInboundReplies().catch(() => {});
-  }, 10000);
+  }, 5000);
 
   // Periodic recurring check
   syncTimer = setInterval(() => {

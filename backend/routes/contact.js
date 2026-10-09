@@ -682,5 +682,18 @@ router.post("/email-templates/select", requireAuth, async (req, res) => {
   }
 });
 
+// =================================================================
+// POST /api/v1/contact/sync-inbound-replies — Admin manual sync trigger
+// =================================================================
+router.post("/sync-inbound-replies", requireAuth, async (req, res) => {
+  try {
+    const { syncInboundReplies } = require("../inbound-sync");
+    const count = await syncInboundReplies();
+    res.json({ success: true, count: typeof count === "number" ? count : 0, message: "Inbound email sync completed." });
+  } catch (err) {
+    res.status(500).json({ error: { code: "SYNC_ERROR", message: err.message } });
+  }
+});
+
 module.exports = router;
 

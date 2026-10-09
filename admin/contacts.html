@@ -3022,13 +3022,18 @@
                 <i class="bi bi-search search-icon"></i>
                 <input class="search-box" type="text" id="inboxSearch" placeholder="Search messages..." oninput="searchDebounce()">
               </div>
-              <div class="filter-tabs">
-                <button class="filter-tab active" onclick="setFilter('', this)">All</button>
-                <button class="filter-tab" onclick="setFilter('new', this)">New</button>
-                <button class="filter-tab" onclick="setFilter('in_review', this)">In Review</button>
-                <button class="filter-tab" onclick="setFilter('contacted', this)">Contacted</button>
-                <button class="filter-tab" onclick="setFilter('replied', this)">Replied</button>
-                <button class="filter-tab" onclick="setFilter('closed', this)">Closed</button>
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                <div class="filter-tabs" style="flex:1; overflow-x:auto;">
+                  <button class="filter-tab active" onclick="setFilter('', this)">All</button>
+                  <button class="filter-tab" onclick="setFilter('new', this)">New</button>
+                  <button class="filter-tab" onclick="setFilter('in_review', this)">In Review</button>
+                  <button class="filter-tab" onclick="setFilter('contacted', this)">Contacted</button>
+                  <button class="filter-tab" onclick="setFilter('replied', this)">Replied</button>
+                  <button class="filter-tab" onclick="setFilter('closed', this)">Closed</button>
+                </div>
+                <button type="button" class="btn btn-sm" id="syncRepliesBtn" onclick="syncInboundRepliesNow(this)" title="Check inbox for new client email replies" style="padding:5px 9px; font-size:11.5px; border-radius:6px; flex-shrink:0; white-space:nowrap;">
+                  <i class="bi bi-arrow-repeat"></i> Sync
+                </button>
               </div>
             </div>
             <div class="inbox-list" id="inboxList">
@@ -4023,6 +4028,41 @@
     let currentMsgId = null;
     let currentSubmission = null;
     let searchTimer = null;
+
+    window.syncInboundRepliesNow = async function (btn) {
+      const orig = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-sm"></span>';
+      }
+      try {
+        const res = await fetch('/api/v1/contact/sync-inbound-replies', {
+          method: 'POST',
+          headers: { Authorization: 'Bearer ' + token }
+        });
+        const data = await res.json();
+        if (data.success) {
+          if (data.count > 0) {
+            toast(`✓ Synced ${data.count} new client reply!`);
+          } else {
+            toast('Inbox up to date');
+          }
+          await loadInbox();
+          if (currentMsgId) {
+            await openMessage(currentMsgId);
+          }
+        } else {
+          toast(data.error?.message || 'Sync failed', 'error');
+        }
+      } catch (_) {
+        toast('Sync failed', 'error');
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = orig;
+        }
+      }
+    };
 
     window.loadInbox = loadInbox;
     window.setFilter = setFilter;

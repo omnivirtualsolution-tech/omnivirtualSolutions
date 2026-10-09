@@ -1174,7 +1174,7 @@ async function sendAutoReply(submission) {
 
   const brandName = company.company_name || "Omni Virtual Solutions";
   const rawSubj = (settings.auto_reply_subject || `We received your message — ${brandName}`).replace(/\s*\[Ref:\s*#?\d+\]/gi, "").trim();
-  const subject = `${interpolate(rawSubj, { customer_name: submission.full_name })} [Ref: #${submission.id}]`;
+  const subject = interpolate(rawSubj, { customer_name: submission.full_name });
   const bodyText = interpolate(settings.auto_reply_body || "Hello {customer_name}, thank you for contacting us!", { customer_name: submission.full_name });
 
   const recipientEmail = settings.recipient_email?.trim() || company?.recipient_email?.trim() || company?.email?.trim() || "admin@omnivirtualsolution.com";
@@ -1225,7 +1225,7 @@ async function sendReply({ submission, replyBody, replyId, sentBy }) {
     return { success: false, reason: "legacy_sender_blocked" };
   }
   const cleanSubj = submission.subject ? submission.subject.replace(/\s*\[Ref:\s*#?\d+\]/gi, "").trim() : "Your Inquiry";
-  const subject   = `Re: ${cleanSubj} [Ref: #${submission.id}] — ${company.company_name || "Omni Virtual Solutions"}`;
+  const subject   = `Re: ${cleanSubj} — ${company.company_name || "Omni Virtual Solutions"}`;
 
   if (!transporter) {
     await db.execute({
