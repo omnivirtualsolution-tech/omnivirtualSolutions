@@ -821,6 +821,267 @@ function buildNotificationHtml({ submission, settings, senderEmail, recipientEma
   });
 }
 
+// ── Live Broadcast Helper (Safe & Non-blocking) ───────────────────
+function safeBroadcast(event) {
+  try {
+    const { broadcast } = require("./routes/live");
+    if (typeof broadcast === "function") broadcast(event);
+  } catch (_) {}
+}
+
+// ── Dynamic Universal Business Email Resolver ────────────────────
+async function getBusinessEmail() {
+  const [settings, company] = await Promise.all([getSettings(), getFullBusinessProfile()]);
+  return (
+    settings.recipient_email?.trim() ||
+    company?.recipient_email?.trim() ||
+    company?.email?.trim() ||
+    settings.sender_email?.trim() ||
+    settings.smtp_user?.trim() ||
+    "admin@omnivirtualsolution.com"
+  );
+}
+
+// ── Visual Design for Outbound Delivery Failure Report ───────────
+function buildFailureAlertHtml({
+  failedEventType,
+  originalRecipient,
+  originalSubject,
+  errorMessage,
+  submission,
+  company,
+  settings,
+}) {
+  const brandName = company?.company_name || "Omni Virtual Solutions";
+  const siteBaseUrl = (process.env.PUBLIC_URL || process.env.URL || "https://www.omnivirtualsolution.com").replace(/\/$/, "");
+  const adminUrl = `${siteBaseUrl}/admin/contacts.html#inbox`;
+  const templateStyle = settings?.email_template_style || "luxury_gold";
+
+  const safeCustomerName = escapeHtml(submission?.full_name || "Website Visitor");
+  const safeCustomerEmail = escapeHtml(originalRecipient || submission?.email || "Unknown");
+  const safePhone = escapeHtml(submission?.phone || "Not provided");
+  const safeSubject = escapeHtml(originalSubject || submission?.subject || "General Inquiry");
+  const safeError = escapeHtml(errorMessage || "Mail transfer agent rejection");
+  const safeSnippet = escapeHtml((submission?.message || "").slice(0, 300));
+
+  const encodedSubject = encodeURIComponent(`Re: ${submission?.subject || "Your Inquiry"} — ${brandName}`);
+  const encodedBody = encodeURIComponent(`Hello ${submission?.full_name || ""},\n\nWe received your inquiry and wanted to follow up with you directly.\n\nBest regards,\n${brandName}`);
+  const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(originalRecipient || "")}&su=${encodedSubject}&body=${encodedBody}`;
+
+  const eventLabel =
+    failedEventType === "auto_reply"
+      ? "Visitor Auto-Reply Acknowledgment"
+      : failedEventType === "reply_sent"
+      ? "Admin Direct Reply Message"
+      : failedEventType === "new_submission_notify"
+      ? "New Inquiry Notification Alert"
+      : "Outbound System Email";
+
+  const bodyContent = `
+    <div style="background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.35); border-radius: 10px; padding: 16px 20px; margin-bottom: 22px;">
+      <div style="font-weight: 700; color: #f87171; font-size: 14.5px; margin-bottom: 6px;">
+        ⚠️ Outbound Email Failed to Deliver
+      </div>
+      <div style="color: #cbd5e1; font-size: 13px; line-height: 1.5;">
+        The system attempted to send an automated <strong>${eventLabel}</strong> to 
+        <span style="color:#ffffff; font-weight:700;">${safeCustomerEmail}</span>, but the mail transfer agent encountered an error.
+      </div>
+    </div>
+
+    <!-- Error Diagnostics -->
+    <div style="background: #0f141f; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 14px 18px; margin-bottom: 22px;">
+      <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; color: #94a3b8; font-weight: 700; margin-bottom: 6px;">
+        Server Error Diagnostic
+      </div>
+      <div style="font-family: Consolas, monospace, sans-serif; font-size: 12.5px; color: #fca5a5; word-break: break-all; line-height: 1.45;">
+        ${safeError}
+      </div>
+    </div>
+
+    <!-- Contact Lead Details -->
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 22px; background: rgba(255, 255, 255, 0.02); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.06);">
+      <tr>
+        <td style="padding: 10px 14px; font-size: 12.5px; color: #94a3b8; width: 130px; border-bottom: 1px solid rgba(255, 255, 255, 0.04);">Customer Name:</td>
+        <td style="padding: 10px 14px; font-size: 13px; color: #ffffff; font-weight: 600; border-bottom: 1px solid rgba(255, 255, 255, 0.04);">${safeCustomerName}</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 14px; font-size: 12.5px; color: #94a3b8; border-bottom: 1px solid rgba(255, 255, 255, 0.04);">Intended Email:</td>
+        <td style="padding: 10px 14px; font-size: 13px; color: #eba22d; font-weight: 600; border-bottom: 1px solid rgba(255, 255, 255, 0.04);">${safeCustomerEmail}</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 14px; font-size: 12.5px; color: #94a3b8; border-bottom: 1px solid rgba(255, 255, 255, 0.04);">Phone:</td>
+        <td style="padding: 10px 14px; font-size: 13px; color: #ffffff; border-bottom: 1px solid rgba(255, 255, 255, 0.04);">${safePhone}</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 14px; font-size: 12.5px; color: #94a3b8; border-bottom: 1px solid rgba(255, 255, 255, 0.04);">Topic:</td>
+        <td style="padding: 10px 14px; font-size: 13px; color: #ffffff; border-bottom: 1px solid rgba(255, 255, 255, 0.04);">${safeSubject}</td>
+      </tr>
+      ${safeSnippet ? `
+      <tr>
+        <td style="padding: 10px 14px; font-size: 12.5px; color: #94a3b8; vertical-align: top;">Message Snippet:</td>
+        <td style="padding: 10px 14px; font-size: 12.5px; color: #cbd5e1; line-height: 1.5;">${safeSnippet}${submission?.message?.length > 300 ? "..." : ""}</td>
+      </tr>` : ""}
+    </table>
+
+    <!-- Direct 1-Click Action Buttons -->
+    <div style="margin-top: 24px; text-align: center;">
+      <a href="${gmailComposeUrl}" target="_blank" style="display: inline-block; background: #eba22d; color: #0b0f17; font-weight: 700; font-size: 13px; padding: 11px 22px; border-radius: 8px; text-decoration: none; margin-right: 10px; margin-bottom: 8px;">
+        ✉️ Compose Direct in Gmail
+      </a>
+      <a href="${adminUrl}" target="_blank" style="display: inline-block; background: rgba(255, 255, 255, 0.08); color: #ffffff; font-weight: 600; font-size: 13px; padding: 11px 20px; border-radius: 8px; text-decoration: none; border: 1px solid rgba(255, 255, 255, 0.15); margin-bottom: 8px;">
+        Open Admin Inbox
+      </a>
+    </div>
+  `;
+
+  return buildEmailShell({
+    title: `Delivery Failure Alert: ${safeCustomerName}`,
+    heroPill: "⚠️ Delivery Failure Alert",
+    heroTitle: "Email Dispatch Failure Notification",
+    heroSubtitle: `An outbound message to ${safeCustomerEmail} could not be delivered.`,
+    bodyContent,
+    ctaText: "Review in Admin Portal",
+    ctaUrl: adminUrl,
+    footerNote: "Automated delivery telemetry dispatch from Omni Virtual Solutions Mail Engine.",
+    supportEmail: settings?.recipient_email || "admin@omnivirtualsolution.com",
+    templateStyle,
+    company,
+  });
+}
+
+// ── In-Memory Deduplication Cache for Failure Alerts (Max 1 per 30s) ──
+const recentFailureAlerts = new Map();
+
+// ── Outbound Delivery Failure Notification Handler ────────────────
+async function sendEmailFailureAlert({
+  failedEventType,
+  originalRecipient,
+  originalSubject,
+  errorMessage,
+  submission = null,
+  replyId = null,
+}) {
+  try {
+    // 1. Loop prevention: Never trigger a failure alert for a failed failure alert!
+    if (failedEventType === "email_failure_alert") {
+      console.warn("[email-service] Loop prevention: ignoring failure of a failure alert.");
+      return { success: false, reason: "loop_prevention" };
+    }
+
+    const [settings, company] = await Promise.all([getSettings(), getFullBusinessProfile()]);
+
+    // Check if failure alerts are enabled (defaults to true)
+    if (settings.email_failure_alert_enabled === "false") {
+      console.log("[email-service] Email failure alerts are disabled in settings.");
+      return { success: false, reason: "failure_alert_disabled" };
+    }
+
+    // Dynamic resolution of the latest business email
+    const businessEmail =
+      settings.recipient_email?.trim() ||
+      company?.recipient_email?.trim() ||
+      company?.email?.trim() ||
+      settings.sender_email?.trim() ||
+      settings.smtp_user?.trim() ||
+      "admin@omnivirtualsolution.com";
+
+    // 2. Loop prevention: If the failed recipient WAS already the business email,
+    // re-sending via the same failing route will cause a recursive loop.
+    if (originalRecipient && originalRecipient.toLowerCase() === businessEmail.toLowerCase()) {
+      console.warn(`[email-service] Loop prevention: failure was already targeting business email (${businessEmail}). Skipping re-send.`);
+      safeBroadcast({
+        type: "email_failed",
+        submissionId: submission?.id || null,
+        recipient: originalRecipient,
+        customerName: submission?.full_name || "Lead",
+        error: errorMessage,
+        timestamp: new Date().toISOString(),
+      });
+      return { success: false, reason: "loop_prevention_same_recipient" };
+    }
+
+    // Deduplication check: max 1 alert per submission/recipient per 30 seconds
+    const dedupKey = `${submission?.id || "none"}:${originalRecipient || "none"}`;
+    const lastAlertTime = recentFailureAlerts.get(dedupKey);
+    if (lastAlertTime && Date.now() - lastAlertTime < 30000) {
+      console.log(`[email-service] Deduplication: alert for ${dedupKey} recently dispatched.`);
+      return { success: false, reason: "deduplicated" };
+    }
+    recentFailureAlerts.set(dedupKey, Date.now());
+    if (recentFailureAlerts.size > 100) {
+      const now = Date.now();
+      for (const [k, t] of recentFailureAlerts.entries()) {
+        if (now - t > 60000) recentFailureAlerts.delete(k);
+      }
+    }
+
+    // Broadcast live SSE alert to any active admin dashboards immediately
+    safeBroadcast({
+      type: "email_failed",
+      submissionId: submission?.id || null,
+      recipient: originalRecipient,
+      customerName: submission?.full_name || "Lead",
+      error: errorMessage,
+      timestamp: new Date().toISOString(),
+    });
+
+    const transporter = await createTransporter(settings);
+    if (!transporter) {
+      console.warn("[email-service] Cannot send failure alert email: SMTP not configured");
+      return { success: false, reason: "smtp_not_configured" };
+    }
+
+    const senderName = company?.company_name || settings.sender_name || "Omni Virtual Solutions";
+    const smtpUser = settings.smtp_user?.trim();
+    const fromAddress = smtpUser
+      ? `"${senderName}" <${smtpUser}>`
+      : `"${senderName}" <${businessEmail}>`;
+
+    const alertSubject = `⚠️ Email Delivery Failed — ${submission?.full_name || originalSubject || "Outbound Dispatch"}`;
+    const htmlBody = buildFailureAlertHtml({
+      failedEventType,
+      originalRecipient,
+      originalSubject,
+      errorMessage,
+      submission,
+      company,
+      settings,
+    });
+
+    await transporter.sendMail({
+      from: fromAddress,
+      to: businessEmail,
+      subject: alertSubject,
+      html: htmlBody,
+      text: `EMAIL DELIVERY FAILED\n\nIntended Recipient: ${originalRecipient}\nCustomer: ${submission?.full_name || "N/A"}\nError: ${errorMessage}\n\nPlease check the admin portal or reply via direct Gmail.`,
+    });
+
+    await logEmail({
+      eventType: "email_failure_alert",
+      submissionId: submission?.id || null,
+      recipientEmail: businessEmail,
+      subject: alertSubject,
+      status: "sent",
+    });
+
+    console.log(`[email-service] Delivery failure alert sent to business email → ${businessEmail}`);
+    return { success: true };
+  } catch (alertErr) {
+    console.error("[email-service] Failed to send failure alert email:", alertErr.message);
+    try {
+      await logEmail({
+        eventType: "email_failure_alert",
+        submissionId: submission?.id || null,
+        recipientEmail: originalRecipient || null,
+        subject: "(failure alert failed)",
+        status: "failed",
+        errorMessage: alertErr.message,
+      });
+    } catch (_) {}
+    return { success: false, reason: alertErr.message };
+  }
+}
+
 // =================================================================
 // MAIN: Send notification to admin when a new contact form is submitted
 // =================================================================
@@ -885,6 +1146,14 @@ async function sendNewSubmissionNotification(submission) {
     await updateNotifyStatus(submission.id, "failed");
     await logEmail({ eventType: "new_submission_notify", submissionId: submission.id, recipientEmail, subject, status: "failed", errorMessage: errMsg });
     console.error(`[email] Notification FAILED for submission #${submission.id}:`, errMsg);
+    safeBroadcast({
+      type: "email_failed",
+      submissionId: submission.id,
+      recipient: recipientEmail,
+      customerName: submission.full_name,
+      error: errMsg,
+      timestamp: new Date().toISOString(),
+    });
     return { success: false, reason: errMsg };
   }
 }
@@ -929,6 +1198,13 @@ async function sendAutoReply(submission) {
     return { success: true };
   } catch (err) {
     await logEmail({ eventType: "auto_reply", submissionId: submission.id, recipientEmail: submission.email, subject, status: "failed", errorMessage: err.message });
+    sendEmailFailureAlert({
+      failedEventType: "auto_reply",
+      originalRecipient: submission.email,
+      originalSubject: subject,
+      errorMessage: err.message,
+      submission,
+    }).catch(() => {});
     return { success: false, reason: err.message };
   }
 }
@@ -985,6 +1261,14 @@ async function sendReply({ submission, replyBody, replyId, sentBy }) {
       args: [err.message, replyId],
     });
     await logEmail({ eventType: "reply_sent", submissionId: submission.id, recipientEmail: submission.email, subject, status: "failed", errorMessage: err.message });
+    sendEmailFailureAlert({
+      failedEventType: "reply_sent",
+      originalRecipient: submission.email,
+      originalSubject: subject,
+      errorMessage: err.message,
+      submission,
+      replyId,
+    }).catch(() => {});
     return { success: false, reason: err.message };
   }
 }
@@ -1197,6 +1481,8 @@ function previewEmail({ style = "luxury_gold", type = "auto_reply", company = nu
 }
 
 module.exports = {
+  sendEmailFailureAlert,
+  getBusinessEmail,
   sendNewSubmissionNotification,
   sendAutoReply,
   sendReply,

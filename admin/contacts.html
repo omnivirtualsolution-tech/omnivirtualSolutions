@@ -313,13 +313,13 @@
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .search-box-wrap:focus-within .search-icon {
-      color: var(--gold);
+      color: #ffffff;
     }
     .search-box:focus {
       outline: none;
       background: rgba(255, 255, 255, 0.07);
-      border-color: var(--gold);
-      box-shadow: 0 0 0 3px rgba(235, 162, 45, 0.16);
+      border-color: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.15);
     }
     .search-box::placeholder {
       color: #64748b;
@@ -344,14 +344,14 @@
     .filter-tab:hover {
       background: rgba(255, 255, 255, 0.07);
       color: #f1f5f9;
-      border-color: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.2);
     }
     .filter-tab.active {
-      background: rgba(235, 162, 45, 0.16);
-      color: var(--gold);
-      border-color: rgba(235, 162, 45, 0.4);
+      background: rgba(255, 255, 255, 0.14);
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.45);
       font-weight: 700;
-      box-shadow: 0 2px 8px rgba(235, 162, 45, 0.12);
+      box-shadow: none;
     }
 
     .inbox-list {
@@ -370,9 +370,9 @@
       background: rgba(255, 255, 255, 0.03);
     }
     .msg-item.selected {
-      background: linear-gradient(90deg, rgba(235, 162, 45, 0.14) 0%, rgba(235, 162, 45, 0.02) 100%);
-      border-left: 3px solid var(--gold);
-      box-shadow: inset 0 1px 0 rgba(235, 162, 45, 0.1);
+      background: rgba(255, 255, 255, 0.07);
+      border-left: 3px solid #ffffff;
+      box-shadow: none;
     }
     .msg-item.unread .msg-name {
       font-weight: 700;
@@ -387,9 +387,9 @@
       right: 16px;
       width: 8px;
       height: 8px;
-      background: var(--gold);
+      background: #ffffff;
       border-radius: 50%;
-      box-shadow: 0 0 10px rgba(235, 162, 45, 0.8);
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.85);
       animation: pulseDot 2s infinite ease-in-out;
     }
     @keyframes pulseDot {
@@ -522,11 +522,11 @@
     }
     .detail-empty i {
       font-size: 54px;
-      color: rgba(235, 162, 45, 0.25);
-      background: rgba(235, 162, 45, 0.05);
+      color: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.04);
       padding: 24px;
       border-radius: 50%;
-      border: 1px solid rgba(235, 162, 45, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
     }
     .detail-empty p {
@@ -547,7 +547,7 @@
     }
     .detail-header {
       padding: 20px 26px;
-      background: linear-gradient(180deg, rgba(17, 24, 39, 0.8) 0%, rgba(13, 18, 31, 0.5) 100%);
+      background: #0d121f;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       flex-shrink: 0;
     }
@@ -580,12 +580,13 @@
       color: #f1f5f9;
     }
     .detail-meta-item a {
-      color: var(--gold);
-      text-decoration: none;
+      color: #ffffff;
+      text-decoration: underline;
+      text-underline-offset: 3px;
       font-weight: 500;
     }
     .detail-meta-item a:hover {
-      text-decoration: underline;
+      color: #cbd5e1;
     }
     .detail-actions {
       padding: 10px 26px;
@@ -611,8 +612,8 @@
     }
     .status-select:focus {
       outline: none;
-      border-color: var(--gold);
-      box-shadow: 0 0 0 2px rgba(235, 162, 45, 0.2);
+      border-color: #ffffff;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.18);
     }
 
     /* Scrollable body */
@@ -664,8 +665,8 @@
     }
 
     .reply-bubble {
-      background: linear-gradient(135deg, rgba(235, 162, 45, 0.07) 0%, rgba(15, 23, 42, 0.65) 100%);
-      border: 1px solid rgba(235, 162, 45, 0.24);
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 12px;
       padding: 18px 22px;
       margin-bottom: 14px;
@@ -681,7 +682,7 @@
       flex-wrap: wrap;
     }
     .reply-meta strong {
-      color: var(--gold);
+      color: #ffffff;
       font-weight: 700;
     }
     .reply-body-text {
@@ -725,9 +726,9 @@
     }
     .reply-textarea:focus {
       outline: none;
-      border-color: var(--gold);
+      border-color: #ffffff;
       background: rgba(0, 0, 0, 0.5);
-      box-shadow: 0 0 0 3px rgba(235, 162, 45, 0.16);
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.18);
     }
     .reply-textarea::placeholder {
       color: #64748b;
@@ -747,6 +748,51 @@
       border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: 6px;
       padding: 6px 12px;
+    }
+
+    /* Contact Messages page monochrome overrides (no gradients, black & white badges, white accents) */
+    #tab-inbox .badge,
+    .inbox-shell .badge {
+      background: rgba(255, 255, 255, 0.08) !important;
+      color: #f8fafc !important;
+      border: 1px solid rgba(255, 255, 255, 0.22) !important;
+      box-shadow: none !important;
+    }
+    #tab-inbox #replyGmailBtn {
+      background: #ffffff !important;
+      color: #0b0e14 !important;
+      border: 1px solid #ffffff !important;
+      font-weight: 700 !important;
+      box-shadow: 0 2px 8px rgba(255, 255, 255, 0.15) !important;
+    }
+    #tab-inbox #replyGmailBtn:hover {
+      background: #e2e8f0 !important;
+      border-color: #e2e8f0 !important;
+      color: #0b0e14 !important;
+    }
+    #tab-inbox #sendReplyBtn {
+      background: rgba(255, 255, 255, 0.06) !important;
+      color: #ffffff !important;
+      border: 1px solid rgba(255, 255, 255, 0.24) !important;
+      font-weight: 600 !important;
+    }
+    #tab-inbox #sendReplyBtn:hover {
+      background: rgba(255, 255, 255, 0.12) !important;
+      border-color: rgba(255, 255, 255, 0.4) !important;
+    }
+    #tab-inbox .btn:hover {
+      border-color: rgba(255, 255, 255, 0.35);
+      color: #ffffff;
+    }
+    #tab-inbox .btn-danger {
+      background: rgba(255, 255, 255, 0.05) !important;
+      color: #f1f5f9 !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    }
+    #tab-inbox .btn-danger:hover {
+      background: rgba(255, 255, 255, 0.12) !important;
+      border-color: rgba(255, 255, 255, 0.4) !important;
+      color: #ffffff !important;
     }
 
     /* ── Email Settings Panel ───────────────────────────────────── */
@@ -1333,18 +1379,24 @@
        ════════════════════════════════════════════════════════════ */
     .crm-kpi-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-bottom: 22px;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    @media (max-width: 1200px) {
+      .crm-kpi-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      }
     }
     .crm-kpi-card {
-      background: var(--card);
-      border: 1px solid var(--border);
+      background: #111622;
+      border: 1px solid rgba(255, 255, 255, 0.22);
       border-radius: 12px;
-      padding: 18px 20px;
+      padding: 16px 18px;
       display: flex;
       align-items: center;
-      gap: 16px;
+      justify-content: space-between;
+      gap: 12px;
       position: relative;
       overflow: hidden;
       transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
@@ -1352,11 +1404,23 @@
     .crm-kpi-card:hover {
       transform: translateY(-2px);
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      border-color: rgba(255, 255, 255, 0.45);
     }
-    .crm-kpi-card.gold  { border-color: rgba(235, 162, 45, 0.25); background: linear-gradient(135deg, rgba(235, 162, 45, 0.08) 0%, rgba(21, 26, 35, 0.95) 100%); }
-    .crm-kpi-card.red   { border-color: rgba(239, 68, 68, 0.25);   background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(21, 26, 35, 0.95) 100%); }
-    .crm-kpi-card.blue  { border-color: rgba(59, 130, 246, 0.25);  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(21, 26, 35, 0.95) 100%); }
-    .crm-kpi-card.green { border-color: rgba(16, 185, 129, 0.25); background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(21, 26, 35, 0.95) 100%); }
+    .crm-kpi-card.gold,
+    .crm-kpi-card.red,
+    .crm-kpi-card.blue,
+    .crm-kpi-card.green,
+    .crm-kpi-card.failed {
+      border-color: rgba(255, 255, 255, 0.22);
+      background: #111622;
+    }
+    .crm-kpi-card.gold:hover,
+    .crm-kpi-card.red:hover,
+    .crm-kpi-card.blue:hover,
+    .crm-kpi-card.green:hover,
+    .crm-kpi-card.failed:hover {
+      border-color: rgba(255, 255, 255, 0.45);
+    }
 
     .crm-kpi-icon {
       width: 48px;
@@ -1475,25 +1539,135 @@
       box-shadow: 0 2px 8px rgba(235,162,45,0.3);
     }
 
-    /* ── Kanban Pipeline Board ── */
+    /* ── Kanban Pipeline Board (Single Page - No Side Scroll) ── */
     .crm-kanban-board {
       display: grid;
-      grid-template-columns: repeat(4, minmax(280px, 1fr));
-      gap: 16px;
-      overflow-x: auto;
-      padding-bottom: 16px;
-      -webkit-overflow-scrolling: touch;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+      padding-bottom: 12px;
+      box-sizing: border-box;
     }
     .crm-column {
       background: #090d16;
       border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 14px;
+      border-radius: 12px;
       display: flex;
       flex-direction: column;
-      max-height: calc(100vh - 280px);
-      min-height: 520px;
+      max-height: calc(100vh - 290px);
+      min-height: 460px;
       overflow: hidden;
       position: relative;
+      min-width: 0;
+    }
+    
+    /* ── Failed Messages Styling ── */
+    .crm-kpi-card.failed {
+      border-color: rgba(255, 255, 255, 0.22);
+      background: #111622;
+    }
+    .crm-kpi-card.failed:hover {
+      border-color: rgba(255, 255, 255, 0.45);
+    }
+    .crm-kpi-card.failed .crm-kpi-icon {
+      background: rgba(239, 68, 68, 0.18);
+      color: #ef4444;
+    }
+    .crm-stage-pill.pill-failed {
+      color: #f87171;
+    }
+    .crm-stage-pill.pill-failed:hover {
+      background: rgba(239, 68, 68, 0.12);
+      color: #fca5a5;
+    }
+    .crm-stage-pill.pill-failed.active {
+      background: rgba(239, 68, 68, 0.22);
+      color: #ef4444;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+    }
+    .crm-failed-banner {
+      background: linear-gradient(90deg, rgba(239, 68, 68, 0.14) 0%, rgba(17, 24, 39, 0.95) 100%);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      border-radius: 10px;
+      padding: 10px 16px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .crm-failed-banner-content {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: #f1f5f9;
+    }
+    .crm-failed-banner-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .crm-card.has-failed {
+      border-color: rgba(239, 68, 68, 0.45);
+      background: linear-gradient(180deg, rgba(239, 68, 68, 0.06) 0%, #121722 100%);
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.12);
+    }
+    .crm-card-failed-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+    .crm-retry-btn {
+      background: rgba(239, 68, 68, 0.15);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+    .crm-retry-btn:hover {
+      background: #ef4444;
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+    }
+    .crm-gmail-chip {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: rgba(235, 162, 45, 0.12);
+      color: var(--gold);
+      border: 1px solid rgba(235, 162, 45, 0.3);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .crm-gmail-chip:hover {
+      background: var(--gold);
+      color: #0b0e14;
     }
     .crm-column::before {
       content: '';
@@ -1798,14 +1972,12 @@
     /* ── Responsive Design Mastery for Contact Leads CRM ── */
     @media (max-width: 1024px) {
       .crm-kanban-board {
-        grid-template-columns: repeat(4, minmax(260px, 1fr));
-        gap: 14px;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+        overflow-x: hidden;
       }
       .crm-column {
-        scroll-snap-align: start;
-        max-height: calc(100dvh - 240px);
+        max-height: calc(100dvh - 260px);
       }
     }
 
@@ -1987,17 +2159,124 @@
       }
     }
 
+    /* ── Single-Page CRM Grid Table (Strictly 1-Page, Zero Side Scroll) ── */
+    .crm-table-wrapper {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden !important;
+      box-sizing: border-box;
+    }
+    .crm-table-wrapper .panel {
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      background: var(--card);
+      box-sizing: border-box;
+    }
     .crm-table-wrapper .panel-body {
+      padding: 0 !important;
+      overflow-x: hidden !important;
+      overflow-y: auto;
+      max-height: calc(100vh - 290px);
+      min-height: 460px;
+      width: 100%;
+      box-sizing: border-box;
       -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.22) rgba(13, 17, 26, 0.7);
     }
-    .crm-table-wrapper .data-table th,
-    .crm-table-wrapper .data-table td {
+    .crm-table-wrapper .panel-body::-webkit-scrollbar {
+      width: 6px;
+    }
+    .crm-table-wrapper .panel-body::-webkit-scrollbar-track {
+      background: rgba(13, 17, 26, 0.7);
+      border-radius: 4px;
+    }
+    .crm-table-wrapper .panel-body::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.22);
+      border-radius: 4px;
+    }
+    .crm-table-wrapper .panel-body::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+    .crm-table-wrapper .data-table {
+      width: 100% !important;
+      max-width: 100% !important;
+      table-layout: fixed !important;
+      border-collapse: collapse;
+      margin: 0;
+    }
+    .crm-table-wrapper .data-table thead th {
+      position: sticky;
+      top: 0;
+      background: #10141d;
+      z-index: 2;
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #94a3b8;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 12px 14px;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      box-sizing: border-box;
     }
-    .crm-table-wrapper .data-table td:nth-child(4) {
-      white-space: normal;
-      min-width: 180px;
-      max-width: 280px;
+    .crm-table-wrapper .th-actions,
+    .crm-table-wrapper .td-actions {
+      text-align: right !important;
+      padding-right: 18px !important;
+      white-space: nowrap !important;
+      overflow: visible !important;
+    }
+    .crm-table-wrapper .data-table tbody td {
+      padding: 12px 14px;
+      font-size: 12.5px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      vertical-align: middle;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      box-sizing: border-box;
+    }
+    .crm-table-wrapper .data-table tbody tr:hover td {
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .crm-table-wrapper .crm-lead-name {
+      font-weight: 700;
+      color: #fff;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      min-width: 0;
+    }
+    .crm-table-wrapper .crm-lead-email {
+      font-size: 12.5px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: block;
+    }
+    .crm-table-wrapper .crm-lead-snippet {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: #94a3b8;
+    }
+    @media (max-width: 1024px) {
+      .crm-table-wrapper .col-snippet,
+      .crm-table-wrapper .td-snippet {
+        display: none !important;
+      }
+    }
+    @media (max-width: 768px) {
+      .crm-table-wrapper .col-date,
+      .crm-table-wrapper .td-date {
+        display: none !important;
+      }
     }
 
     /* ── CRM Visual Telemetry Strip (Start to End Scanning Animation) ── */
@@ -2190,13 +2469,11 @@
               <i class="bi bi-chat-left-text-fill"></i> Contact Messages
             </a>
           </li>
-          <!-- Contact Leads CRM (Commented out)
           <li>
             <a class="nav-sub-item" onclick="switchTab('leads', this)" id="navSubLeads">
               <i class="bi bi-kanban-fill" style="color:var(--gold);"></i> Contact Leads CRM
             </a>
           </li>
-          -->
           <li>
             <a class="nav-sub-item" onclick="switchTab('email-settings', this)" id="navSubEmailSettings">
               <i class="bi bi-palette2" style="color:var(--gold);"></i> Email UI &amp; Settings
@@ -2286,7 +2563,7 @@
                 <div class="detail-subject" id="detailSubject">—</div>
                 <div class="detail-meta">
                   <div class="detail-meta-item"><i class="bi bi-person-fill"></i> <strong id="detailName">—</strong></div>
-                  <div class="detail-meta-item"><i class="bi bi-envelope-fill"></i> <a id="detailEmail" href="#" style="color:var(--gold); text-decoration:none;">—</a></div>
+                  <div class="detail-meta-item"><i class="bi bi-envelope-fill"></i> <a id="detailEmail" href="#" style="color:#ffffff; text-decoration:none;">—</a></div>
                   <div class="detail-meta-item" id="detailPhoneWrap" style="display:none"><i class="bi bi-telephone-fill"></i> <strong id="detailPhone">—</strong></div>
                   <div class="detail-meta-item"><i class="bi bi-clock-fill"></i> <span id="detailDate">—</span></div>
                   <div class="detail-meta-item"><span id="detailStatusBadge" class="badge badge-new">new</span></div>
@@ -2311,7 +2588,7 @@
               <div class="detail-body" id="detailBodyScroll">
                 <!-- Original message -->
                 <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-                  <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--gold);"></span>
+                  <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#ffffff;"></span>
                   <span style="font-size:11px; color:#94a3b8; font-weight:700; text-transform:uppercase; letter-spacing:0.08em;">Original Customer Message</span>
                 </div>
                 <div class="msg-body-card" id="detailMessage">—</div>
@@ -2322,16 +2599,16 @@
 
               <!-- Compose reply -->
               <div class="reply-compose">
-                <div class="reply-compose-title"><i class="bi bi-reply-fill" style="color:var(--gold);"></i> Reply to Customer</div>
+                <div class="reply-compose-title"><i class="bi bi-reply-fill" style="color:#ffffff;"></i> Reply to Customer</div>
                 <textarea class="reply-textarea" id="replyTextarea" placeholder="Write your reply here..."></textarea>
                 <div class="reply-footer">
-                  <div class="reply-to-info">Sending to: <span id="replyToEmail" style="color:var(--gold); font-weight:600;">—</span></div>
+                  <div class="reply-to-info">Sending to: <span id="replyToEmail" style="color:#ffffff; font-weight:600;">—</span></div>
                   <div style="display:flex; gap:10px; align-items:center;">
-                    <button class="btn btn-gold" id="replyGmailBtn" onclick="replyInGmail()">
+                    <button class="btn" id="replyGmailBtn" onclick="replyInGmail()">
                       <i class="bi bi-google"></i> Reply via Gmail
                     </button>
-                    <button class="btn btn-sm" id="sendReplyBtn" onclick="sendReply()" style="color:#cbd5e1; font-weight:600; border-color:rgba(255,255,255,0.12);">
-                      <i class="bi bi-send-fill" style="color:var(--gold);"></i> Send via Server
+                    <button class="btn btn-sm" id="sendReplyBtn" onclick="sendReply()" style="color:#ffffff; font-weight:600; border-color:rgba(255,255,255,0.2);">
+                      <i class="bi bi-send-fill" style="color:#ffffff;"></i> Send via Server
                     </button>
                   </div>
                 </div>
@@ -2342,13 +2619,11 @@
         </div>
       </div>
 
-      <!-- ── TAB: CONTACT LEADS CRM (REAL EXECUTIVE PIPELINE) (COMMENTED OUT) ──
-<!- - ── TAB: CONTACT LEADS CRM (REAL EXECUTIVE PIPELINE) ── - ->
+      <!-- ── TAB: CONTACT LEADS CRM (REAL EXECUTIVE PIPELINE) ── -->
       <div id="tab-leads" class="admin-tab">
-        <!- - 1. Executive KPI Summary Cards - ->
+        <!-- 1. Executive KPI Summary Cards -->
         <div class="crm-kpi-grid">
           <div class="crm-kpi-card gold">
-            <div class="crm-kpi-icon"><i class="bi bi-people-fill"></i></div>
             <div class="crm-kpi-content">
               <div class="crm-kpi-val" id="crmKpiTotal">0</div>
               <div class="crm-kpi-label">Total Leads Ingested</div>
@@ -2356,7 +2631,6 @@
             <div class="crm-kpi-trend"><i class="bi bi-arrow-up-right"></i> All Time</div>
           </div>
           <div class="crm-kpi-card red">
-            <div class="crm-kpi-icon"><i class="bi bi-lightning-charge-fill"></i></div>
             <div class="crm-kpi-content">
               <div class="crm-kpi-val" id="crmKpiNew">0</div>
               <div class="crm-kpi-label">New / Action Required</div>
@@ -2364,7 +2638,6 @@
             <div class="crm-kpi-trend" style="color:#f87171;"><span class="crm-pulse-dot red"></span> Urgent</div>
           </div>
           <div class="crm-kpi-card blue">
-            <div class="crm-kpi-icon"><i class="bi bi-chat-dots-fill"></i></div>
             <div class="crm-kpi-content">
               <div class="crm-kpi-val" id="crmKpiActive">0</div>
               <div class="crm-kpi-label">Active Outreach / Review</div>
@@ -2372,39 +2645,48 @@
             <div class="crm-kpi-trend" style="color:#60a5fa;"><i class="bi bi-arrow-repeat"></i> In Progress</div>
           </div>
           <div class="crm-kpi-card green">
-            <div class="crm-kpi-icon"><i class="bi bi-trophy-fill"></i></div>
             <div class="crm-kpi-content">
               <div class="crm-kpi-val" id="crmKpiClosed">0</div>
               <div class="crm-kpi-label">Closed / Converted</div>
             </div>
             <div class="crm-kpi-trend" style="color:#34d399;"><i class="bi bi-check2-circle"></i> Resolved</div>
           </div>
+          <div class="crm-kpi-card failed" id="crmKpiCardFailed" onclick="crmFilterStage('failed', document.getElementById('pillFailed'))" style="cursor:pointer;" title="Click to filter Failed Delivery Leads">
+            <div class="crm-kpi-content">
+              <div class="crm-kpi-val" id="crmKpiFailed" style="color:#ef4444;">0</div>
+              <div class="crm-kpi-label">Failed Delivery</div>
+            </div>
+            <div class="crm-kpi-trend" id="crmKpiFailedTrend" style="color:#f87171;"><span class="crm-pulse-dot red"></span> Action Needed</div>
+          </div>
         </div>
 
-        <!- - 2. CRM Control & Toolbar Strip - ->
+        <!-- 2. CRM Control & Toolbar Strip -->
         <div class="crm-toolbar">
           <div class="crm-toolbar-left">
-            <!- - Search Input - ->
+            <!-- Search Input -->
             <div class="search-box-wrap" style="width:280px; max-width:100%;">
               <i class="bi bi-search search-icon"></i>
-              <input type="text" id="crmSearchInput" class="search-input-field" placeholder="Search leads by name, email, topic..." oninput="crmSearchDebounce()">
+              <input type="text" id="crmSearchInput" class="search-box" placeholder="Search leads by name, email, topic..." oninput="crmSearchDebounce()">
               <button type="button" id="crmSearchClear" onclick="crmClearSearch()" style="display:none; position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; color:#94a3b8; cursor:pointer;" aria-label="Clear search">
                 <i class="bi bi-x-circle-fill"></i>
               </button>
             </div>
             
-            <!- - Stage Filter Pills - ->
+            <!-- Stage Filter Pills -->
             <div class="crm-stage-pills">
               <button type="button" class="crm-stage-pill active" onclick="crmFilterStage('', this)">All</button>
               <button type="button" class="crm-stage-pill" onclick="crmFilterStage('new', this)">New</button>
               <button type="button" class="crm-stage-pill" onclick="crmFilterStage('in_review', this)">In Review</button>
               <button type="button" class="crm-stage-pill" onclick="crmFilterStage('contacted', this)">Contacted</button>
               <button type="button" class="crm-stage-pill" onclick="crmFilterStage('closed', this)">Closed</button>
+              <button type="button" class="crm-stage-pill pill-failed" id="pillFailed" onclick="crmFilterStage('failed', this)" title="Filter Failed Delivery Inquiries">
+                <i class="bi bi-exclamation-triangle-fill" style="color:#ef4444;"></i> Failed (<span id="crmFailedPillCount">0</span>)
+              </button>
             </div>
           </div>
 
           <div class="crm-toolbar-right">
-            <!- - View Switcher Toggle - ->
+            <!-- View Switcher Toggle -->
             <div class="crm-view-switcher">
               <button type="button" id="crmViewKanbanBtn" class="crm-view-btn active" onclick="crmSetView('kanban')" title="Kanban Pipeline View">
                 <i class="bi bi-kanban-fill"></i> Pipeline Board
@@ -2414,10 +2696,10 @@
               </button>
             </div>
 
-            <!- - Action Buttons - ->
-            <button type="button" class="btn btn-sm" onclick="runCrmStartToEndAnimation()" title="Replay Start-to-End Scanning Animation" style="padding:7px 12px; background:rgba(235,162,45,0.15); border-color:rgba(235,162,45,0.4); color:var(--gold);">
+            <!-- Action Buttons -->
+            <!-- <button type="button" class="btn btn-sm" onclick="runCrmStartToEndAnimation()" title="Replay Start-to-End Scanning Animation" style="padding:7px 12px; background:rgba(235,162,45,0.15); border-color:rgba(235,162,45,0.4); color:var(--gold);">
               <i class="bi bi-lightning-charge-fill"></i> <span>Replay Scan</span>
-            </button>
+            </button> -->
             <button type="button" class="btn btn-sm" onclick="exportLeadsCsv()" title="Export CSV Report" style="padding:7px 12px;">
               <i class="bi bi-download"></i> <span>Export CSV</span>
             </button>
@@ -2427,24 +2709,25 @@
           </div>
         </div>
 
-        <!- - Visual Pipeline Telemetry & Scan Bar (Start to End) - ->
-        <div id="crmTelemetryStrip" class="crm-telemetry-strip">
-          <div class="crm-telemetry-status">
-            <div class="crm-telemetry-indicator">
-              <span class="crm-telemetry-pulse"></span>
-              <span id="crmTelemetryText" class="crm-telemetry-text">Initializing Pipeline Telemetry...</span>
-            </div>
-            <div class="crm-telemetry-percent" id="crmTelemetryPercent">0%</div>
+        <!-- Failed Delivery Quick-Action Banner (Shown when failures exist) -->
+        <div id="crmFailedBanner" class="crm-failed-banner" style="display:none;">
+          <div class="crm-failed-banner-content">
+            <span class="crm-pulse-dot red"></span>
+            <span id="crmFailedBannerText"><strong>Delivery Failure Detected:</strong> Outbound notification could not be delivered.</span>
           </div>
-          <div class="crm-telemetry-track">
-            <div class="crm-telemetry-bar" id="crmTelemetryBar"></div>
-            <div class="crm-telemetry-spark" id="crmTelemetrySpark"></div>
+          <div class="crm-failed-banner-actions">
+            <button type="button" class="btn btn-sm" onclick="crmFilterStage('failed', document.getElementById('pillFailed'))" style="background:rgba(239,68,68,0.2); color:#fca5a5; border-color:rgba(239,68,68,0.4);">
+              <i class="bi bi-filter"></i> View Failed Leads
+            </button>
+            <button type="button" class="btn btn-sm btn-gold" onclick="crmRetryAllFailedLeads()">
+              <i class="bi bi-arrow-clockwise"></i> 1-Click Retry All
+            </button>
           </div>
         </div>
 
-        <!- - 3. Kanban Pipeline Board Stage Columns - ->
+        <!-- 3. Kanban Pipeline Board Stage Columns -->
         <div id="crmKanbanView" class="crm-kanban-board">
-          <!- - Stage 1: New Leads - ->
+          <!-- Stage 1: New Leads -->
           <div class="crm-column stage-new">
             <div class="crm-column-header">
               <div class="crm-col-title-wrap">
@@ -2454,11 +2737,11 @@
               <span class="crm-col-badge" id="crmCountNew">0</span>
             </div>
             <div class="crm-cards-container" id="crmCardsNew">
-              <!- - Rendered cards - ->
+              <!-- Rendered cards -->
             </div>
           </div>
 
-          <!- - Stage 2: In Review - ->
+          <!-- Stage 2: In Review -->
           <div class="crm-column stage-review">
             <div class="crm-column-header">
               <div class="crm-col-title-wrap">
@@ -2468,11 +2751,11 @@
               <span class="crm-col-badge" id="crmCountReview">0</span>
             </div>
             <div class="crm-cards-container" id="crmCardsReview">
-              <!- - Rendered cards - ->
+              <!-- Rendered cards -->
             </div>
           </div>
 
-          <!- - Stage 3: Contacted / In Discussion - ->
+          <!-- Stage 3: Contacted / In Discussion -->
           <div class="crm-column stage-contacted">
             <div class="crm-column-header">
               <div class="crm-col-title-wrap">
@@ -2482,11 +2765,11 @@
               <span class="crm-col-badge" id="crmCountContacted">0</span>
             </div>
             <div class="crm-cards-container" id="crmCardsContacted">
-              <!- - Rendered cards - ->
+              <!-- Rendered cards -->
             </div>
           </div>
 
-          <!- - Stage 4: Closed / Converted - ->
+          <!-- Stage 4: Closed / Converted -->
           <div class="crm-column stage-closed">
             <div class="crm-column-header">
               <div class="crm-col-title-wrap">
@@ -2496,39 +2779,48 @@
               <span class="crm-col-badge" id="crmCountClosed">0</span>
             </div>
             <div class="crm-cards-container" id="crmCardsClosed">
-              <!- - Rendered cards - ->
+              <!-- Rendered cards -->
             </div>
           </div>
         </div>
 
-        <!- - 4. Detailed Table View (Toggled) - ->
+        <!-- 4. Detailed Table View (Toggled) -->
         <div id="crmTableView" class="crm-table-wrapper" style="display:none;">
-          <div class="panel" style="margin-bottom:0; background:var(--card); border:1px solid var(--border); border-radius:14px; overflow:hidden;">
-            <div class="panel-body" style="padding:0; overflow-x:auto;">
-              <table class="data-table" style="width:100%;">
+          <div class="panel" style="margin-bottom:0; background:var(--card); border:1px solid rgba(255,255,255,0.12); border-radius:14px; overflow:hidden;">
+            <div class="panel-body" style="padding:0; overflow-x:hidden;">
+              <table class="data-table" style="width:100%; table-layout:fixed;">
+                <colgroup>
+                  <col style="width: 16%;">
+                  <col style="width: 18%;">
+                  <col style="width: 11%;">
+                  <col class="col-snippet" style="width: 21%;">
+                  <col style="width: 11%;">
+                  <col class="col-date" style="width: 11%;">
+                  <col class="col-actions" style="width: 12%;">
+                </colgroup>
                 <thead>
                   <tr>
-                    <th style="padding:14px 18px;">Customer Lead</th>
-                    <th>Contact Details</th>
-                    <th>Inquiry Topic</th>
-                    <th>Message Snippet</th>
-                    <th>Pipeline Stage</th>
-                    <th>Date Received</th>
-                    <th style="text-align:right; padding-right:18px;">Actions</th>
+                    <th style="padding:12px 14px;">Customer Lead</th>
+                    <th style="padding:12px 14px;">Contact Details</th>
+                    <th style="padding:12px 14px;">Inquiry Topic</th>
+                    <th class="col-snippet" style="padding:12px 14px;">Message Snippet</th>
+                    <th style="padding:12px 14px;">Pipeline Stage</th>
+                    <th class="col-date" style="padding:12px 14px; text-align:center;">Date Received</th>
+                    <th class="th-actions" style="text-align:right; padding:12px 18px;">Actions</th>
                   </tr>
                 </thead>
                 <tbody id="crmTableBody">
-                  <!- - Dynamic rows - ->
+                  <!-- Dynamic rows -->
                 </tbody>
               </table>
             </div>
           </div>
         </div>
 
-        <!- - 5. Lead Intelligence Drawer / Modal - ->
+        <!-- 5. Lead Intelligence Drawer / Modal -->
         <div id="crmDrawerBackdrop" class="crm-drawer-backdrop" style="display:none;" onclick="if(event.target===this) closeCrmDrawer()">
           <div class="crm-drawer" role="dialog" aria-modal="true" aria-labelledby="crmDrawerName">
-            <!- - Drawer Header - ->
+            <!-- Drawer Header -->
             <div class="crm-drawer-header">
               <div style="display:flex; align-items:center; gap:12px;">
                 <div class="crm-avatar" id="crmDrawerAvatar" style="width:44px; height:44px; font-size:16px;">—</div>
@@ -2537,14 +2829,19 @@
                   <span id="crmDrawerDate" style="font-size:12px; color:#94a3b8;">—</span>
                 </div>
               </div>
-              <button type="button" class="delete-modal-close" onclick="closeCrmDrawer()" aria-label="Close dossier">
-                <i class="bi bi-x-lg"></i>
-              </button>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <button type="button" class="btn btn-sm btn-danger" onclick="crmDrawerDelete()" style="padding:6px 12px; font-weight:600; display:inline-flex; align-items:center; gap:6px; border-radius:8px;" title="Delete this conversation">
+                  <i class="bi bi-trash3-fill"></i> Delete
+                </button>
+                <button type="button" class="delete-modal-close" onclick="closeCrmDrawer()" aria-label="Close dossier">
+                  <i class="bi bi-x-lg"></i>
+                </button>
+              </div>
             </div>
 
-            <!- - Drawer Body - ->
+            <!-- Drawer Body -->
             <div class="crm-drawer-body">
-              <!- - Quick Stage Selector Banner - ->
+              <!-- Quick Stage Selector Banner -->
               <div class="crm-drawer-section">
                 <label class="crm-drawer-label">Pipeline Stage Progression</label>
                 <div style="display:flex; gap:10px; align-items:center;">
@@ -2557,12 +2854,17 @@
                 </div>
               </div>
 
-              <!- - Contact Profile Details - ->
+              <!-- Contact Profile Details -->
               <div class="crm-drawer-section">
                 <label class="crm-drawer-label">Contact Intelligence</label>
                 <div class="crm-drawer-info-grid">
                   <div class="crm-info-box">
-                    <span class="crm-info-title"><i class="bi bi-envelope-fill"></i> Email Address</span>
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
+                      <span class="crm-info-title" style="margin-bottom:0;"><i class="bi bi-envelope-fill"></i> Email Address</span>
+                      <button type="button" class="btn-icon" onclick="crmDrawerCopyEmail()" id="crmCopyEmailBtn" title="Copy email address" aria-label="Copy email address" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); color:#94a3b8; border-radius:6px; padding:3px 7px; cursor:pointer; font-size:12px; transition:all 0.2s;">
+                        <i class="bi bi-clipboard" id="crmCopyEmailIcon"></i>
+                      </button>
+                    </div>
                     <a id="crmDrawerEmail" href="#" class="crm-info-val highlight">—</a>
                   </div>
                   <div class="crm-info-box">
@@ -2576,7 +2878,7 @@
                 </div>
               </div>
 
-              <!- - Inquiry Full Message - ->
+              <!-- Inquiry Full Message -->
               <div class="crm-drawer-section">
                 <label class="crm-drawer-label">Client Inquiry Message</label>
                 <div class="crm-message-quote" id="crmDrawerMessage">
@@ -2584,31 +2886,56 @@
                 </div>
               </div>
 
-              <!- - Internal Notes / Follow-up Scratchpad - ->
+              <!-- Delivery Diagnostics & Retry Strip -->
+              <div class="crm-drawer-section" id="crmDrawerDeliverySection" style="display:none;">
+                <div style="background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.3); border-radius:8px; padding:12px 14px; display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                  <div>
+                    <span style="color:#f87171; font-weight:700; font-size:12.5px; display:block;"><i class="bi bi-exclamation-triangle-fill"></i> Delivery Failure Detected</span>
+                    <span style="color:#cbd5e1; font-size:11.5px;">Outbound notification or auto-reply email was not delivered.</span>
+                  </div>
+                  <button type="button" class="btn btn-sm btn-gold" id="crmDrawerRetryBtn" onclick="crmRetryCurrentDrawerLead()" style="padding:6px 12px; font-weight:700;">
+                    <i class="bi bi-arrow-clockwise"></i> Retry Send
+                  </button>
+                </div>
+              </div>
+
+              <!-- Conversation History (Replies) -->
+              <div class="crm-drawer-section" id="crmDrawerThreadSection" style="display:none;">
+                <label class="crm-drawer-label"><i class="bi bi-clock-history" style="color:var(--gold);"></i> Conversation History (<span id="crmDrawerReplyCount">0</span>)</label>
+                <div id="crmDrawerReplyThread" style="display:flex; flex-direction:column; gap:8px;"></div>
+              </div>
+
+              <!-- Reply to Customer Composer -->
+              <div class="crm-drawer-section">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                  <label class="crm-drawer-label" style="margin:0;"><i class="bi bi-reply-fill" style="color:var(--gold);"></i> Reply to Customer</label>
+                  <span style="font-size:11.5px; color:#94a3b8;">Sending to: <strong id="crmDrawerReplyTo" style="color:var(--gold);">—</strong></span>
+                </div>
+                <textarea id="crmDrawerReplyText" class="search-input" style="width:100%; height:85px; resize:vertical; font-size:13px; font-family:inherit; padding:10px; line-height:1.5;" placeholder="Type your reply to customer here... (Click 'Reply via Server' to send email directly, or 'Reply in Gmail')"></textarea>
+              </div>
+
+              <!-- Internal Notes / Follow-up Scratchpad -->
               <div class="crm-drawer-section">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
                   <label class="crm-drawer-label" style="margin:0;"><i class="bi bi-sticky-fill" style="color:var(--gold);"></i> Admin Follow-up Notes</label>
                   <span style="font-size:11px; color:#94a3b8;">Local autosave</span>
                 </div>
-                <textarea id="crmDrawerNotes" class="search-input" style="width:100%; height:90px; resize:vertical; font-size:13px; font-family:inherit; padding:10px;" placeholder="Add private notes on negotiations, follow-up calls, custom quote details..."></textarea>
+                <textarea id="crmDrawerNotes" class="search-input" style="width:100%; height:80px; resize:vertical; font-size:13px; font-family:inherit; padding:10px;" placeholder="Add private notes on negotiations, follow-up calls, custom quote details..."></textarea>
               </div>
             </div>
 
-            <!- - Drawer Footer Action Bar - ->
-            <div class="crm-drawer-footer">
-              <button type="button" class="btn" onclick="crmDrawerCopyEmail()" id="crmCopyEmailBtn" style="min-height:42px;">
-                <i class="bi bi-clipboard"></i> Copy Email
-              </button>
-              <button type="button" class="btn btn-gold" onclick="crmDrawerReplyGmail()" style="min-height:42px; font-weight:700;">
+            <!-- Drawer Footer Action Bar -->
+            <div class="crm-drawer-footer" style="display:flex; align-items:center; justify-content:flex-end; gap:12px; padding:16px 24px;">
+              <button type="button" class="btn" onclick="crmDrawerReplyGmail()" style="min-height:42px; padding:10px 18px; font-weight:600; border-color:rgba(255,255,255,0.15); display:inline-flex; align-items:center; gap:8px;">
                 <i class="bi bi-google"></i> Reply in Gmail
+              </button>
+              <button type="button" class="btn btn-gold" id="crmDrawerSendServerBtn" onclick="crmDrawerSendReplyServer()" style="min-height:42px; padding:10px 20px; font-weight:700; display:inline-flex; align-items:center; gap:8px;">
+                <i class="bi bi-send-fill"></i> Reply via Server
               </button>
             </div>
           </div>
         </div>
       </div>
-
-      
-      -->
 
       <!-- ── TAB: EMAIL SETTINGS ── -->
       <div id="tab-email-settings" class="admin-tab">
@@ -2754,6 +3081,14 @@
                   <label class="toggle-label" for="notifEnabled">Enable email notifications for new contact submissions</label>
                 </div>
                 <div class="form-hint">When OFF, messages are still saved to the inbox. You'll never lose a submission.</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Delivery Failure Alerts</label>
+                <div class="toggle-switch">
+                  <input type="checkbox" class="toggle-input" id="failureAlertEnabled" checked>
+                  <label class="toggle-label" for="failureAlertEnabled">Notify business email immediately if an outbound email fails to deliver</label>
+                </div>
+                <div class="form-hint">Sends an immediate failure diagnostic report with customer details, server error reason, and a 1-click Direct Gmail link to the business email when auto-replies or outbound messages bounce.</div>
               </div>
               <div class="form-group">
                 <label class="form-label">Notification Preference</label>
@@ -3235,7 +3570,7 @@
             <div class="msg-preview">${escHtml(m.message)}</div>
             <div class="msg-meta">
               <span class="msg-time"><i class="bi bi-clock"></i> ${fmt(m.created_at)}</span>
-              ${m.reply_count > 0 ? `<span style="font-size:10.5px; color:var(--gold); font-weight:600;"><i class="bi bi-chat-left-fill"></i> ${m.reply_count}</span>` : ''}
+              ${m.reply_count > 0 ? `<span style="font-size:10.5px; color:#ffffff; font-weight:600;"><i class="bi bi-chat-left-fill"></i> ${m.reply_count}</span>` : ''}
             </div>
           </div>`;
       }).join('');
@@ -3304,12 +3639,12 @@
             ${replies.map(r => `
               <div class="reply-bubble">
                 <div class="reply-meta">
-                  <span style="display:inline-flex; align-items:center; gap:5px; color:var(--gold); font-weight:700;">
+                  <span style="display:inline-flex; align-items:center; gap:5px; color:#ffffff; font-weight:700;">
                     <i class="bi bi-shield-lock-fill"></i> ${escHtml(r.sent_by || 'Admin')}
                   </span>
                   <span><i class="bi bi-clock"></i> ${fmt(r.sent_at)}</span>
                   <span class="badge badge-${r.email_sent ? 'sent' : 'failed'}" style="font-size:9.5px; margin-left:auto;">${r.email_sent ? '✓ Emailed' : '✗ Email failed'}</span>
-                  ${r.email_error ? `<span style="font-size:10.5px; color:var(--danger);" title="${escHtml(r.email_error)}">⚠ ${escHtml(r.email_error.substring(0,50))}</span>` : ''}
+                  ${r.email_error ? `<span style="font-size:10.5px; color:#cbd5e1;" title="${escHtml(r.email_error)}">⚠ ${escHtml(r.email_error.substring(0,50))}</span>` : ''}
                 </div>
                 <div class="reply-body-text">${escHtml(r.reply_body)}</div>
               </div>
@@ -3421,14 +3756,23 @@
         });
         if (res.ok) {
           toast('Message deleted successfully');
-          allMessages = allMessages.filter(m => m.id !== currentMsgId);
+          const deletedId = currentMsgId;
+          allMessages = allMessages.filter(m => m.id !== deletedId);
+          if (Array.isArray(window.crmAllLeads)) {
+            window.crmAllLeads = window.crmAllLeads.filter(l => l.id !== deletedId);
+          }
           currentMsgId = null;
           currentSubmission = null;
+          crmSelectedLead = null;
           closeDeleteModal();
-          document.getElementById('msgDetailView').classList.remove('visible');
-          document.getElementById('detailEmpty').style.display = '';
+          if (typeof closeCrmDrawer === 'function') closeCrmDrawer();
+          const detailView = document.getElementById('msgDetailView');
+          if (detailView) detailView.classList.remove('visible');
+          const detailEmpty = document.getElementById('detailEmpty');
+          if (detailEmpty) detailEmpty.style.display = '';
           document.querySelector('.inbox-shell')?.classList.remove('show-detail');
           renderList();
+          if (typeof crmRenderAll === 'function') crmRenderAll();
         } else {
           toast('Failed to delete message', 'error');
         }
@@ -3645,23 +3989,49 @@
       const newCount = crmAllLeads.filter(l => l.status === 'new').length;
       const activeCount = crmAllLeads.filter(l => l.status === 'in_review' || l.status === 'contacted' || l.status === 'replied').length;
       const closedCount = crmAllLeads.filter(l => l.status === 'closed').length;
+      const failedCount = crmAllLeads.filter(l => l.email_notify_status === 'failed').length;
 
       const elTotal = document.getElementById('crmKpiTotal');
       const elNew = document.getElementById('crmKpiNew');
       const elActive = document.getElementById('crmKpiActive');
       const elClosed = document.getElementById('crmKpiClosed');
+      const elFailed = document.getElementById('crmKpiFailed');
+      const elFailedTrend = document.getElementById('crmKpiFailedTrend');
+      const elPillCount = document.getElementById('crmFailedPillCount');
+      const elBanner = document.getElementById('crmFailedBanner');
+      const elBannerText = document.getElementById('crmFailedBannerText');
 
       if (elTotal) elTotal.textContent = total;
       if (elNew) elNew.textContent = newCount;
       if (elActive) elActive.textContent = activeCount;
       if (elClosed) elClosed.textContent = closedCount;
+      if (elFailed) elFailed.textContent = failedCount;
+      if (elFailedTrend) {
+        elFailedTrend.innerHTML = failedCount > 0
+          ? `<span class="crm-pulse-dot red"></span> ${failedCount} Issue${failedCount > 1 ? 's' : ''}`
+          : `<i class="bi bi-check2-circle" style="color:#34d399;"></i> All Good`;
+      }
+      if (elPillCount) elPillCount.textContent = failedCount;
+
+      if (elBanner) {
+        if (failedCount > 0) {
+          elBanner.style.display = 'flex';
+          if (elBannerText) {
+            elBannerText.innerHTML = `<strong>${failedCount} Delivery Failure${failedCount > 1 ? 's' : ''} Detected:</strong> Action required to retry or contact client directly.`;
+          }
+        } else {
+          elBanner.style.display = 'none';
+        }
+      }
     }
 
     function crmGetFilteredLeads() {
       return crmAllLeads.filter(l => {
         // Stage filter
         if (crmFilterStatus) {
-          if (crmFilterStatus === 'contacted') {
+          if (crmFilterStatus === 'failed') {
+            if (l.email_notify_status !== 'failed') return false;
+          } else if (crmFilterStatus === 'contacted') {
             if (l.status !== 'contacted' && l.status !== 'replied') return false;
           } else if (l.status !== crmFilterStatus) {
             return false;
@@ -3731,13 +4101,20 @@
           const initials = crmGetInitials(l.full_name);
           const bg = crmGetAvatarColor(l.full_name);
           const topic = escHtml(l.subject || 'General Inquiry');
+          const isFailed = l.email_notify_status === 'failed';
+          const cardClass = isFailed ? 'crm-card has-failed' : 'crm-card';
+          const encodedSubject = encodeURIComponent(`Re: ${l.subject || "Your Inquiry"} — Omni Virtual Solutions`);
+          const encodedBody = encodeURIComponent(`Hello ${l.full_name || ""},\n\nThank you for reaching out to Omni Virtual Solutions.\n\n`);
+          const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(l.email || "")}&su=${encodedSubject}&body=${encodedBody}`;
+
           return `
-            <div class="crm-card" onclick="openCrmLeadDrawer(${l.id})">
+            <div class="${cardClass}" onclick="openCrmLeadDrawer(${l.id})">
               <div class="crm-card-header">
                 <div class="crm-avatar" style="background:${bg};">${initials}</div>
                 <div class="crm-card-user">
                   <div class="crm-card-name" title="${escHtml(l.full_name)}">${escHtml(l.full_name)}</div>
                   <div class="crm-card-time"><i class="bi bi-clock"></i> ${fmt(l.created_at)}</div>
+                  ${isFailed ? `<span class="crm-card-failed-badge"><i class="bi bi-exclamation-triangle-fill"></i> Email Failed</span>` : ''}
                 </div>
               </div>
               <div class="crm-card-topic" title="${topic}">${topic}</div>
@@ -3745,15 +4122,23 @@
               <div class="crm-card-footer" onclick="event.stopPropagation()">
                 <div class="crm-chips-wrap">
                   <a href="mailto:${escHtml(l.email)}" class="crm-chip" title="Email: ${escHtml(l.email)}"><i class="bi bi-envelope"></i></a>
+                  <a href="${gmailComposeUrl}" target="_blank" class="crm-gmail-chip" title="Direct Compose in Gmail"><i class="bi bi-google"></i></a>
                   ${l.phone ? `<a href="tel:${escHtml(l.phone)}" class="crm-chip" title="Call: ${escHtml(l.phone)}"><i class="bi bi-telephone"></i></a>` : ''}
                 </div>
-                ${nextStage ? `
-                  <button type="button" class="crm-advance-btn" onclick="crmAdvanceStage(${l.id}, '${nextStage}')" title="Move to ${nextLabel}">
-                    ${nextLabel} &rarr;
-                  </button>
-                ` : `
-                  <span style="font-size:11px; color:#34d399; font-weight:700;"><i class="bi bi-check-circle-fill"></i> Closed</span>
-                `}
+                <div style="display:flex; align-items:center; gap:6px;">
+                  ${isFailed ? `
+                    <button type="button" class="crm-retry-btn" onclick="crmRetrySingleLead(${l.id}, event)" title="1-Click Retry Dispatch">
+                      <i class="bi bi-arrow-clockwise"></i> Retry
+                    </button>
+                  ` : ''}
+                  ${nextStage ? `
+                    <button type="button" class="crm-advance-btn" onclick="crmAdvanceStage(${l.id}, '${nextStage}')" title="Move to ${nextLabel}">
+                      ${nextLabel} &rarr;
+                    </button>
+                  ` : `
+                    <span style="font-size:11px; color:#34d399; font-weight:700;"><i class="bi bi-check-circle-fill"></i> Closed</span>
+                  `}
+                </div>
               </div>
             </div>
           `;
@@ -3779,29 +4164,33 @@
         const bg = crmGetAvatarColor(l.full_name);
         return `
           <tr style="cursor:pointer;" onclick="openCrmLeadDrawer(${l.id})">
-            <td style="padding:14px 18px;">
-              <div style="display:flex; align-items:center; gap:10px;">
-                <div class="crm-avatar" style="background:${bg}; width:32px; height:32px; font-size:11px;">${initials}</div>
-                <div style="font-weight:700; color:#fff;">${escHtml(l.full_name)}</div>
+            <td style="padding:12px 14px;">
+              <div style="display:flex; align-items:center; gap:10px; min-width:0; overflow:hidden;">
+                <div class="crm-avatar" style="background:${bg}; width:30px; height:30px; font-size:11px; flex-shrink:0;">${initials}</div>
+                <div class="crm-lead-name" title="${escHtml(l.full_name)}">${escHtml(l.full_name)}</div>
               </div>
             </td>
-            <td>
-              <div style="font-size:12.5px;"><a href="mailto:${escHtml(l.email)}" style="color:var(--gold); text-decoration:none;" onclick="event.stopPropagation()">${escHtml(l.email)}</a></div>
-              ${l.phone ? `<div style="font-size:11.5px; color:var(--muted);">${escHtml(l.phone)}</div>` : ''}
+            <td style="padding:12px 14px; min-width:0; overflow:hidden;">
+              <div class="crm-lead-email" title="${escHtml(l.email)}"><a href="mailto:${escHtml(l.email)}" style="color:var(--gold); text-decoration:none;" onclick="event.stopPropagation()">${escHtml(l.email)}</a></div>
+              ${l.phone ? `<div style="font-size:11.5px; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${escHtml(l.phone)}">${escHtml(l.phone)}</div>` : ''}
             </td>
-            <td><span class="crm-card-topic" style="margin:0;">${escHtml(l.subject || 'General Inquiry')}</span></td>
-            <td style="max-width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#94a3b8;" title="${escHtml(l.message)}">${escHtml(l.message)}</td>
-            <td onclick="event.stopPropagation()">
-              <select onchange="crmUpdateLeadStatusDirect(${l.id}, this.value)" style="background:#1a202c; color:#fff; border:1px solid var(--border); border-radius:6px; padding:4px 8px; font-size:12px; font-weight:600;">
+            <td style="padding:12px 14px; min-width:0; overflow:hidden;">
+              <span class="crm-card-topic" style="margin:0; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:inline-block;" title="${escHtml(l.subject || 'General Inquiry')}">${escHtml(l.subject || 'General Inquiry')}</span>
+            </td>
+            <td class="col-snippet td-snippet" style="padding:12px 14px; min-width:0; overflow:hidden;">
+              <div class="crm-lead-snippet" title="${escHtml(l.message)}">${escHtml(l.message)}</div>
+            </td>
+            <td style="padding:12px 14px; min-width:0; overflow:hidden;" onclick="event.stopPropagation()">
+              <select onchange="crmUpdateLeadStatusDirect(${l.id}, this.value)" style="background:#1a202c; color:#fff; border:1px solid rgba(255,255,255,0.14); border-radius:6px; padding:4px 6px; font-size:11.5px; font-weight:600; width:100%; max-width:110px;">
                 <option value="new" ${l.status === 'new' ? 'selected' : ''}>🟡 New</option>
                 <option value="in_review" ${l.status === 'in_review' ? 'selected' : ''}>🔵 In Review</option>
                 <option value="contacted" ${l.status === 'contacted' || l.status === 'replied' ? 'selected' : ''}>🟣 Contacted</option>
                 <option value="closed" ${l.status === 'closed' ? 'selected' : ''}>🟢 Closed</option>
               </select>
             </td>
-            <td style="font-size:12px; color:var(--muted); white-space:nowrap;">${fmt(l.created_at)}</td>
-            <td style="text-align:right; padding-right:18px;" onclick="event.stopPropagation()">
-              <button type="button" class="btn btn-sm" onclick="openCrmLeadDrawer(${l.id})" style="padding:4px 10px; font-size:11.5px;">
+            <td class="col-date td-date" style="padding:12px 14px; font-size:11.5px; color:var(--muted); white-space:nowrap; text-align:center;">${fmt(l.created_at)}</td>
+            <td class="td-actions" style="text-align:right; padding:12px 18px;" onclick="event.stopPropagation()">
+              <button type="button" class="btn btn-sm" onclick="openCrmLeadDrawer(${l.id})" style="padding:4px 10px; font-size:11.5px; white-space:nowrap; font-weight:600;" title="View Dossier">
                 <i class="bi bi-eye"></i> Dossier
               </button>
             </td>
@@ -3880,6 +4269,60 @@
       }, 250);
     };
 
+    window.crmRetrySingleLead = async function(id, event) {
+      if (event) event.stopPropagation();
+      try {
+        toast('Retrying email dispatch for lead #' + id + '...', 'info');
+        const res = await fetch('/api/v1/contact/submissions/' + id + '/retry', {
+          method: 'POST',
+          headers: { Authorization: 'Bearer ' + token }
+        });
+        const data = await res.json();
+        if (data.success) {
+          toast('Email sent successfully!', 'success');
+          const lead = crmAllLeads.find(l => l.id === id);
+          if (lead) lead.email_notify_status = 'sent';
+          crmRenderAll();
+        } else {
+          toast('Retry failed: ' + (data.reason || 'Server error'), 'error');
+        }
+      } catch (e) {
+        toast('Network error during retry', 'error');
+      }
+    };
+
+    window.crmRetryAllFailedLeads = async function() {
+      const failed = crmAllLeads.filter(l => l.email_notify_status === 'failed');
+      if (!failed.length) {
+        toast('No failed leads to retry', 'info');
+        return;
+      }
+      toast(`Retrying ${failed.length} failed lead(s)...`, 'info');
+      try {
+        const res = await fetch('/api/v1/contact/submissions/retry-pending', {
+          method: 'POST',
+          headers: { Authorization: 'Bearer ' + token }
+        });
+        const data = await res.json();
+        toast('Retry batch completed', 'success');
+        await loadLeadsCRM();
+      } catch (e) {
+        toast('Network error during batch retry', 'error');
+      }
+    };
+
+    window.crmRetryCurrentDrawerLead = async function() {
+      if (!crmSelectedLead) return;
+      const btn = document.getElementById('crmDrawerRetryBtn');
+      if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner-sm"></span> Retrying...'; }
+      await crmRetrySingleLead(crmSelectedLead.id);
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="bi bi-arrow-clockwise"></i> Retry Send'; }
+      if (crmSelectedLead.email_notify_status === 'sent') {
+        const sec = document.getElementById('crmDrawerDeliverySection');
+        if (sec) sec.style.display = 'none';
+      }
+    };
+
     window.crmClearSearch = function() {
       const input = document.getElementById('crmSearchInput');
       if (input) input.value = '';
@@ -3893,6 +4336,8 @@
       const lead = crmAllLeads.find(l => l.id === id);
       if (!lead) return;
       crmSelectedLead = lead;
+      currentMsgId = lead.id;
+      currentSubmission = lead;
 
       const initials = crmGetInitials(lead.full_name);
       const bg = crmGetAvatarColor(lead.full_name);
@@ -3905,22 +4350,138 @@
       const elMsg = document.getElementById('crmDrawerMessage');
       const elStage = document.getElementById('crmDrawerStageSelect');
       const elNotes = document.getElementById('crmDrawerNotes');
+      const elReplyText = document.getElementById('crmDrawerReplyText');
+      const elReplyTo = document.getElementById('crmDrawerReplyTo');
 
       if (elAvatar) { elAvatar.textContent = initials; elAvatar.style.background = bg; }
       if (elName) elName.textContent = lead.full_name;
       if (elDate) elDate.textContent = 'Received ' + fmt(lead.created_at) + (lead.created_at ? ' (' + lead.created_at.substring(0, 10) + ')' : '');
       if (elEmail) { elEmail.textContent = lead.email || '—'; elEmail.href = 'mailto:' + (lead.email || ''); }
+      if (elReplyTo) { elReplyTo.textContent = lead.email || '—'; }
       if (elPhone) elPhone.textContent = lead.phone || 'No phone provided';
       if (elSubject) elSubject.textContent = lead.subject || 'General Inquiry';
       if (elMsg) elMsg.textContent = lead.message || '—';
       if (elStage) elStage.value = lead.status === 'replied' ? 'contacted' : lead.status;
+      if (elReplyText) elReplyText.value = '';
 
       // LocalStorage notes
       const notesKey = 'omni_crm_notes_' + lead.id;
       if (elNotes) elNotes.value = localStorage.getItem(notesKey) || '';
 
+      const deliverySection = document.getElementById('crmDrawerDeliverySection');
+      if (deliverySection) {
+        deliverySection.style.display = lead.email_notify_status === 'failed' ? 'block' : 'none';
+      }
+
+      // Load replies history
+      crmLoadDrawerReplies(lead.id);
+
       const backdrop = document.getElementById('crmDrawerBackdrop');
       if (backdrop) backdrop.style.display = 'flex';
+    };
+
+    async function crmLoadDrawerReplies(id) {
+      const threadEl = document.getElementById('crmDrawerReplyThread');
+      const threadSection = document.getElementById('crmDrawerThreadSection');
+      const countEl = document.getElementById('crmDrawerReplyCount');
+      if (!threadEl) return;
+      try {
+        const res = await fetch('/api/v1/contact/submissions/' + id, {
+          headers: { Authorization: 'Bearer ' + token }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const replies = data.replies || [];
+          if (countEl) countEl.textContent = replies.length;
+          if (replies.length > 0) {
+            if (threadSection) threadSection.style.display = 'block';
+            threadEl.innerHTML = replies.map(r => `
+              <div class="reply-bubble" style="margin-bottom:8px; padding:12px 14px; background:linear-gradient(135deg, rgba(235,162,45,0.06) 0%, rgba(15,23,42,0.85) 100%);">
+                <div class="reply-meta" style="font-size:11px; margin-bottom:6px;">
+                  <span style="display:inline-flex; align-items:center; gap:5px; color:var(--gold); font-weight:700;">
+                    <i class="bi bi-shield-lock-fill"></i> ${escHtml(r.sent_by || 'Admin')}
+                  </span>
+                  <span><i class="bi bi-clock"></i> ${fmt(r.sent_at)}</span>
+                  <span class="badge badge-${r.email_sent ? 'sent' : 'failed'}" style="font-size:9.5px; margin-left:auto;">${r.email_sent ? '✓ Emailed' : '✗ Email failed'}</span>
+                </div>
+                <div class="reply-body-text" style="font-size:13px; line-height:1.5;">${escHtml(r.reply_body)}</div>
+              </div>
+            `).join('');
+          } else {
+            if (threadSection) threadSection.style.display = 'none';
+            threadEl.innerHTML = '';
+          }
+        }
+      } catch (_) {}
+    }
+
+    window.crmDrawerDelete = function () {
+      if (!crmSelectedLead) return;
+      currentMsgId = crmSelectedLead.id;
+      currentSubmission = crmSelectedLead;
+      const elSub = document.getElementById('delTargetSubject');
+      const elSender = document.getElementById('delTargetSender');
+      const elEmail = document.getElementById('delTargetEmail');
+      if (elSub) elSub.textContent = crmSelectedLead.subject || 'General Inquiry';
+      if (elSender) elSender.textContent = crmSelectedLead.full_name || 'Customer';
+      if (elEmail) elEmail.textContent = crmSelectedLead.email || '—';
+      const modal = document.getElementById('deleteModal');
+      if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        document.getElementById('confirmDeleteBtn')?.focus();
+      }
+    };
+
+    window.crmDrawerSendReplyServer = async function () {
+      if (!crmSelectedLead) return;
+      const replyInput = document.getElementById('crmDrawerReplyText');
+      const body = replyInput ? replyInput.value.trim() : '';
+      if (!body) {
+        toast('Please write a reply first', 'error');
+        replyInput?.focus();
+        return;
+      }
+
+      const btn = document.getElementById('crmDrawerSendServerBtn');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-sm"></span> Sending...';
+      }
+
+      try {
+        const leadId = crmSelectedLead.id;
+        const res = await fetch('/api/v1/contact/submissions/' + leadId + '/reply', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+          body: JSON.stringify({ reply_body: body }),
+        });
+        const data = await res.json();
+        if (res.ok) {
+          if (data.emailSent) {
+            toast('Reply sent and email delivered! ✓');
+          } else {
+            toast('Reply saved. Email notice: ' + (data.emailError || 'Email could not be delivered'), 'error');
+          }
+          if (replyInput) replyInput.value = '';
+          crmSelectedLead.status = 'contacted';
+          const matchInList = crmAllLeads.find(l => l.id === leadId);
+          if (matchInList) matchInList.status = 'contacted';
+          const elStage = document.getElementById('crmDrawerStageSelect');
+          if (elStage) elStage.value = 'contacted';
+          crmRenderAll();
+          await crmLoadDrawerReplies(leadId);
+        } else {
+          toast(data.error?.message || data.error || 'Failed to send reply', 'error');
+        }
+      } catch (err) {
+        toast('Network error sending reply', 'error');
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="bi bi-send-fill"></i> Reply via Server';
+        }
+      }
     };
 
     window.closeCrmDrawer = function() {
@@ -3944,20 +4505,49 @@
       if (!crmSelectedLead || !crmSelectedLead.email) return;
       navigator.clipboard.writeText(crmSelectedLead.email).then(() => {
         toast('Email copied to clipboard');
+        const icon = document.getElementById('crmCopyEmailIcon');
         const btn = document.getElementById('crmCopyEmailBtn');
+        if (icon) icon.className = 'bi bi-check2';
         if (btn) {
-          btn.innerHTML = '<i class="bi bi-check2"></i> Copied!';
-          setTimeout(() => { btn.innerHTML = '<i class="bi bi-clipboard"></i> Copy Email'; }, 2000);
+          btn.style.borderColor = 'rgba(52, 211, 153, 0.4)';
+          btn.style.color = '#34d399';
         }
+        setTimeout(() => {
+          if (icon) icon.className = 'bi bi-clipboard';
+          if (btn) {
+            btn.style.borderColor = 'rgba(255, 255, 255, 0.12)';
+            btn.style.color = '#94a3b8';
+          }
+        }, 2000);
       });
     };
 
-    window.crmDrawerReplyGmail = function() {
+    window.crmDrawerReplyGmail = async function() {
       if (!crmSelectedLead || !crmSelectedLead.email) return;
+      const customBody = document.getElementById('crmDrawerReplyText')?.value.trim();
       const subject = encodeURIComponent('Re: ' + (crmSelectedLead.subject || 'Omni Virtual Solutions Inquiry'));
-      const body = encodeURIComponent(`Hi ${crmSelectedLead.full_name},\n\nThank you for reaching out to Omni Virtual Solutions.\n\nBest regards,\nOmni Virtual Solutions Team`);
+      const greeting = `Hi ${crmSelectedLead.full_name},\n\nThank you for reaching out to Omni Virtual Solutions.\n\n`;
+      const bodyText = customBody ? (greeting + customBody + `\n\nBest regards,\nOmni Virtual Solutions Team`) : (greeting + `Best regards,\nOmni Virtual Solutions Team`);
+      const body = encodeURIComponent(bodyText);
       const url = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(crmSelectedLead.email)}&su=${subject}&body=${body}`;
+
+      // Advance status to contacted in database
+      try {
+        await fetch('/api/v1/contact/submissions/' + crmSelectedLead.id, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+          body: JSON.stringify({ status: 'contacted' }),
+        });
+        crmSelectedLead.status = 'contacted';
+        const match = crmAllLeads.find(l => l.id === crmSelectedLead.id);
+        if (match) match.status = 'contacted';
+        const elStage = document.getElementById('crmDrawerStageSelect');
+        if (elStage) elStage.value = 'contacted';
+        crmRenderAll();
+      } catch (_) {}
+
       window.open(url, '_blank', 'noopener,noreferrer');
+      toast('Opening Gmail to send your reply!');
     };
 
     window.exportLeadsCsv = function() {
@@ -4000,10 +4590,11 @@
         (data.settings || []).forEach(s => { settingsMap[s.setting_key] = s.setting_value; });
 
         // Notification settings
-        document.getElementById('notifEnabled').checked  = settingsMap.email_notifications_enabled === 'true';
-        document.getElementById('notifPref').value       = settingsMap.notification_pref || 'all';
-        document.getElementById('recipientEmail').value  = settingsMap.recipient_email || '';
-        document.getElementById('notifSubject').value    = settingsMap.notification_subject || '';
+        document.getElementById('notifEnabled').checked       = settingsMap.email_notifications_enabled === 'true';
+        document.getElementById('failureAlertEnabled').checked = settingsMap.email_failure_alert_enabled !== 'false';
+        document.getElementById('notifPref').value            = settingsMap.notification_pref || 'all';
+        document.getElementById('recipientEmail').value       = settingsMap.recipient_email || '';
+        document.getElementById('notifSubject').value         = settingsMap.notification_subject || '';
 
         // SMTP
         document.getElementById('smtpHost').value    = settingsMap.smtp_host || '';
@@ -4099,6 +4690,7 @@
     window.saveNotifSettings = async function () {
       const ok = await saveSettings([
         { key: 'email_notifications_enabled', value: document.getElementById('notifEnabled').checked ? 'true' : 'false' },
+        { key: 'email_failure_alert_enabled', value: document.getElementById('failureAlertEnabled').checked ? 'true' : 'false' },
         { key: 'notification_pref',            value: document.getElementById('notifPref').value },
         { key: 'recipient_email',              value: document.getElementById('recipientEmail').value.trim() },
         { key: 'notification_subject',         value: document.getElementById('notifSubject').value.trim() },
@@ -4449,10 +5041,7 @@
             <span><i class="bi bi-envelope-fill"></i> <span id="delTargetEmail">—</span></span>
           </div>
         </div>
-        <div style="display:flex; align-items:center; gap:8px; margin-top:14px; font-size:12px; color:#f87171; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.2); border-radius:8px; padding:10px 12px;">
-          <i class="bi bi-shield-slash-fill" style="font-size:15px; flex-shrink:0;"></i>
-          <span>Database record and threads will be irreversibly removed from Turso.</span>
-        </div>
+      
       </div>
       <div class="delete-modal-footer">
         <button type="button" class="btn" onclick="closeDeleteModal()" style="min-height:40px; padding:8px 18px;">

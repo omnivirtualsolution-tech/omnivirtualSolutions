@@ -65,6 +65,7 @@ const COLUMN_MIGRATIONS = [
 // ── Default email settings seed ──────────────────────────────────
 const DEFAULT_SETTINGS = [
   { key: "email_notifications_enabled",  value: "true",                        label: "Enable Email Notifications (true/false)" },
+  { key: "email_failure_alert_enabled",  value: "true",                        label: "Send Delivery Failure Alert to Business Email (true/false)" },
   { key: "recipient_email",              value: "admin@omnivirtualsolution.com", label: "Notification Recipient Email" },
   { key: "smtp_host",                    value: "",                             label: "SMTP Host (e.g. smtp.gmail.com)" },
   { key: "smtp_port",                    value: "587",                          label: "SMTP Port (587 for TLS, 465 for SSL)" },

@@ -2041,13 +2041,11 @@
               <i class="bi bi-chat-left-text-fill"></i> Contact Messages
             </a>
           </li>
-          <!-- Contact Leads CRM (Commented out)
           <li>
             <a class="nav-sub-item" href="admin/contacts.html#leads">
               <i class="bi bi-kanban-fill" style="color:var(--gold);"></i> Contact Leads CRM
             </a>
           </li>
-          -->
           <li>
             <a class="nav-sub-item" href="admin/contacts.html#email-settings">
               <i class="bi bi-palette2" style="color:var(--gold);"></i> Email UI &amp; Settings
@@ -3976,6 +3974,9 @@
               } else if (event.type === 'new_lead') {
                 showLiveToast(`New Inquiry: <strong>${escapeHtml(event.lead?.full_name || 'Client Lead')}</strong> — "${escapeHtml(event.lead?.subject || '')}"`, 'success');
                 loadAnalytics(currentTimeWindow);
+                loadLeads();
+              } else if (event.type === 'email_failed') {
+                showLiveToast(`⚠️ Outbound Email Failed: <strong>${escapeHtml(event.customerName || event.recipient || 'Lead')}</strong> — ${escapeHtml(event.error || 'Check CRM for 1-click retry')}`, 'error');
                 loadLeads();
               } else if (event.type === 'lead_updated' || event.type === 'reply_sent' || event.type === 'lead_deleted') {
                 showLiveToast(`Inquiry records updated in database`, 'info');
