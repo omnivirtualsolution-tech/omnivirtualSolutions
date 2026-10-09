@@ -111,6 +111,21 @@ async function syncInboundReplies() {
     };
 
     connection = await imaps.connect(config);
+
+    // Guard against unhandled 'error' event crash when Gmail resets idle socket
+    connection.on("error", (err) => {
+      if (err?.code !== "ECONNRESET" && !err?.message?.includes("ECONNRESET")) {
+        console.warn("[inbound-sync/socket] Connection notice:", err.message || err);
+      }
+    });
+    if (connection.imap) {
+      connection.imap.on("error", (err) => {
+        if (err?.code !== "ECONNRESET" && !err?.message?.includes("ECONNRESET")) {
+          console.warn("[inbound-sync/imap] IMAP socket notice:", err.message || err);
+        }
+      });
+    }
+
     await connection.openBox("INBOX");
 
     // 1. Fast metadata search for messages from the last 2 days
@@ -178,11 +193,13 @@ async function syncInboundReplies() {
 
               if (dupeCheck.rows.length === 0) {
                 // Insert into contact_replies
-                await db.execute({
+                const insRes = await db.execute({
                   sql: `INSERT INTO contact_replies (submission_id, direction, reply_body, sent_by, email_sent, sent_at)
                         VALUES (?, 'inbound', ?, ?, 1, CURRENT_TIMESTAMP)`,
                   args: [submissionId, cleanText, fromName || "Customer"],
                 });
+
+                const newReplyId = insRes.lastInsertRowid || Date.now();
 
                 // Reset read_at to NULL so conversation becomes UNREAD (lights up badges)
                 await db.execute({
@@ -200,6 +217,15 @@ async function syncInboundReplies() {
                   broadcast({
                     type: "inbound_reply_received",
                     submissionId,
+                    reply: {
+                      id: Number(newReplyId),
+                      submission_id: Number(submissionId),
+                      direction: "inbound",
+                      reply_body: cleanText,
+                      sent_by: fromName || "Customer",
+                      email_sent: 1,
+                      sent_at: new Date().toISOString(),
+                    },
                     senderName: fromName || "Customer",
                     preview: cleanText.substring(0, 100),
                     timestamp: new Date().toISOString(),
@@ -225,7 +251,11 @@ async function syncInboundReplies() {
     return 0;
   } finally {
     if (connection) {
-      try { await connection.end(); } catch (_) {}
+      try {
+        connection.removeAllListeners("error");
+        if (connection.imap) connection.imap.removeAllListeners("error");
+        await connection.end();
+      } catch (_) {}
     }
     isSyncing = false;
   }

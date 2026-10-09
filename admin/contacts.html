@@ -879,6 +879,19 @@
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
       transition: all 0.2s ease;
     }
+    .reply-bubble.reply-bubble-anim-in {
+      animation: bubbleSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes bubbleSlideIn {
+      0% {
+        opacity: 0;
+        transform: translateY(16px) scale(0.98);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
     .reply-bubble.bubble-inbound {
       background: rgba(30, 41, 59, 0.45);
       border: 1px solid rgba(96, 165, 250, 0.25);
@@ -4228,7 +4241,7 @@
               const isInbound = r.direction === 'inbound';
               if (isInbound) {
                 return `
-                  <div class="reply-bubble bubble-inbound">
+                  <div class="reply-bubble bubble-inbound" data-reply-id="${r.id}">
                     <div class="reply-meta">
                       <span class="bubble-sender-wrap">
                         <span class="bubble-avatar-sm">${escHtml((m.full_name || 'C').charAt(0).toUpperCase())}</span>
@@ -4242,7 +4255,7 @@
                 `;
               } else {
                 return `
-                  <div class="reply-bubble bubble-outbound">
+                  <div class="reply-bubble bubble-outbound" data-reply-id="${r.id}">
                     <div class="reply-meta">
                       <span style="display:inline-flex; align-items:center; gap:5px; color:#ffffff; font-weight:700;">
                         <i class="bi bi-shield-lock-fill" style="color:var(--gold);"></i> ${escHtml(r.sent_by || 'Admin')}
@@ -4276,6 +4289,99 @@
 
       } catch (e) {
         toast('Failed to load message', 'error');
+      }
+    };
+
+    function playMessageChime() {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        const ctx = new AudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.08, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.28);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.28);
+      } catch (_) {}
+    }
+
+    // Real-time zero-refresh Messenger bubble injection
+    window.appendReplyToThread = function (r, animate = true) {
+      const thread = document.getElementById('replyThread');
+      if (!thread) return;
+
+      if (r.id && thread.querySelector(`[data-reply-id="${r.id}"]`)) return;
+
+      let divider = thread.querySelector('.thread-divider');
+      if (!divider) {
+        divider = document.createElement('div');
+        divider.className = 'thread-divider';
+        divider.innerHTML = '<span>Conversation History</span>';
+        thread.appendChild(divider);
+      }
+
+      const m = currentSubmission || {};
+      const isInbound = r.direction === 'inbound';
+      const animClass = animate ? ' reply-bubble-anim-in' : '';
+
+      const bubbleEl = document.createElement('div');
+      bubbleEl.className = `reply-bubble ${isInbound ? 'bubble-inbound' : 'bubble-outbound'}${animClass}`;
+      if (r.id) bubbleEl.setAttribute('data-reply-id', r.id);
+
+      if (isInbound) {
+        bubbleEl.innerHTML = `
+          <div class="reply-meta">
+            <span class="bubble-sender-wrap">
+              <span class="bubble-avatar-sm">${escHtml((r.sent_by || m.full_name || 'C').charAt(0).toUpperCase())}</span>
+              <strong style="color:#ffffff;">${escHtml(r.sent_by || m.full_name || 'Customer')}</strong>
+            </span>
+            <span><i class="bi bi-clock"></i> ${fmt(r.sent_at || new Date().toISOString())}</span>
+            <span class="badge badge-replied" style="font-size:9.5px; margin-left:auto;">Client Reply</span>
+          </div>
+          <div class="reply-body-text">${escHtml(r.reply_body)}</div>
+        `;
+        if (animate) playMessageChime();
+      } else {
+        bubbleEl.innerHTML = `
+          <div class="reply-meta">
+            <span style="display:inline-flex; align-items:center; gap:5px; color:#ffffff; font-weight:700;">
+              <i class="bi bi-shield-lock-fill" style="color:var(--gold);"></i> ${escHtml(r.sent_by || 'Admin')}
+            </span>
+            <span><i class="bi bi-clock"></i> ${fmt(r.sent_at || new Date().toISOString())}</span>
+            <span class="badge badge-${r.email_sent ? 'sent' : 'failed'}" style="font-size:9.5px; margin-left:auto;">${r.email_sent ? '✓ Emailed' : '✗ Email failed'}</span>
+            ${r.email_error ? `<span style="font-size:10.5px; color:#cbd5e1;" title="${escHtml(r.email_error)}">⚠ ${escHtml(r.email_error.substring(0,50))}</span>` : ''}
+          </div>
+          <div class="reply-body-text">${escHtml(r.reply_body)}</div>
+        `;
+      }
+
+      thread.appendChild(bubbleEl);
+
+      const scrollContainer = document.getElementById('detailBodyScroll');
+      if (scrollContainer) {
+        setTimeout(() => {
+          scrollContainer.scrollTo({ top: scrollContainer.scrollHeight, behavior: 'smooth' });
+        }, 50);
+      }
+
+      if (r.submission_id) {
+        const item = document.getElementById('msgItem-' + r.submission_id);
+        if (item) {
+          const previewEl = item.querySelector('.msg-preview');
+          if (previewEl) {
+            previewEl.textContent = isInbound ? '↳ ' + r.reply_body : 'You: ' + r.reply_body;
+          }
+          const timeEl = item.querySelector('.msg-time');
+          if (timeEl) {
+            timeEl.innerHTML = '<i class="bi bi-clock"></i> Just now';
+          }
+        }
       }
     };
 
@@ -4454,8 +4560,22 @@
           } else {
             toast('Reply saved. Email failed: ' + (data.emailError || 'SMTP not configured'), 'error');
           }
-          // Reload message to show reply thread
-          openMessage(currentMsgId);
+          // Real-time zero-refresh Messenger append
+          appendReplyToThread({
+            id: data.replyId || Date.now(),
+            submission_id: currentMsgId,
+            direction: 'outbound',
+            reply_body: body,
+            sent_by: 'Admin',
+            email_sent: data.emailSent ? 1 : 0,
+            email_error: data.emailError || null,
+            sent_at: new Date().toISOString(),
+          }, true);
+          document.getElementById('replyTextarea').value = '';
+          const hsb = document.getElementById('detailHeaderStatusBadge');
+          if (hsb) { hsb.textContent = 'replied'; hsb.className = 'badge badge-replied'; }
+          const sSelect = document.getElementById('statusSelect');
+          if (sSelect) sSelect.value = 'replied';
         } else {
           toast(data.error?.message || 'Failed to send reply', 'error');
         }
@@ -5577,16 +5697,27 @@
       liveSource.onmessage = (evt) => {
         try {
           const payload = JSON.parse(evt.data);
-          if (payload.type === 'inbound_reply_received' || payload.type === 'new_submission') {
+          if (payload.type === 'inbound_reply_received') {
+            const subId = Number(payload.submissionId);
+            if (currentMsgId && Number(currentMsgId) === subId) {
+              if (payload.reply) {
+                appendReplyToThread(payload.reply, true);
+              } else {
+                fetch('/api/v1/contact/submissions/' + subId, { headers: { Authorization: 'Bearer ' + token } })
+                  .then(r => r.json())
+                  .then(d => {
+                    (d.replies || []).forEach(r => appendReplyToThread(r, true));
+                  }).catch(() => {});
+              }
+            } else {
+              const item = document.getElementById('msgItem-' + subId);
+              if (item) item.classList.add('unread');
+            }
+            toast(`💬 New client reply from ${payload.senderName || 'Customer'}!`);
             loadInbox();
-            if (currentMsgId && Number(payload.submissionId) === Number(currentMsgId)) {
-              openMessage(currentMsgId);
-            }
-            if (payload.type === 'inbound_reply_received') {
-              toast(`💬 New client reply from ${payload.senderName || 'Customer'}!`);
-            } else if (payload.type === 'new_submission') {
-              toast('✉️ New contact message received!');
-            }
+          } else if (payload.type === 'new_submission') {
+            loadInbox();
+            toast('✉️ New contact message received!');
           }
         } catch (_) {}
       };
@@ -5595,14 +5726,12 @@
     // Fast periodic polling (every 12s) to guarantee instant messenger freshness
     setInterval(() => {
       loadInbox().catch(() => {});
-      if (currentMsgId && typeof openMessage === 'function') {
+      if (currentMsgId && typeof appendReplyToThread === 'function') {
         fetch('/api/v1/contact/submissions/' + currentMsgId, { headers: { Authorization: 'Bearer ' + token } })
           .then(r => r.json())
           .then(data => {
-            const replies = data?.replies || [];
-            const renderedCount = document.querySelectorAll('#replyThread .reply-bubble').length;
-            if (replies.length !== renderedCount) {
-              openMessage(currentMsgId);
+            if (data?.replies) {
+              data.replies.forEach(r => appendReplyToThread(r, true));
             }
           }).catch(() => {});
       }
@@ -5612,8 +5741,14 @@
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden) {
         loadInbox().catch(() => {});
-        if (currentMsgId && typeof openMessage === 'function') {
-          openMessage(currentMsgId).catch(() => {});
+        if (currentMsgId && typeof appendReplyToThread === 'function') {
+          fetch('/api/v1/contact/submissions/' + currentMsgId, { headers: { Authorization: 'Bearer ' + token } })
+            .then(r => r.json())
+            .then(data => {
+              if (data?.replies) {
+                data.replies.forEach(r => appendReplyToThread(r, true));
+              }
+            }).catch(() => {});
         }
       }
     });

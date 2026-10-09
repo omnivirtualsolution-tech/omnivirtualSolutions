@@ -337,6 +337,15 @@ app.use((err, req, res, _next) => {
   res.status(500).json({ error: { code: "INTERNAL_ERROR", message: "An unexpected error occurred." } });
 });
 
+// Global socket resilience: prevent transient ECONNRESET / EPIPE drops from terminating server
+process.on("uncaughtException", (err) => {
+  if (err && (err.code === "ECONNRESET" || err.message?.includes("ECONNRESET") || err.code === "EPIPE" || err.source === "socket")) {
+    console.warn("[server/resilience] Handled transient socket reset notice:", err.message);
+    return;
+  }
+  console.error("[server/fatal] Uncaught exception:", err);
+});
+
 // ─────────────────────────────────────────────────────────────────
 // Start (only when executed directly, not when imported by serverless functions)
 // ─────────────────────────────────────────────────────────────────
