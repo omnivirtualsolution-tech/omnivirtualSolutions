@@ -522,10 +522,10 @@ router.post("/submissions/retry-pending", requireAuth, async (req, res) => {
 router.get("/email-settings", requireAuth, async (req, res) => {
   try {
     const result = await db.execute("SELECT setting_key, setting_value, setting_label, updated_at, updated_by FROM email_settings ORDER BY setting_key");
-    // Mask password
+    // Mask sensitive credentials (password and Cloudflare API token)
     const settings = result.rows.map((r) => ({
       ...r,
-      setting_value: r.setting_key === "smtp_pass" && r.setting_value ? "••••••••" : r.setting_value,
+      setting_value: (r.setting_key === "smtp_pass" || r.setting_key === "cloudflare_api_token") && r.setting_value ? "••••••••" : r.setting_value,
     }));
     res.json({ settings });
   } catch (err) {
@@ -558,8 +558,8 @@ router.put("/email-settings", requireAuth, async (req, res) => {
   try {
     for (const { key, value } of pairs) {
       if (!key) continue;
-      // Don't overwrite password if masked value sent
-      if (key === "smtp_pass" && value === "••••••••") continue;
+      // Don't overwrite sensitive fields if masked value sent
+      if ((key === "smtp_pass" || key === "cloudflare_api_token") && value === "••••••••") continue;
 
       await db.execute({
         sql: `INSERT INTO email_settings (setting_key, setting_value, updated_by)

@@ -122,6 +122,17 @@ async function handleParsedRawEmail(rawSource, uid, imapOrConnection) {
     return false;
   }
 
+  // Ignore Out-of-Office / automated responders
+  try {
+    const autoSubmitted = (typeof parsed.headers?.get === "function" ? parsed.headers.get("auto-submitted") : parsed.headers?.["auto-submitted"]) || "";
+    const isAutoSubmitted = autoSubmitted && String(autoSubmitted).toLowerCase() !== "no";
+    const isOooSubject = /^(?:auto(?:matic)?\s*reply|out\s*of\s*office|vacation\s*notice)/i.test(subject);
+    if (isAutoSubmitted || isOooSubject) {
+      if (dedupeKey) trackProcessedEmail(dedupeKey);
+      return false;
+    }
+  } catch (_) {}
+
   // Check against admin's configured SMTP user
   try {
     const settingsRes = await db.execute("SELECT setting_value FROM email_settings WHERE setting_key = 'smtp_user' LIMIT 1");
@@ -160,12 +171,21 @@ async function handleParsedRawEmail(rawSource, uid, imapOrConnection) {
     return false; // Not a contact inquiry reply or ticket was deleted
   }
 
-  const cleanText = cleanReplyText(parsed.text || parsed.html || "");
-  if (!cleanText || cleanText.length === 0) return false;
+  let cleanText = cleanReplyText(parsed.text || parsed.html || "");
+  if (!cleanText || cleanText.length === 0) {
+    if (parsed.attachments && parsed.attachments.length > 0) {
+      const fileNames = parsed.attachments.map(a => a.filename || "file").filter(Boolean).join(", ");
+      cleanText = `📎 [Client attached ${parsed.attachments.length} file(s): ${fileNames || "attachment"}]`;
+    } else {
+      return false;
+    }
+  }
 
-  // Deduplicate against already recorded inbound replies
+  // Deduplicate against recent identical inbound replies (within 10 minutes)
   const dupeCheck = await db.execute({
-    sql: "SELECT id FROM contact_replies WHERE submission_id = ? AND direction = 'inbound' AND reply_body = ? LIMIT 1",
+    sql: `SELECT id FROM contact_replies 
+          WHERE submission_id = ? AND direction = 'inbound' AND reply_body = ? 
+            AND sent_at > datetime('now', '-10 minutes') LIMIT 1`,
     args: [targetSubId, cleanText],
   });
   if (dupeCheck.rows.length > 0) {
@@ -588,14 +608,17 @@ async function startIdleSocket() {
     imap.once("close", () => {
       if (isServiceActive) {
         clearTimeout(idleReconnectTimer);
-        idleReconnectTimer = setTimeout(startIdleSocket, 4000);
+        // Fast sweep on close to ensure no missed messages during TCP reset
+        syncInboundReplies({ includeSentMail: false }).catch(() => {});
+        idleReconnectTimer = setTimeout(startIdleSocket, 3000);
       }
     });
 
     imap.once("end", () => {
       if (isServiceActive) {
         clearTimeout(idleReconnectTimer);
-        idleReconnectTimer = setTimeout(startIdleSocket, 4000);
+        syncInboundReplies({ includeSentMail: false }).catch(() => {});
+        idleReconnectTimer = setTimeout(startIdleSocket, 3000);
       }
     });
 
@@ -604,12 +627,12 @@ async function startIdleSocket() {
     console.warn("[inbound-sync/idle] Failed to start IDLE socket:", err.message);
     if (isServiceActive) {
       clearTimeout(idleReconnectTimer);
-      idleReconnectTimer = setTimeout(startIdleSocket, 6000);
+      idleReconnectTimer = setTimeout(startIdleSocket, 5000);
     }
   }
 }
 
-function startInboundSync(intervalMs = 20000) {
+function startInboundSync(intervalMs = 7000) {
   isServiceActive = true;
   if (syncTimer) clearInterval(syncTimer);
 
@@ -618,7 +641,7 @@ function startInboundSync(intervalMs = 20000) {
     startIdleSocket().catch(() => {});
   }, 1000);
 
-  // 2. Secondary fallback pulse (every 20s) to guarantee Sent Mail & reconnect coverage
+  // 2. Secondary fallback pulse (every 7s) to guarantee Sent Mail & reconnect coverage
   syncTimer = setInterval(() => {
     syncInboundReplies({ includeSentMail: true }).catch(() => {});
   }, intervalMs);
