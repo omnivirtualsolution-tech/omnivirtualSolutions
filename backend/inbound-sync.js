@@ -242,6 +242,125 @@ async function syncInboundReplies() {
         }
       }
     }
+
+    // 4. Two-Way Sync: Inspect Sent Mail for replies sent by Admin directly via external email client (phone/web)
+    try {
+      const boxes = await connection.getBoxes();
+      let sentBoxName = null;
+      if (boxes["[Gmail]"]?.children?.["Sent Mail"]) {
+        sentBoxName = "[Gmail]/Sent Mail";
+      } else if (boxes["[Gmail]"]?.children?.["Sent Messages"]) {
+        sentBoxName = "[Gmail]/Sent Messages";
+      } else if (boxes["Sent"]) {
+        sentBoxName = "Sent";
+      } else if (boxes["Sent Mail"]) {
+        sentBoxName = "Sent Mail";
+      }
+
+      if (sentBoxName) {
+        await connection.openBox(sentBoxName);
+        const allSentMsgs = await connection.search([["SINCE", sinceDate]]);
+        if (allSentMsgs && allSentMsgs.length > 0) {
+          const recentSent = allSentMsgs.slice(-10);
+          const sentUids = recentSent.map(m => m.attributes.uid);
+          const sentRange = `${sentUids[0]}:${sentUids[sentUids.length - 1]}`;
+          const candidateSent = await connection.search([["UID", sentRange]], { bodies: [""], markSeen: false });
+
+          if (candidateSent && candidateSent.length > 0) {
+            for (const item of candidateSent) {
+              try {
+                const allPart = item.parts.find(p => !p.which || p.which === "") || item.parts[0];
+                const rawSource = allPart?.body || "";
+                if (!rawSource) continue;
+
+                const parsed = await simpleParser(rawSource);
+                const toAddress = parsed.to?.value?.[0]?.address || "";
+                const subject = parsed.subject || "";
+                const inReplyTo = parsed.inReplyTo || "";
+                const references = Array.isArray(parsed.references) ? parsed.references.join(" ") : (parsed.references || "");
+
+                let submissionId = extractSubmissionId(subject, inReplyTo, references);
+
+                // Fallback: match recipient email against recent contact_submissions
+                if (!submissionId && toAddress) {
+                  const findSub = await db.execute({
+                    sql: "SELECT id FROM contact_submissions WHERE lower(email) = lower(?) ORDER BY created_at DESC LIMIT 1",
+                    args: [toAddress],
+                  });
+                  if (findSub.rows.length > 0) {
+                    submissionId = findSub.rows[0].id;
+                  }
+                }
+
+                if (submissionId) {
+                  const cleanText = cleanReplyText(parsed.text || parsed.html || "");
+                  if (cleanText && cleanText.length > 0) {
+                    // Check if this outbound reply was ALREADY saved (sent from web dashboard or previous sync)
+                    const dupeCheck = await db.execute({
+                      sql: `SELECT id FROM contact_replies 
+                            WHERE submission_id = ? AND direction = 'outbound' 
+                            AND (reply_body = ? OR reply_body LIKE ? || '%') 
+                            LIMIT 1`,
+                      args: [submissionId, cleanText, cleanText.substring(0, 40)],
+                    });
+
+                    if (dupeCheck.rows.length === 0) {
+                      const sentAtStr = parsed.date
+                        ? new Date(parsed.date).toISOString().replace("T", " ").substring(0, 19)
+                        : new Date().toISOString().replace("T", " ").substring(0, 19);
+
+                      const insRes = await db.execute({
+                        sql: `INSERT INTO contact_replies (submission_id, direction, reply_body, sent_by, email_sent, sent_at)
+                              VALUES (?, 'outbound', ?, 'Admin (via Email)', 1, ?)`,
+                        args: [submissionId, cleanText, sentAtStr],
+                      });
+
+                      const newReplyId = insRes.lastInsertRowid || Date.now();
+
+                      // Update submission status to 'replied'
+                      await db.execute({
+                        sql: `UPDATE contact_submissions SET status = 'replied' WHERE id = ?`,
+                        args: [submissionId],
+                      });
+
+                      newRepliesCount++;
+                      console.log(`[inbound-sync] Successfully captured admin email reply for submission #${submissionId}: "${cleanText.substring(0, 40)}"`);
+
+                      // Real-time broadcast
+                      try {
+                        broadcast({
+                          type: "inbound_reply_received",
+                          submissionId,
+                          reply: {
+                            id: Number(newReplyId),
+                            submission_id: Number(submissionId),
+                            direction: "outbound",
+                            reply_body: cleanText,
+                            sent_by: "Admin (via Email)",
+                            email_sent: 1,
+                            sent_at: sentAtStr,
+                          },
+                          senderName: "Admin (via Email)",
+                          preview: cleanText.substring(0, 100),
+                          timestamp: new Date().toISOString(),
+                        });
+                      } catch (_) {}
+                    }
+                  }
+                }
+              } catch (sentMsgErr) {
+                console.warn("[inbound-sync] Error parsing sent message:", sentMsgErr.message);
+              }
+            }
+          }
+        }
+      }
+    } catch (sentBoxErr) {
+      if (!sentBoxErr.message?.includes("Timed out") && !sentBoxErr.message?.includes("ECONNRESET")) {
+        console.warn("[inbound-sync] Sent mail check notice:", sentBoxErr.message);
+      }
+    }
+
     return newRepliesCount;
   } catch (err) {
     // Graceful error logging — never crash

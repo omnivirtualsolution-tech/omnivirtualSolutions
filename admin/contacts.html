@@ -4254,6 +4254,11 @@
                   </div>
                 `;
               } else {
+                const isSentViaEmail = (r.sent_by || '').toLowerCase().includes('email');
+                const badgeHtml = isSentViaEmail
+                  ? `<span class="badge" style="font-size:9.5px; margin-left:auto; background:rgba(217,119,6,0.18); color:#f59e0b; border:1px solid rgba(217,119,6,0.35);"><i class="bi bi-envelope-fill"></i> Sent via Email</span>`
+                  : `<span class="badge badge-${r.email_sent ? 'sent' : 'failed'}" style="font-size:9.5px; margin-left:auto;">${r.email_sent ? '✓ Emailed' : '✗ Email failed'}</span>`;
+
                 return `
                   <div class="reply-bubble bubble-outbound" data-reply-id="${r.id}">
                     <div class="reply-meta">
@@ -4261,7 +4266,7 @@
                         <i class="bi bi-shield-lock-fill" style="color:var(--gold);"></i> ${escHtml(r.sent_by || 'Admin')}
                       </span>
                       <span><i class="bi bi-clock"></i> ${fmt(r.sent_at)}</span>
-                      <span class="badge badge-${r.email_sent ? 'sent' : 'failed'}" style="font-size:9.5px; margin-left:auto;">${r.email_sent ? '✓ Emailed' : '✗ Email failed'}</span>
+                      ${badgeHtml}
                       ${r.email_error ? `<span style="font-size:10.5px; color:#cbd5e1;" title="${escHtml(r.email_error)}">⚠ ${escHtml(r.email_error.substring(0,50))}</span>` : ''}
                     </div>
                     <div class="reply-body-text">${escHtml(r.reply_body)}</div>
@@ -4348,13 +4353,18 @@
         `;
         if (animate) playMessageChime();
       } else {
+        const isSentViaEmail = (r.sent_by || '').toLowerCase().includes('email');
+        const badgeHtml = isSentViaEmail
+          ? `<span class="badge" style="font-size:9.5px; margin-left:auto; background:rgba(217,119,6,0.18); color:#f59e0b; border:1px solid rgba(217,119,6,0.35);"><i class="bi bi-envelope-fill"></i> Sent via Email</span>`
+          : `<span class="badge badge-${r.email_sent ? 'sent' : 'failed'}" style="font-size:9.5px; margin-left:auto;">${r.email_sent ? '✓ Emailed' : '✗ Email failed'}</span>`;
+
         bubbleEl.innerHTML = `
           <div class="reply-meta">
             <span style="display:inline-flex; align-items:center; gap:5px; color:#ffffff; font-weight:700;">
               <i class="bi bi-shield-lock-fill" style="color:var(--gold);"></i> ${escHtml(r.sent_by || 'Admin')}
             </span>
             <span><i class="bi bi-clock"></i> ${fmt(r.sent_at || new Date().toISOString())}</span>
-            <span class="badge badge-${r.email_sent ? 'sent' : 'failed'}" style="font-size:9.5px; margin-left:auto;">${r.email_sent ? '✓ Emailed' : '✗ Email failed'}</span>
+            ${badgeHtml}
             ${r.email_error ? `<span style="font-size:10.5px; color:#cbd5e1;" title="${escHtml(r.email_error)}">⚠ ${escHtml(r.email_error.substring(0,50))}</span>` : ''}
           </div>
           <div class="reply-body-text">${escHtml(r.reply_body)}</div>
