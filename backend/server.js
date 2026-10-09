@@ -352,6 +352,14 @@ if (require.main === module) {
     console.log("=".repeat(62));
     console.log(`  Database: ${process.env.TURSO_DATABASE_URL ? "☁️  Turso Cloud" : "💾 Local SQLite (data/omni.db)"}`);
     console.log("=".repeat(62) + "\n");
+
+    // Start background Gmail IMAP sync service
+    try {
+      const { startInboundSync } = require("./inbound-sync");
+      startInboundSync(45000);
+    } catch (syncErr) {
+      console.warn("[server] Inbound sync service failed to initialize:", syncErr.message);
+    }
   });
 }
 

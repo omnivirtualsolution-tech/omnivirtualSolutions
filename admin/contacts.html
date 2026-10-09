@@ -546,57 +546,263 @@
       display: flex;
     }
     .detail-header {
-      padding: 20px 26px;
+      padding: 14px 20px;
       background: #0d121f;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
       flex-shrink: 0;
     }
-    .detail-subject {
-      font-size: 20px;
+    .detail-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      flex: 1;
+    }
+    .detail-header-text {
+      min-width: 0;
+      flex: 1;
+    }
+    .detail-sender-name {
+      font-size: 18px;
       font-weight: 700;
       color: #ffffff;
       letter-spacing: -0.015em;
-      line-height: 1.35;
-      margin-bottom: 12px;
+      line-height: 1.25;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 0;
     }
-    .detail-meta {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
+    .detail-subject {
+      font-size: 17.5px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.015em;
+      line-height: 1.25;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 0;
     }
-    .detail-meta-item {
-      font-size: 12px;
+    .detail-header-sub {
+      font-size: 12.5px;
       color: #94a3b8;
-      display: inline-flex;
+      display: flex;
       align-items: center;
       gap: 6px;
-      background: rgba(255, 255, 255, 0.035);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 8px;
-      padding: 5px 10px;
+      margin-top: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .detail-meta-item strong {
-      color: #f1f5f9;
-    }
-    .detail-meta-item a {
-      color: #ffffff;
-      text-decoration: underline;
-      text-underline-offset: 3px;
-      font-weight: 500;
-    }
-    .detail-meta-item a:hover {
+    .detail-subject-sub {
       color: #cbd5e1;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 260px;
     }
-    .detail-actions {
-      padding: 10px 26px;
-      background: rgba(255, 255, 255, 0.015);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    .detail-header-sub #detailSenderName {
+      color: #cbd5e1;
+      font-weight: 600;
+    }
+    .detail-header-sep {
+      opacity: 0.5;
+    }
+    .conversation-info-btn {
+      width: 42px;
+      height: 42px;
+      min-width: 42px;
+      min-height: 42px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--gold);
+      font-size: 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      touch-action: manipulation;
+    }
+    .conversation-info-btn:hover {
+      background: var(--gold-dim);
+      border-color: rgba(235, 162, 45, 0.45);
+      color: #fff;
+      transform: scale(1.06);
+    }
+
+    /* ── Conversation Info Slide-Over Drawer ── */
+    .conv-info-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 99998;
+      display: flex;
+      justify-content: flex-end;
+      animation: fadeInConvBackdrop 0.22s ease;
+    }
+    @keyframes fadeInConvBackdrop {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .conv-info-drawer {
+      width: min(420px, 92vw);
+      height: 100%;
+      background: #0d121c;
+      border-left: 1px solid rgba(235, 162, 45, 0.25);
+      box-shadow: -15px 0 45px rgba(0, 0, 0, 0.85);
+      display: flex;
+      flex-direction: column;
+      animation: drawerSlideInRight 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+    }
+    @keyframes drawerSlideInRight {
+      from { transform: translateX(100%); }
+      to { transform: translateX(0); }
+    }
+    .conv-info-header {
+      padding: 16px 20px;
+      background: #111724;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .conv-info-title-wrap {
       display: flex;
       align-items: center;
       gap: 10px;
-      flex-wrap: wrap;
+      font-size: 15px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .conv-info-close {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--muted);
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      touch-action: manipulation;
+    }
+    .conv-info-close:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      border-color: var(--gold);
+    }
+    .conv-info-body {
+      padding: 18px 20px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .conv-info-card {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    .conv-info-card-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .conv-profile-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .conv-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(235, 162, 45, 0.25), rgba(235, 162, 45, 0.08));
+      border: 1px solid rgba(235, 162, 45, 0.4);
+      color: var(--gold);
+      font-size: 18px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       flex-shrink: 0;
+    }
+    .conv-profile-text {
+      min-width: 0;
+      flex: 1;
+    }
+    .conv-profile-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+      word-break: break-word;
+    }
+    .conv-profile-email {
+      font-size: 12.5px;
+      color: #94a3b8;
+      margin-top: 2px;
+      word-break: break-all;
+    }
+    .conv-profile-phone {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .conv-meta-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .conv-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .conv-meta-lbl {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .conv-meta-val {
+      font-size: 13px;
+      color: #f1f5f9;
+      word-break: break-word;
+    }
+    .conv-actions-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    @media (max-width: 600px) {
+      .conv-info-drawer {
+        width: 100vw;
+        border-left: none;
+      }
     }
     .status-select {
       background: #111827;
@@ -668,9 +874,40 @@
       background: rgba(255, 255, 255, 0.035);
       border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 12px;
-      padding: 18px 22px;
+      padding: 16px 20px;
       margin-bottom: 14px;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+      transition: all 0.2s ease;
+    }
+    .reply-bubble.bubble-inbound {
+      background: rgba(30, 41, 59, 0.45);
+      border: 1px solid rgba(96, 165, 250, 0.25);
+      border-left: 3.5px solid #60a5fa;
+      border-radius: 14px 14px 14px 4px;
+    }
+    .reply-bubble.bubble-outbound {
+      background: linear-gradient(135deg, rgba(235, 162, 45, 0.06), rgba(255, 255, 255, 0.03));
+      border: 1px solid rgba(235, 162, 45, 0.22);
+      border-left: 3.5px solid var(--gold);
+      border-radius: 14px 14px 4px 14px;
+    }
+    .bubble-sender-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .bubble-avatar-sm {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(96, 165, 250, 0.2);
+      border: 1px solid rgba(96, 165, 250, 0.45);
+      color: #93c5fd;
+      font-size: 11px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
     .reply-meta {
       font-size: 11.5px;
@@ -1041,23 +1278,30 @@
     }
 
     .back-to-list-btn {
-      display: none;
+      width: 38px;
+      height: 38px;
+      min-width: 38px;
+      min-height: 38px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #e2e8f0;
+      font-size: 18px;
+      display: inline-flex;
       align-items: center;
-      gap: 6px;
-      margin-bottom: 12px;
-      padding: 8px 14px;
-      min-height: 44px;
-      font-weight: 600;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid var(--border);
-      color: var(--text);
+      justify-content: center;
+      padding: 0;
+      margin: 0;
       cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      touch-action: manipulation;
     }
     .back-to-list-btn:hover {
       background: var(--gold-dim);
-      border-color: rgba(235,162,45,0.3);
+      border-color: rgba(235, 162, 45, 0.35);
       color: var(--gold);
+      transform: scale(1.05);
     }
 
     /* ── Delete Confirmation Modal ──────────────────────────────── */
@@ -1155,8 +1399,76 @@
       gap: 10px;
     }
 
+    /* ── Mobile Sub-Navigation Bar (Instant 1-Tap Switching on Handhelds) ── */
+    .mobile-subnav-bar {
+      display: none;
+      background: rgba(13, 17, 26, 0.96);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 12px;
+      gap: 8px;
+      position: sticky;
+      top: 56px;
+      z-index: 850;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .mobile-subnav-bar::-webkit-scrollbar {
+      display: none;
+    }
+    .mobile-subnav-btn {
+      flex: 1 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 8px 14px;
+      min-height: 44px; /* 44px WCAG 2.2 AA / Apple HIG Touch Target */
+      border-radius: 9px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.035);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      touch-action: manipulation;
+    }
+    .mobile-subnav-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+    .mobile-subnav-btn.active {
+      background: var(--gold-dim);
+      color: var(--gold);
+      border-color: rgba(235, 162, 45, 0.35);
+      font-weight: 700;
+      box-shadow: 0 2px 10px rgba(235, 162, 45, 0.15);
+    }
+    .mobile-subnav-btn i {
+      font-size: 14.5px;
+    }
+    .mobile-subnav-badge {
+      background: #e53e3e;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 12px;
+      min-width: 18px;
+      text-align: center;
+      line-height: 1.2;
+    }
+
     /* ── Responsive Breakpoints (Mobile-First Polish) ── */
     @media (max-width: 1024px) {
+      .mobile-subnav-bar {
+        display: flex;
+      }
       #sidebar {
         width: min(290px, 86vw);
         transform: translateX(-100%);
@@ -1189,8 +1501,9 @@
     @media (max-width: 860px) {
       .inbox-shell {
         grid-template-columns: 1fr;
-        height: calc(100dvh - 110px);
-        min-height: 480px;
+        height: calc(100dvh - 130px);
+        min-height: 460px;
+        max-height: calc(100dvh - 130px);
         position: relative;
         border-radius: 12px;
       }
@@ -1204,74 +1517,168 @@
         display: none;
         height: 100%;
       }
+      /* When viewing message on mobile: allow natural fluid flow so messages & send buttons are never crushed */
+      .inbox-shell.show-detail {
+        height: auto !important;
+        min-height: calc(100dvh - 130px);
+        max-height: none !important;
+        overflow: visible !important;
+      }
       .inbox-shell.show-detail .inbox-list-pane {
         display: none;
       }
       .inbox-shell.show-detail .inbox-detail-pane {
         display: flex;
         flex: 1;
+        height: auto !important;
+        overflow: visible !important;
+      }
+      .inbox-shell.show-detail #msgDetailView {
+        height: auto !important;
+        overflow: visible !important;
+        display: flex;
+        flex-direction: column;
       }
       .back-to-list-btn {
         display: inline-flex !important;
-        min-height: 44px;
-        align-items: center;
-        gap: 8px;
-        font-weight: 600;
-        padding: 8px 16px;
-        margin-bottom: 14px;
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        color: #ffffff;
-        border-radius: 8px;
+        width: 38px !important;
+        height: 38px !important;
+        min-width: 38px !important;
+        min-height: 38px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border-radius: 10px !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 18px !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        color: #ffffff !important;
         touch-action: manipulation;
       }
       .back-to-list-btn:hover {
-        background: rgba(235, 162, 45, 0.2);
-        border-color: var(--gold);
-        color: var(--gold);
+        background: rgba(235, 162, 45, 0.2) !important;
+        border-color: var(--gold) !important;
+        color: var(--gold) !important;
       }
       .smtp-grid-wrap {
         grid-template-columns: 1fr !important;
       }
       .detail-header {
-        padding: 16px 18px;
+        padding: 12px 14px !important;
       }
       .detail-subject {
-        font-size: 18px;
+        font-size: 17px !important;
+        margin-bottom: 8px !important;
+        line-height: 1.35;
+      }
+      .detail-meta {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 5px !important;
+        align-items: center !important;
+      }
+      .detail-meta-item {
+        font-size: 11px !important;
+        padding: 3px 8px !important;
       }
       .detail-actions {
-        padding: 10px 18px;
+        padding: 10px 14px;
         gap: 8px;
+        flex-wrap: wrap;
+      }
+      .detail-actions .status-select {
+        flex: 1 1 130px;
+        min-height: 44px;
+        font-size: 16px !important;
+      }
+      .detail-actions .btn {
+        min-height: 44px;
+        touch-action: manipulation;
       }
       .detail-body {
-        padding: 18px;
+        padding: 14px 14px !important;
+        overflow-y: visible !important;
+        flex: none !important;
+        background: #0d121f;
+      }
+      .msg-body-card {
+        padding: 16px 16px !important;
+        font-size: 14px !important;
+        line-height: 1.6 !important;
+        margin-bottom: 16px !important;
+        min-height: 70px;
       }
       .reply-compose {
-        padding: 14px 18px;
+        padding: 14px 14px 24px !important;
+        flex: none !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .reply-textarea {
+        font-size: 16px !important;
+        min-height: 95px !important;
+        margin-bottom: 10px;
+      }
+      .reply-footer {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+      }
+      .reply-to-info {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .reply-btn-group {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px !important;
+        width: 100% !important;
+      }
+      .reply-btn-group .btn {
+        width: 100%;
+        justify-content: center;
+        min-height: 44px;
+        font-size: 13px;
+        font-weight: 700;
+        touch-action: manipulation;
       }
     }
 
     @media (max-width: 640px) {
       .content-area {
-        padding: 10px 8px;
+        padding: 10px 10px calc(14px + env(safe-area-inset-bottom, 0px));
       }
       .top-header {
-        height: auto;
+        height: 56px;
         min-height: 56px;
-        padding: 8px 12px;
-        flex-wrap: wrap;
+        padding: 0 12px;
+        flex-wrap: nowrap;
         gap: 8px;
+      }
+      .top-header-left {
+        gap: 8px;
+        min-width: 0;
+        flex: 1;
+      }
+      .sidebar-toggle-btn {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        min-height: 44px;
+        margin-right: 4px;
+        touch-action: manipulation;
       }
       .page-title {
         font-size: clamp(13px, 3.8vw, 15px);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: calc(100vw - 145px);
+        max-width: calc(100vw - 165px);
       }
       .header-actions {
         gap: 6px;
-        flex-wrap: wrap;
+        flex-shrink: 0;
       }
       .header-actions .btn {
         padding: 8px 10px;
@@ -1314,19 +1721,23 @@
         flex-shrink: 0;
         padding: 6px 14px;
         font-size: 12px;
-        min-height: 38px;
+        min-height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         touch-action: manipulation;
       }
       .msg-item {
         padding: 14px 14px;
       }
       .detail-meta {
-        gap: 6px;
-        flex-direction: column;
-        align-items: flex-start;
+        gap: 5px;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
       }
       .detail-meta-item {
-        font-size: 11.5px;
+        font-size: 11px;
         padding: 4px 8px;
       }
       .detail-actions {
@@ -1339,30 +1750,16 @@
         font-size: 16px !important;
       }
       .reply-compose {
-        padding: 12px 14px;
-      }
-      .reply-footer {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
-      }
-      .reply-footer > div {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        width: 100%;
-      }
-      .reply-footer .btn {
-        width: 100%;
-        justify-content: center;
-        min-height: 44px;
-        touch-action: manipulation;
+        padding: 12px 14px 24px;
       }
     }
 
     @media (max-width: 480px) {
       .stat-row {
         grid-template-columns: 1fr;
+      }
+      .reply-btn-group {
+        grid-template-columns: 1fr !important;
       }
       .delete-modal-footer {
         flex-direction: column;
@@ -1372,6 +1769,9 @@
         width: 100%;
         min-height: 44px;
         justify-content: center;
+      }
+      .email-template-selector-grid {
+        grid-template-columns: 1fr !important;
       }
     }
     /* ════════════════════════════════════════════════════════════
@@ -1975,7 +2375,7 @@
       .crm-kanban-board {
         grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 10px;
-        overflow-x: hidden;
+        overflow-x: auto;
       }
       .crm-column {
         max-height: calc(100dvh - 260px);
@@ -1986,14 +2386,14 @@
       .crm-toolbar {
         flex-direction: column;
         align-items: stretch;
-        gap: 14px;
-        padding: 14px;
+        gap: 12px;
+        padding: 12px;
       }
       .crm-toolbar-left {
         flex-direction: column;
         align-items: stretch;
         width: 100%;
-        gap: 12px;
+        gap: 10px;
       }
       .crm-toolbar-left .search-box-wrap {
         width: 100% !important;
@@ -2004,53 +2404,67 @@
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
-        padding: 4px;
-        gap: 4px;
+        padding: 2px 0 6px;
+        gap: 6px;
+        display: flex;
+        flex-wrap: nowrap;
       }
       .crm-stage-pills::-webkit-scrollbar { display: none; }
       .crm-stage-pill {
-        flex: 1 0 auto;
+        flex: 0 0 auto;
         text-align: center;
-        min-height: 40px;
+        min-height: 44px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         touch-action: manipulation;
         font-size: 13px;
-        padding: 6px 14px;
+        padding: 8px 14px;
       }
       .crm-toolbar-right {
         width: 100%;
-        justify-content: space-between;
+        display: flex;
+        flex-wrap: wrap;
         gap: 8px;
       }
       .crm-view-switcher {
-        flex: 1;
+        flex: 1 1 100%;
+        display: flex;
       }
       .crm-view-btn {
         flex: 1;
         justify-content: center;
-        min-height: 40px;
+        min-height: 44px;
         touch-action: manipulation;
       }
       .crm-toolbar-right .btn {
-        min-height: 40px;
+        flex: 1;
+        min-height: 44px;
+        justify-content: center;
         touch-action: manipulation;
       }
 
       /* Kanban Board Mobile Snap Swiping */
       .crm-kanban-board {
-        grid-template-columns: repeat(4, minmax(calc(100vw - 56px), 1fr));
-        gap: 14px;
-        scroll-snap-type: x mandatory;
-        padding-bottom: 20px;
+        display: flex !important;
+        grid-template-columns: none !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scroll-snap-type: x mandatory !important;
+        gap: 14px !important;
+        padding-bottom: 20px !important;
+        scrollbar-width: none !important;
+      }
+      .crm-kanban-board::-webkit-scrollbar {
+        display: none !important;
       }
       .crm-column {
-        min-width: calc(100vw - 56px);
-        max-width: calc(100vw - 56px);
-        scroll-snap-align: center;
-        max-height: calc(100dvh - 300px);
-        min-height: 460px;
+        flex: 0 0 calc(100vw - 44px) !important;
+        min-width: calc(100vw - 44px) !important;
+        max-width: calc(100vw - 44px) !important;
+        scroll-snap-align: center !important;
+        max-height: calc(100dvh - 280px);
+        min-height: 440px;
       }
       .crm-card {
         padding: 16px;
@@ -2059,15 +2473,15 @@
         padding-top: 12px;
       }
       .crm-chip {
-        width: 38px;
-        height: 38px;
+        width: 40px;
+        height: 40px;
         font-size: 14px;
         touch-action: manipulation;
       }
       .crm-advance-btn {
-        min-height: 38px;
-        padding: 6px 14px;
-        font-size: 12.5px;
+        min-height: 40px;
+        padding: 8px 16px;
+        font-size: 13px;
         touch-action: manipulation;
       }
 
@@ -2081,18 +2495,18 @@
         border-left: none;
       }
       .crm-drawer-header {
-        padding: 16px 18px;
+        padding: 14px 16px;
       }
       .crm-drawer-body {
-        padding: 18px;
-        gap: 16px;
+        padding: 16px;
+        gap: 14px;
       }
       .crm-drawer-info-grid {
         grid-template-columns: 1fr;
         gap: 10px;
       }
       .crm-drawer-footer {
-        padding: 14px 18px max(14px, env(safe-area-inset-bottom));
+        padding: 12px 16px max(14px, env(safe-area-inset-bottom));
         flex-direction: column-reverse;
         align-items: stretch;
         gap: 10px;
@@ -2108,9 +2522,9 @@
 
     @media (max-width: 600px) {
       .crm-kpi-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr) !important;
         gap: 10px;
-        margin-bottom: 16px;
+        margin-bottom: 14px;
       }
       .crm-kpi-card {
         padding: 12px 14px;
@@ -2145,18 +2559,16 @@
         width: 100%;
         justify-content: center;
       }
-      .crm-kanban-board {
-        grid-template-columns: repeat(4, minmax(calc(100vw - 36px), 1fr));
-      }
       .crm-column {
-        min-width: calc(100vw - 36px);
-        max-width: calc(100vw - 36px);
+        flex: 0 0 calc(100vw - 28px) !important;
+        min-width: calc(100vw - 28px) !important;
+        max-width: calc(100vw - 28px) !important;
       }
     }
 
     @media (max-width: 380px) {
       .crm-kpi-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
       }
     }
 
@@ -2274,9 +2686,65 @@
       }
     }
     @media (max-width: 768px) {
+      .crm-table-wrapper .panel-body {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+      .crm-table-wrapper .data-table {
+        min-width: 580px !important;
+        table-layout: auto !important;
+      }
       .crm-table-wrapper .col-date,
       .crm-table-wrapper .td-date {
         display: none !important;
+      }
+    }
+
+    /* ── Live Email Preview Modal Responsive Styling ── */
+    .email-preview-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 99999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+    .email-preview-modal-dialog {
+      background: #0e131e;
+      border: 1px solid rgba(235, 162, 45, 0.35);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 980px;
+      height: 92dvh;
+      max-height: 92dvh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.95);
+    }
+    @media (max-width: 640px) {
+      .email-preview-modal-backdrop {
+        padding: 6px;
+      }
+      .email-preview-modal-dialog {
+        height: 96dvh;
+        max-height: 96dvh;
+        border-radius: 12px;
+      }
+      .email-preview-modal-header {
+        padding: 10px 12px !important;
+        gap: 8px !important;
+      }
+      .email-preview-modal-body {
+        padding: 8px !important;
+      }
+      .email-preview-modal-controls {
+        width: 100%;
+        justify-content: space-between;
       }
     }
 
@@ -2523,6 +2991,23 @@
         <a href="index.html" target="_blank" class="btn"><i class="bi bi-box-arrow-up-right"></i> <span class="btn-text">Live Site</span></a>
       </div>
     </header>
+ 
+    <!-- ── Mobile Sub-Navigation Bar (Instant 1-Tap Switching on Handhelds) ── -->
+    <div class="mobile-subnav-bar" id="mobileSubnavBar">
+      <button type="button" class="mobile-subnav-btn active" id="mobTab-inbox" onclick="switchTab('inbox')">
+        <i class="bi bi-chat-left-text-fill"></i>
+        <span>Inbox</span>
+        <span class="mobile-subnav-badge" id="mobUnreadBadge">0</span>
+      </button>
+      <button type="button" class="mobile-subnav-btn" id="mobTab-leads" onclick="switchTab('leads')">
+        <i class="bi bi-kanban-fill"></i>
+        <span>CRM Leads</span>
+      </button>
+      <button type="button" class="mobile-subnav-btn" id="mobTab-email-settings" onclick="switchTab('email-settings')">
+        <i class="bi bi-palette2"></i>
+        <span>Email UI</span>
+      </button>
+    </div>
 
     <div class="content-area">
 
@@ -2560,30 +3045,20 @@
 
             <div id="msgDetailView">
               <div class="detail-header">
-                <button class="btn btn-sm back-to-list-btn" id="backToListBtn" onclick="closeMessageDetail()"><i class="bi bi-arrow-left"></i> All Messages</button>
-                <div class="detail-subject" id="detailSubject">—</div>
-                <div class="detail-meta">
-                  <div class="detail-meta-item"><i class="bi bi-person-fill"></i> <strong id="detailName">—</strong></div>
-                  <div class="detail-meta-item"><i class="bi bi-envelope-fill"></i> <a id="detailEmail" href="#" style="color:#ffffff; text-decoration:none;">—</a></div>
-                  <div class="detail-meta-item" id="detailPhoneWrap" style="display:none"><i class="bi bi-telephone-fill"></i> <strong id="detailPhone">—</strong></div>
-                  <div class="detail-meta-item"><i class="bi bi-clock-fill"></i> <span id="detailDate">—</span></div>
-                  <div class="detail-meta-item"><span id="detailStatusBadge" class="badge badge-new">new</span></div>
-                  <div class="detail-meta-item" id="detailEmailNotify"></div>
+                <div class="detail-header-left">
+                  <button type="button" class="back-to-list-btn" id="backToListBtn" onclick="closeMessageDetail()" title="Back to All Messages" aria-label="Back to All Messages"><i class="bi bi-arrow-left"></i></button>
+                  <div class="detail-header-text">
+                    <div class="detail-sender-name" id="detailSenderName">—</div>
+                    <div class="detail-header-sub">
+                      <span class="detail-subject-sub" id="detailSubject">—</span>
+                      <span class="detail-header-sep">•</span>
+                      <span id="detailHeaderStatusBadge" class="badge badge-new">new</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-
-              <div class="detail-actions">
-                <select class="status-select" id="statusSelect" onchange="updateStatus(this.value)">
-                  <option value="new">New</option>
-                  <option value="in_review">In Review</option>
-                  <option value="contacted">Contacted</option>
-                  <option value="replied">Replied</option>
-                  <option value="closed">Closed</option>
-                </select>
-                <button class="btn btn-sm" onclick="markUnread()" title="Mark as unread"><i class="bi bi-envelope"></i> Mark Unread</button>
-                <button class="btn btn-sm" onclick="retryNotification()" id="retryBtn" style="display:none"><i class="bi bi-arrow-repeat"></i> Retry Email</button>
-                <div style="flex:1"></div>
-                <button class="btn btn-sm btn-danger" onclick="deleteMessage()"><i class="bi bi-trash3"></i> Delete</button>
+                <button type="button" class="conversation-info-btn" id="openConvInfoBtn" onclick="openConversationInfoDrawer()" title="View Details & Actions" aria-label="Conversation Info">
+                  <i class="bi bi-info-circle-fill"></i>
+                </button>
               </div>
 
               <div class="detail-body" id="detailBodyScroll">
@@ -2604,12 +3079,12 @@
                 <textarea class="reply-textarea" id="replyTextarea" placeholder="Write your reply here..."></textarea>
                 <div class="reply-footer">
                   <div class="reply-to-info">Sending to: <span id="replyToEmail" style="color:#ffffff; font-weight:600;">—</span></div>
-                  <div style="display:flex; gap:10px; align-items:center;">
+                  <div class="reply-btn-group" style="display:flex; gap:10px; align-items:center;">
+                    <button class="btn btn-gold" id="sendReplyBtn" onclick="sendReply()">
+                      <i class="bi bi-send-fill"></i> Send via Server
+                    </button>
                     <button class="btn" id="replyGmailBtn" onclick="replyInGmail()">
                       <i class="bi bi-google"></i> Reply via Gmail
-                    </button>
-                    <button class="btn btn-sm" id="sendReplyBtn" onclick="sendReply()" style="color:#ffffff; font-weight:600; border-color:rgba(255,255,255,0.2);">
-                      <i class="bi bi-send-fill" style="color:#ffffff;"></i> Send via Server
                     </button>
                   </div>
                 </div>
@@ -2958,7 +3433,7 @@
               </p>
 
               <!-- 3 Design Selector Cards -->
-              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:18px; margin-bottom:14px;">
+              <div class="email-template-selector-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:18px; margin-bottom:14px;">
 
                 <!-- Design 1: Luxury Gold -->
                 <div id="contacts-card-template-luxury_gold" style="background:#111622; border:2px solid rgba(235,162,45,0.4); border-radius:12px; overflow:hidden; display:flex; flex-direction:column; position:relative;">
@@ -3400,6 +3875,11 @@
         toggleSidebar();
       }
       if (e.key === 'Escape') {
+        const infoBackdrop = document.getElementById('conversationInfoBackdrop');
+        if (infoBackdrop && infoBackdrop.style.display === 'flex') {
+          closeConversationInfoDrawer();
+          return;
+        }
         const delModal = document.getElementById('deleteModal');
         if (delModal && delModal.style.display === 'flex') {
           closeDeleteModal();
@@ -3426,9 +3906,26 @@
       updateSidebarToggleButton();
     });
 
+    window.openConversationInfoDrawer = function() {
+      const el = document.getElementById('conversationInfoBackdrop');
+      if (el) el.style.display = 'flex';
+    };
+
+    window.closeConversationInfoDrawer = function() {
+      const el = document.getElementById('conversationInfoBackdrop');
+      if (el) el.style.display = 'none';
+    };
+
     window.closeMessageDetail = function() {
+      closeConversationInfoDrawer();
       document.querySelector('.inbox-shell')?.classList.remove('show-detail');
       document.querySelectorAll('.msg-item').forEach(el => el.classList.remove('selected'));
+      const view = document.getElementById('msgDetailView');
+      const empty = document.getElementById('detailEmpty');
+      if (window.innerWidth > 868) {
+        if (view) view.classList.remove('visible');
+        if (empty) empty.style.display = '';
+      }
     };
 
     // ── Tab switching ────────────────────────────────────────────
@@ -3439,8 +3936,22 @@
       document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
       document.querySelectorAll('.nav-sub-item').forEach(n => n.classList.remove('active'));
+      document.querySelectorAll('.mobile-subnav-btn').forEach(b => b.classList.remove('active'));
+
       document.getElementById('tab-' + id)?.classList.add('active');
-      if (el) el.classList.add('active');
+      document.getElementById('mobTab-' + id)?.classList.add('active');
+
+      const subItemMap = {
+        inbox: 'navSubInbox',
+        leads: 'navSubLeads',
+        'email-settings': 'navSubEmailSettings'
+      };
+      if (subItemMap[id]) {
+        document.getElementById(subItemMap[id])?.classList.add('active');
+      }
+      if (el && !el.classList.contains('mobile-subnav-btn')) {
+        el.classList.add('active');
+      }
 
       const titles = {
         inbox: '<i class="bi bi-inbox-fill" style="color:var(--gold)"></i> <span>Contact Messages</span>',
@@ -3538,7 +4049,10 @@
 
         // Update unread badge (messages without read_at)
         const unread = allMessages.filter(m => !m.read_at).length;
-        document.getElementById('unreadBadge').textContent = unread;
+        const bDesktop = document.getElementById('unreadBadge');
+        if (bDesktop) bDesktop.textContent = unread;
+        const bMob = document.getElementById('mobUnreadBadge');
+        if (bMob) bMob.textContent = unread;
       } catch (e) {
         document.getElementById('inboxList').innerHTML = '<div class="msg-empty"><i class="bi bi-wifi-off"></i><br>Could not load messages</div>';
       }
@@ -3560,17 +4074,24 @@
       list.innerHTML = allMessages.map(m => {
         const unread = !m.read_at;
         const selected = m.id === currentMsgId ? ' selected' : '';
+        const hasClientReply = m.latest_reply_direction === 'inbound';
+        const previewText = m.latest_reply_body 
+          ? (hasClientReply ? '↳ ' + m.latest_reply_body : 'You: ' + m.latest_reply_body)
+          : m.message;
+        const activityTime = m.last_activity_at || m.created_at;
+
         return `
           <div class="msg-item${unread ? ' unread' : ''}${selected}" onclick="openMessage(${m.id})" id="msgItem-${m.id}">
             ${unread ? '<div class="msg-unread-dot"></div>' : ''}
             <div class="msg-name">
-              <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:210px;">${escHtml(m.full_name)}</span>
+              <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:175px;">${escHtml(m.full_name)}</span>
+              ${hasClientReply && unread ? '<span class="badge" style="background:rgba(59,130,246,0.18); color:#60a5fa; border:1px solid rgba(59,130,246,0.35); font-size:9px; padding:1px 6px;">New Reply</span>' : ''}
               <span class="badge badge-${m.status}" style="font-size:9.5px; flex-shrink:0;">${m.status}</span>
             </div>
             <div class="msg-subject">${escHtml(m.subject || 'No subject')}</div>
-            <div class="msg-preview">${escHtml(m.message)}</div>
+            <div class="msg-preview">${escHtml(previewText)}</div>
             <div class="msg-meta">
-              <span class="msg-time"><i class="bi bi-clock"></i> ${fmt(m.created_at)}</span>
+              <span class="msg-time"><i class="bi bi-clock"></i> ${fmt(activityTime)}</span>
               ${m.reply_count > 0 ? `<span style="font-size:10.5px; color:#ffffff; font-weight:600;"><i class="bi bi-chat-left-fill"></i> ${m.reply_count}</span>` : ''}
             </div>
           </div>`;
@@ -3598,8 +4119,21 @@
         currentSubmission = m;
         const replies = data.replies || [];
 
-        // Fill header
-        document.getElementById('detailSubject').textContent = m.subject || 'No Subject';
+        // Fill header & drawer details
+        const sub = m.subject || 'No Subject';
+        const sender = m.full_name || 'Customer';
+        document.getElementById('detailSubject').textContent = sub;
+        const drawerSub = document.getElementById('drawerSubject');
+        if (drawerSub) drawerSub.textContent = sub;
+
+        const senderEl = document.getElementById('detailSenderName');
+        if (senderEl) senderEl.textContent = sender;
+
+        const avatarEl = document.getElementById('drawerCustomerAvatar');
+        if (avatarEl) {
+          avatarEl.textContent = (sender.trim().charAt(0) || 'C').toUpperCase();
+        }
+
         document.getElementById('detailName').textContent = m.full_name;
         document.getElementById('detailEmail').textContent = m.email;
         document.getElementById('detailEmail').href = 'mailto:' + m.email;
@@ -3613,21 +4147,34 @@
           document.getElementById('detailPhoneWrap').style.display = 'none';
         }
 
-        // Status badge
+        // Status badges (both drawer and top header)
         const sb = document.getElementById('detailStatusBadge');
-        sb.textContent = m.status;
-        sb.className = 'badge badge-' + m.status;
+        if (sb) {
+          sb.textContent = m.status;
+          sb.className = 'badge badge-' + m.status;
+        }
+        const hsb = document.getElementById('detailHeaderStatusBadge');
+        if (hsb) {
+          hsb.textContent = m.status;
+          hsb.className = 'badge badge-' + m.status;
+        }
 
         // Status select
         document.getElementById('statusSelect').value = m.status;
 
         // Email notify status
         const ens = document.getElementById('detailEmailNotify');
-        if (m.email_notify_status) {
-          ens.innerHTML = `<span class="badge badge-${m.email_notify_status}" title="Email notification status">✉ ${m.email_notify_status}</span>`;
+        if (ens) {
+          if (m.email_notify_status) {
+            ens.innerHTML = `<span class="badge badge-${m.email_notify_status}" title="Email notification status">✉ ${m.email_notify_status}</span>`;
+          } else {
+            ens.innerHTML = '<span style="color:#94a3b8; font-size:12px;">Not triggered</span>';
+          }
         }
         const retryBtn = document.getElementById('retryBtn');
-        retryBtn.style.display = (m.email_notify_status === 'failed' || m.email_notify_status === 'pending') ? '' : 'none';
+        if (retryBtn) {
+          retryBtn.style.display = (m.email_notify_status === 'failed' || m.email_notify_status === 'pending') ? '' : 'none';
+        }
 
         // Message body
         document.getElementById('detailMessage').textContent = m.message;
@@ -3637,19 +4184,38 @@
         if (replies.length > 0) {
           thread.innerHTML = `
             <div class="thread-divider"><span>Conversation History (${replies.length})</span></div>
-            ${replies.map(r => `
-              <div class="reply-bubble">
-                <div class="reply-meta">
-                  <span style="display:inline-flex; align-items:center; gap:5px; color:#ffffff; font-weight:700;">
-                    <i class="bi bi-shield-lock-fill"></i> ${escHtml(r.sent_by || 'Admin')}
-                  </span>
-                  <span><i class="bi bi-clock"></i> ${fmt(r.sent_at)}</span>
-                  <span class="badge badge-${r.email_sent ? 'sent' : 'failed'}" style="font-size:9.5px; margin-left:auto;">${r.email_sent ? '✓ Emailed' : '✗ Email failed'}</span>
-                  ${r.email_error ? `<span style="font-size:10.5px; color:#cbd5e1;" title="${escHtml(r.email_error)}">⚠ ${escHtml(r.email_error.substring(0,50))}</span>` : ''}
-                </div>
-                <div class="reply-body-text">${escHtml(r.reply_body)}</div>
-              </div>
-            `).join('')}
+            ${replies.map(r => {
+              const isInbound = r.direction === 'inbound';
+              if (isInbound) {
+                return `
+                  <div class="reply-bubble bubble-inbound">
+                    <div class="reply-meta">
+                      <span class="bubble-sender-wrap">
+                        <span class="bubble-avatar-sm">${escHtml((m.full_name || 'C').charAt(0).toUpperCase())}</span>
+                        <strong style="color:#ffffff;">${escHtml(r.sent_by || m.full_name || 'Customer')}</strong>
+                      </span>
+                      <span><i class="bi bi-clock"></i> ${fmt(r.sent_at)}</span>
+                      <span class="badge badge-replied" style="font-size:9.5px; margin-left:auto;">Client Reply</span>
+                    </div>
+                    <div class="reply-body-text">${escHtml(r.reply_body)}</div>
+                  </div>
+                `;
+              } else {
+                return `
+                  <div class="reply-bubble bubble-outbound">
+                    <div class="reply-meta">
+                      <span style="display:inline-flex; align-items:center; gap:5px; color:#ffffff; font-weight:700;">
+                        <i class="bi bi-shield-lock-fill" style="color:var(--gold);"></i> ${escHtml(r.sent_by || 'Admin')}
+                      </span>
+                      <span><i class="bi bi-clock"></i> ${fmt(r.sent_at)}</span>
+                      <span class="badge badge-${r.email_sent ? 'sent' : 'failed'}" style="font-size:9.5px; margin-left:auto;">${r.email_sent ? '✓ Emailed' : '✗ Email failed'}</span>
+                      ${r.email_error ? `<span style="font-size:10.5px; color:#cbd5e1;" title="${escHtml(r.email_error)}">⚠ ${escHtml(r.email_error.substring(0,50))}</span>` : ''}
+                    </div>
+                    <div class="reply-body-text">${escHtml(r.reply_body)}</div>
+                  </div>
+                `;
+              }
+            }).join('')}
           `;
         } else {
           thread.innerHTML = '';
@@ -3662,9 +4228,11 @@
         document.getElementById('detailBodyScroll').scrollTop = 0;
 
         // Refresh list to remove unread dot
-        const idx = allMessages.findIndex(x => x.id === id);
-        if (idx !== -1) { allMessages[idx].read_at = new Date().toISOString(); allMessages[idx].status = m.status; }
-        document.getElementById('unreadBadge').textContent = allMessages.filter(x => !x.read_at).length;
+        const remainingUnread = allMessages.filter(x => !x.read_at).length;
+        const bDesktop = document.getElementById('unreadBadge');
+        if (bDesktop) bDesktop.textContent = remainingUnread;
+        const bMob = document.getElementById('mobUnreadBadge');
+        if (bMob) bMob.textContent = remainingUnread;
 
       } catch (e) {
         toast('Failed to load message', 'error');
@@ -3683,8 +4251,16 @@
           toast('Status updated to ' + status);
           const idx = allMessages.findIndex(x => x.id === currentMsgId);
           if (idx !== -1) { allMessages[idx].status = status; renderList(); }
-          document.getElementById('detailStatusBadge').textContent = status;
-          document.getElementById('detailStatusBadge').className = 'badge badge-' + status;
+          const sb = document.getElementById('detailStatusBadge');
+          if (sb) {
+            sb.textContent = status;
+            sb.className = 'badge badge-' + status;
+          }
+          const hsb = document.getElementById('detailHeaderStatusBadge');
+          if (hsb) {
+            hsb.textContent = status;
+            hsb.className = 'badge badge-' + status;
+          }
         }
       } catch (e) { toast('Failed to update status', 'error'); }
     };
@@ -3766,6 +4342,7 @@
           currentSubmission = null;
           crmSelectedLead = null;
           closeDeleteModal();
+          closeConversationInfoDrawer();
           if (typeof closeCrmDrawer === 'function') closeCrmDrawer();
           const detailView = document.getElementById('msgDetailView');
           if (detailView) detailView.classList.remove('visible');
@@ -4954,63 +5531,174 @@
       loadInbox();
     }
 
+    // ── Live Real-time SSE updates for Messenger & Inbound Replies ──
+    try {
+      const liveSource = new EventSource('/api/v1/live');
+      liveSource.onmessage = (evt) => {
+        try {
+          const payload = JSON.parse(evt.data);
+          if (payload.type === 'inbound_reply_received' || payload.type === 'new_submission') {
+            loadInbox();
+            if (currentMsgId && Number(payload.submissionId) === Number(currentMsgId)) {
+              openMessage(currentMsgId);
+            }
+            if (payload.type === 'inbound_reply_received') {
+              toast(`💬 New client reply from ${payload.senderName || 'Customer'}!`);
+            } else if (payload.type === 'new_submission') {
+              toast('✉️ New contact message received!');
+            }
+          }
+        } catch (_) {}
+      };
+    } catch (_) {}
+
+    // Periodic safety polling (every 45s) to guarantee unread badge freshness
+    setInterval(() => {
+      loadInbox().catch(() => {});
+    }, 45000);
+
   })();
   </script>
 
   <!-- ── Email Template Preview Modal (Contacts Page) ── -->
-  <div id="emailPreviewModalContacts" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); z-index:99999; justify-content:center; align-items:center; padding:18px;" onclick="if(event.target===this) closeEmailPreviewModalContacts()">
-    <div style="background:#0e131e; border:1px solid rgba(235,162,45,0.35); border-radius:16px; width:100%; max-width:980px; height:92vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 24px 60px rgba(0,0,0,0.95);">
+  <div id="emailPreviewModalContacts" class="email-preview-modal-backdrop" style="display:none;" onclick="if(event.target===this) closeEmailPreviewModalContacts()">
+    <div class="email-preview-modal-dialog">
       
       <!-- Modal Header -->
-      <div style="padding:14px 20px; background:#080b11; border-bottom:1px solid rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+      <div class="email-preview-modal-header" style="padding:14px 20px; background:#080b11; border-bottom:1px solid rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
         <div id="contactsPreviewModalTitle" style="font-size:15px; font-weight:700; color:#fff; display:flex; align-items:center; gap:8px;">
-          <i class="bi bi-palette2" style="color:var(--gold)"></i> Live Email Preview
+          <i class="bi bi-palette2" style="color:var(--gold)"></i> <span>Live Email Preview</span>
         </div>
         
         <!-- Controls: View Types & Device -->
-        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+        <div class="email-preview-modal-controls" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
           <!-- Template Types -->
-          <div style="display:flex; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:3px;">
-            <button class="contacts-preview-type-btn active" onclick="setPreviewTypeContacts('auto_reply', this)" style="border:none; background:transparent; color:#fff; font-size:12px; font-weight:600; padding:5px 12px; border-radius:6px; cursor:pointer;">
+          <div class="email-preview-type-wrap" style="display:flex; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:3px;">
+            <button class="contacts-preview-type-btn active" onclick="setPreviewTypeContacts('auto_reply', this)" style="border:none; background:transparent; color:#fff; font-size:12px; font-weight:600; padding:6px 12px; border-radius:6px; cursor:pointer;">
               Auto-Reply
             </button>
-            <button class="contacts-preview-type-btn" onclick="setPreviewTypeContacts('notification', this)" style="border:none; background:transparent; color:#94a3b8; font-size:12px; font-weight:600; padding:5px 12px; border-radius:6px; cursor:pointer;">
+            <button class="contacts-preview-type-btn" onclick="setPreviewTypeContacts('notification', this)" style="border:none; background:transparent; color:#94a3b8; font-size:12px; font-weight:600; padding:6px 12px; border-radius:6px; cursor:pointer;">
               Admin Alert
             </button>
-            <button class="contacts-preview-type-btn" onclick="setPreviewTypeContacts('reply', this)" style="border:none; background:transparent; color:#94a3b8; font-size:12px; font-weight:600; padding:5px 12px; border-radius:6px; cursor:pointer;">
+            <button class="contacts-preview-type-btn" onclick="setPreviewTypeContacts('reply', this)" style="border:none; background:transparent; color:#94a3b8; font-size:12px; font-weight:600; padding:6px 12px; border-radius:6px; cursor:pointer;">
               Team Reply
             </button>
           </div>
 
           <!-- Device View -->
-          <div style="display:flex; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:3px;">
-            <button class="contacts-preview-device-btn active" onclick="setPreviewDeviceContacts('desktop', this)" style="border:none; background:transparent; color:#fff; font-size:13px; padding:5px 10px; border-radius:6px; cursor:pointer;" title="Desktop View (650px)">
+          <div class="email-preview-device-wrap" style="display:flex; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:3px;">
+            <button class="contacts-preview-device-btn active" onclick="setPreviewDeviceContacts('desktop', this)" style="border:none; background:transparent; color:#fff; font-size:13px; padding:6px 10px; border-radius:6px; cursor:pointer;" title="Desktop View (650px)">
               <i class="bi bi-laptop"></i>
             </button>
-            <button class="contacts-preview-device-btn" onclick="setPreviewDeviceContacts('mobile', this)" style="border:none; background:transparent; color:#94a3b8; font-size:13px; padding:5px 10px; border-radius:6px; cursor:pointer;" title="Mobile View (375px)">
+            <button class="contacts-preview-device-btn" onclick="setPreviewDeviceContacts('mobile', this)" style="border:none; background:transparent; color:#94a3b8; font-size:13px; padding:6px 10px; border-radius:6px; cursor:pointer;" title="Mobile View (375px)">
               <i class="bi bi-phone"></i>
             </button>
           </div>
 
           <!-- Set Active Button in Modal -->
-          <button id="contactsModalSetActiveBtn" class="btn btn-gold" onclick="activateCurrentModalTemplateContacts()" style="padding:6px 14px; font-size:12px;">
+          <button id="contactsModalSetActiveBtn" class="btn btn-gold" onclick="activateCurrentModalTemplateContacts()" style="padding:6px 14px; font-size:12px; min-height:36px;">
             <i class="bi bi-check2-circle"></i> Set As Active
           </button>
 
           <!-- Close Button -->
-          <button onclick="closeEmailPreviewModalContacts()" style="border:none; background:rgba(255,255,255,0.08); color:#fff; width:30px; height:30px; border-radius:8px; font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center;" title="Close Preview">
+          <button onclick="closeEmailPreviewModalContacts()" style="border:none; background:rgba(255,255,255,0.08); color:#fff; width:36px; height:36px; border-radius:8px; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; touch-action:manipulation;" title="Close Preview">
             <i class="bi bi-x-lg"></i>
           </button>
         </div>
       </div>
 
       <!-- Modal Body (Iframe Stage) -->
-      <div style="flex:1; background:#05070c; padding:20px; overflow-y:auto; display:flex; justify-content:center; align-items:flex-start;">
-        <div id="contactsPreviewIframeWrapper" style="width:100%; max-width:680px; height:100%; min-height:560px; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 12px 35px rgba(0,0,0,0.6); transition:all 0.3s ease; border:1px solid rgba(255,255,255,0.1);">
-          <iframe id="contactsEmailPreviewIframe" style="width:100%; height:100%; min-height:560px; border:none; display:block;" src="about:blank"></iframe>
+      <div class="email-preview-modal-body" style="flex:1; background:#05070c; padding:20px; overflow-y:auto; display:flex; justify-content:center; align-items:flex-start;">
+        <div id="contactsPreviewIframeWrapper" style="width:100%; max-width:680px; height:100%; min-height:400px; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 12px 35px rgba(0,0,0,0.6); transition:all 0.3s ease; border:1px solid rgba(255,255,255,0.1);">
+          <iframe id="contactsEmailPreviewIframe" style="width:100%; height:100%; min-height:400px; border:none; display:block;" src="about:blank"></iframe>
         </div>
       </div>
 
+    </div>
+  </div>
+
+  <!-- ── Conversation Details Slide-Over Drawer ── -->
+  <div id="conversationInfoBackdrop" class="conv-info-backdrop" style="display:none;" onclick="if(event.target===this) closeConversationInfoDrawer()">
+    <div class="conv-info-drawer" role="dialog" aria-modal="true" aria-labelledby="convInfoDrawerTitle">
+      <div class="conv-info-header">
+        <div class="conv-info-title-wrap">
+          <i class="bi bi-info-circle-fill" style="color:var(--gold); font-size:17px;"></i>
+          <span id="convInfoDrawerTitle">Conversation Details</span>
+        </div>
+        <button type="button" class="conv-info-close" onclick="closeConversationInfoDrawer()" aria-label="Close conversation details">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <div class="conv-info-body">
+        <!-- Customer Profile Card -->
+        <div class="conv-info-card">
+          <div class="conv-info-card-label">Customer Profile</div>
+          <div class="conv-profile-row">
+            <div class="conv-avatar" id="drawerCustomerAvatar">C</div>
+            <div class="conv-profile-text">
+              <div class="conv-profile-name" id="detailName">—</div>
+              <div class="conv-profile-email"><a id="detailEmail" href="#" style="color:#94a3b8; text-decoration:none;">—</a></div>
+              <div class="conv-profile-phone" id="detailPhoneWrap" style="display:none">
+                <i class="bi bi-telephone-fill" style="color:var(--gold);"></i> <strong id="detailPhone" style="color:#cbd5e1;">—</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Conversation Metadata Card -->
+        <div class="conv-info-card">
+          <div class="conv-info-card-label">Message Info</div>
+          <div class="conv-meta-grid">
+            <div class="conv-meta-item">
+              <span class="conv-meta-lbl">Subject</span>
+              <span class="conv-meta-val" id="drawerSubject" style="font-weight:600; color:#fff;">—</span>
+            </div>
+            <div class="conv-meta-item">
+              <span class="conv-meta-lbl">Date &amp; Time</span>
+              <span class="conv-meta-val" id="detailDate">—</span>
+            </div>
+            <div class="conv-meta-item">
+              <span class="conv-meta-lbl">Current Status</span>
+              <div style="margin-top:2px;">
+                <span id="detailStatusBadge" class="badge badge-new">new</span>
+              </div>
+            </div>
+            <div class="conv-meta-item" id="detailEmailNotifyWrap">
+              <span class="conv-meta-lbl">Notification Email</span>
+              <div id="detailEmailNotify" style="margin-top:2px;">—</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Status Management Card -->
+        <div class="conv-info-card">
+          <div class="conv-info-card-label">Manage Status</div>
+          <select class="status-select" id="statusSelect" onchange="updateStatus(this.value)" style="width:100%; min-height:42px; font-size:13.5px; border-radius:8px; padding:0 12px;">
+            <option value="new">New</option>
+            <option value="in_review">In Review</option>
+            <option value="contacted">Contacted</option>
+            <option value="replied">Replied</option>
+            <option value="closed">Closed</option>
+          </select>
+        </div>
+
+        <!-- Quick Actions Card -->
+        <div class="conv-info-card">
+          <div class="conv-info-card-label">Actions</div>
+          <div class="conv-actions-stack">
+            <button type="button" class="btn btn-sm" onclick="markUnread()" title="Mark as unread" style="min-height:42px; justify-content:center; width:100%;">
+              <i class="bi bi-envelope"></i> Mark as Unread
+            </button>
+            <button type="button" class="btn btn-sm" onclick="retryNotification()" id="retryBtn" style="min-height:42px; justify-content:center; width:100%; display:none;">
+              <i class="bi bi-arrow-repeat"></i> Retry Notification Email
+            </button>
+            <button type="button" class="btn btn-sm btn-danger" onclick="closeConversationInfoDrawer(); deleteMessage();" style="min-height:42px; justify-content:center; width:100%;">
+              <i class="bi bi-trash3"></i> Delete Conversation
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 

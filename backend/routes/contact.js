@@ -266,11 +266,15 @@ router.get("/submissions", requireAuth, async (req, res) => {
         sql: `SELECT cs.id, cs.full_name, cs.email, cs.phone, cs.subject, cs.message,
                      cs.status, cs.created_at, cs.read_at, cs.admin_notes, cs.email_notify_status,
                      s.title AS service_interest_title,
-                     (SELECT COUNT(*) FROM contact_replies r WHERE r.submission_id = cs.id) AS reply_count
+                     (SELECT COUNT(*) FROM contact_replies r WHERE r.submission_id = cs.id) AS reply_count,
+                     (SELECT reply_body FROM contact_replies r WHERE r.submission_id = cs.id ORDER BY sent_at DESC LIMIT 1) AS latest_reply_body,
+                     (SELECT direction FROM contact_replies r WHERE r.submission_id = cs.id ORDER BY sent_at DESC LIMIT 1) AS latest_reply_direction,
+                     (SELECT sent_at FROM contact_replies r WHERE r.submission_id = cs.id ORDER BY sent_at DESC LIMIT 1) AS latest_reply_at,
+                     COALESCE((SELECT MAX(sent_at) FROM contact_replies r WHERE r.submission_id = cs.id), cs.created_at) AS last_activity_at
               FROM contact_submissions cs
               LEFT JOIN services s ON cs.service_interest_id = s.id
               ${where}
-              ORDER BY cs.created_at DESC
+              ORDER BY last_activity_at DESC
               LIMIT ? OFFSET ?`,
         args: [...args, parseInt(limit), offset],
       }),

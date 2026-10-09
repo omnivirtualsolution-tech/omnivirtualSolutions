@@ -1173,7 +1173,8 @@ async function sendAutoReply(submission) {
   if (!transporter) return { success: false, reason: "smtp_not_configured" };
 
   const brandName = company.company_name || "Omni Virtual Solutions";
-  const subject = interpolate(settings.auto_reply_subject || `We received your message — ${brandName}`, { customer_name: submission.full_name });
+  const rawSubj = (settings.auto_reply_subject || `We received your message — ${brandName}`).replace(/\s*\[Ref:\s*#?\d+\]/gi, "").trim();
+  const subject = `${interpolate(rawSubj, { customer_name: submission.full_name })} [Ref: #${submission.id}]`;
   const bodyText = interpolate(settings.auto_reply_body || "Hello {customer_name}, thank you for contacting us!", { customer_name: submission.full_name });
 
   const recipientEmail = settings.recipient_email?.trim() || company?.recipient_email?.trim() || company?.email?.trim() || "admin@omnivirtualsolution.com";
@@ -1193,6 +1194,7 @@ async function sendAutoReply(submission) {
       subject,
       text: bodyText,
       html: htmlBody,
+      messageId: `<submission-${submission.id}@omnivirtualsolution.com>`,
     });
     await logEmail({ eventType: "auto_reply", submissionId: submission.id, recipientEmail: submission.email, subject, status: "sent" });
     return { success: true };
@@ -1222,7 +1224,8 @@ async function sendReply({ submission, replyBody, replyId, sentBy }) {
     console.warn("[email-service] Reply blocked: legacy email sender detected");
     return { success: false, reason: "legacy_sender_blocked" };
   }
-  const subject     = `Re: ${submission.subject || "Your Inquiry"} — ${company.company_name || "Omni Virtual Solutions"}`;
+  const cleanSubj = submission.subject ? submission.subject.replace(/\s*\[Ref:\s*#?\d+\]/gi, "").trim() : "Your Inquiry";
+  const subject   = `Re: ${cleanSubj} [Ref: #${submission.id}] — ${company.company_name || "Omni Virtual Solutions"}`;
 
   if (!transporter) {
     await db.execute({
@@ -1247,6 +1250,9 @@ async function sendReply({ submission, replyBody, replyId, sentBy }) {
       subject,
       text: fullBody,
       html: htmlBody,
+      messageId: `<submission-${submission.id}-reply-${replyId || Date.now()}@omnivirtualsolution.com>`,
+      inReplyTo: `<submission-${submission.id}@omnivirtualsolution.com>`,
+      references: `<submission-${submission.id}@omnivirtualsolution.com>`,
     });
 
     await db.execute({
