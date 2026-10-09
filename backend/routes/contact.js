@@ -166,10 +166,18 @@ const handleContactSubmission = async (req, res) => {
     }
   }
 
-  // Broadcast live event to real-time dashboards (privacy-safe: no email or full message on public stream)
+  // Broadcast live event to real-time dashboards
   try {
     broadcast({
-      type: "new_lead",
+      type: "new_submission",
+      submissionId: newId,
+      submission: {
+        id: newId,
+        full_name: full_name ? full_name.slice(0, 50) : "Client Lead",
+        subject: subject ? subject.slice(0, 80) : "General Inquiry",
+        status: 'new',
+        created_at: new Date().toISOString(),
+      },
       lead: {
         id: newId,
         full_name: full_name ? full_name.slice(0, 30) : "Client Lead",

@@ -2894,6 +2894,133 @@
       .crm-telemetry-indicator {
         font-size: 11px;
       }
+    /* ── Template Editor Modal ────────────────────────────────────── */
+    .template-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 7, 13, 0.85);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 100000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      animation: fadeInTemplateModal 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .template-modal-dialog {
+      background: #0d121f;
+      border: 1px solid rgba(235, 162, 45, 0.35);
+      border-radius: 18px;
+      width: 100%;
+      max-width: 680px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9), 0 0 35px rgba(235, 162, 45, 0.12);
+      overflow: hidden;
+      animation: popInTemplateModal 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes fadeInTemplateModal {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes popInTemplateModal {
+      from { transform: scale(0.95) translateY(12px); opacity: 0; }
+      to { transform: scale(1) translateY(0); opacity: 1; }
+    }
+    .template-modal-header {
+      padding: 18px 24px;
+      background: rgba(235, 162, 45, 0.06);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    .template-modal-body {
+      padding: 20px 24px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .template-modal-footer {
+      padding: 16px 24px;
+      background: rgba(11, 15, 25, 0.95);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+    .var-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(235, 162, 45, 0.12);
+      border: 1px solid rgba(235, 162, 45, 0.35);
+      color: var(--gold);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12.5px;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+    .var-chip:hover, .var-chip:active {
+      background: rgba(235, 162, 45, 0.25);
+      border-color: var(--gold);
+      transform: translateY(-1px);
+    }
+    .template-tab-btn {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #94a3b8;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+    .template-tab-btn.active {
+      background: rgba(235, 162, 45, 0.15);
+      border-color: var(--gold);
+      color: #fff;
+    }
+
+    @media (max-width: 768px) {
+      .template-modal-backdrop {
+        padding: 0;
+        align-items: flex-end;
+      }
+      .template-modal-dialog {
+        max-width: 100%;
+        max-height: 94vh;
+        height: 94vh;
+        border-radius: 20px 20px 0 0;
+        border-bottom: none;
+      }
+      .template-modal-header {
+        padding: 16px 18px;
+      }
+      .template-modal-body {
+        padding: 16px 18px;
+      }
+      .template-modal-footer {
+        padding: 14px 18px;
+      }
+      .template-modal-editor-textarea {
+        font-size: 16px !important; /* Prevents iOS Safari auto-zoom */
+        min-height: 200px !important;
+      }
     }
   </style>
 </head>
@@ -3728,26 +3855,58 @@
 
           <!-- Reply template -->
           <div class="settings-card">
-            <div class="settings-card-header">
-              <i class="bi bi-chat-quote-fill" style="color:var(--gold)"></i> Reply & Auto-Reply Templates
+            <div class="settings-card-header" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <i class="bi bi-chat-quote-fill" style="color:var(--gold)"></i> 
+                <span>Reply & Auto-Reply Templates</span>
+              </div>
+              <span class="badge" style="background:rgba(235,162,45,0.12); color:var(--gold); border:1px solid rgba(235,162,45,0.3); font-size:11px; padding:4px 10px;">
+                <i class="bi bi-phone"></i> Touch & Mobile Ready
+              </span>
             </div>
             <div class="settings-card-body">
               <div class="form-group">
-                <label class="form-label">Reply Email Template</label>
-                <textarea class="form-input" id="replyTemplate" rows="6" style="resize:vertical; min-height:100px;"></textarea>
-                <div class="form-hint">Use <code style="color:var(--gold)">{customer_name}</code> and <code style="color:var(--gold)">{reply_body}</code>. The {reply_body} will be replaced with whatever you write in the Reply box.</div>
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; flex-wrap:wrap; gap:6px;">
+                  <label class="form-label" style="margin:0;">Reply Email Template</label>
+                  <button type="button" class="btn btn-sm" onclick="openTemplateModal('reply')" style="font-size:12px; padding:4px 10px; display:inline-flex; align-items:center; gap:6px; color:var(--gold); border:1px solid rgba(235,162,45,0.35); background:rgba(235,162,45,0.08);">
+                    <i class="bi bi-arrows-angle-expand"></i> Edit in Full Modal
+                  </button>
+                </div>
+                <textarea class="form-input" id="replyTemplate" rows="5" style="resize:vertical; min-height:95px;" placeholder="Hello {customer_name}..."></textarea>
+                <div class="form-hint" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;">
+                  <span>Use <code style="color:var(--gold)">{customer_name}</code> and <code style="color:var(--gold)">{reply_body}</code>.</span>
+                  <a href="javascript:void(0)" onclick="openTemplateModal('reply')" style="color:var(--gold); text-decoration:none; font-weight:600; font-size:11.5px;">Tap to open editor modal &rarr;</a>
+                </div>
               </div>
-              <div class="form-group">
-                <label class="form-label" style="margin-top:4px;">Auto-Reply to Customer on Submission</label>
-                <div class="toggle-switch" style="margin-bottom:10px;">
+
+              <div class="form-group" style="margin-top:18px;">
+                <label class="form-label" style="margin-bottom:8px;">Auto-Reply to Customer on Submission</label>
+                <div class="toggle-switch" style="margin-bottom:12px;">
                   <input type="checkbox" class="toggle-input" id="autoReplyEnabled">
                   <label class="toggle-label" for="autoReplyEnabled">Automatically send acknowledgment to visitor when they submit the form</label>
                 </div>
-                <input class="form-input" type="text" id="autoReplySubject" placeholder="We received your message — Omni Virtual Solutions" style="margin-bottom:10px;">
-                <textarea class="form-input" id="autoReplyBody" rows="5" style="resize:vertical; min-height:90px;"></textarea>
-                <div class="form-hint">Use <code style="color:var(--gold)">{customer_name}</code> in the auto-reply body.</div>
+                
+                <div style="margin-bottom:10px;">
+                  <label class="form-label" style="font-size:12px; color:#94a3b8; margin-bottom:4px; display:block;">Email Subject Line</label>
+                  <input class="form-input" type="text" id="autoReplySubject" placeholder="We received your message — Omni Virtual Solutions">
+                </div>
+
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; flex-wrap:wrap; gap:6px;">
+                  <label class="form-label" style="margin:0;">Auto-Reply Message Body</label>
+                  <button type="button" class="btn btn-sm" onclick="openTemplateModal('auto_reply')" style="font-size:12px; padding:4px 10px; display:inline-flex; align-items:center; gap:6px; color:var(--gold); border:1px solid rgba(235,162,45,0.35); background:rgba(235,162,45,0.08);">
+                    <i class="bi bi-arrows-angle-expand"></i> Edit in Full Modal
+                  </button>
+                </div>
+                <textarea class="form-input" id="autoReplyBody" rows="5" style="resize:vertical; min-height:90px;" placeholder="Hello {customer_name}..."></textarea>
+                <div class="form-hint" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;">
+                  <span>Use <code style="color:var(--gold)">{customer_name}</code> in the body.</span>
+                  <a href="javascript:void(0)" onclick="openTemplateModal('auto_reply')" style="color:var(--gold); text-decoration:none; font-weight:600; font-size:11.5px;">Tap to open editor modal &rarr;</a>
+                </div>
               </div>
-              <button class="btn btn-gold" onclick="saveTemplateSettings()"><i class="bi bi-floppy2-fill"></i> Save Templates</button>
+
+              <div style="display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;">
+                <button class="btn btn-gold" onclick="saveTemplateSettings()" style="min-height:42px; padding:8px 22px; font-weight:700;"><i class="bi bi-floppy2-fill"></i> Save Templates</button>
+              </div>
             </div>
           </div>
 
@@ -5499,6 +5658,148 @@
     };
 
     // ════════════════════════════════════════════════════════════
+    // TEMPLATE FULL EDITOR MODAL CONTROLLER
+    // ════════════════════════════════════════════════════════════
+    let currentModalTemplateType = 'reply'; // 'reply' or 'auto_reply'
+
+    window.openTemplateModal = function (type) {
+      currentModalTemplateType = type;
+      const isAuto = type === 'auto_reply';
+
+      const modal = document.getElementById('templateEditorModal');
+      const titleEl = document.getElementById('templateModalTitle');
+      const subEl = document.getElementById('templateModalSubtitle');
+      const subjGroup = document.getElementById('modalSubjectGroup');
+      const chipsEl = document.getElementById('modalVariableChips');
+      const bodyInput = document.getElementById('modalTemplateBody');
+      const hintEl = document.getElementById('modalTemplateHint');
+
+      if (isAuto) {
+        titleEl.textContent = 'Edit Auto-Reply Template';
+        subEl.textContent = 'Sent automatically to visitors upon contact form submission';
+        subjGroup.style.display = 'block';
+        document.getElementById('modalTemplateSubject').value = document.getElementById('autoReplySubject').value;
+        bodyInput.value = document.getElementById('autoReplyBody').value;
+        chipsEl.innerHTML = `
+          <button type="button" class="var-chip" onclick="insertTemplateVariable('{customer_name}')">
+            <i class="bi bi-plus-lg"></i> {customer_name}
+          </button>
+        `;
+        hintEl.textContent = 'Auto-reply body is displayed to the visitor in their confirmation email.';
+      } else {
+        titleEl.textContent = 'Edit Reply Email Template';
+        subEl.textContent = 'Default email template used when replying to client inquiries';
+        subjGroup.style.display = 'none';
+        bodyInput.value = document.getElementById('replyTemplate').value;
+        chipsEl.innerHTML = `
+          <button type="button" class="var-chip" onclick="insertTemplateVariable('{customer_name}')">
+            <i class="bi bi-plus-lg"></i> {customer_name}
+          </button>
+          <button type="button" class="var-chip" onclick="insertTemplateVariable('{reply_body}')">
+            <i class="bi bi-plus-lg"></i> {reply_body}
+          </button>
+        `;
+        hintEl.textContent = '{reply_body} is replaced with whatever you write in the reply box.';
+      }
+
+      updateModalCharCounter();
+      bodyInput.oninput = updateModalCharCounter;
+
+      switchTemplateModalTab('edit');
+      if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => bodyInput.focus(), 80);
+      }
+    };
+
+    window.closeTemplateModal = function () {
+      const modal = document.getElementById('templateEditorModal');
+      if (modal) modal.style.display = 'none';
+      document.body.style.overflow = '';
+    };
+
+    window.switchTemplateModalTab = function (tab) {
+      const isEdit = tab === 'edit';
+      const editView = document.getElementById('templateModalEditView');
+      const prevView = document.getElementById('templateModalPreviewView');
+      const btnEdit = document.getElementById('tabBtnEdit');
+      const btnPrev = document.getElementById('tabBtnPreview');
+
+      if (editView && prevView) {
+        editView.style.display = isEdit ? 'flex' : 'none';
+        prevView.style.display = isEdit ? 'none' : 'flex';
+      }
+      if (btnEdit && btnPrev) {
+        btnEdit.className = 'template-tab-btn' + (isEdit ? ' active' : '');
+        btnPrev.className = 'template-tab-btn' + (isEdit ? '' : ' active');
+      }
+
+      if (!isEdit) {
+        const isAuto = currentModalTemplateType === 'auto_reply';
+        const rawBody = document.getElementById('modalTemplateBody').value;
+        const rawSubj = document.getElementById('modalTemplateSubject').value;
+
+        const sampleName = 'Evelyn Mags';
+        const sampleReply = 'Hello Evelyn, thank you for reaching out! We would be delighted to partner on your upcoming project.';
+
+        let renderedBody = rawBody.replace(/\{customer_name\}/g, sampleName);
+        if (!isAuto) {
+          renderedBody = renderedBody.replace(/\{reply_body\}/g, sampleReply);
+        }
+        const renderedSubj = (isAuto ? rawSubj : 'Re: Your Inquiry — Omni Virtual Solutions').replace(/\{customer_name\}/g, sampleName);
+
+        const sLine = document.getElementById('modalPreviewSubjectLine');
+        if (sLine) sLine.textContent = 'Subject: ' + renderedSubj;
+        const bText = document.getElementById('modalPreviewBodyText');
+        if (bText) bText.textContent = renderedBody;
+      }
+    };
+
+    window.insertTemplateVariable = function (token) {
+      const textarea = document.getElementById('modalTemplateBody');
+      if (!textarea) return;
+      const start = textarea.selectionStart || 0;
+      const end = textarea.selectionEnd || 0;
+      const val = textarea.value;
+      textarea.value = val.substring(0, start) + token + val.substring(end);
+      textarea.selectionStart = textarea.selectionEnd = start + token.length;
+      textarea.focus();
+      updateModalCharCounter();
+    };
+
+    function updateModalCharCounter() {
+      const textarea = document.getElementById('modalTemplateBody');
+      const counter = document.getElementById('modalCharCounter');
+      if (textarea && counter) {
+        counter.textContent = textarea.value.length + ' characters';
+      }
+    }
+
+    window.applyTemplateModal = async function (saveImmediately = false) {
+      const isAuto = currentModalTemplateType === 'auto_reply';
+      const modalBody = document.getElementById('modalTemplateBody').value;
+
+      if (isAuto) {
+        document.getElementById('autoReplyBody').value = modalBody;
+        const modalSubj = document.getElementById('modalTemplateSubject').value.trim();
+        if (modalSubj) {
+          document.getElementById('autoReplySubject').value = modalSubj;
+        }
+      } else {
+        document.getElementById('replyTemplate').value = modalBody;
+      }
+
+      closeTemplateModal();
+
+      if (saveImmediately) {
+        await saveTemplateSettings();
+      } else {
+        toast('Template applied to form (click "Save Templates" to commit)');
+      }
+    };
+
+    // ════════════════════════════════════════════════════════════
     // EMAIL TEMPLATES STUDIO
     // ════════════════════════════════════════════════════════════
     let activeContactsTemplate = 'luxury_gold';
@@ -5725,9 +6026,10 @@
             }
             toast(`💬 New client reply from ${payload.senderName || 'Customer'}!`);
             loadInbox();
-          } else if (payload.type === 'new_submission') {
+          } else if (payload.type === 'new_submission' || payload.type === 'new_lead') {
             loadInbox();
-            toast('✉️ New contact message received!');
+            if (typeof playMessageChime === 'function') playMessageChime();
+            toast('✉️ New contact message received from ' + (payload.submission?.full_name || payload.lead?.full_name || 'Visitor') + '!');
           }
         } catch (_) {}
       };
@@ -5945,6 +6247,90 @@
         <button type="button" class="btn btn-danger" id="confirmDeleteBtn" onclick="confirmDeleteMessage()" style="min-height:40px; padding:8px 20px; font-weight:700;">
           <i class="bi bi-trash3-fill"></i> Delete Message
         </button>
+      </div>
+    </div>
+  <!-- ── Reply & Auto-Reply Template Full Editor Modal ── -->
+  <div id="templateEditorModal" class="template-modal-backdrop" style="display:none;" onclick="if(event.target===this) closeTemplateModal()">
+    <div class="template-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="templateModalTitle">
+      <div class="template-modal-header">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:38px; height:38px; border-radius:10px; background:rgba(235, 162, 45, 0.15); border:1px solid rgba(235, 162, 45, 0.35); display:flex; align-items:center; justify-content:center; color:var(--gold); font-size:18px;">
+            <i class="bi bi-chat-quote-fill" id="templateModalIcon"></i>
+          </div>
+          <div>
+            <h3 style="margin:0; font-size:16px; font-weight:700; color:#fff;" id="templateModalTitle">Edit Template</h3>
+            <span style="font-size:12px; color:#94a3b8;" id="templateModalSubtitle">Customize client message</span>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="display:inline-flex; background:rgba(255,255,255,0.05); padding:3px; border-radius:10px;">
+            <button type="button" class="template-tab-btn active" id="tabBtnEdit" onclick="switchTemplateModalTab('edit')">
+              <i class="bi bi-pencil-square"></i> Edit
+            </button>
+            <button type="button" class="template-tab-btn" id="tabBtnPreview" onclick="switchTemplateModalTab('preview')">
+              <i class="bi bi-eye"></i> Preview
+            </button>
+          </div>
+          <button type="button" class="delete-modal-close" onclick="closeTemplateModal()" aria-label="Close dialog" style="margin-left:6px;">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="template-modal-body">
+        <!-- Edit View -->
+        <div id="templateModalEditView" style="display:flex; flex-direction:column; gap:14px; height:100%;">
+          <!-- Subject Input (only visible when editing auto-reply) -->
+          <div id="modalSubjectGroup" style="display:none;">
+            <label class="form-label" style="font-size:12px; color:#94a3b8; margin-bottom:4px; display:block;">Email Subject Line</label>
+            <input type="text" class="form-input" id="modalTemplateSubject" placeholder="We received your message — Omni Virtual Solutions" style="font-size:14px; padding:10px 14px;">
+          </div>
+
+          <!-- Variable chips helper -->
+          <div>
+            <div style="font-size:12px; color:#94a3b8; margin-bottom:6px; display:flex; align-items:center; justify-content:space-between;">
+              <span><i class="bi bi-magic" style="color:var(--gold);"></i> Tap to insert dynamic variable:</span>
+              <span style="font-size:11px; color:#64748b;">Inserts at cursor</span>
+            </div>
+            <div id="modalVariableChips" style="display:flex; gap:8px; flex-wrap:wrap;">
+              <!-- Dynamic chips inserted via JS -->
+            </div>
+          </div>
+
+          <!-- Main Textarea -->
+          <div style="flex:1; display:flex; flex-direction:column; min-height:220px;">
+            <textarea id="modalTemplateBody" class="form-input template-modal-editor-textarea" style="flex:1; width:100%; min-height:220px; font-family:inherit; font-size:14.5px; line-height:1.6; resize:vertical; padding:14px;" placeholder="Write template text here..."></textarea>
+          </div>
+          <div style="font-size:11.5px; color:#64748b; display:flex; justify-content:space-between;">
+            <span id="modalTemplateHint"></span>
+            <span id="modalCharCounter">0 characters</span>
+          </div>
+        </div>
+
+        <!-- Preview View -->
+        <div id="templateModalPreviewView" style="display:none; flex-direction:column; gap:12px;">
+          <div style="background:#111622; border:1px solid rgba(235, 162, 45, 0.3); border-radius:12px; padding:18px;">
+            <div style="font-size:11.5px; color:#94a3b8; margin-bottom:6px; border-bottom:1px solid rgba(255,255,255,0.06); padding-bottom:8px;">
+              <strong>Simulated Client Email View</strong> • Recipient: <em>Evelyn Mags</em>
+            </div>
+            <div id="modalPreviewSubjectLine" style="font-size:14px; font-weight:700; color:#fff; margin-bottom:12px;"></div>
+            <div id="modalPreviewBodyText" style="font-size:14px; line-height:1.65; color:#e2e8f0; white-space:pre-wrap; background:rgba(0,0,0,0.25); border-radius:8px; padding:14px; border:1px solid rgba(255,255,255,0.05);"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="template-modal-footer">
+        <button type="button" class="btn" onclick="closeTemplateModal()" style="min-height:42px; padding:8px 18px;">
+          Cancel
+        </button>
+        <div style="display:flex; gap:10px;">
+          <button type="button" class="btn btn-ghost" onclick="applyTemplateModal(false)" style="min-height:42px; padding:8px 18px; border:1px solid rgba(235, 162, 45, 0.4); color:var(--gold);">
+            <i class="bi bi-check2"></i> Apply to Form
+          </button>
+          <button type="button" class="btn btn-gold" onclick="applyTemplateModal(true)" style="min-height:42px; padding:8px 20px; font-weight:700;">
+            <i class="bi bi-floppy2-fill"></i> Save Templates
+          </button>
+        </div>
       </div>
     </div>
   </div>

@@ -20,6 +20,7 @@ if (dns && typeof dns.setDefaultResultOrder === "function") {
   } catch (_) {}
 }
 
+const Imap = require("imap");
 const imaps = require("imap-simple");
 const { simpleParser } = require("mailparser");
 const { db } = require("./db");
@@ -380,27 +381,130 @@ async function syncInboundReplies() {
   }
 }
 
-// ── Start / Stop Lifecycle ─────────────────────────────────────────
-function startInboundSync(intervalMs = 12000) {
+// ── Real-Time IMAP IDLE Push Engine & Lifecycle ────────────────────
+let idleSocket = null;
+let idleReconnectTimer = null;
+let isServiceActive = false;
+
+async function startIdleSocket() {
+  if (!isServiceActive) return;
+  try {
+    const settingsRes = await db.execute("SELECT setting_key, setting_value FROM email_settings");
+    const settings = {};
+    settingsRes.rows.forEach(r => { settings[r.setting_key] = r.setting_value; });
+
+    const smtpHost = settings.smtp_host?.trim() || "";
+    const smtpUser = settings.smtp_user?.trim() || "";
+    const smtpPass = settings.smtp_pass?.trim() || "";
+
+    if (!smtpUser || !smtpPass) return;
+
+    let imapHost = "imap.gmail.com";
+    if (smtpHost && !smtpHost.includes("gmail") && !smtpHost.includes("google")) {
+      imapHost = smtpHost.replace(/^smtp\./i, "imap.");
+    }
+
+    if (idleSocket) {
+      try { idleSocket.end(); } catch (_) {}
+      idleSocket = null;
+    }
+
+    const imap = new Imap({
+      user: smtpUser,
+      password: smtpPass,
+      host: imapHost,
+      port: 993,
+      tls: true,
+      tlsOptions: { rejectUnauthorized: false },
+      authTimeout: 15000,
+      keepalive: {
+        interval: 10000,
+        idleInterval: 300000,
+        forceNoop: false,
+      },
+    });
+
+    idleSocket = imap;
+
+    imap.once("ready", () => {
+      imap.openBox("INBOX", false, (err) => {
+        if (err) {
+          console.warn("[inbound-sync/idle] openBox notice:", err.message);
+          return;
+        }
+        console.log("[inbound-sync/idle] ⚡ Real-Time IMAP IDLE push active on INBOX (sub-second push notification enabled)");
+
+        // Immediate catch-up check
+        syncInboundReplies().catch(() => {});
+
+        // Listen for INSTANT push events from Gmail
+        imap.on("mail", (numNewMsgs) => {
+          console.log(`[inbound-sync/idle] ⚡ Gmail push: ${numNewMsgs} new email(s) arrived. Syncing instantly...`);
+          syncInboundReplies().catch(() => {});
+        });
+      });
+    });
+
+    imap.on("error", (err) => {
+      if (err?.code !== "ECONNRESET" && !err?.message?.includes("ECONNRESET")) {
+        console.warn("[inbound-sync/idle] Socket notice:", err.message);
+      }
+    });
+
+    imap.once("close", () => {
+      if (isServiceActive) {
+        clearTimeout(idleReconnectTimer);
+        idleReconnectTimer = setTimeout(startIdleSocket, 4000);
+      }
+    });
+
+    imap.once("end", () => {
+      if (isServiceActive) {
+        clearTimeout(idleReconnectTimer);
+        idleReconnectTimer = setTimeout(startIdleSocket, 4000);
+      }
+    });
+
+    imap.connect();
+  } catch (err) {
+    console.warn("[inbound-sync/idle] Failed to start IDLE socket:", err.message);
+    if (isServiceActive) {
+      clearTimeout(idleReconnectTimer);
+      idleReconnectTimer = setTimeout(startIdleSocket, 6000);
+    }
+  }
+}
+
+function startInboundSync(intervalMs = 20000) {
+  isServiceActive = true;
   if (syncTimer) clearInterval(syncTimer);
 
-  // Initial delayed check (3s after server boot)
+  // 1. Launch real-time IMAP IDLE push socket (sub-second notifications)
   setTimeout(() => {
-    syncInboundReplies().catch(() => {});
-  }, 3000);
+    startIdleSocket().catch(() => {});
+  }, 1500);
 
-  // Periodic recurring check
+  // 2. Secondary fallback pulse (every 20s) to guarantee Sent Mail & reconnect coverage
   syncTimer = setInterval(() => {
     syncInboundReplies().catch(() => {});
   }, intervalMs);
 
-  console.log(`[inbound-sync] Background Gmail IMAP sync service active (polling every ${Math.round(intervalMs / 1000)}s)`);
+  console.log(`[inbound-sync] Real-Time Gmail sync service initialized (IMAP IDLE Push + ${Math.round(intervalMs / 1000)}s heartbeat fallback)`);
 }
 
 function stopInboundSync() {
+  isServiceActive = false;
   if (syncTimer) {
     clearInterval(syncTimer);
     syncTimer = null;
+  }
+  if (idleReconnectTimer) {
+    clearTimeout(idleReconnectTimer);
+    idleReconnectTimer = null;
+  }
+  if (idleSocket) {
+    try { idleSocket.end(); } catch (_) {}
+    idleSocket = null;
   }
 }
 
