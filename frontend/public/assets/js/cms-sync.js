@@ -84,10 +84,15 @@
       if (el.tagName.toLowerCase() === 'img') {
         const path = value.startsWith('http') ? value : (value.startsWith('/') ? value : '/' + value);
         el.src = path;
-      } else if (el.classList.contains('service-pill') || el.classList.contains('trust-item')) {
+      } else if (el.querySelector('i') && !el.querySelector('[data-block-key]')) {
         const icon = el.querySelector('i');
         const iconHtml = icon ? icon.outerHTML + ' ' : '';
-        el.innerHTML = iconHtml + String(value).replace(/^[✓📖☑️📢]\s*/, '').trim();
+        const cleanVal = String(value).replace(/^[✓📖☑️📢📍]\s*/, '').trim();
+        if (cleanVal.includes('\n')) {
+          el.innerHTML = iconHtml + cleanVal.replace(/\n/g, '<br>');
+        } else {
+          el.innerHTML = iconHtml + cleanVal;
+        }
       } else {
         if (value.includes('\n')) {
           el.innerHTML = value.replace(/\n/g, '<br>');

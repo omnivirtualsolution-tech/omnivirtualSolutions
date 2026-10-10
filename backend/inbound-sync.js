@@ -665,9 +665,25 @@ function stopInboundSync() {
   }
 }
 
+async function restartInboundSync() {
+  if (idleSocket) {
+    try { idleSocket.end(); } catch (_) {}
+    idleSocket = null;
+  }
+  if (idleReconnectTimer) {
+    clearTimeout(idleReconnectTimer);
+    idleReconnectTimer = null;
+  }
+  console.log("[inbound-sync] ⚡ Reloading IMAP configuration and restarting IDLE push socket...");
+  isServiceActive = true;
+  await startIdleSocket();
+  syncInboundReplies({ includeSentMail: false, forceCheck: true }).catch(() => {});
+}
+
 module.exports = {
   startInboundSync,
   stopInboundSync,
+  restartInboundSync,
   syncInboundReplies,
   cleanReplyText,
   extractSubmissionId,

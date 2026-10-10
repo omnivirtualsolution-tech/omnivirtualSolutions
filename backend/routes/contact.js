@@ -269,7 +269,7 @@ router.get("/submissions", requireAuth, async (req, res) => {
 
     const where = conditions.length > 0 ? "WHERE " + conditions.join(" AND ") : "";
 
-    const [rows, countRow] = await Promise.all([
+    const [rows, countRow, unreadRow] = await Promise.all([
       db.execute({
         sql: `SELECT cs.id, cs.full_name, cs.email, cs.phone, cs.subject, cs.message,
                      cs.status, cs.created_at, cs.read_at, cs.admin_notes, cs.email_notify_status,
@@ -290,9 +290,18 @@ router.get("/submissions", requireAuth, async (req, res) => {
         sql: `SELECT COUNT(*) AS total FROM contact_submissions cs ${where}`,
         args,
       }),
+      db.execute({
+        sql: `SELECT COUNT(*) AS unread FROM contact_submissions WHERE read_at IS NULL`,
+      }),
     ]);
 
-    res.json({ submissions: rows.rows, total: countRow.rows[0].total, page: parseInt(page), limit: parseInt(limit) });
+    res.json({
+      submissions: rows.rows,
+      total: countRow.rows[0].total,
+      unread: Number(unreadRow.rows?.[0]?.unread || 0),
+      page: parseInt(page),
+      limit: parseInt(limit)
+    });
   } catch (err) {
     console.error("[contact/submissions] GET Error:", err.message);
     res.status(500).json({ error: { code: "INTERNAL_ERROR", message: "Failed to load submissions." } });
@@ -577,6 +586,13 @@ router.put("/email-settings", requireAuth, async (req, res) => {
     if (typeof emailSvc.clearTransporterCache === "function") {
       emailSvc.clearTransporterCache();
     }
+    // Hot-reload real-time IMAP IDLE push socket with updated SMTP credentials
+    try {
+      const { restartInboundSync } = require("../inbound-sync");
+      if (typeof restartInboundSync === "function") {
+        restartInboundSync().catch((syncErr) => console.warn("[inbound-sync] Restart notice:", syncErr.message));
+      }
+    } catch (_) {}
     res.json({ success: true, saved: pairs.length });
   } catch (err) {
     console.error("[email-settings] Save error:", err.message);

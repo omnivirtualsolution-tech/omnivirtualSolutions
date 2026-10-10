@@ -112,6 +112,14 @@ router.get("/business-profile", requireAuth, async (_req, res) => {
 // and content_blocks, then broadcasting SSE events site-wide.
 // ─────────────────────────────────────────────────────────────────
 router.patch("/business-profile", requireAuth, async (req, res) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (req.body.email && !emailRegex.test(String(req.body.email).trim())) {
+    return res.status(400).json({ error: { code: "VALIDATION_ERROR", message: "Public contact email is not a valid email address." } });
+  }
+  if (req.body.recipient_email && !emailRegex.test(String(req.body.recipient_email).trim())) {
+    return res.status(400).json({ error: { code: "VALIDATION_ERROR", message: "Recipient inquiry email is not a valid email address." } });
+  }
+
   try {
     const editor = req.admin?.username || "admin";
     const profile = await updateBusinessProfile(req.body, editor);

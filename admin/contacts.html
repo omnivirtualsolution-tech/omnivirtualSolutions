@@ -3119,7 +3119,7 @@
         <div class="nav-dropdown-toggle" onclick="toggleContactDropdown()" role="button" aria-expanded="true" tabindex="0" data-tooltip="Contact Messages">
           <i class="bi bi-inbox-fill" style="color:var(--gold);"></i>
           <span>Contact Messages</span>
-          <span class="nav-badge" id="unreadBadge" style="background:#e53e3e; color:#fff; margin-left:auto;">0</span>
+          <span class="nav-badge" id="unreadBadge" style="background:#e53e3e; color:#fff; margin-left:auto; display:none;">0</span>
           <i class="bi bi-chevron-down nav-dropdown-arrow" id="contactDropdownArrow"></i>
         </div>
         <ul class="nav-submenu" id="contactSubmenu">
@@ -3187,7 +3187,7 @@
       <button type="button" class="mobile-subnav-btn active" id="mobTab-inbox" onclick="switchTab('inbox')">
         <i class="bi bi-chat-left-text-fill"></i>
         <span>Inbox</span>
-        <span class="mobile-subnav-badge" id="mobUnreadBadge">0</span>
+        <span class="mobile-subnav-badge" id="mobUnreadBadge" style="display:none;">0</span>
       </button>
       <button type="button" class="mobile-subnav-btn" id="mobTab-leads" onclick="switchTab('leads')">
         <i class="bi bi-kanban-fill"></i>
@@ -4201,12 +4201,7 @@
       document.getElementById('topTitle').innerHTML = titles[id] || 'Admin';
 
       if (id === 'inbox')          loadInbox();
-      if (id === 'leads') {
-        loadLeadsCRM();
-        if (typeof crmAllLeads !== 'undefined' && crmAllLeads.length > 0) {
-          runCrmStartToEndAnimation();
-        }
-      }
+      if (id === 'leads')          loadLeadsCRM(true);
       if (id === 'email-settings') loadEmailSettings();
     };
 
@@ -4309,6 +4304,20 @@
       }, 350);
     };
 
+    function updateUnreadBadgeUI(count) {
+      const num = Math.max(0, parseInt(count, 10) || 0);
+      const bDesktop = document.getElementById('unreadBadge');
+      if (bDesktop) {
+        bDesktop.textContent = num;
+        bDesktop.style.display = num > 0 ? 'inline-block' : 'none';
+      }
+      const bMob = document.getElementById('mobUnreadBadge');
+      if (bMob) {
+        bMob.textContent = num;
+        bMob.style.display = num > 0 ? 'inline-flex' : 'none';
+      }
+    }
+
     async function loadInbox() {
       try {
         const params = new URLSearchParams();
@@ -4322,12 +4331,9 @@
 
         renderList();
 
-        // Update unread badge (messages without read_at)
-        const unread = allMessages.filter(m => !m.read_at).length;
-        const bDesktop = document.getElementById('unreadBadge');
-        if (bDesktop) bDesktop.textContent = unread;
-        const bMob = document.getElementById('mobUnreadBadge');
-        if (bMob) bMob.textContent = unread;
+        // Update unread badge cleanly (hides if 0, uses database-wide count if provided)
+        const unread = data.unread !== undefined ? data.unread : allMessages.filter(m => !m.read_at).length;
+        updateUnreadBadgeUI(unread);
       } catch (e) {
         document.getElementById('inboxList').innerHTML = '<div class="msg-empty"><i class="bi bi-wifi-off"></i><br>Could not load messages</div>';
       }
@@ -4393,10 +4399,7 @@
         }).catch(() => {});
       }
       const remainingUnread = allMessages.filter(x => !x.read_at).length;
-      const bDesktop = document.getElementById('unreadBadge');
-      if (bDesktop) bDesktop.textContent = remainingUnread;
-      const bMob = document.getElementById('mobUnreadBadge');
-      if (bMob) bMob.textContent = remainingUnread;
+      updateUnreadBadgeUI(remainingUnread);
 
       document.getElementById('detailEmpty').style.display = 'none';
       const view = document.getElementById('msgDetailView');
@@ -4525,10 +4528,7 @@
 
         // Refresh list to remove unread dot
         const remainingUnread = allMessages.filter(x => !x.read_at).length;
-        const bDesktop = document.getElementById('unreadBadge');
-        if (bDesktop) bDesktop.textContent = remainingUnread;
-        const bMob = document.getElementById('mobUnreadBadge');
-        if (bMob) bMob.textContent = remainingUnread;
+        updateUnreadBadgeUI(remainingUnread);
 
       } catch (e) {
         toast('Failed to load message', 'error');
@@ -4680,7 +4680,12 @@
         body: JSON.stringify({ mark_unread: true }),
       });
       const idx = allMessages.findIndex(x => x.id === currentMsgId);
-      if (idx !== -1) { allMessages[idx].read_at = null; renderList(); }
+      if (idx !== -1) {
+        allMessages[idx].read_at = null;
+        renderList();
+        const remainingUnread = allMessages.filter(x => !x.read_at).length;
+        updateUnreadBadgeUI(remainingUnread);
+      }
       toast('Marked as unread');
     };
 
@@ -4965,7 +4970,7 @@
       crmAnimationRaf = requestAnimationFrame(step);
     };
 
-    window.loadLeadsCRM = async function() {
+    window.loadLeadsCRM = async function(animate = false) {
       try {
         const res = await fetch('/api/v1/contact/submissions?limit=300', {
           headers: { Authorization: 'Bearer ' + token }
@@ -4973,7 +4978,9 @@
         const data = await res.json();
         crmAllLeads = data.submissions || [];
         crmRenderAll();
-        runCrmStartToEndAnimation();
+        if (animate) {
+          runCrmStartToEndAnimation();
+        }
       } catch (err) {
         console.error('Failed to load leads CRM:', err);
         toast('Could not load CRM leads', 'error');
@@ -6144,18 +6151,33 @@
               }
               toast(`💬 New client reply from ${payload.senderName || 'Customer'}!`);
               await loadInbox();
+              if (document.getElementById('tab-leads')?.classList.contains('active')) {
+                loadLeadsCRM(false).catch(() => {});
+              }
+              if (crmSelectedLead && Number(crmSelectedLead.id) === subId && typeof crmLoadDrawerReplies === 'function') {
+                crmLoadDrawerReplies(crmSelectedLead.id).catch(() => {});
+              }
             } else if (payload.type === 'new_submission' || payload.type === 'new_lead') {
               if (typeof playMessageChime === 'function') playMessageChime();
               toast('✉️ New contact message received from ' + (payload.submission?.full_name || payload.lead?.full_name || 'Visitor') + '!');
               await loadInbox();
+              if (document.getElementById('tab-leads')?.classList.contains('active')) {
+                loadLeadsCRM(false).catch(() => {});
+              }
             } else if (payload.type === 'reply_sent') {
               const subId = Number(payload.submissionId);
               if (currentMsgId && Number(currentMsgId) === subId && payload.reply) {
                 appendReplyToThread(payload.reply, false);
               }
               await loadInbox();
+              if (document.getElementById('tab-leads')?.classList.contains('active')) {
+                loadLeadsCRM(false).catch(() => {});
+              }
             } else if (payload.type === 'lead_read' || payload.type === 'lead_updated' || payload.type === 'lead_deleted') {
               await loadInbox();
+              if (document.getElementById('tab-leads')?.classList.contains('active')) {
+                loadLeadsCRM(false).catch(() => {});
+              }
             }
           } catch (_) {}
         };

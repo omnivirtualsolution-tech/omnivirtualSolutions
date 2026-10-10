@@ -2032,7 +2032,7 @@
         <div class="nav-dropdown-toggle" onclick="toggleContactDropdown()" role="button" aria-expanded="false" tabindex="0" data-tooltip="Contact Messages">
           <i class="bi bi-inbox-fill" style="color:var(--gold);"></i>
           <span>Contact Messages</span>
-          <span class="nav-badge" id="inboxBadge" style="background:#e53e3e; color:#fff; margin-left:auto;">0</span>
+          <span class="nav-badge" id="inboxBadge" style="background:#e53e3e; color:#fff; margin-left:auto; display:none;">0</span>
           <i class="bi bi-chevron-down nav-dropdown-arrow" id="contactDropdownArrow"></i>
         </div>
         <ul class="nav-submenu" id="contactSubmenu">
@@ -2256,6 +2256,64 @@
           </div>
         </div>
 
+        <!-- Senior Executive Analyst Intelligence Card -->
+        <div class="intelligence-card">
+          <div class="intel-header">
+            <div class="intel-title">
+              <i class="bi bi-cpu-fill text-warning"></i> Executive Intelligence Briefing
+            </div>
+            <span class="intel-badge">Real-Time Synthesis</span>
+          </div>
+          <div class="intel-headline" id="insightsHeadline">Generating executive performance summary...</div>
+          <div class="intel-grid">
+            <div>
+              <div class="intel-item-lbl"><i class="bi bi-search me-1"></i> Key Finding</div>
+              <div class="intel-item-val" id="insightsFinding">—</div>
+            </div>
+            <div>
+              <div class="intel-item-lbl"><i class="bi bi-lightning-charge me-1"></i> Strategic Recommendation</div>
+              <div class="intel-item-val" id="insightsRecommendation">—</div>
+            </div>
+          </div>
+          <div class="intel-provenance" id="insightsProvenance">
+            <i class="bi bi-shield-check"></i> Computed across active telemetry data
+          </div>
+        </div>
+
+        <!-- Secondary Visualizations: Inquiries Status & Top Visited Entry Pages -->
+        <div class="charts-row" style="margin-top:20px;">
+          <!-- Inquiries Status Breakdown Doughnut Chart -->
+          <div class="panel" style="margin-bottom:0;">
+            <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center;">
+              <div class="panel-title" style="display:flex; align-items:center; gap:8px;">
+                <i class="bi bi-pie-chart text-warning"></i>
+                <span>Inquiries Status Distribution</span>
+                <span id="leadsStatusTotalBadge" class="stat-badge gold" style="margin-top:0; font-size:10.5px;">0 Total</span>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="chart-container" style="height:260px;">
+                <canvas id="chartLeadStatus"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Top Visited Entry Pages -->
+          <div class="panel" style="margin-bottom:0;">
+            <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center;">
+              <div class="panel-title" style="display:flex; align-items:center; gap:8px;">
+                <i class="bi bi-file-earmark-bar-graph text-info"></i>
+                <span>Top Visited Entry Pages</span>
+              </div>
+            </div>
+            <div class="panel-body" style="padding-top:8px;">
+              <div class="top-pages-list" id="topPagesList" style="margin-top:0; border-top:none; padding-top:0;">
+                <div style="color:var(--muted); font-size:11px; padding:6px 0;">Loading entry pages...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Promo Banner to Visual In-Place Editor -->
         <div class="editor-promo-card" style="margin-top:24px;">
           <div class="promo-content">
@@ -2311,6 +2369,12 @@
                 <div class="device-switcher">
                   <button type="button" class="device-btn active" id="btnDevDesk" onclick="setDeviceViewport('desktop', this)">
                     <i class="bi bi-display"></i> Desktop
+                  </button>
+                  <button type="button" class="device-btn" id="btnDevTab" onclick="setDeviceViewport('tablet', this)">
+                    <i class="bi bi-tablet"></i> Tablet
+                  </button>
+                  <button type="button" class="device-btn" id="btnDevMob" onclick="setDeviceViewport('mobile', this)">
+                    <i class="bi bi-phone"></i> Mobile
                   </button>
                 </div>
                 <span class="device-spec-pill" id="deviceSpecPill">100% • Fluid Desktop</span>
@@ -4529,14 +4593,17 @@
       // ── Unread Badge Counter ────────────────────────────────────
       async function updateInboxBadge() {
         try {
-          const res = await fetch('/api/v1/contact/submissions?limit=200', {
+          const res = await fetch('/api/v1/contact/submissions?limit=1', {
             headers: { 'Authorization': 'Bearer ' + token }
           });
           if (!res.ok) return;
           const data = await res.json();
-          const unread = (data.submissions || []).filter(s => !s.read_at).length;
+          const unread = data.unread !== undefined ? data.unread : (data.submissions || []).filter(s => !s.read_at).length;
           const badge = document.getElementById('inboxBadge');
-          if (badge) badge.textContent = unread;
+          if (badge) {
+            badge.textContent = unread;
+            badge.style.display = unread > 0 ? 'inline-block' : 'none';
+          }
         } catch (_) {}
       }
       window.updateInboxBadge = updateInboxBadge;
@@ -4569,9 +4636,12 @@
           allLeads = data.submissions || [];
 
           // Sync unread badge immediately from lead data
-          const unreadCount = allLeads.filter(l => !l.read_at).length;
+          const unreadCount = data.unread !== undefined ? data.unread : allLeads.filter(l => !l.read_at).length;
           const badge = document.getElementById('inboxBadge');
-          if (badge) badge.textContent = unreadCount;
+          if (badge) {
+            badge.textContent = unreadCount;
+            badge.style.display = unreadCount > 0 ? 'inline-block' : 'none';
+          }
 
           // Recent leads table
           const recent = allLeads.slice(0, 5);

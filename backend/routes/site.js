@@ -67,6 +67,9 @@ router.get("/", async (req, res) => {
       blockMap['footer.copyright'] = company.copyright_text;
     }
 
+    company.hq_caption = blockMap['footer.hq.caption'] || "New York, NY";
+    blockMap['footer.hq.caption'] = company.hq_caption;
+
     res.set("Cache-Control", "no-cache, no-store, must-revalidate");
     res.json({
       company,

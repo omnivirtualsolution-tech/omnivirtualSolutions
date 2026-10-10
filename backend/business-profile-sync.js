@@ -257,6 +257,24 @@ async function updateBusinessProfile(data = {}, editor = "admin") {
     }
   }
 
+  // 4b. Synchronize services table cta_email column
+  try {
+    await db.execute({
+      sql: "UPDATE services SET cta_email = ?",
+      args: [email],
+    });
+  } catch (err) {
+    console.warn("[business-profile-sync] Notice updating services cta_email:", err.message);
+  }
+
+  // 4c. Invalidate Nodemailer transporter cache on email changes
+  try {
+    const emailSvc = require("./email-service");
+    if (typeof emailSvc.clearTransporterCache === "function") {
+      emailSvc.clearTransporterCache();
+    }
+  } catch (_) {}
+
   const updatedProfile = {
     company_name,
     tagline,
